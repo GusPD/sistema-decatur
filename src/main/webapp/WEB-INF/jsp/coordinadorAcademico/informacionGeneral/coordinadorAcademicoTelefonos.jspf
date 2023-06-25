@@ -1,0 +1,141 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<div id="perfil-telefono">
+    <div class="subtitulo-Perfil">
+        <div class="row col-sm-12 d-flex justify-content-end">
+            <div class="col-sm-11">
+                <h3>Teléfonos</h3>
+            </div>
+            <div class="col-sm-1">
+                <sec:authorize access="hasAuthority('AGREGAR_TELEFONO_PERFIL_COORDINADOR_PRIVILAGE')">
+                <button type="button" class="btn-add btn btn-sm" data-bs-toggle="modal" data-bs-target="#agregarTelefonoModal">Agregar</button>
+                </sec:authorize>
+            </div>
+        </div>
+    </div>
+    <div class="overflow-auto" style="max-height: 55vh;">
+        <table style="width:100%; " class="table table-bordered small">
+            <thead>
+                <tr>
+                    <th scope="col">N°</th>
+                    <th scope="col">Tipo</th>
+                    <th scope="col">Número</th>
+                    <th scope="col">Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <c:if test="${empty telefonos}">
+                    <tr>
+                        <td colspan="4">No hay registros</td>
+                    </tr>
+                </c:if>
+                <c:if test="${not empty telefonos}">
+                    <c:forEach items="${telefonos}" var="eTelefono" varStatus="numeroTelefono">
+                        <tr>
+                            <td>${numeroTelefono.index+1}</td>
+                            <td>${eTelefono.tipoTelefono}</td>
+                            <td>${eTelefono.numero}</td>
+                            <td>
+                                <sec:authorize access="hasAuthority('ELIMINAR_TELEFONO_PERFIL_COORDINADOR_PRIVILAGE')">
+                                    <a href="#" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#confirmarEliminarTelefono-${eTelefono.idTelefono}">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                    <!-- Modal de confirmación de eliminación -->
+                                    <div class="modal fade" id="confirmarEliminarTelefono-${eTelefono.idTelefono}" tabindex="-1" aria-labelledby="confirmarEliminarTelefonoLabel-${eTelefono.idTelefono}" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="confirmarEliminarTelefonoLabel-${eTelefono.idTelefono}">Confirmar eliminación</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <strong>¿Estás seguro de eliminar el teléfono?</strong>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                    <a href="/EliminarTelefonoCoordinadorAcademico/${eTelefono.idTelefono}/${coordinadorCA.idCoorAca}" class="btn btn-danger">Eliminar</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </sec:authorize>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </c:if>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div style="text-align: left;">
+    <!-- Modal para crear aspirantes -->
+    <div class="modal fade" id="agregarTelefonoModal" tabindex="-1" aria-labelledby="crearModalTelefonoLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="crearModalTelefonoLabel">Agregar Teléfono</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="/AgregarTelefonoCoordinadorAcademico/${coordinadorCA.idCoorAca}/${coordinadorCA.idListTelefono}" method="post" onsubmit="return validarParametrosTelefono()" accept-charset="UTF-8">
+                    <div class="modal-body">
+                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+                        <div id="MensajeErrorNumero" class="d-none">
+                            <div class="alert alert-danger d-flex align-items-center alert-dismissible fade show" role="alert">
+                                <strong><i class="bi bi-exclamation-triangle"></i> Error!  </strong>El formato del teléfono no es válido.
+                                <button id="btnAlertaNumero" type="button" class="btn-close" aria-label="Close"></button>
+                            </div>
+                        </div>
+                        <div class="overflow-auto" style="max-height:55vh;">
+                            <div class="form-group">
+                                <label for="tipoTelefono" class="form-label">Tipo de Teléfono:</label>
+                                <select type="text" class="form-select" id="tipoTelefono" name="tipoTelefono" required>
+                                    <option value="">Seleccione una opción</option>
+                                    <c:forEach items="${tiposTelefonos}" var="eTipoTelefonoS" varStatus="status">
+                                        <option value="${eTipoTelefonoS}">${eTipoTelefonoS}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="numero" class="form-label">Número:</label>
+                                <input type="text" class="form-control" id="numero" name="numero" maxlength="9" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-outline-success">Guardar</button>
+                        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/inputmask/dist/jquery.inputmask.bundle.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        //Manejo de mascaras
+        var inputNumeroT = document.getElementById("numero");
+        $(inputNumeroT).inputmask('9999-9999', {
+            showMaskOnFocus: false,
+            showMaskOnHover: false
+        });
+        //Alerta de Numero
+        var mensajeErrorNumeroT = document.getElementById("MensajeErrorNumero");
+        var botonAlertaNumeroT=document.getElementById("btnAlertaNumero");
+        botonAlertaNumeroT.addEventListener("click", function() {
+          mensajeErrorNumeroT.classList.add("d-none");
+        });
+    });
+    function validarParametrosTelefono() {
+        var resultado = true;
+        var mensajeErrorNumeroT = document.getElementById("MensajeErrorNumero");
+        var numeroInput= document.getElementById('numero').value;
+        numeroInput=numeroInput.replace("_", "");
+        if (numeroInput.length > 0 && numeroInput.length < 9) {
+            mensajeErrorNumeroT.classList.remove("d-none");
+            resultado = false; // Detener el envío del formulario
+        }
+        return resultado;
+    }
+</script>
+                  

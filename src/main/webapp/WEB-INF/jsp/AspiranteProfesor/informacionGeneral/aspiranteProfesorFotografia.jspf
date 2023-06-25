@@ -1,0 +1,23 @@
+<div id="perfil-informacion-general">
+    <div class="subtitulo-Perfil"><h3>Fotografía</h3></div>
+    <div class="row align-items-start">
+        <div class="col">
+            <form action="/actualizarFotoAP/${aspiranteAP.idAspiranteProfesor}" method="post" enctype="multipart/form-data" accept-charset="UTF-8">
+              <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+              <div class="input-group mb-3">
+                <input type="file" class="form-control" id="fotografiaAp" name="fotografiaCa" aria-hidden="true" accept=".png,.jpg,.jpeg">
+              </div>
+              <button class="btn btn-outline-secondary align-items-start" type="submit" id="btnSubirFotografia">Subir</button>
+            </form>
+        </div>
+        <div class="col">
+            <p>Para que la fotografía sea incorporada a su expediente, tome en cuenta los siguientes detalles de la foto:
+            <br>Tipo de archivo *.jpg, *.png
+            <br>El tamaño debería; tener de ancho 128px, como mínimo.
+            <br>El nombre del archivo no debe contener espacios, ni tildes.
+            <br>La fotografía debe de tener un solo fondo, donde resalte el rostro.
+            <br>Subir fotografías ajenas será considerado como una falta.</p>
+        </div>
+    </div>
+</div>                  
+

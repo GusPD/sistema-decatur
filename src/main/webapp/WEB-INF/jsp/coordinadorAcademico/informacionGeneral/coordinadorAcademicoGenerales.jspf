@@ -1,0 +1,434 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<div id="perfil-informacion-general">
+    <div class="subtitulo-Perfil"><h3>Información General
+            <sec:authorize access="hasAuthority('EDITAR_INFORMACION_PERFIL_COORDINADOR_PRIVILAGE')">
+              <span title="Editar datos" data-bs-toggle="modal" data-bs-target="#actualizarGeneralesModal" class="text-info puntero pull-right" onclick="cargarSelect()" style="cursor: pointer;">
+                  <i class="fa bi-pencil-square"></i>
+              </span>
+            </sec:authorize>
+        </h3>
+    </div>
+    <div class="overflow-auto" style="max-height: 55vh;">
+        <table style="width:100%; " class="table table-bordered">
+            <tbody>
+                <tr>
+                    <td width="20%">Carné</td>
+                    <td><c:if test="${not empty coordinadorCA.codCa}">${coordinadorCA.codCa}</c:if></td>
+                </tr>
+                <tr>
+                    <td>Nombres</td>
+                    <td><c:if test="${not empty coordinadorCA.nombresCa}">${coordinadorCA.nombresCa}</c:if></td>
+                </tr>
+                <tr>
+                    <td>Apellidos</td>
+                    <td><c:if test="${not empty coordinadorCA.apellidosCa}">${coordinadorCA.apellidosCa}</c:if></td>
+                </tr>
+                <tr>
+                    <td>Sexo</td>
+                    <td><c:if test="${not empty coordinadorCA.sexoCa}">${coordinadorCA.sexoCa}</c:if></td>
+                </tr>
+                <tr>
+                    <td>Género</td>
+                    <td><c:if test="${not empty coordinadorCA.generoCa}">${coordinadorCA.generoCa}</c:if></td>
+                </tr>
+                <tr>
+                    <td>Fecha Nacimiento</td>
+                    <td><c:if test="${not empty coordinadorCA.fechaNacCa}"><fmt:formatDate value="${coordinadorCA.fechaNacCa}" pattern="dd/MM/yyyy" /></c:if></td>
+                </tr>
+                <tr>
+                    <td>Estado Civil</td>
+                    <td><c:if test="${not empty coordinadorCA.estadoCivilCa}">${coordinadorCA.estadoCivilCa}</c:if></td>
+                </tr>
+                <tr>
+                    <td>Pais</td>
+                    <td>${paisSeleccionado}</td>
+                </tr>
+                <tr>
+                    <td>Nacionalidad</td>
+                    <td><c:if test="${not empty coordinadorCA.nacionalidadCa}">${coordinadorCA.nacionalidadCa}</c:if></td>
+                </tr>
+                <c:choose>
+                    <c:when test="${paisSeleccionado eq ''}">
+                    </c:when>
+                    <c:when test="${paisSeleccionado eq 'El Salvador'}">
+                        <tr>
+                            <td>DUI</td>
+                            <td><c:if test="${not empty coordinadorCA.duiCa}">${coordinadorCA.duiCa}</c:if></td>
+                        </tr>
+                        <tr>
+                            <td>NIT</td>
+                            <td><c:if test="${not empty coordinadorCA.nitCa}">${coordinadorCA.nitCa}</c:if></td>
+                        </tr>
+                        <tr>
+                            <td>NUP</td>
+                            <td><c:if test="${not empty coordinadorCA.nupCa}">${coordinadorCA.nupCa}</c:if></td>
+                        </tr>
+                    </c:when>
+                    <c:otherwise>
+                        <tr>
+                            <td>Pasaporte</td>
+                            <td><c:if test="${not empty coordinadorCA.pasaporteCa}">${coordinadorCA.pasaporteCa}</c:if></td>
+                        </tr>
+                        <tr>
+                            <td>Documento Personal</td>
+                            <td><c:if test="${not empty coordinadorCA.docPersonalCa}">${coordinadorCA.docPersonalCa}</c:if></td>
+                        </tr>
+                    </c:otherwise>
+                </c:choose>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div style="text-align: left;">
+    <!-- Modal para crear aspirantes -->
+    <div class="modal fade" id="actualizarGeneralesModal" tabindex="-1" aria-labelledby="crearModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="crearModalLabel">Información General</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="/ActualizarCoordinadorAcademico/${coordinadorCA.idCoorAca}" method="post" accept-charset="UTF-8" onsubmit="return validarParametros()">
+                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+                        <div id="MensajeErrorFecha" class="d-none">
+                            <div class="alert alert-danger d-flex align-items-center alert-dismissible fade show" role="alert">
+                                <strong><i class="bi bi-exclamation-triangle"></i> Error!  </strong>La edad debe ser mayor de 18 años.
+                                <button id="btnAlertaFecha" type="button" class="btn-close" aria-label="Close"></button>
+                            </div>
+                        </div>
+                        <div id="MensajeErrorFechaNacimiento" class="d-none">
+                            <div class="alert alert-danger d-flex align-items-center alert-dismissible fade show" role="alert">
+                                <strong><i class="bi bi-exclamation-triangle"></i> Error!  </strong>La fecha no es un formato válido.
+                                <button id="btnAlertaFechaNacimiento" type="button" class="btn-close" aria-label="Close"></button>
+                            </div>
+                        </div>
+                        <div id="MensajeErrorDui" class="d-none">
+                            <div class="alert alert-danger d-flex align-items-center alert-dismissible fade show" role="alert">
+                                <strong><i class="bi bi-exclamation-triangle"></i> Error!  </strong>El DUI no es un formato válido.
+                                <button id="btnAlertaDui" type="button" class="btn-close" aria-label="Close"></button>
+                            </div>
+                        </div>
+                        <div id="MensajeErrorNit" class="d-none">
+                            <div class="alert alert-danger d-flex align-items-center alert-dismissible fade show" role="alert">
+                                <strong><i class="bi bi-exclamation-triangle"></i> Error!  </strong>El NIT no es un formato válido.
+                                <button id="btnAlertaNit" type="button" class="btn-close" aria-label="Close"></button>
+                            </div>
+                        </div>
+                        <div id="MensajeErrorNup" class="d-none">
+                            <div class="alert alert-danger d-flex align-items-center alert-dismissible fade show" role="alert">
+                                <strong><i class="bi bi-exclamation-triangle"></i> Error!  </strong>El NUP no es un formato válido.
+                                <button id="btnAlertaNup" type="button" class="btn-close" aria-label="Close"></button>
+                            </div>
+                        </div>
+                        <div class="overflow-auto" style="max-height:55vh;">
+                            <div class="form-group">
+                                <label for="nombresCa" class="form-label">Nombre:</label>
+                                <input type="text" class="form-control" id="nombresCa" name="nombresCa" value="${coordinadorCA.nombresCa}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="apellidosCa" class="form-label">Apellido:</label>
+                                <input type="text" class="form-control" id="apellidosCa" name="apellidosCa" value="${coordinadorCA.apellidosCa}" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="sexoCa" class="form-label">Sexo:</label>
+                                <select type="text" class="form-select" id="sexoCa" name="sexoCa" required>
+                                    <option value="">Seleccione una opción</option>
+                                    <c:forEach items="${sexos}" var="eSexo" varStatus="status">
+                                        <option value="${eSexo}" <c:if test="${coordinadorCA.sexoCa == eSexo}">selected</c:if>>${eSexo}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="generoCa" class="form-label">Genero:</label>
+                                <select type="text" class="form-select" id="generoCa" name="generoCa" required>
+                                    <option value="">Seleccione una opción</option>
+                                    <c:forEach items="${generos}" var="eGenero">
+                                        <option value="${eGenero}" <c:if test="${coordinadorCA.generoCa == eGenero}">selected</c:if>>${eGenero}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="fechaNacCa" class="form-label">Fecha Nacimiento:</label>
+                                <input type="text" class="form-control" id="fechaNacCa" name="fechaNacCa" placeholder="dd / mm / yyyy" maxlength="10" value="<fmt:formatDate value="${coordinadorCA.fechaNacCa}" pattern="dd/MM/yyyy" />" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="estadoCivilCa" class="form-label">Estado Civil:</label>
+                                <select type="text" class="form-select" id="estadoCivilCa" name="estadoCivilCa" required>
+                                    <option value="">Seleccione una opción</option>
+                                    <c:forEach items="${estadosCiviles}" var="eEstadoCivil">
+                                        <option value="${eEstadoCivil}" <c:if test="${coordinadorCA.estadoCivilCa == eEstadoCivil}">selected</c:if>>${eEstadoCivil}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="idPais" class="form-label">País:</label>
+                                <select class="form-select" id="idPais" name="idPais" onchange="mostrarOcultarSelect()">
+                                    <option value="">Seleccione una opción</option>
+                                    <c:forEach items="${paises}" var="ePais">
+                                        <option value="${ePais.idPais}" <c:if test="${coordinadorCA.idPais == ePais.idPais}">selected</c:if>>${ePais.nombrePais}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="nacionalidadCa" class="form-label">Nacionalidad:</label>
+                                <select class="form-select" id="nacionalidadCa" name="nacionalidadCa" required>
+                                    <option value="">Seleccione una opción</option>
+                                    <c:forEach items="${nacionalidades}" var="eNacionalidad">
+                                        <option value="${eNacionalidad}" <c:if test="${coordinadorCA.nacionalidadCa == eNacionalidad}">selected</c:if>>${eNacionalidad}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                            <div id="group-duiCa" class="form-group">
+                                <label for="duiCa" class="form-label">DUI:</label>
+                                <input type="text" class="form-control" id="duiCa" name="duiCa" maxlength="10" placeholder="######## - #" value="${coordinadorCA.duiCa}">
+                            </div>
+                            <div id="group-nitCa" class="form-group">
+                                <label for="nitCa" class="form-label">NIT:</label>
+                                <input type="text" class="form-control" id="nitCa" name="nitCa" maxlength="17" placeholder="#### - #### - ### - #" value="${coordinadorCA.nitCa}">
+                            </div>
+                            <div id="group-nupCa" class="form-group">
+                                <label for="nupCa" class="form-label">NUP:</label>
+                                <input type="text" class="form-control" id="nupCa" name="nupCa" maxlength="15" placeholder="############" value="${coordinadorCA.nupCa}">
+                            </div>
+                            <div id="group-pasaporteCa" class="form-group">
+                                <label for="pasaporteCa" class="form-label">Pasaporte:</label>
+                                <input type="text" class="form-control" id="pasaporteCa" name="pasaporteCa" maxlength="9" placeholder="*********" value="${coordinadorCA.pasaporteCa}">
+                            </div>
+                            <div id="group-docPersonalCa" class="form-group">
+                                <label for="docPersonalCa" class="form-label">Documento Personal:</label>
+                                <input type="text" class="form-control" id="docPersonalCa" name="docPersonalCa" maxlength="20" placeholder="####################" value="${coordinadorCA.docPersonalCa}">
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-outline-success">Guardar</button>
+                            <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/jquery/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/inputmask/dist/jquery.inputmask.bundle.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        //Manejo de mascaras
+        var inputDocPersonal = document.getElementById('docPersonalCa');
+        var inputPasaporte = document.getElementById("pasaporteCa");
+        var inputDui = document.getElementById("duiCa");
+        var inputNit = document.getElementById("nitCa");
+        var inputNup = document.getElementById("nupCa");
+        var inputFechaNac = document.getElementById("fechaNacCa");
+        $(inputDocPersonal).inputmask('9999999999999999999999999999', {
+            showMaskOnFocus: false,
+            showMaskOnHover: false
+        });
+        $(inputPasaporte).inputmask('*********', {
+            showMaskOnFocus: false,
+            showMaskOnHover: false
+        });
+        $(inputDui).inputmask('99999999-9', {
+            showMaskOnFocus: false,
+            showMaskOnHover: false
+        });
+        $(inputNit).inputmask('9999-999999-999-9', {
+            showMaskOnFocus: false,
+            showMaskOnHover: false
+        });
+        $(inputNup).inputmask('999999999999', {
+            showMaskOnFocus: false,
+            showMaskOnHover: false
+        });
+        $(inputFechaNac).inputmask('99/99/9999', {
+            showMaskOnFocus: false,
+            showMaskOnHover: false
+        });
+        //Alerta de Fecha
+        var mensajeErrorFecha = document.getElementById("MensajeErrorFecha");
+        var botonAlertaFecha= document.getElementById("btnAlertaFecha");
+        botonAlertaFecha.addEventListener("click", function() {
+          mensajeErrorFecha.classList.add("d-none");
+        });
+        //Alerta de Fecha Nacimiento
+        var mensajeErrorFechaNacimiento = document.getElementById("MensajeErrorFechaNacimiento");
+        var botonAlertaFechaNacimiento= document.getElementById("btnAlertaFechaNacimiento");
+        botonAlertaFechaNacimiento.addEventListener("click", function() {
+          mensajeErrorFechaNacimiento.classList.add("d-none");
+        });
+        //Alerta de Dui
+        var mensajeErrorDui = document.getElementById("MensajeErrorDui");
+        var botonAlertaDui= document.getElementById("btnAlertaDui");
+        botonAlertaDui.addEventListener("click", function() {
+          mensajeErrorDui.classList.add("d-none");
+        });
+        //Alerta de Nit
+        var mensajeErrorNit = document.getElementById("MensajeErrorNit");
+        var botonAlertaNit= document.getElementById("btnAlertaNit");
+        botonAlertaNit.addEventListener("click", function() {
+          mensajeErrorNit.classList.add("d-none");
+        });
+        //Alerta de Nup
+        var mensajeErrorNup = document.getElementById("MensajeErrorNup");
+        var botonAlertaNup= document.getElementById("btnAlertaNup");
+        botonAlertaNup.addEventListener("click", function() {
+          mensajeErrorNup.classList.add("d-none");
+        });
+    });
+    function validarParametros() {
+        var resultado = true;
+        var mensajeErrorFecha = document.getElementById("MensajeErrorFecha");
+        var mensajeErrorFechaNacimiento = document.getElementById("MensajeErrorFechaNacimiento");
+        var mensajeErrorDui = document.getElementById("MensajeErrorDui");
+        var mensajeErrorNit = document.getElementById("MensajeErrorNit");
+        var mensajeErrorNup = document.getElementById("MensajeErrorNup");
+        var fechaNacimiento = document.getElementById('fechaNacCa').value;
+        var fechaInput= document.getElementById('fechaNacCa').value;
+        fechaInput=fechaInput.replace("_", "");
+        var duiInput= document.getElementById('duiCa').value;
+        duiInput=duiInput.replace("_", "");
+        var nitInput= document.getElementById('nitCa').value;
+        nitInput=nitInput.replace("_", "");
+        var nupInput= document.getElementById('nupCa').value;
+        nupInput=nupInput.replace("_", "");
+        var partesFecha = fechaNacimiento.split("/"); // Suponiendo que el formato de fecha es "dd-mm-yyyy"
+        var dia = parseInt(partesFecha[0], 10);
+        var mes = parseInt(partesFecha[1], 10) - 1; // Restamos 1 al mes porque en JavaScript los meses van de 0 a 11
+        var anio = parseInt(partesFecha[2], 10);
+        var fechaConvertida=anio+"/"+mes+"/"+dia;
+        var fechaNacimientoOk = new Date(fechaConvertida);
+        var fechaActual = new Date();
+        var edadMilisegundos = fechaActual.getTime() - fechaNacimientoOk.getTime();
+        var edadAnios = Math.floor(edadMilisegundos / (1000 * 60 * 60 * 24 * 365));
+        if (edadAnios < 18) {
+            mensajeErrorFecha.classList.remove("d-none");
+            resultado = false; // Detener el envío del formulario
+        }
+        if (fechaInput.length > 0 && fechaInput.length < 10) {
+            mensajeErrorFechaNacimiento.classList.remove("d-none");
+            resultado = false; // Detener el envío del formulario
+        }
+        if (duiInput.length > 0 && duiInput.length < 10) {
+            mensajeErrorDui.classList.remove("d-none");
+            resultado = false; // Detener el envío del formulario
+        }
+        if (nitInput.length > 0 && nitInput.length < 17) {
+            mensajeErrorNit.classList.remove("d-none");
+            resultado = false; // Detener el envío del formulario
+        }
+        if (nupInput.length > 0 && nupInput.length < 12) {
+            mensajeErrorNup.classList.remove("d-none");
+            resultado = false; // Detener el envío del formulario
+        }
+        return resultado;
+    }
+    function mostrarOcultarSelect() {
+        var inputDocPersonal = document.getElementById('docPersonalCa');
+        var inputPasaporte = document.getElementById("pasaporteCa");
+        var inputDui = document.getElementById("duiCa");
+        var inputNit = document.getElementById("nitCa");
+        var inputNup = document.getElementById("nupCa");
+        var selectPais = document.getElementById("idPais");
+        var docPersonal= document.getElementById("group-docPersonalCa");
+        var pasaporte = document.getElementById("group-pasaporteCa");
+        var dui = document.getElementById("group-duiCa");
+        var nit = document.getElementById("group-nitCa");
+        var nup = document.getElementById("group-nupCa");
+
+        if (selectPais.options[selectPais.selectedIndex].text === "Seleccione una opción"){
+            docPersonal.classList.add("d-none");
+            pasaporte.classList.add("d-none");
+            dui.classList.add("d-none");
+            nit.classList.add("d-none");
+            nup.classList.add("d-none");
+            inputDocPersonal.value="";
+            inputPasaporte.value="";
+            inputDui.value="";
+            inputNit.value="";
+            inputNup.value="";
+            inputDocPersonal.required = false;
+            inputPasaporte.required = false;
+            inputDui.required = false;
+            inputNit.required = false;
+            inputNup.required = false;
+        }else if (selectPais.options[selectPais.selectedIndex].text === "El Salvador") {
+            docPersonal.classList.add("d-none");
+            pasaporte.classList.add("d-none");
+            dui.classList.remove("d-none");
+            nit.classList.remove("d-none");
+            nup.classList.remove("d-none");
+            inputDocPersonal.value="";
+            inputPasaporte.value="";
+            inputDocPersonal.required = false;
+            inputPasaporte.required = false;
+            inputDui.required = true;
+            inputNit.required = true;
+            inputNup.required = true;
+        } else {
+            docPersonal.classList.remove("d-none");
+            pasaporte.classList.remove("d-none");
+            dui.classList.add("d-none");
+            nit.classList.add("d-none");
+            nup.classList.add("d-none");
+            inputDui.value="";
+            inputNit.value="";
+            inputNup.value="";
+            inputDui.required = false;
+            inputNit.required = false;
+            inputNup.required = false;
+            inputDocPersonal.required = true;
+            inputPasaporte.required = true;
+        }
+    }
+    function cargarSelect() {
+        var inputDocPersonal = document.getElementById('docPersonalCa');
+        var inputPasaporte = document.getElementById("pasaporteCa");
+        var inputDui = document.getElementById("duiCa");
+        var inputNit = document.getElementById("nitCa");
+        var inputNup = document.getElementById("nupCa");
+        var selectPais = document.getElementById("idPais");
+        var docPersonal= document.getElementById("group-docPersonalCa");
+        var pasaporte = document.getElementById("group-pasaporteCa");
+        var dui = document.getElementById("group-duiCa");
+        var nit = document.getElementById("group-nitCa");
+        var nup = document.getElementById("group-nupCa");
+
+        if (selectPais.options[selectPais.selectedIndex].text === "Seleccione una opción"){
+            docPersonal.classList.add("d-none");
+            pasaporte.classList.add("d-none");
+            dui.classList.add("d-none");
+            nit.classList.add("d-none");
+            nup.classList.add("d-none");
+            inputDocPersonal.required = false;
+            inputPasaporte.required = false;
+            inputDui.required = false;
+            inputNit.required = false;
+            inputNup.required = false;
+        }else if (selectPais.options[selectPais.selectedIndex].text === "El Salvador") {
+            docPersonal.classList.add("d-none");
+            pasaporte.classList.add("d-none");
+            dui.classList.remove("d-none");
+            nit.classList.remove("d-none");
+            nup.classList.remove("d-none");
+            inputDocPersonal.required = false;
+            inputPasaporte.required = false;
+            inputDui.required = true;
+            inputNit.required = true;
+            inputNup.required = true;
+        } else {
+            docPersonal.classList.remove("d-none");
+            pasaporte.classList.remove("d-none");
+            dui.classList.add("d-none");
+            nit.classList.add("d-none");
+            nup.classList.add("d-none");
+            inputDui.required = false;
+            inputNit.required = false;
+            inputNup.required = false;
+            inputDocPersonal.required = true;
+            inputPasaporte.required = true;
+        }
+    }
+</script>
+      

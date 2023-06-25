@@ -1,0 +1,203 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<div id="perfil-experiencia-laboral">
+    <div class="subtitulo-Perfil">
+        <div class="row col-sm-12 d-flex justify-content-end">
+            <div class="col-sm-11">
+                <h3>Experiencia Laboral</h3>
+            </div>
+            <sec:authorize access="hasAuthority('AGREGAR_EXPERIENCIA_PERFIL_ASPIRANTE_PRIVILAGE')"> 
+            <div class="col-sm-1">
+                <button type="button" class="btn-add btn btn-sm" data-bs-toggle="modal" data-bs-target="#agregarExperienciaLaboralModal">Agregar</button>
+            </div>
+            </sec:authorize>
+        </div>
+    </div>
+    <div class="overflow-auto" style="max-height: 55vh;">
+        <table style="width:100%; " class="table table-bordered small">
+            <thead>
+                <tr>
+                    <th scope="col">N°</th>
+                    <th scope="col">Nombre Istitución</th>
+                    <th scope="col">Cargo</th>
+                    <th scope="col">Funciones</th>
+                    <th scope="col">Periodo Inicio</th>
+                    <th scope="col">Periodo Fin</th>
+                    <th scope="col">Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <c:if test="${empty experienciasLaborales}">
+                    <tr>
+                        <td colspan="7">No hay registros</td>
+                    </tr>
+                </c:if>
+                <c:if test="${not empty experienciasLaborales}">
+                    <c:forEach items="${experienciasLaborales}" var="eExperienciaLaboral" varStatus="numeroExperienciaLaboral">
+                        <tr>
+                            <td>${numeroExperienciaLaboral.index+1}</td>
+                            <td>${eExperienciaLaboral.nombreInstitucion}</td>
+                            <td>${eExperienciaLaboral.cargo}</td>
+                            <td>${eExperienciaLaboral.funciones}</td>
+                            <td><fmt:formatDate value="${eExperienciaLaboral.periodoInicio}" pattern="dd/MM/yyyy" /></td>
+                            <td><fmt:formatDate value="${eExperienciaLaboral.periodoFin}" pattern="dd/MM/yyyy" /></td>
+                            <td>
+                                <sec:authorize access="hasAuthority('ELIMINAR_EXPERIENCIA_PERFIL_ASPIRANTE_PRIVILAGE')"> 
+                                <a href="#" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#confirmarEliminarExperienciaLaboral-${eExperienciaLaboral.idEl}">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                                <!-- Modal de confirmación de eliminación -->
+                                <div class="modal fade" id="confirmarEliminarExperienciaLaboral-${eExperienciaLaboral.idEl}" tabindex="-1" aria-labelledby="confirmarEliminarExperienciaLaboralLabel-${eExperienciaLaboral.idEl}" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="confirmarEliminarExperienciaLaboralLabel-${eExperienciaLaboral.idEl}">Confirmar eliminación</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <strong>¿Estás seguro de eliminar la experiencia laboral?</strong>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                <a href="/EliminarExperienciaLaboralAspiranteProfesor/${eExperienciaLaboral.idEl}/${aspiranteAP.idAspiranteProfesor}" class="btn btn-danger">Eliminar</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                </sec:authorize>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </c:if>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div style="text-align: left;">
+    <!-- Modal para crear aspirantes -->
+    <div class="modal fade" id="agregarExperienciaLaboralModal" tabindex="-1" aria-labelledby="crearModalExperienciaLaboralLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="crearModalExperienciaLaboralLabel">Agregar Experiencia Laboral</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="/AgregarExperienciaLaboralAspiranteProfesor/${aspiranteAP.idAspiranteProfesor}/${aspiranteAP.idListEl}" method="post" accept-charset="UTF-8" onsubmit="return validarPeriodos()">
+                    <div class="modal-body">
+                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+                        <div id="MensajeErrorPeriodo" class="d-none">
+                            <div class="alert alert-danger d-flex align-items-center alert-dismissible fade show" role="alert">
+                                <strong><i class="bi bi-exclamation-triangle"></i> Error!&nbsp;</strong>El periodo no es válido.
+                                <button id="btnAlertaPeriodo" type="button" class="btn-close" aria-label="Close"></button>
+                            </div>
+                        </div>
+                        <div id="MensajeErrorPeriodoInicio" class="d-none">
+                            <div class="alert alert-danger d-flex align-items-center alert-dismissible fade show" role="alert">
+                                <strong><i class="bi bi-exclamation-triangle"></i> Error!&nbsp;</strong>El formato del periodo de inicio no es válido.
+                                <button id="btnAlertaPeriodoInicio" type="button" class="btn-close" aria-label="Close"></button>
+                            </div>
+                        </div>
+                        <div id="MensajeErrorPeriodoFin" class="d-none">
+                            <div class="alert alert-danger d-flex align-items-center alert-dismissible fade show" role="alert">
+                                <strong><i class="bi bi-exclamation-triangle"></i> Error!&nbsp;</strong>El formato del periodo de fin no es válido.
+                                <button id="btnAlertaPeriodoFin" type="button" class="btn-close" aria-label="Close"></button>
+                            </div>
+                        </div>
+                        <div class="overflow-auto" style="max-height:55vh;">
+                            <div class="form-group">
+                                <label for="link" class="form-label">Nombre de Institución:</label>
+                                <input type="text" class="form-control" id="nombreInstitucion" name="nombreInstitucion" maxlength="100" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="link" class="form-label">Cargo:</label>
+                                <input type="text" class="form-control" id="cargo" name="cargo" maxlength="100" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="link" class="form-label">Funciones:</label>
+                                <input type="text" class="form-control" id="funciones" name="funciones" maxlength="500" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="link" class="form-label">Periodo de Inicio:</label>
+                                <input type="text" class="form-control" id="periodoInicio" name="periodoInicio" maxlength="10" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="link" class="form-label">Periodo de Fin:</label>
+                                <input type="text" class="form-control" id="periodoFin" name="periodoFin" maxlength="10" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-outline-success">Guardar</button>
+                        <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/inputmask/dist/jquery.inputmask.bundle.min.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        //Manejo de mascaras
+        var inputPeriodoInicio = document.getElementById("periodoInicio");
+        $(inputPeriodoInicio).inputmask('99/99/9999', {
+            showMaskOnFocus: false,
+            showMaskOnHover: false
+        });
+        var inputPeriodoFin = document.getElementById("periodoFin");
+        $(inputPeriodoFin).inputmask('99/99/9999', {
+            showMaskOnFocus: false,
+            showMaskOnHover: false
+        });
+        //Alerta de Periodo
+        var mensajeErrorPeriodo= document.getElementById("MensajeErrorPeriodo");
+        var botonAlertaPeriodo=document.getElementById("btnAlertaPeriodo");
+        botonAlertaPeriodo.addEventListener("click", function() {
+          mensajeErrorPeriodo.classList.add("d-none");
+        });
+        //Alerta de Periodo Inicio
+        var mensajeErrorPeriodoInicio= document.getElementById("MensajeErrorPeriodoInicio");
+        var botonAlertaPeriodoInicio=document.getElementById("btnAlertaPeriodoInicio");
+        botonAlertaPeriodoInicio.addEventListener("click", function() {
+          mensajeErrorPeriodoInicio.classList.add("d-none");
+        });
+        //Alerta de Periodo Fin
+        var mensajeErrorPeriodoFin= document.getElementById("MensajeErrorPeriodoFin");
+        var botonAlertaPeriodoFin=document.getElementById("btnAlertaPeriodoFin");
+        botonAlertaPeriodoFin.addEventListener("click", function() {
+          mensajeErrorPeriodoFin.classList.add("d-none");
+        });
+    });
+    function validarPeriodos() {
+        var resultado = true;
+        const periodoInicio = document.getElementById('periodoInicio').value;
+        const periodoFin = document.getElementById('periodoFin').value;
+        var mensajeErrorPeriodo= document.getElementById("MensajeErrorPeriodo");
+        var mensajeErrorPeriodoInicio= document.getElementById("MensajeErrorPeriodoInicio");
+        var mensajeErrorPeriodoFin= document.getElementById("MensajeErrorPeriodoFin");
+
+        var periodoInicioS=periodoInicio;
+        var periodoFinS=periodoFin;
+        
+        periodoInicioS=periodoInicioS.replace("_","");
+        periodoFinS = periodoFinS.replace("_","");
+
+        const fechaInicio = new Date(periodoInicio);
+        const fechaFin = new Date(periodoFin);
+        
+        if (fechaInicio > fechaFin) {
+            mensajeErrorPeriodo.classList.remove("d-none");
+            resultado = false; // Detener el envío del formulario
+        }
+        if (periodoInicioS.length >0 && periodoInicioS.length < 10) {
+            mensajeErrorPeriodoInicio.classList.remove("d-none");
+            resultado = false; // Detener el envío del formulario
+        }
+        if (periodoFinS.length >0 && periodoFinS.length < 10) {
+            mensajeErrorPeriodoFin.classList.remove("d-none");
+            resultado = false; // Detener el envío del formulario
+        }
+        return resultado;
+    }
+</script>
+                            

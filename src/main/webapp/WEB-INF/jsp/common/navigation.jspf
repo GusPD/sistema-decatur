@@ -1,0 +1,98 @@
+<nav id="sidebar" class="navbar-collapse collapse show">
+    <div class="p-4 pt-5">
+        <a href="#Logo" class="img logo rounded-circle mb-5" style="background-image: url(images/logo.jpg);"></a>
+        <ul class="list-unstyled components mb-5">
+            <li class="active">
+                <a href="#Procesos" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Procesos</a>
+                <ul class="collapse list-unstyled" id="Procesos">
+                    <li>
+                        <a href="/GestionarMaestria">Gestionar Maestría</a>
+                    </li>
+                    <li>
+                        <a href="#">Inscribir Maestria</a>
+                    </li>
+                    <li>
+                        <a href="#">Postular a Profesor</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#Perfiles" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Perfiles</a>
+                <ul class="collapse list-unstyled" id="Perfiles">
+                    <li>
+                        <a href="/gestionarCoordinadorAcademico">Coordinadores</a>
+                    </li>
+                    <li>
+                        <a href="/GestionarAspiranteProfesor">Aspirantes a Profesor</a>
+                    </li>
+                    <li>
+                        <a href="/viewEstudiantes">Estudiantes</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#Administracion" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Administración</a>
+                <ul class="collapse list-unstyled" id="Administracion">
+                    <li>
+                        <a href="/viewUsuarios">Usuarios</a>
+                    </li>
+                    <li>
+                        <a href="/viewRoles">Roles</a>
+                    </li>
+                    <li>
+                        <a href="/viewFacultad">Facultades</a>
+                    </li>
+                    <li>
+                        <a href="/viewEscuelaPosgrado">Escuelas de Posgrado</a>
+                    </li>
+                    <li>
+                        <a href="/GestionarAreaConocimiento">Áreas del Conocimiento</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#Maestria" data-bs-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Maestría</a>
+                <ul class="collapse list-unstyled" id="Maestria">
+                    <li>
+                        <a href="/GestionarPlanEstudio">Asignaturas</a>
+                    </li>
+                    <li>
+                        <a href="/GestionarCohorte">Gestión de Cohorte</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>
+<!-- Contenido de la Pagina  -->
+    <div id="content" class="p-4 p-md-5">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+                <button type="button" id="sidebarCollapse" class="btn btn-primary">
+                    <i class="fa fa-bars"></i>
+                    <span class="sr-only">Toggle Menu</span>
+                </button>
+                <button class="btn btn-dark d-inline-block d-lg-none ml-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle Navigation">
+                    <i class="fa fa-bars"></i>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                  <ul class="nav navbar-nav ml-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="#">Perfil</a>
+                    </li>
+                    <li class="nav-item active">
+                        <div class="nav-link">
+                            <form method="POST" action="/logout">
+                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                            <a onclick="this.parentNode.submit()" href="#"><i class="fa bi-power"></i>  Salir</i></a>
+                        </form>
+                        </div>
+                    </li>
+                  </ul>
+                </div>
+            </div>
+        </nav>
+<!--<div class="titulo">
+    <h1>${pageTitle}</h1>
+</div>-->
+            
