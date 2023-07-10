@@ -1,157 +1,90 @@
 package com.gl05.bad.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
-import java.util.*;
-import javax.persistence.*;
-//import lombok.Data;
+import java.math.BigInteger;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import lombok.Data;
 
+@Data
 @Entity
 @Table(name = "USUARIO")
-public class Usuario implements Serializable{
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u"),
+    @NamedQuery(name = "Usuario.findByIdUsuario", query = "SELECT u FROM Usuario u WHERE u.idUsuario = :idUsuario"),
+    @NamedQuery(name = "Usuario.findByUsername", query = "SELECT u FROM Usuario u WHERE u.username = :username"),
+    @NamedQuery(name = "Usuario.findByPassword", query = "SELECT u FROM Usuario u WHERE u.password = :password"),
+    @NamedQuery(name = "Usuario.findByEmail", query = "SELECT u FROM Usuario u WHERE u.email = :email"),
+    @NamedQuery(name = "Usuario.findByIntentos", query = "SELECT u FROM Usuario u WHERE u.intentos = :intentos"),
+    @NamedQuery(name = "Usuario.findByBloqueado", query = "SELECT u FROM Usuario u WHERE u.bloqueado = :bloqueado"),
+    @NamedQuery(name = "Usuario.findByHabilitado", query = "SELECT u FROM Usuario u WHERE u.habilitado = :habilitado")})
+public class Usuario implements Serializable {
+
     private static final long serialVersionUID = 1L;
-    
-    @Column(name="IDUSUARIO")
     @Id
-    @SequenceGenerator(name = "USUARIO_SEQ", sequenceName = "USUARIO_SEQ", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "USUARIO_SEQ")
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "ID_USUARIO")
+    @SequenceGenerator(name = "S_USUARIO", sequenceName = "S_USUARIO", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "S_USUARIO")
     private Long idUsuario;
- 
-    @Column(name="USERNAME")
+    
+    @Size(max = 50)
+    @Column(name = "USERNAME")
     private String username;
     
-    @Column(name="EMAIL")
+    @Size(max = 100)
+    @Column(name = "PASSWORD")
+    private String password;
+    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
+    
+    @Size(max = 100)
+    @Column(name = "EMAIL")
     private String email;
     
-    @Column(name="PASSWORD_USER")
-    private String password;
+    @Column(name = "INTENTOS")
+    private int intentos;
     
-    @Column(name="ENABLE_USER")
-    private boolean enabled;
+    @Column(name = "BLOQUEADO")
+    private int bloqueado;
     
-    @Column(name="NUMEROINTENTOS")
-    private int numerointentos;
-    
-    @Column(name="BLOQUEADO")
-    private int usuarioBloqueado;
-    
-   //Establezco la relación con la base de datos
+    @Column(name = "HABILITADO")
+    private boolean habilitado;
+
+    //Establezco la relación con la base de datos
     @ManyToMany//(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-   @JoinTable(
+    @JoinTable(
            name = "USUARIO_ROLES",
-            joinColumns = @JoinColumn(name="IDUSUARIO"),
-            inverseJoinColumns = @JoinColumn(name="IDROL")
+            joinColumns = @JoinColumn(name="ID_USUARIO"),
+            inverseJoinColumns = @JoinColumn(name="ID_ROL")
     )
-    private Set<Roles> roles = new HashSet<>();
     
-////    @OneToMany(mappedBy = "idusuario")
-//    private Collection<AspiranteProfesor> aspiranteProfesorCollection;
-//    @OneToMany(mappedBy = "idusuario")
-//    private Collection<CoordinadorAcademico> coordinadorAcademicoCollection;
-
-    public Usuario(Long idUsuario, String username, String email, String password, boolean enabled, int numerointentos, int usuarioBloqueado) {
-        this.idUsuario = idUsuario;
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.enabled = enabled;
-        this.numerointentos = numerointentos;
-        this.usuarioBloqueado = usuarioBloqueado;
-    }
-
-    public Usuario(String username, String email, String password, boolean enabled, int numerointentos, int usuarioBloqueado) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.enabled = enabled;
-        this.numerointentos = numerointentos;
-        this.usuarioBloqueado = usuarioBloqueado;
-    }
-
-    public Usuario() {
-    }
-
-    public Long getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(Long idUsuario) {
-        this.idUsuario = idUsuario;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
+    private Set<Rol> roles = new HashSet<>();
     
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public Set<Roles> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Roles> roles) {
-        this.roles = roles;
-    }
-
-    public int getNumerointentos() {
-        return numerointentos;
-    }
-
-    public void setNumerointentos(int numerointentos) {
-        this.numerointentos = numerointentos;
-    }
-
-    public int getUsuarioBloqueado() {
-        return usuarioBloqueado;
-    }
-
-    public void setUsuarioBloqueado(int usuarioBloqueado) {
-        this.usuarioBloqueado = usuarioBloqueado;
-    }
-    
-//    public Collection<AspiranteProfesor> getAspiranteProfesorCollection() {
-//        return aspiranteProfesorCollection;
-//    }
-//
-//    public void setAspiranteProfesorCollection(Collection<AspiranteProfesor> aspiranteProfesorCollection) {
-//        this.aspiranteProfesorCollection = aspiranteProfesorCollection;
-//    }
-//
-//    public Collection<CoordinadorAcademico> getCoordinadorAcademicoCollection() {
-//        return coordinadorAcademicoCollection;
-//    }
-//
-//    public void setCoordinadorAcademicoCollection(Collection<CoordinadorAcademico> coordinadorAcademicoCollection) {
-//        this.coordinadorAcademicoCollection = coordinadorAcademicoCollection;
-//    }
-
     //Añade roles al usuario
-    public void añadirRol(Roles rol){
+    public void añadirRol(Rol rol){
         this.roles.add(rol);
     }
 
@@ -181,7 +114,4 @@ public class Usuario implements Serializable{
     public String toString() {
         return username ;
     }
-    
-    
-    
 }

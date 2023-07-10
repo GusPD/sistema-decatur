@@ -1,10 +1,10 @@
 package com.gl05.bad.servicio;
 
-import com.gl05.bad.domain.Permisos;
+import com.gl05.bad.domain.Permiso;
 import java.util.List;
 
 public interface PermisosService {
-    public List<Permisos> listaPermisos();
+    public List<Permiso> listaPermisos();
 
-    public void AgregarPermiso(Permisos permiso);
+    public void AgregarPermiso(Permiso permiso);
 }

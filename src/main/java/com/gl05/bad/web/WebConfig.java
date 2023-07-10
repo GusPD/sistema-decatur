@@ -1,11 +1,8 @@
 package com.gl05.bad.web;
 
-import java.util.List;
 import java.util.Locale;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
@@ -39,11 +36,4 @@ public class WebConfig implements WebMvcConfigurer{
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/login").setViewName("login");
     }
-    
-//    @Override
-//    public void addViewControllers(ViewControllerRegistry registro){
-//        registro.addViewController("/").setViewName("index");
-//        registro.addViewController("/login");
-//        registro.addViewController("/errores/403").setViewName("/errores/403");
-//    }
 }

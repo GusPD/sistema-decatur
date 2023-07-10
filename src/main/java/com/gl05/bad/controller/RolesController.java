@@ -1,7 +1,6 @@
 package com.gl05.bad.controller;
 
-import com.gl05.bad.dao.RolesDao;
-import com.gl05.bad.domain.Roles;
+import com.gl05.bad.domain.Rol;
 import com.gl05.bad.servicio.BitacoraServiceImp;
 import com.gl05.bad.servicio.PermisosService;
 import com.gl05.bad.servicio.RolesService;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import com.gl05.bad.dao.RolDao;
 
 @Controller
 public class RolesController {
@@ -33,10 +33,10 @@ public class RolesController {
     private PermisosService permisosService;
 
     @Autowired
-    private RolesDao rolDao;
+    private RolDao rolDao;
 
     //Obtener los roles y mostrarlos en tablas
-    @GetMapping("/viewRoles")
+    @GetMapping("/GestionarRoles")
     public String mostrarRoles(Model model) {
         model.addAttribute("pageTitle", "Roles");
 
@@ -47,18 +47,17 @@ public class RolesController {
         model.addAttribute("Permisos", elementoPermiso);
         //model.addAttribute("rol", new Roles());
 
-        return "/Roles/GestionarRoles2";
+        return "/Roles/GestionarRoles";
     }
     
     @GetMapping("/roles/data")
     @ResponseBody
-    public DataTablesOutput<Roles> getRoles(@Valid DataTablesInput input) {
+    public DataTablesOutput<Rol> getRoles(@Valid DataTablesInput input) {
         return rolesService.listarRoles(input);
     }
-    
 
     @PostMapping("/AgregarRol")
-    public ResponseEntity AgregarRol(Roles rol, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public ResponseEntity AgregarRol(Rol rol, HttpServletRequest request, RedirectAttributes redirectAttributes) {
          
         try {
             rolesService.AgregarRol(rol);
@@ -69,11 +68,10 @@ public class RolesController {
             String error = "Ocurrió un error al agregar el rol.";
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
-//        return "redirect:/viewRoles";
     }
 
     @PostMapping("/EliminarRol/{idRol}")
-    public ResponseEntity EliminarRol(Roles rol, RedirectAttributes redirectAttributes) {
+    public ResponseEntity EliminarRol(Rol rol, RedirectAttributes redirectAttributes) {
         try {
             rolesService.eliminarRol(rol);
             String mensaje = "Se ha eliminado el rol correctamente.";
@@ -83,12 +81,11 @@ public class RolesController {
             String error = "Ha ocurrido un error al eliminar el rol";
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
-//        return "redirect:/viewRoles";
     }
 
     @GetMapping("/ObtenerRol/{id}")
-    public ResponseEntity<Roles> obtenerRol(@PathVariable Long id) {
-        Roles rol = rolesService.encontrarRol(id);
+    public ResponseEntity<Rol> obtenerRol(@PathVariable Long id) {
+        Rol rol = rolesService.encontrarRol(id);
         if (rol != null) {
             return ResponseEntity.ok(rol);
         } else {
@@ -97,7 +94,7 @@ public class RolesController {
     }
     
     @PostMapping("/ActualizarRol")
-    public ResponseEntity ActualizarRol(Roles rol, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public ResponseEntity ActualizarRol(Rol rol, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             rolesService.actualizarRol(rol);
             String mensaje = "Se ha actualizado el rol correctamente.";
@@ -107,8 +104,5 @@ public class RolesController {
            String error = "Ha ocurrido un error al actualizar el rol.";
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
-//        return "redirect:/viewRoles";
     }
-    
-
 }

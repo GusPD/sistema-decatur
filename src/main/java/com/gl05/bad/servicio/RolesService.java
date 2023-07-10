@@ -1,21 +1,21 @@
 package com.gl05.bad.servicio;
 
-import com.gl05.bad.domain.Roles;
+import com.gl05.bad.domain.Rol;
 import java.util.List;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 
 public interface RolesService {
     
-    public List<Roles> listaRoles();
+    public List<Rol> listaRoles();
     
-    public DataTablesOutput<Roles> listarRoles(DataTablesInput input);
+    public DataTablesOutput<Rol> listarRoles(DataTablesInput input);
    
-    public void AgregarRol(Roles rol);
+    public void AgregarRol(Rol rol);
     
-    public Roles encontrarRol(Long rol);
+    public Rol encontrarRol(Long rol);
     
-    public void eliminarRol(Roles rol);
+    public void eliminarRol(Rol rol);
     
-    public void actualizarRol(Roles rol);
+    public void actualizarRol(Rol rol);
 }

@@ -7,7 +7,7 @@ import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 
 public interface UserService {
     
-   public List<Usuario> listaUsuarios();
+    public List<Usuario> listaUsuarios();
     
     public DataTablesOutput<Usuario> listarUsuarios(DataTablesInput input);
    
@@ -22,6 +22,4 @@ public interface UserService {
     public Usuario encontrarUsuarioPorEmail(String email);
     
     public void actualizarUsuario(Usuario usuario);
-    
-    
 }

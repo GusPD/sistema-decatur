@@ -1,16 +1,53 @@
 $(document).ready(function () {
-    $('#rolesTable').DataTable({
+    var table = $('#rolesTable').DataTable({
         ajax: '/roles/data',
         processing: true,
         serverSide: true,
-        dom: "<'row w-100'<'col-sm-6'l><'col-sm-6'f>>" +
-                "<'row w-100'<'col-sm-12 my-4'tr>>" +
-                "<'row w-100'<'col-sm-5'i><'col-sm-7'p>>",
+        order: [[0, 'asc']],
+        dom: "<'row w-100'<'col-sm-12 mb-4'B>>" +
+             "<'row w-100'<'col-sm-6'l><'col-sm-6'f>>" +
+             "<'row w-100'<'col-sm-12 my-4'tr>>" +
+             "<'row w-100'<'col-sm-5'i><'col-sm-7'p>>",
+        lengthMenu: [[5, 25, 50, 100, -1], [5, 25, 50, 100, 'Todos']], // Opciones de selección para mostrar registros por página
+        pageLength: 5, // Cantidad de registros por página por defecto
+        buttons: [
+            {
+                extend: 'copy',
+                text: 'Copiar',
+                class: 'btn-sm',
+                exportOptions: {
+                  columns: [0, 1] // Índices de las columnas que se copiarán
+                }
+            },
+            {
+                extend: 'excel',
+                text: 'Exportar a Excel',
+                class: 'btn-sm',
+                title: 'Roles del sistema', // Título del reporte en Excel
+                filename: 'Roles ' + getCurrentDateTime(), // Nombre del archivo Excel
+                exportOptions: {
+                  columns: [0, 1] // Índices de las columnas que se exportarán
+                }
+            },
+            {
+                extend: 'pdf',
+                text: 'Exportar a PDF',
+                class: 'btn-sm',
+                title: 'Roles del sistema', // Título del reporte en PDF
+                filename: 'Roles ' + getCurrentDateTime(), // Nombre del archivo PDF
+                exportOptions: {
+                  columns: [0, 1] // Índices de las columnas que se exportarán
+                },
+                customize: function (doc) {
+                  doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split('');
+                }
+            }
+        ],
         columns: [
-            {data: 'nombre', width: '20%'},
+            {data: 'nombre', width: '25%'},
             {
                 data: 'permisos',
-                width: '40%',
+                width: '50%',
                 render: function (data) {
                     var nombresPermisos = data.map(function (permiso) {
                         return permiso.nombre;
@@ -22,7 +59,7 @@ $(document).ready(function () {
                 title: 'Acciones',
                 sortable: false,
                 searchable: false,
-                width: '40%',
+                width: '25%',
                 render: function (data, type, row) {
                     // Aquí puedes construir el HTML para las acciones según tus necesidades
 //                    var actionsHtml = '<a type="button" class="btn btn-outline-secondary" href="/DetalleMaestria/' + row.idMaestria + '">';
@@ -70,14 +107,33 @@ $(document).ready(function () {
             },
             "buttons": {
                 "copy": "Copiar",
-                "colvis": "Visibilidad"
+                "copyTitle": "Copiar al portapapeles",
+                copySuccess: {
+                  _: "%d filas copiadas al portapapeles",
+                  1: "1 fila copiada al portapapeles"
+                }
             }
         },
         search: {
             return: true
         }
     });
+    table.columns.adjust();
+    new $.fn.dataTable.FixedHeader(table);
+    table.buttons().container().appendTo('.botonExportar');
+    // Función para obtener la fecha y hora actual en formato deseado
+    function getCurrentDateTime() {
+        var date = new Date();
+        var year = date.getFullYear();
+        var month = String(date.getMonth() + 1).padStart(2, '0');
+        var day = String(date.getDate()).padStart(2, '0');
+        var hours = String(date.getHours()).padStart(2, '0');
+        var minutes = String(date.getMinutes()).padStart(2, '0');
+        var seconds = String(date.getSeconds()).padStart(2, '0');
 
+        return year + month + day + '_' + hours + minutes + seconds;
+    }
+    
     $.validator.addMethod(
     "validarnombre",
     function (value, element) {

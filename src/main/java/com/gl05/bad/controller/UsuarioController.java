@@ -36,7 +36,7 @@ public class UsuarioController {
     private PasswordEncoder passwordEncoder;
 
     //Obtener los usuarios y mostrarlos en tablas
-    @GetMapping("/viewUsuarios")
+    @GetMapping("/GestionarUsuarios")
     public String mostrarUsuarios(Model model) {
         model.addAttribute("pageTitle", "Usuarios");
 
@@ -47,7 +47,7 @@ public class UsuarioController {
         model.addAttribute("roles", elementoRol);
         model.addAttribute("usuario", new Usuario());
 
-        return "/Usuarios/GestionarUsuarios2";
+        return "/Usuarios/GestionarUsuarios";
     }
     
     @GetMapping("/usuarios/data")
@@ -70,8 +70,6 @@ public class UsuarioController {
             String error = "Ocurrió un error al agregar al usuario.";
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
-
-//        return "redirect:/viewUsuarios";
     }
 
     @PostMapping("/EliminarUsuario/{idUsuario}")
@@ -85,7 +83,6 @@ public class UsuarioController {
             String error = "Ha ocurrido un error al eliminar el usuario";
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
-//        return "redirect:/viewUsuarios";
     }
 
     @GetMapping("/ObtenerUsuario/{id}")
@@ -121,7 +118,5 @@ public class UsuarioController {
             String error = "Ha ocurrido un error al actualizar el usuario.";
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
-//        return "redirect:/viewUsuarios";
     }
-
 }
