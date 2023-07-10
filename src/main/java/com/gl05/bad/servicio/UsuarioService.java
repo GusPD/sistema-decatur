@@ -1,8 +1,8 @@
 package com.gl05.bad.servicio;
 
 import com.gl05.bad.dao.UsuarioDao;
-import com.gl05.bad.domain.Permisos;
-import com.gl05.bad.domain.Roles;
+import com.gl05.bad.domain.Permiso;
+import com.gl05.bad.domain.Rol;
 import com.gl05.bad.domain.Usuario;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -33,29 +33,27 @@ public class UsuarioService implements UserDetailsService {
             
         }
 
-        if (usuario.getUsuarioBloqueado() == 1) {
+        if (usuario.getBloqueado() == 1) {
             throw new LockedException("La cuenta está bloqueada");
         }
 
-
         return new org.springframework.security.core.userdetails.User(
-                usuario.getUsername(), usuario.getPassword(), usuario.isEnabled(), true, true,
+                usuario.getUsername(), usuario.getPassword(), usuario.isHabilitado(), true, true,
                 true, getAuthorities(usuario.getRoles()));
     }
 
-    private Collection<? extends GrantedAuthority> getAuthorities(Collection<Roles> roles) {
+    private Collection<? extends GrantedAuthority> getAuthorities(Collection<Rol> roles) {
         return getGrantedAuthorities(getPrivileges(roles));
     }
 
-    private List<String> getPrivileges(Collection<Roles> roles) {
-
+    private List<String> getPrivileges(Collection<Rol> roles) {
         List<String> privileges = new ArrayList<>();
-        List<Permisos> collection = new ArrayList<>();
-        for (Roles role : roles) {
+        List<Permiso> collection = new ArrayList<>();
+        for (Rol role : roles) {
             privileges.add(role.getNombre());
             collection.addAll(role.getPermisos());
         }
-        for (Permisos item : collection) {
+        for (Permiso item : collection) {
             privileges.add(item.getNombre());
         }
         return privileges;

@@ -1,3 +1,7 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
 package com.gl05.bad.domain;
 
 import java.io.Serializable;
@@ -12,43 +16,51 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
 import lombok.Data;
 
+/**
+ *
+ * @author Gustavo Delgado
+ */
 @Data
 @Entity
+@Table(name = "BITACORA")
+@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Bitacora.findAll", query = "SELECT b FROM Bitacora b"),
     @NamedQuery(name = "Bitacora.findByIdBitacora", query = "SELECT b FROM Bitacora b WHERE b.idBitacora = :idBitacora"),
-    @NamedQuery(name = "Bitacora.findByNombreEvento", query = "SELECT b FROM Bitacora b WHERE b.nombreEvento = :nombreEvento"),
-    @NamedQuery(name = "Bitacora.findByHoraEvento", query = "SELECT b FROM Bitacora b WHERE b.horaEvento = :horaEvento"),
+    @NamedQuery(name = "Bitacora.findByUsername", query = "SELECT b FROM Bitacora b WHERE b.username = :username"),
+    @NamedQuery(name = "Bitacora.findByEvento", query = "SELECT b FROM Bitacora b WHERE b.evento = :evento"),
+    @NamedQuery(name = "Bitacora.findByHora", query = "SELECT b FROM Bitacora b WHERE b.hora = :hora"),
     @NamedQuery(name = "Bitacora.findByIpEquipo", query = "SELECT b FROM Bitacora b WHERE b.ipEquipo = :ipEquipo")})
 public class Bitacora implements Serializable {
+
     private static final long serialVersionUID = 1L;
-    
     @Id
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "ID_BITACORA")
     @SequenceGenerator(name = "S_BITACORA", sequenceName = "S_BITACORA", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "S_BITACORA")
-    private Long idBitacora;    
-    
-    @Basic(optional = false)
-    @Column(name = "NOMBRE_USUARIO")
-    private String nombreUsuario;
-    
-    @Basic(optional = false)
-    @Column(name = "NOMBRE_EVENTO")
-    private String nombreEvento;
-    
-    @Basic(optional = false)
-    @Column(name = "HORA_EVENTO")
-    private LocalDateTime horaEvento;
-    
-    @Basic(optional = false)
+    private Integer idBitacora;
+    @Size(max = 50)
+    @Column(name = "USERNAME")
+    private String username;
+    @Size(max = 50)
+    @Column(name = "EVENTO")
+    private String evento;
+    @Column(name = "HORA")
+    private LocalDateTime hora;
+    @Size(max = 15)
     @Column(name = "IP_EQUIPO")
     private String ipEquipo;
-    
+
     @Override
     public int hashCode() {
         int hash = 0;

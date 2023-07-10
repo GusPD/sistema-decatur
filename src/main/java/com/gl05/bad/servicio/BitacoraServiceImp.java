@@ -2,27 +2,39 @@ package com.gl05.bad.servicio;
 
 import com.gl05.bad.dao.BitacoraDao;
 import com.gl05.bad.domain.Bitacora;
+import com.gl05.bad.domain.Usuario;
 import java.time.LocalDateTime;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
+import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class BitacoraServiceImp {
-  @Autowired
+public class BitacoraServiceImp implements BitacoraService{
+    @Autowired
     private BitacoraDao bitacoraDao;
   
-  @Autowired
+    @Autowired
     private HttpServletRequest request;
-
+  
+    @Override
+    @Transactional(readOnly = true)
+    public List<Bitacora> listaBitacora() {
+        return (List<Bitacora>) bitacoraDao.findAll();
+    }
+    
+    @Override
     public void registrarInicioSesion(String usuario) {
         Bitacora bitacora = new Bitacora();
-        bitacora.setNombreUsuario(usuario);
-        bitacora.setNombreEvento("Inicio de sesión");
-        bitacora.setHoraEvento(LocalDateTime.now());
+        bitacora.setUsername(usuario);
+        bitacora.setEvento("Inicio de sesión");
+        bitacora.setHora(LocalDateTime.now());
         
         String ip = obtenerDireccionIP();
         bitacora.setIpEquipo(ip);
@@ -30,11 +42,12 @@ public class BitacoraServiceImp {
         bitacoraDao.save(bitacora);
     }
     
+    @Override
     public void registrarCerrarSesion(String usuario) {
         Bitacora bitacora = new Bitacora();
-        bitacora.setNombreUsuario(usuario);
-        bitacora.setNombreEvento("Cierre de sesión");
-        bitacora.setHoraEvento(LocalDateTime.now());
+        bitacora.setUsername(usuario);
+        bitacora.setEvento("Cierre de sesión");
+        bitacora.setHora(LocalDateTime.now());
         
         String ip = obtenerDireccionIPCierre();
         bitacora.setIpEquipo(ip);
@@ -42,17 +55,24 @@ public class BitacoraServiceImp {
         bitacoraDao.save(bitacora);
     }
 
+    @Override
     public void registrarAccion(String accion) {
         Bitacora bitacora = new Bitacora();
-        bitacora.setNombreUsuario(obtenerUsuarioActual());
-        bitacora.setNombreEvento(accion);
-        bitacora.setHoraEvento(LocalDateTime.now());
+        bitacora.setUsername(obtenerUsuarioActual());
+        bitacora.setEvento(accion);
+        bitacora.setHora(LocalDateTime.now());
         
         
         String ip = obtenerDireccionIP();
         bitacora.setIpEquipo(ip);
 
         bitacoraDao.save(bitacora);
+    }
+    
+    @Override
+    @Transactional(readOnly=true)
+    public DataTablesOutput<Bitacora> listarBitacora(DataTablesInput input) {
+        return (DataTablesOutput<Bitacora>)bitacoraDao.findAll(input);
     }
     
     private String obtenerDireccionIP() {

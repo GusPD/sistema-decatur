@@ -5,8 +5,7 @@ body{
     overflow-x: hidden;
     background-color: #fff;
     font-family: "Poppins", Arial, sans-serif;
-    font-size: 14px;
-    line-height: 1.8;
+    font-size: 14px !Important;
     font-weight: normal;
 }
 
@@ -45,8 +44,8 @@ text-decoration:none;
 .titulo-Perfil{
   text-align:left !Important;
   color: #004077 !Important;
-  margin-top:2em !Important;
-  margin-bottom: 2em !Important;
+  margin-top: 1em !Important;
+  margin-bottom: 1em !Important;
   border-bottom: 1px solid black !Important;
   border-color: #BECECF !Important;
 }
@@ -100,7 +99,7 @@ input[type="number"]::-webkit-outer-spin-button:disabled {
 
 pre{
   font-family: "Poppins", Arial, sans-serif;
-  font-size: 14px;
+  font-size: 10px;
   line-height: 1.8;
   font-weight: normal;
   white-space: pre-wrap; 
@@ -196,7 +195,88 @@ pre{
 }
 
 .card-title {
-  font-size: 24px;
-  margin-bottom: 10px;
+  margin-bottom: 18px;
   color: #333;
+}
+
+.h1,h1{
+    font-size: calc(1.25rem + 0.75vw) !Important;
+}
+
+.content-header{
+    padding: auto !Important;
+}
+
+.btn-secondary {
+    color: #fff !Important;
+    border: none !important;
+    background-color: #43627D !important;
+    border-color: #004077 !important;
+    font-size: 13px !Important;
+    margin-right: 4px !Important;
+}
+
+.btn-secondary:hover {
+    color: #000 !Important;
+    background-color: #fff !Important;
+    border: #43627D !Important;
+}
+
+div.dataTables_wrapper div.dataTables_filter input {
+    font-size: 12px !Important;
+    border-color: #004077 !important;
+}
+
+.page-item {
+    font-size: 10px !Important;
+}
+
+.page-link {
+    color: #000 !Important;
+    font-size: 10px !Important;
+    border-color: #004077 !Important;
+}
+
+div.dataTables_wrapper div.dataTables_length select {
+    font-size: 12px !Important;
+    border-color: #004077 !important;
+}
+table.dataTable {
+    max-width: none !important;
+    border-collapse: separate !important;
+    border-spacing: 0;
+    font-size: small !Important;
+    margin: 0px !Important;
+    width: 100% !Important;
+}
+
+table.dataTable thead>tr>th {
+    background-color: #8A99AF !Important;
+    color: #000 !Important;
+    border-color: #004077 !important;
+}
+
+.page-item.active .page-link {
+    background-color: #83B1F3 !Important;
+    border-color: #004077 !Important;
+}
+
+.w-100 {
+    width: auto !important;
+}
+
+.container-titulo{
+    padding: 0px !Important;
+}
+
+div.dataTables_wrapper div.dataTables_info {
+    padding-top: 0px !Important;
+}
+
+.content{
+    margin-top: 4px !Important;
+}
+
+.overflow-auto{
+    max-height: 65vh !Important;
 }

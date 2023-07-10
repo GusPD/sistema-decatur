@@ -8,37 +8,83 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.SequenceGenerator;
-import lombok.Data;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
 
-@Data
+/**
+ *
+ * @author Gustavo Delgado
+ */
 @Entity
+@Table(name = "TELEFONO")
+@XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Telefono.findAll", query = "SELECT t FROM Telefono t"),
     @NamedQuery(name = "Telefono.findByIdTelefono", query = "SELECT t FROM Telefono t WHERE t.idTelefono = :idTelefono"),
-    @NamedQuery(name = "Telefono.findByTipoTelefono", query = "SELECT t FROM Telefono t WHERE t.tipoTelefono = :tipoTelefono"),
-    @NamedQuery(name = "Telefono.findByNumero", query = "SELECT t FROM Telefono t WHERE t.numero = :numero")})
+    @NamedQuery(name = "Telefono.findByTipo", query = "SELECT t FROM Telefono t WHERE t.tipo = :tipo"),
+    @NamedQuery(name = "Telefono.findByTelefono", query = "SELECT t FROM Telefono t WHERE t.telefono = :telefono")})
 public class Telefono implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
+    @Basic(optional = false)
+    @NotNull
     @Column(name = "ID_TELEFONO")
-    @SequenceGenerator(name = "S_TELEFONO", sequenceName = "S_TELEFONO", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "S_TELEFONO")
-    private Long idTelefono;
-    @Column(name = "TIPO_TELEFONO", nullable=true)
-    private String tipoTelefono;
-    @Column(name = "NUMERO", nullable=true)
-    private String numero;
-    @Column(name = "ID_LIST_TELEFONO", nullable=true)
-    private Integer idListTelefono;
+    private Integer idTelefono;
+    @Size(max = 20)
+    @Column(name = "TIPO")
+    private String tipo;
+    @Column(name = "TELEFONO")
+    private Long telefono;
+    @JoinColumn(name = "ID_PROPIETARIO", referencedColumnName = "ID_PROPIETARIO")
+    @ManyToOne
+    private Propietario idPropietario;
+
+    public Telefono() {
+    }
+
+    public Telefono(Integer idTelefono) {
+        this.idTelefono = idTelefono;
+    }
+
+    public Integer getIdTelefono() {
+        return idTelefono;
+    }
+
+    public void setIdTelefono(Integer idTelefono) {
+        this.idTelefono = idTelefono;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public Long getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(Long telefono) {
+        this.telefono = telefono;
+    }
+
+    public Propietario getIdPropietario() {
+        return idPropietario;
+    }
+
+    public void setIdPropietario(Propietario idPropietario) {
+        this.idPropietario = idPropietario;
+    }
 
     @Override
     public int hashCode() {

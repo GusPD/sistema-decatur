@@ -48,8 +48,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         mailSender.setHost("smtp.gmail.com");
         mailSender.setPort(587);
-        mailSender.setUsername("badmaestria08@gmail.com");
-        mailSender.setPassword("wdayaatpxrhlpvri");
+        mailSender.setUsername("gustavopineda400@gmail.com");
+        mailSender.setPassword("Herminia22Gustavo");
 
         Properties props = mailSender.getJavaMailProperties();
         props.put("mail.transport.protocol", "smtp");
@@ -93,78 +93,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
           
         http.authorizeRequests()          
                 //Aqui debo de poner todos los permisos de ver privilage para que haga el bloqueo al estar
-                //deshabilitado/bloqueado o ambos
-                
-                //Esto generaba malas redirecciones si no se tiene un permiso al usuario
-                //por eso lo quite
-//              .antMatchers("/login", "/logout", "/")
-//              .hasAnyAuthority("VIEW_INDEX")
                 
                 .antMatchers("/", "/logout")
                 .authenticated()
     
                  //Reestrincion de vistas
-                .antMatchers("/viewUsuarios")
-                .hasAnyAuthority("VIEW_USUARIO_PRIVILAGE")
-                .antMatchers("/viewRoles")
-                .hasAnyAuthority("VIEW_ROLES_PRIVILAGE")
-                .antMatchers("/viewFacultad")
-                .hasAnyAuthority("VIEW_FACULTAD_PRIVILAGE")
-                .antMatchers("/viewEscuelaPosgrado")
-                .hasAnyAuthority("VIEW_ESCUELA_PRIVILAGE")
-                .antMatchers("/GestionarAreaConocimiento")
-                .hasAnyAuthority("VIEW_AREA_CONOCIMIENTO_PRIVILAGE")
-                .antMatchers("/viewEstudiantes")
-                .hasAnyAuthority("VIEW_ESTUDIANTE_PRIVILAGE")
-                .antMatchers("/gestionarCoordinadorAcademico")
-                .hasAnyAuthority("VIEW_COORDINADORES_PRIVILAGE")
-                .antMatchers("/perfilCoordinadorAcademico/**")
-                .hasAnyAuthority("VIEW_PERFIL_COORDINADOR_PRIVILAGE")
-                .antMatchers("/GestionarAspiranteProfesor")
-                .hasAnyAuthority("VIEW_ASPIRANTES_PRIVILAGE")
-                .antMatchers("/PerfilAspiranteProfesor/**")
-                .hasAnyAuthority("VIEW_PERFIL_ASPIRANTE_PRIVILAGE")
-                .antMatchers("/GestionarMaestria")
-                .hasAnyAuthority("VIEW_MAESTRIA_PRIVILAGE")
-                .antMatchers("/DetalleMaestria/**")
-                .hasAnyAuthority("VIEW_DETALLE_MAESTRIA_PRIVILAGE")
-                .antMatchers("/InscribirMaestria")
-                .hasAnyAuthority("VIEW_INSCRIBIR_MAESTRIA_PRIVILAGE")
-                .antMatchers("/InscripcionEstudiantes/**")
-                .hasAnyAuthority("VIEW_INSCRIBIR_ESTUDIANTES_PRIVILAGE")
-                .antMatchers("/GestionarEstudiantesCohorte/**")
-                .hasAnyAuthority("VIEW_ESTUDIANTES_COHORTE_PRIVILAGE")
-                .antMatchers("/PostularProfesor")
-                .hasAnyAuthority("VIEW_POSTULAR_PROFESOR_COHORTE_PRIVILAGE")
-                .antMatchers("/GestionarPlanEstudio/**")
-                .hasAnyAuthority("VIEW_PLANES_ESTUDIO_PRIVILAGE")
-                .antMatchers("/DetallePlanEstudio/**")
-                .hasAnyAuthority("VIEW_DETALLE_PLAN_PRIVILAGE")
-                .antMatchers("/viewPrograma/**")
-                .hasAnyAuthority("VIEW_PROGRAMA_ASIGNATURA_PRIVILAGE")
-                .antMatchers("/viewActividad/**")
-                .hasAnyAuthority("VIEW_ACTIVIDADES_PRIVILAGE")
-                .antMatchers("/GestionarCohorte/**")
-                .hasAnyAuthority("VIEW_COHORTE_PRIVILAGE")
-                .antMatchers("/PostuladosCohorte/**")
-                .hasAnyAuthority("VIEW_POSTULADOS_COHORTE_PRIVILAGE")
-      
-                //Agregados 08-junio
-                .antMatchers("/GestionarPaises")
-                .hasAnyAuthority("VIEW_PAISES_PRIVILAGE")
-                .antMatchers("/ProfesorCohorte/**")
-                .hasAnyAuthority("VIEW_PROFESOR_COHORTE_PRIVILAGE")
-                .antMatchers("/EstudiantesInscritos")
-                .hasAnyAuthority("VIEW_REPORTE_INSCRIPCION_ESTUDIANTES_PRIVILAGE")
-                .antMatchers("/AreasAcademicas")
-                .hasAnyAuthority("VIEW_REPORTE_DISTRIBUCION_CATEGORIZADA_PRIVILAGE")
-                .antMatchers("/DetalleEstudiante/**")
-                .hasAnyAuthority("VIEW_DETALLE_ESTUDIANTE_PRIVILAGE")
-                .antMatchers("/DetalleCohorte/**")
-                .hasAnyAuthority("VIEW_DETALLE_COHORTE_PRIVILAGE")
-                .antMatchers("/AsignaturasInscripcionCohorte/**")
-                .hasAnyAuthority("VIEW_INSCRIPCIONES_MATERIAS_PRIVILAGE")
-                //Aqui falta poner el permiso de ruta de Docentes contratados
+                .antMatchers("/GestionarUsuarios")
+                .hasAnyAuthority("GESTIONAR_USUARIO_PRIVILAGE")
+                .antMatchers("/GestionarRoles")
+                .hasAnyAuthority("GESTIONAR_ROLES_PRIVILAGE")
+                .antMatchers("/GestionarBitacora")
+                .hasAnyAuthority("GESTIONAR_BITACORA_PRIVILAGE")
                 
                 .and()
                 .formLogin() 
@@ -180,7 +119,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .exceptionHandling().accessDeniedPage("/accesoDenegado");
 
-        //.failureUrl("/login?error=true");
         http.logout()
         .logoutUrl("/logout") // Ruta para cerrar sesión
         .logoutSuccessHandler(logoutSuccessHandler()) // Manejador de cierre de sesión personalizado
@@ -203,7 +141,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             String username = authentication.getName();
             
             Usuario usuario = usuarioDao.findByUsername(username);
-            usuario.setNumerointentos(0);
+            usuario.setIntentos(0);
             usuarioDao.save(usuario);
             bitacoraService.registrarInicioSesion(username);
             super.onAuthenticationSuccess(request, response, authentication);

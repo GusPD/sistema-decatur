@@ -17,25 +17,24 @@
         <div class="row">
             <div class="col-sm-12 col-md-6 offset-md-3">
                 <div class="login-form">
-                    <h3 class="text-center">Iniciar sesión</h3>
+                    <h3 class="text-center">Iniciar sesión Decatur</h3>
         
-        <!-- Mostrar mensaje de error si está presente en la sesión -->
-        <c:if test="${not empty sessionScope.errorMessage}">
-            <div id="errorMessageContainer" class="alert alert-danger mt-3">
-            ${sessionScope.errorMessage}
-        </div>
-    
-       <c:remove var="errorMessage" scope="session" />
-        </c:if>
+                    <!-- Mostrar mensaje de error si está presente en la sesión -->
+                    <c:if test="${not empty sessionScope.errorMessage}">
+                        <div id="errorMessageContainer" class="alert alert-danger mt-3">
+                        ${sessionScope.errorMessage}
+                    </div>
 
-                    
+                    <c:remove var="errorMessage" scope="session" />
+                    </c:if>
+
                     <form action="/authenticate" method="POST">
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                         <div class="mb-3">
                             <label for="username" class="form-label">Usuario</label>
                             <input type="text" name="username" id="username" class="form-control" placeholder= "Ingrese nombre de usuario" required autofocus>
                         </div>
-                       
+
                         <div class="mb-3">
                             <label for="password" class="form-label">Contraseña</label>
                         <div class="input-group">
@@ -45,7 +44,7 @@
                             </button>
                         </div>
                         </div>
-           
+
                         <div class="d-grid">
                             <button type="submit" class="btn btn-primary">Iniciar sesión</button>
                         </div>
@@ -57,35 +56,7 @@
     
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="${pageContext.request.contextPath}/js/login.js"></script>
 </body>
 </html>
-
-<script>
-    //Funcionalidad de ver o no la contraseña
-    function togglePasswordVisibility() {
-        var passwordInput = document.getElementById("password");
-        var eyeIcon = document.getElementById("eye-icon");
-
-        if (passwordInput.type === "password") {
-            passwordInput.type = "text";
-            eyeIcon.classList.remove("bi-eye");
-            eyeIcon.classList.add("bi-eye-slash");
-        } else {
-            passwordInput.type = "password";
-            eyeIcon.classList.remove("bi-eye-slash");
-            eyeIcon.classList.add("bi-eye");
-        }
-    }
-</script>
-
-
-<script>
-    // Esperar 5 segundos y ocultar el mensaje de error
-    setTimeout(function() {
-        var errorMessageContainer = document.getElementById("errorMessageContainer");
-        if (errorMessageContainer) {
-            errorMessageContainer.style.display = "none";
-        }
-    }, 5000);
-</script>
 
