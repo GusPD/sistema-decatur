@@ -1,6 +1,6 @@
 $(document).ready(function() { 
-    var table = $('#usuarioTable').DataTable({
-        ajax: '/usuarios/data',
+    var table = $('#proyectoTable').DataTable({
+        ajax: '/proyectos/data',
         processing: true,
         serverSide: true,
         order: [[0, 'asc']],
@@ -23,7 +23,7 @@ $(document).ready(function() {
                 extend: 'excel',
                 text: 'Exportar a Excel',
                 class: 'btn-sm',
-                title: 'Usuarios del sistema', // Título del reporte en Excel
+                title: 'Proyectos del sistema', // Título del reporte en Excel
                 filename: 'Usuarios ' + getCurrentDateTime(), // Nombre del archivo Excel
                 exportOptions: {
                   columns: [0, 1, 2, 3] // Índices de las columnas que se exportarán
@@ -33,7 +33,7 @@ $(document).ready(function() {
                 extend: 'pdf',
                 text: 'Exportar a PDF',
                 class: 'btn-sm',
-                title: 'Usuarios del sistema', // Título del reporte en PDF
+                title: 'Proyectos del sistema', // Título del reporte en PDF
                 filename: 'Usuarios ' + getCurrentDateTime(), // Nombre del archivo PDF
                 exportOptions: {
                   columns: [0, 1, 2, 3] // Índices de las columnas que se exportarán
@@ -44,26 +44,14 @@ $(document).ready(function() {
             }
         ],
         columns: [
-            { data: 'username', width: '20%' },
-            { data: 'email', width: '20%' },
-            { data: 'habilitado',
-                render: function(data, type, row) {
-                    var estado = (data === true) ? 'Si' : 'No';
-                    return estado;
-                }, width: '20%'
-            },
-            { data: 'bloqueado',
-                render: function(data, type, row) {
-                    var estado = (data === 0) ? 'No' : 'Si';
-                    return estado;
-                }, width: '20%'
-            },
+            { data: 'nombre', width: '35%' },
+            { data: 'empresa', width: '35%' },
             {
                 data: null,
                 title: 'Acciones',
                 sortable: false,
                 searchable: false,
-                width: '20%',
+                width: '30%',
                 render: function (data, type, row) {
                     // Aquí puedes construir el HTML para las acciones según tus necesidades
 //                    var actionsHtml = '<a type="button" class="btn btn-outline-secondary" href="/DetalleMaestria/' + row.idMaestria + '">';
@@ -71,15 +59,15 @@ $(document).ready(function() {
                     
                     var actionsHtml = '';
                     
-                    if(hasPrivilegeEditarUsuario === true){
+                    if(hasPrivilegeEditarProyecto === true){
                         actionsHtml = '<button type="button" class="btn btn-outline-primary abrirModal-btn" data-bs-toggle="modal" ';
-                        actionsHtml += 'data-bs-target="#crearModal" data-tipo="editar" data-id="' + row.idUsuario + '" data-modo="actualizar">';
+                        actionsHtml += 'data-bs-target="#crearModal" data-tipo="editar" data-id="' + row.idProyecto + '" data-modo="actualizar">';
                         actionsHtml += '<i class="bi bi-pencil-square"></i></button>';
                     }
                     
-                    if(hasPrivilegeEliminarUsuario === true){
-                    actionsHtml += '<button type="button" class="btn btn-outline-danger eliminarModal-btn" data-id="' + row.idUsuario + '" ';
-                    actionsHtml += 'data-cod="' + row.idUsuario + '">';
+                    if(hasPrivilegeEliminarProyecto === true){
+                    actionsHtml += '<button type="button" class="btn btn-outline-danger eliminarModal-btn" data-id="' + row.idProyecto + '" ';
+                    actionsHtml += 'data-cod="' + row.idProyecto + '">';
                     actionsHtml += '<i class="bi bi-trash"></i></button>';
                    }
                     
@@ -137,74 +125,29 @@ $(document).ready(function() {
         var seconds = String(date.getSeconds()).padStart(2, '0');
 
         return year + month + day + '_' + hours + minutes + seconds;
-    }
-    
-    //validacion de contraseña con expresión
-    $.validator.addMethod(
-    "validarPassword",
-    function(value, element) {
-      return this.optional(element) || 
-              /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:,<.>])[A-Za-z\d!@#$%^&*()\-_=+{};:,<.>]{8,}$/.test(value);
-    },
-    "La contraseña debe contener al menos una mayúscula, una minúscula, un número, un carácter especial y tener un mínimo de 8 caracteres"
-    );
-    
-    $.validator.addMethod(
-    "validarCorreo",
-    function(value, element) {
-        return this.optional(element) || /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value);
-    },
-        "Ingresa una dirección de correo electrónico válida"
-    );
-
-            
+    }         
 
      var formGuardar = $('#formGuardar'); // Almacenar referencia al formulario
      var validator = $('#formGuardar').validate({
          
         rules: {
-           username: {
+           nombre: {
                required: true
            },
            
-           email:{
-               required: true,
-               validarCorreo: true
-           }
-           ,          
-           password: {
-           required: function(element) {
-            return !$('#UsuarioId').val(); // La contraseña es requerida si no se está editando un usuario existente
-            },
-            validarPassword: true
-            },
-            
-            "roles[]": {
-                required: true,
-                minlength: 1
-            }
-            
-           
+           empresa:{
+               required: true
+           }          
         },
         
         messages:{
-            username:{
+            nombre:{
                 required: 'Este campo es requerido'
             },
             
-            email:{
+            empresa:{
                 required: 'Este campo es requerido'
-            }
-            ,
-            password:{
-                required: 'Este campo es requerido',
-                validarPassword: 'La contraseña debe contener al menos una mayúscula, una minúscula, un número, un carácter especial y tener un mínimo de 8 caracteres'
-            },
-            
-            "roles[]": {
-                required: "Selecciona al menos un rol"
-            }
-        
+            }        
         },
         
         highlight: function(element) {
@@ -216,36 +159,28 @@ $(document).ready(function() {
         },
         
         errorPlacement: function(error, element) {
-            if (element.attr("name") === "username" || element.attr("name") === "email" || element.attr("name") === "password" ) {
+            if (element.attr("name") === "nombre" || element.attr("name") === "empresa" ) {
                 error.insertAfter(element);
-              }
-           
-           if (element.attr("name") === "roles[]") {
-              error.appendTo("#roles-error");
-            } else {
-              error.insertAfter(element);
-            }
-           
-            
-         },
+            }        
+        },
          
         errorElement: 'div',
         errorClass: 'invalid-feedback',
         
         submitHandler: function(form) {
                event.preventDefault();//detiene el evento del envio del form 
-            var idUsuario = $('#UsuarioId').val();//tomo la id
+            var idProyecto = $('#idProyecto').val();//tomo la id
 
             var formDataArray = formGuardar.serializeArray();//tomo los datos del array
 
             console.log(formDataArray);
             var url;//valido el tipo de url si editar o crear
-            if (idUsuario) {
-                url = '/ActualizarUsuario';
+            if (idProyecto) {
+                url = '/ActualizarProyecto';
                 //meto la id en el campo de envio
-                formDataArray.push({name: 'idUsuario', value: idUsuario});
+                formDataArray.push({name: 'idProyecto', value: idProyecto});
             } else {
-                url = '/AgregarUsuario';
+                url = '/AgregarProyecto';
             }
 
             //realizo el guardado mediante ajax
@@ -255,23 +190,22 @@ $(document).ready(function() {
                 data: formDataArray,
                 success: function (response) {
                     $('#crearModal').modal('hide');  // Cierra el modal
-                    var table = $('#usuarioTable').DataTable();
+                    var table = $('#proyectoTable').DataTable();
                     table.ajax.reload(null, false);
                     mostrarMensaje(response, 'success');
                 },
                 error: function (xhr, status, error) {
                     $('#crearModal').modal('hide'); // Cierra el modal
-                    var errorMessage = xhr.responseText || 'Error al actualizar el usuario.';
+                    var errorMessage = xhr.responseText || 'Error al actualizar el proyecto.';
                     mostrarMensaje(errorMessage, 'danger');
                 }
             });
         }
-     
     });
-    
+
     // metodo para mostrar el modal segun sea si editar o nuevo registro
         $(document).on('click', '.abrirModal-btn', function () {
-            var idUsuario = $(this).data('id');
+            var idProyecto = $(this).data('id');
             var modal = $('#crearModal');
             var tituloModal = modal.find('.modal-title');
             var form = modal.find('form');
@@ -279,15 +213,11 @@ $(document).ready(function() {
             validator.resetForm();  // Restablecer la validación
             formGuardar.find('.is-invalid').removeClass('is-invalid');
 
-            if (idUsuario) {
-                tituloModal.text('Editar Usuario');//titulo del modal
-                //con esto quito los campos de oculto para que muestre para habilitar/deshabilitar
-                // y bloquear/desbloquear
-                $('.oculto').removeAttr('hidden');
-                 $('#password').removeAttr('required');
+            if (idProyecto) {
+                tituloModal.text('Editar Proyecto');//titulo del modal
                 
                 $.ajax({//utilizo ajax para obtener los datos
-                    url: '/ObtenerUsuario/' + idUsuario,
+                    url: '/ObtenerProyecto/' + idProyecto,
                     type: 'GET',
                     success: function (response) {
                        
@@ -296,53 +226,24 @@ $(document).ready(function() {
                         for (var i = 0; i < checkboxes.length; i++) {
                             checkboxes[i].checked = false;
                         }
-                        $('#username').val(response.username);
-                        $('#email').val(response.email);
-                        $('#password').val('');
-
-                        $.each(response.roles, function (index, valor) {
-                            var miCheckbox = document.getElementById('rol' + valor.idRol);
-                            if (miCheckbox !== null) {
-                                miCheckbox.checked = true;
-                            } else {
-                                console.log("El checkbox no se encontró en el documento.");
-                            }
-                        });
-                       
-                       //esto es para habilitado/desabilitado
-                       if(response.habilitado === true){
-                           $('#habilitado').val(1);
-                       }else{
-                           $('#habilitado').val(0);
-                       }
-                       
-                       //console.log(response.enabled);
-                       $('#bloqueado').val(response.bloqueado);
-                       //console.log(response.usuarioBloqueado);
-                       $('#UsuarioId').val(idUsuario);
+                        $('#nombre').val(response.nombre);
+                        $('#empresa').val(response.empresa);
+                        $('#idProyecto').val(response.idProyecto);
 
                     },
                     error: function () {
-                        alert('Error al obtener los datos del usuario.');
+                        alert('Error al obtener los datos del proyecto.');
                     }
                 });
             } else {
                 var checkboxes = document.querySelectorAll(".checkClean");
-                $('.oculto').attr('hidden', true);
                 
-                //Aqui la contraseña ya no sera requerida
-                $('#password').attr('required', true);
-
-                for (var i = 0; i < checkboxes.length; i++) {
-                    checkboxes[i].checked = false;
-                }
                 // en caso de presionar el boton de nuevo solo se abrira el modal
-                tituloModal.text('Agregar Usuario');
-                form.attr('action', '/AgregarUsuario');
-                $('#username').val('');
-                $('#email').val('');
-                $('#password').val('');
-                $('#UsuarioId').val('');
+                tituloModal.text('Agregar Proyecto');
+                form.attr('action', '/AgregarProyecto');
+                $('#nombre').val('');
+                $('#empresa').val('');
+                $('#idProyecto').val('');
 
             }
             modal.modal('show');
@@ -351,49 +252,48 @@ $(document).ready(function() {
    
    // Método para mostrar el modal de eliminación
     $(document).on('click', '.eliminarModal-btn', function () {
-        var idUsuario = $(this).data('id');
-//        var codPlan = $(this).data('cod');
+        var idProyecto = $(this).data('id');
 
         var modal = $('#confirmarEliminarModal');
         var tituloModal = modal.find('.modal-title');
         var cuerpoModal = modal.find('.modal-body');
-        var eliminarBtn = modal.find('#eliminarUsuarioBtn');
+        var eliminarBtn = modal.find('#eliminarProyectoBtn');
 
         // Actualizar el contenido del modal con los parámetros recibidos
         tituloModal.text('Confirmar eliminación');
-        cuerpoModal.html('<strong>¿Estás seguro de eliminar al usuario seleccionado?</strong><br>Ten en cuenta que se eliminarán \n\
-        los datos relacionados al usuario');
+        cuerpoModal.html('<strong>¿Estás seguro de eliminar el proyecto seleccionado?</strong><br>Ten en cuenta que se eliminarán \n\
+        los datos relacionados al proyecto');
 
         // Actualizar el atributo href del botón de eliminación con el idCohorte
-        eliminarBtn.data('id', idUsuario);
+        eliminarBtn.data('id', idProyecto);
 
         modal.modal('show');
     });
    
    
    //Método para enviar la solicitud de eliminar
-    $(document).on('click', '#eliminarUsuarioBtn', function () {
+    $(document).on('click', '#eliminarProyectoBtn', function () {
         
-        var idUsuario = $(this).data('id');
-        // Actualizar la acción del formulario con el idMaestria
-        $('#eliminarUsuarioForm').attr('action', '/EliminarUsuario/' + idUsuario);
+        var idProyecto = $(this).data('id');
+        // Actualizar la acción del formulario
+        $('#eliminarProyectoForm').attr('action', '/EliminarProyecto/' + idProyecto);
 
         // Realizar la solicitud POST al método de eliminación
         $.ajax({
-            url: $('#eliminarUsuarioForm').attr('action'),
+            url: $('#eliminarProyectoForm').attr('action'),
             type: 'POST',
-            data: $('#eliminarUsuarioForm').serialize(), // Incluir los datos del formulario en la solicitud
+            data: $('#eliminarProyectoForm').serialize(), // Incluir los datos del formulario en la solicitud
             success: function (response) {
               $('#confirmarEliminarModal').modal('hide');
               // Recargar el DataTable
-              $('#usuarioTable').DataTable().ajax.reload();
+              $('#proyectoTable').DataTable().ajax.reload();
               // Mostrar el mensaje de éxito del controlador
                mostrarMensaje(response, 'success');
             },
             error: function () {
               $('#confirmarEliminarModal').modal('hide');
               // Mostrar mensaje de error en caso de que la solicitud falle
-              mostrarMensaje('Error al eliminar al usuario.', 'danger');
+              mostrarMensaje('Error al eliminar el proyecto.', 'danger');
             }
         });
         

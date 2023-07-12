@@ -101,7 +101,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/GestionarUsuarios")
                 .hasAnyAuthority("GESTIONAR_USUARIO_PRIVILAGE")
                 .antMatchers("/GestionarRoles")
-                .hasAnyAuthority("GESTIONAR_ROLES_PRIVILAGE")
+                .hasAnyAuthority("GESTIONAR_ROL_PRIVILAGE")
                 .antMatchers("/GestionarBitacora")
                 .hasAnyAuthority("GESTIONAR_BITACORA_PRIVILAGE")
                 
