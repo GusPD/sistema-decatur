@@ -118,8 +118,8 @@
                     <p>Ten en cuenta que se eliminarán los datos relacionados al rol <span id="nombre"></span>.</p>
                 </div>
                 <div class="modal-footer">
-                  <button id="eliminarRolBtn" class="btn btn-danger btn-sm">Eliminar</button>
-                  <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                  <button id="eliminarRolBtn" class="btn btn-outline-danger btn-sm">Eliminar</button>
+                  <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
                 </div>
             </div>
         </div>

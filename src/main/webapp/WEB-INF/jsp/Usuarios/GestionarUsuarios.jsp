@@ -143,8 +143,8 @@
                     <p>Ten en cuenta que se eliminarán los datos relacionados al usuario <span id="username"></span>.</p>
                 </div>
                 <div class="modal-footer">
-                  <button id="eliminarUsuarioBtn" class="btn btn-danger btn-sm">Eliminar</button>
-                  <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                  <button id="eliminarUsuarioBtn" class="btn btn-outline-danger btn-sm">Eliminar</button>
+                  <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
                 </div>
             </div>
         </div>

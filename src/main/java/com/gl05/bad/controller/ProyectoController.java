@@ -37,6 +37,17 @@ public class ProyectoController {
         return "/Proyecto/GestionarProyecto";
     }
     
+    @GetMapping("/MostrarProyecto/{idProyecto}")
+    public String mostrarProyecto(Model model, Proyecto proyecto) {
+        model.addAttribute("pageTitle", "Proyectos");
+        Proyecto proyectoEncontrado = proyectoService.encontrarProyecto(proyecto.getIdProyecto());
+        var listaProyectos = proyectoService.listaProyectos();
+        model.addAttribute("proyectos", listaProyectos);
+        model.addAttribute("proyecto", proyectoEncontrado);
+        
+        return "/Proyecto/MostrarProyecto";
+    }
+    
     @GetMapping("/proyectos/data")
     @ResponseBody
     public DataTablesOutput<Proyecto> getProyectos(@Valid DataTablesInput input) {

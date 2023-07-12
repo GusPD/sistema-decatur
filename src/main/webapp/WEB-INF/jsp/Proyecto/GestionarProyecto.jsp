@@ -110,8 +110,8 @@
                     <p>Ten en cuenta que se eliminarán los datos relacionados al proyecto <span id="nombre"></span>.</p>
                 </div>
                 <div class="modal-footer">
-                  <button id="eliminarProyectoBtn" class="btn btn-danger btn-sm">Eliminar</button>
-                  <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                  <button id="eliminarProyectoBtn" class="btn btn-outline-danger btn-sm">Eliminar</button>
+                  <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
                 </div>
             </div>
         </div>
@@ -122,6 +122,10 @@
     </form>                    
     <!-- /.Modal de eliminar -->
 </div>
+
+<sec:authorize access="hasAuthority('VER_PROYECTO_PRIVILAGE')" var="hasPrivilegeVerProyecto"></sec:authorize>
+<script>var hasPrivilegeVerProyecto = ${hasPrivilegeVerProyecto};</script>    
+        
 <sec:authorize access="hasAuthority('EDITAR_PROYECTO_PRIVILAGE')" var="hasPrivilegeEditarProyecto"></sec:authorize>
 <script>var hasPrivilegeEditarProyecto = ${hasPrivilegeEditarProyecto};</script>
 

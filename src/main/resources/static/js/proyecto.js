@@ -16,7 +16,7 @@ $(document).ready(function() {
                 text: 'Copiar',
                 class: 'btn-sm',
                 exportOptions: {
-                  columns: [0, 1, 2, 3] // Índices de las columnas que se copiarán
+                  columns: [0, 1] // Índices de las columnas que se copiarán
                 }
             },
             {
@@ -24,9 +24,9 @@ $(document).ready(function() {
                 text: 'Exportar a Excel',
                 class: 'btn-sm',
                 title: 'Proyectos del sistema', // Título del reporte en Excel
-                filename: 'Usuarios ' + getCurrentDateTime(), // Nombre del archivo Excel
+                filename: 'Proyectos ' + getCurrentDateTime(), // Nombre del archivo Excel
                 exportOptions: {
-                  columns: [0, 1, 2, 3] // Índices de las columnas que se exportarán
+                  columns: [0, 1] // Índices de las columnas que se exportarán
                 }
             },
             {
@@ -34,9 +34,9 @@ $(document).ready(function() {
                 text: 'Exportar a PDF',
                 class: 'btn-sm',
                 title: 'Proyectos del sistema', // Título del reporte en PDF
-                filename: 'Usuarios ' + getCurrentDateTime(), // Nombre del archivo PDF
+                filename: 'Proyectos ' + getCurrentDateTime(), // Nombre del archivo PDF
                 exportOptions: {
-                  columns: [0, 1, 2, 3] // Índices de las columnas que se exportarán
+                  columns: [0, 1] // Índices de las columnas que se exportarán
                 },
                 customize: function (doc) {
                   doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split('');
@@ -59,8 +59,13 @@ $(document).ready(function() {
                     
                     var actionsHtml = '';
                     
+                    if(hasPrivilegeVerProyecto === true){
+                        actionsHtml = '<a type="button" class="btn btn-outline-secondary" href="/MostrarProyecto/' + row.idProyecto + '">';
+                        actionsHtml += '<i class="bi bi-eye"></i></a>';
+                    }
+                    
                     if(hasPrivilegeEditarProyecto === true){
-                        actionsHtml = '<button type="button" class="btn btn-outline-primary abrirModal-btn" data-bs-toggle="modal" ';
+                        actionsHtml += '<button type="button" class="btn btn-outline-primary abrirModal-btn" data-bs-toggle="modal" ';
                         actionsHtml += 'data-bs-target="#crearModal" data-tipo="editar" data-id="' + row.idProyecto + '" data-modo="actualizar">';
                         actionsHtml += '<i class="bi bi-pencil-square"></i></button>';
                     }
