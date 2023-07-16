@@ -9,20 +9,21 @@ import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import lombok.Data;
 
-/**
- *
- * @author Gustavo Delgado
- */
+@Data
 @Entity
 @Table(name = "PROYECTO")
 @XmlRootElement
@@ -38,99 +39,15 @@ public class Proyecto implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "ID_PROYECTO")
-    private Integer idProyecto;
+    @SequenceGenerator(name = "S_PROYECTO", sequenceName = "S_PROYECTO", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "S_PROYECTO")
+    private Long idProyecto;
     @Size(max = 200)
     @Column(name = "NOMBRE")
     private String nombre;
     @Size(max = 200)
     @Column(name = "EMPRESA")
     private String empresa;
-    @OneToMany(mappedBy = "idProyecto")
-    private Collection<Visitante> visitanteCollection;
-    @OneToMany(mappedBy = "idProyecto")
-    private Collection<Terreno> terrenoCollection;
-    @OneToMany(mappedBy = "idProyecto")
-    private Collection<Propietario> propietarioCollection;
-    @OneToMany(mappedBy = "idProyecto")
-    private Collection<CuentaBancaria> cuentaBancariaCollection;
-    @OneToMany(mappedBy = "idProyecto")
-    private Collection<Visita> visitaCollection;
-
-    public Proyecto() {
-    }
-
-    public Proyecto(Integer idProyecto) {
-        this.idProyecto = idProyecto;
-    }
-
-    public Integer getIdProyecto() {
-        return idProyecto;
-    }
-
-    public void setIdProyecto(Integer idProyecto) {
-        this.idProyecto = idProyecto;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getEmpresa() {
-        return empresa;
-    }
-
-    public void setEmpresa(String empresa) {
-        this.empresa = empresa;
-    }
-
-    @XmlTransient
-    public Collection<Visitante> getVisitanteCollection() {
-        return visitanteCollection;
-    }
-
-    public void setVisitanteCollection(Collection<Visitante> visitanteCollection) {
-        this.visitanteCollection = visitanteCollection;
-    }
-
-    @XmlTransient
-    public Collection<Terreno> getTerrenoCollection() {
-        return terrenoCollection;
-    }
-
-    public void setTerrenoCollection(Collection<Terreno> terrenoCollection) {
-        this.terrenoCollection = terrenoCollection;
-    }
-
-    @XmlTransient
-    public Collection<Propietario> getPropietarioCollection() {
-        return propietarioCollection;
-    }
-
-    public void setPropietarioCollection(Collection<Propietario> propietarioCollection) {
-        this.propietarioCollection = propietarioCollection;
-    }
-
-    @XmlTransient
-    public Collection<CuentaBancaria> getCuentaBancariaCollection() {
-        return cuentaBancariaCollection;
-    }
-
-    public void setCuentaBancariaCollection(Collection<CuentaBancaria> cuentaBancariaCollection) {
-        this.cuentaBancariaCollection = cuentaBancariaCollection;
-    }
-
-    @XmlTransient
-    public Collection<Visita> getVisitaCollection() {
-        return visitaCollection;
-    }
-
-    public void setVisitaCollection(Collection<Visita> visitaCollection) {
-        this.visitaCollection = visitaCollection;
-    }
 
     @Override
     public int hashCode() {

@@ -111,8 +111,26 @@
                         </ul>
                     </li>
                 </sec:authorize>
-                <sec:authorize access="hasAuthority('GESTIONAR_USUARIO_PRIVILAGE') or hasAuthority('GESTIONAR_ROLES_PRIVILAGE')">
-                    <li class="nav-item ${requestScope['javax.servlet.forward.request_uri'] == '/GestionarUsuarios' || requestScope['javax.servlet.forward.request_uri'] == '/GestionarRoles' ? 'menu-open' : ''}">
+                <sec:authorize access="hasAuthority('GESTIONAR_PROYECTO_PRIVILAGE')">
+                    <li class="nav-item ${requestScope['javax.servlet.forward.request_uri'] == '/GestionarProyecto' ? 'menu-open' : ''}">
+                        <a href="#" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == '/GestionarProyecto' ? 'active' : ''}">
+                            <i class="nav-icon fa-solid fa-folder-closed"></i>
+                            <p>Administración<i class="right fas fa-angle-left"></i></p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <sec:authorize access="hasAuthority('GESTIONAR_PROYECTO_PRIVILAGE')">
+                            <li class="nav-item">
+                                <a href="/GestionarProyecto" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == '/GestionarProyecto' ? 'active' : ''}">
+                                    <i class="fa-solid fa-mountain-sun nav-icon text-warning"></i>
+                                    <p>Proyectos</p>
+                                </a>
+                            </li>
+                            </sec:authorize>
+                        </ul>
+                    </li>
+                </sec:authorize>
+                <sec:authorize access="hasAuthority('GESTIONAR_USUARIO_PRIVILAGE') or hasAuthority('GESTIONAR_ROL_PRIVILAGE') or hasAuthority('BITACORA_PRIVILAGE')">
+                    <li class="nav-item ${requestScope['javax.servlet.forward.request_uri'] == '/GestionarUsuarios' || requestScope['javax.servlet.forward.request_uri'] == '/GestionarRoles' || requestScope['javax.servlet.forward.request_uri'] == '/GestionarBitacora' ? 'menu-open' : ''}">
                         <a href="#" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == '/GestionarUsuarios' || requestScope['javax.servlet.forward.request_uri'] == '/GestionarRoles' ? 'active' : ''}">
                             <i class="nav-icon fas fa-unlock"></i>
                             <p>Seguridad<i class="right fas fa-angle-left"></i></p>
@@ -126,7 +144,7 @@
                                 </a>
                             </li>
                             </sec:authorize>
-                            <sec:authorize access="hasAuthority('GESTIONAR_ROLES_PRIVILAGE')">
+                            <sec:authorize access="hasAuthority('GESTIONAR_ROL_PRIVILAGE')">
                                 <li class="nav-item">
                                     <a href="/GestionarRoles"class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == '/GestionarRoles' ? 'active' : ''}">
                                         <i class="fa-solid fa-user-gear nav-icon text-warning"></i>

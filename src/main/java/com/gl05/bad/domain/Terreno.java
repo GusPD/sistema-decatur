@@ -1,37 +1,30 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.gl05.bad.domain;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import lombok.Data;
 
-/**
- *
- * @author Gustavo Delgado
- */
+@Data
 @Entity
 @Table(name = "TERRENO")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Terreno.findAll", query = "SELECT t FROM Terreno t"),
     @NamedQuery(name = "Terreno.findByIdTerreno", query = "SELECT t FROM Terreno t WHERE t.idTerreno = :idTerreno"),
+    @NamedQuery(name = "Terreno.findByMatricula", query = "SELECT t FROM Terreno t WHERE t.matricula = :matricula"),
     @NamedQuery(name = "Terreno.findByNumero", query = "SELECT t FROM Terreno t WHERE t.numero = :numero"),
     @NamedQuery(name = "Terreno.findByPoligono", query = "SELECT t FROM Terreno t WHERE t.poligono = :poligono"),
     @NamedQuery(name = "Terreno.findBySeccion", query = "SELECT t FROM Terreno t WHERE t.seccion = :seccion"),
@@ -44,95 +37,25 @@ public class Terreno implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "ID_TERRENO")
-    private Integer idTerreno;
+    @SequenceGenerator(name = "S_TERRENO", sequenceName = "S_TERRENO", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "S_TERRENO")
+    private Long idTerreno;
+    @Size(max = 20)
+    @Column(name = "MATRICULA")
+    private String matricula;
     @Column(name = "NUMERO")
-    private BigInteger numero;
+    private Long numero;
     @Column(name = "POLIGONO")
     private Character poligono;
     @Column(name = "SECCION")
     private Character seccion;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "AREA_METROS")
-    private BigDecimal areaMetros;
+    private Double areaMetros;
     @Column(name = "AREA_VARAS")
-    private BigDecimal areaVaras;
-    @JoinColumn(name = "ID_PROYECTO", referencedColumnName = "ID_PROYECTO")
-    @ManyToOne
-    private Proyecto idProyecto;
-    @OneToMany(mappedBy = "idTerreno")
-    private Collection<Venta> ventaCollection;
-
-    public Terreno() {
-    }
-
-    public Terreno(Integer idTerreno) {
-        this.idTerreno = idTerreno;
-    }
-
-    public Integer getIdTerreno() {
-        return idTerreno;
-    }
-
-    public void setIdTerreno(Integer idTerreno) {
-        this.idTerreno = idTerreno;
-    }
-
-    public BigInteger getNumero() {
-        return numero;
-    }
-
-    public void setNumero(BigInteger numero) {
-        this.numero = numero;
-    }
-
-    public Character getPoligono() {
-        return poligono;
-    }
-
-    public void setPoligono(Character poligono) {
-        this.poligono = poligono;
-    }
-
-    public Character getSeccion() {
-        return seccion;
-    }
-
-    public void setSeccion(Character seccion) {
-        this.seccion = seccion;
-    }
-
-    public BigDecimal getAreaMetros() {
-        return areaMetros;
-    }
-
-    public void setAreaMetros(BigDecimal areaMetros) {
-        this.areaMetros = areaMetros;
-    }
-
-    public BigDecimal getAreaVaras() {
-        return areaVaras;
-    }
-
-    public void setAreaVaras(BigDecimal areaVaras) {
-        this.areaVaras = areaVaras;
-    }
-
-    public Proyecto getIdProyecto() {
-        return idProyecto;
-    }
-
-    public void setIdProyecto(Proyecto idProyecto) {
-        this.idProyecto = idProyecto;
-    }
-
-    @XmlTransient
-    public Collection<Venta> getVentaCollection() {
-        return ventaCollection;
-    }
-
-    public void setVentaCollection(Collection<Venta> ventaCollection) {
-        this.ventaCollection = ventaCollection;
-    }
+    private Double areaVaras;
+    @JoinColumn(name = "ID_PROYECTO")
+    private Long idProyecto;
 
     @Override
     public int hashCode() {

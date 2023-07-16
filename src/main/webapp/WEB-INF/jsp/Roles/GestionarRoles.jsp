@@ -5,7 +5,7 @@
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-        <div class="container-fluid">
+        <div class="container">
             <div class="row">
                 <div class="col-sm-12">
                     <div class="titulo-Perfil">
@@ -17,7 +17,8 @@
             </div>
         </div>
     </section>
-    <div  class="overflow-auto">
+    <section class="content">
+        <div  class="overflow-auto">
         <!-- Main content -->
         <section class="content pb-5">
             <div class="container">
@@ -66,6 +67,7 @@
             </div><!-- /.container-fluid -->
         </section>
     </div>
+    </section>
             
     <!-- Modal para roles -->
     <div class="modal fade" id="crearModal" tabindex="-1" aria-labelledby="crearModalLabel" aria-hidden="true">
@@ -118,8 +120,8 @@
                     <p>Ten en cuenta que se eliminarán los datos relacionados al rol <span id="nombre"></span>.</p>
                 </div>
                 <div class="modal-footer">
-                  <button id="eliminarRolBtn" class="btn btn-danger btn-sm">Eliminar</button>
-                  <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                  <button id="eliminarRolBtn" class="btn btn-outline-danger btn-sm">Eliminar</button>
+                  <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
                 </div>
             </div>
         </div>

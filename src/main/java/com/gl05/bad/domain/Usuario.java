@@ -76,7 +76,7 @@ public class Usuario implements Serializable {
     //Establezco la relación con la base de datos
     @ManyToMany//(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
-           name = "USUARIO_ROLES",
+           name = "USUARIO_ROL",
             joinColumns = @JoinColumn(name="ID_USUARIO"),
             inverseJoinColumns = @JoinColumn(name="ID_ROL")
     )
