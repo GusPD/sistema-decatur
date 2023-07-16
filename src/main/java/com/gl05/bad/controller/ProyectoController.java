@@ -28,7 +28,7 @@ public class ProyectoController {
     private ProyectoService proyectoService;
 
     @GetMapping("/GestionarProyecto")
-    public String gestionarProyecto(Model model) {
+    public String GestionarProyecto(Model model) {
         model.addAttribute("pageTitle", "Proyectos");
 
         var elemento = proyectoService.listaProyectos();
@@ -37,7 +37,7 @@ public class ProyectoController {
         return "/Proyecto/GestionarProyecto";
     }
     
-    @GetMapping("/MostrarProyecto/{idProyecto}")
+    @GetMapping("/Proyecto/{idProyecto}")
     public String mostrarProyecto(Model model, Proyecto proyecto) {
         model.addAttribute("pageTitle", "Proyectos");
         Proyecto proyectoEncontrado = proyectoService.encontrarProyecto(proyecto.getIdProyecto());
@@ -50,12 +50,12 @@ public class ProyectoController {
     
     @GetMapping("/proyectos/data")
     @ResponseBody
-    public DataTablesOutput<Proyecto> getProyectos(@Valid DataTablesInput input) {
+    public DataTablesOutput<Proyecto> GetProyectos(@Valid DataTablesInput input) {
         return proyectoService.listarProyectos(input);
     }
 
     @PostMapping("/AgregarProyecto")
-    public ResponseEntity AgregarUsuario(Proyecto proyecto, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public ResponseEntity AgregarProyecto(Proyecto proyecto, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             proyectoService.agregarProyecto(proyecto);
             String mensaje = "Se ha agregado un proyecto.";
@@ -68,7 +68,7 @@ public class ProyectoController {
     }
 
     @PostMapping("/EliminarProyecto/{idProyecto}")
-    public ResponseEntity EliminarUsuario(Proyecto proyecto) {
+    public ResponseEntity EliminarProyecto(Proyecto proyecto) {
         try {
             proyectoService.eliminarProyecto(proyecto);
              String mensaje = "Se ha eliminado un proyecto correctamente.";
@@ -81,7 +81,7 @@ public class ProyectoController {
     }
 
     @GetMapping("/ObtenerProyecto/{id}")
-    public ResponseEntity<Proyecto> obtenerProyecto(@PathVariable Long id) {
+    public ResponseEntity<Proyecto> ObtenerProyecto(@PathVariable Long id) {
         Proyecto proyecto = proyectoService.encontrarProyecto(id);
         if (proyecto != null) {
             return ResponseEntity.ok(proyecto);
@@ -91,7 +91,7 @@ public class ProyectoController {
     }
 
     @PostMapping("/ActualizarProyecto")
-    public ResponseEntity ActualizarUsuario(Proyecto proyecto, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public ResponseEntity ActualizarProyecto(Proyecto proyecto, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             proyectoService.actualizarProyecto(proyecto);
             String mensaje = "Se ha actualizado el proyecto correctamente.";

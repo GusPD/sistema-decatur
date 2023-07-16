@@ -5,7 +5,7 @@
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
     <section class="content-header">
-        <div class="container-fluid">
+        <div class="container">
             <div class="row">
                 <div class="col-sm-12">
                     <div class="titulo-Perfil">
@@ -17,7 +17,8 @@
             </div>
         </div>
     </section>
-    <div  class="overflow-auto">
+    <section class="content">
+        <div  class="overflow-auto">
         <!-- Main content -->
         <section class="content">
             <div class="container">
@@ -39,6 +40,7 @@
             </div><!-- /.container-fluid -->
         </section>
     </div>
+    </section>
 <%@ include file="../common/footer.jspf"%>
 <script src="${pageContext.request.contextPath}/js/bitacora.js"></script>
 

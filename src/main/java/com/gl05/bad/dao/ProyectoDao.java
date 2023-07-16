@@ -1,4 +1,3 @@
-
 package com.gl05.bad.dao;
 
 import com.gl05.bad.domain.Proyecto;

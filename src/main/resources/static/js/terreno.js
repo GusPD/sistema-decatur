@@ -1,42 +1,45 @@
 $(document).ready(function() { 
-    var table = $('#proyectoTable').DataTable({
-        ajax: '/proyectos/data',
+    var idProyecto = $('#proyectoId').data('id');
+    var table = $('#terrenoTable').DataTable({
+        ajax: {
+            url: '/terrenos/data/' + idProyecto,
+            dataSrc: 'data'
+        },
         processing: true,
         serverSide: true,
-        order: [[0, 'asc']],
         dom: "<'row w-100'<'col-sm-12 mb-4'B>>" +
              "<'row w-100'<'col-sm-6'l><'col-sm-6'f>>" +
              "<'row w-100'<'col-sm-12 my-4'tr>>" +
              "<'row w-100'<'col-sm-5'i><'col-sm-7'p>>",
-        lengthMenu: [[5, 25, 50, 100, -1], [5, 25, 50, 100, 'Todos']], // Opciones de selección para mostrar registros por página
-        pageLength: 5, // Cantidad de registros por página por defecto
+        lengthMenu: [[3, 25, 50, 100, -1], [3, 25, 50, 100, 'Todos']], // Opciones de selección para mostrar registros por página
+        pageLength: 3, // Cantidad de registros por página por defecto
         buttons: [
             {
                 extend: 'copy',
                 text: 'Copiar',
                 class: 'btn-sm',
                 exportOptions: {
-                  columns: [0, 1] // Índices de las columnas que se copiarán
+                  columns: [0, 1, 2, 3, 4] // Índices de las columnas que se copiarán
                 }
             },
             {
                 extend: 'excel',
                 text: 'Exportar a Excel',
                 class: 'btn-sm',
-                title: 'Proyectos del sistema', // Título del reporte en Excel
-                filename: 'Proyectos ' + getCurrentDateTime(), // Nombre del archivo Excel
+                title: 'Terrenos del sistema', // Título del reporte en Excel
+                filename: 'Terrenos ' + getCurrentDateTime(), // Nombre del archivo Excel
                 exportOptions: {
-                  columns: [0, 1] // Índices de las columnas que se exportarán
+                  columns: [0, 1, 2, 3, 4] // Índices de las columnas que se exportarán
                 }
             },
             {
                 extend: 'pdf',
                 text: 'Exportar a PDF',
                 class: 'btn-sm',
-                title: 'Proyectos del sistema', // Título del reporte en PDF
-                filename: 'Proyectos ' + getCurrentDateTime(), // Nombre del archivo PDF
+                title: 'Terrenos del sistema', // Título del reporte en PDF
+                filename: 'Terrenos ' + getCurrentDateTime(), // Nombre del archivo PDF
                 exportOptions: {
-                  columns: [0, 1] // Índices de las columnas que se exportarán
+                  columns: [0, 1, 2, 3, 4] // Índices de las columnas que se exportarán
                 },
                 customize: function (doc) {
                   doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split('');
@@ -44,8 +47,11 @@ $(document).ready(function() {
             }
         ],
         columns: [
-            { data: 'nombre', width: '35%' },
-            { data: 'empresa', width: '35%' },
+            { data: 'poligono', width: '10%' },
+            { data: 'numero', width: '10%' },
+            { data: 'matricula', width: '20%' },
+            { data: 'areaMetros', width: '15%', searchable: false },
+            { data: 'areaVaras', width: '15%', searchable: false },
             {
                 data: null,
                 title: 'Acciones',
@@ -59,24 +65,34 @@ $(document).ready(function() {
                     
                     var actionsHtml = '';
                     
-                    if(hasPrivilegeVerProyecto === true){
-                        actionsHtml = '<a type="button" class="btn btn-outline-secondary" href="/Proyecto/' + row.idProyecto + '">';
+                    if(hasPrivilegeVerTerreno === true){
+                        actionsHtml = '<a type="button" class="btn btn-outline-secondary" href="/Terreno/' + row.idTerreno + '">';
                         actionsHtml += '<i class="bi bi-eye"></i></a>';
                     }
                     
-                    if(hasPrivilegeEditarProyecto === true){
+                    if(hasPrivilegeEditarTerreno === true){
                         actionsHtml += '<button type="button" class="btn btn-outline-primary abrirModal-btn" data-bs-toggle="modal" ';
-                        actionsHtml += 'data-bs-target="#crearModal" data-tipo="editar" data-id="' + row.idProyecto + '" data-modo="actualizar">';
+                        actionsHtml += 'data-bs-target="#crearModal" data-tipo="editar" data-id="' + row.idTerreno + '" data-modo="actualizar">';
                         actionsHtml += '<i class="bi bi-pencil-square"></i></button>';
                     }
                     
-                    if(hasPrivilegeEliminarProyecto === true){
-                    actionsHtml += '<button type="button" class="btn btn-outline-danger eliminarModal-btn" data-id="' + row.idProyecto + '" ';
-                    actionsHtml += 'data-cod="' + row.idProyecto + '">';
+                    if(hasPrivilegeEliminarTerreno === true){
+                    actionsHtml += '<button type="button" class="btn btn-outline-danger eliminarModal-btn" data-id="' + row.idTerreno + '" ';
+                    actionsHtml += 'data-cod="' + row.idTerreno + '">';
                     actionsHtml += '<i class="bi bi-trash"></i></button>';
                    }
                     
                     return actionsHtml || '';
+                }
+            }
+        ],
+        columnDefs: [
+            {
+                data: null,
+                searchable: true,
+                targets: 1,
+                render: function (data, type, row) {
+                    return row.numero + row.seccion;
                 }
             }
         ],
@@ -114,11 +130,33 @@ $(document).ready(function() {
         },
         search: {
             return: true
+        },
+        ordering: {
+            return: true
         }
     });
     table.columns.adjust();
     new $.fn.dataTable.FixedHeader(table);
     table.buttons().container().appendTo('.botonExportar');
+    
+    // Obtén la referencia al DataTable
+    var table = $('#terrenoTable').DataTable();
+
+    // Agrega un evento al filtro de búsqueda
+    $('#terrenoTable_filter input').on('keyup', function () {
+        // Obtén el valor del filtro de búsqueda
+        var searchTerm = $(this).val().trim();
+
+        // Verifica si el valor no está vacío
+        if (searchTerm !== '') {
+            // Aplica el filtro personalizado en la columna "Lote"
+            table.column[0,1].search('^' + searchTerm + '$', true, false).draw();
+        } else {
+            // Si el valor está vacío, muestra todos los registros
+            table.column[0,1].search('').draw();
+        }
+    });
+    
     // Función para obtener la fecha y hora actual en formato deseado
     function getCurrentDateTime() {
         var date = new Date();
@@ -136,21 +174,37 @@ $(document).ready(function() {
      var validator = $('#formGuardar').validate({
          
         rules: {
-           nombre: {
+           matricula: {
                required: true
            },
-           
-           empresa:{
+           poligono: {
+               required: true
+           },
+           numero: {
+               required: true
+           },
+           areaMetros: {
+               required: true
+           },
+           areaVaras:{
                required: true
            }          
         },
         
         messages:{
-            nombre:{
+            matricula:{
                 required: 'Este campo es requerido'
             },
-            
-            empresa:{
+            poligono:{
+                required: 'Este campo es requerido'
+            },
+            numero:{
+                required: 'Este campo es requerido'
+            },
+            areaMetros:{
+                required: 'Este campo es requerido'
+            },
+            areaVaras:{
                 required: 'Este campo es requerido'
             }        
         },
@@ -164,7 +218,7 @@ $(document).ready(function() {
         },
         
         errorPlacement: function(error, element) {
-            if (element.attr("name") === "nombre" || element.attr("name") === "empresa" ) {
+            if (element.attr("name") === "matricula" || element.attr("name") === "poligono" || element.attr("name") === "numero" || element.attr("name") === "areaMetros" || element.attr("name") === "areaVaras") {
                 error.insertAfter(element);
             }        
         },
@@ -174,18 +228,18 @@ $(document).ready(function() {
         
         submitHandler: function(form) {
                event.preventDefault();//detiene el evento del envio del form 
-            var idProyecto = $('#idProyecto').val();//tomo la id
+            var idTerreno = $('#idTerreno').val();//tomo la id
 
             var formDataArray = formGuardar.serializeArray();//tomo los datos del array
 
             console.log(formDataArray);
             var url;//valido el tipo de url si editar o crear
-            if (idProyecto) {
-                url = '/ActualizarProyecto';
+            if (idTerreno) {
+                url = '/ActualizarTerreno';
                 //meto la id en el campo de envio
-                formDataArray.push({name: 'idProyecto', value: idProyecto});
+                formDataArray.push({name: 'idTerreno', value: idTerreno});
             } else {
-                url = '/AgregarProyecto';
+                url = '/AgregarTerreno';
             }
 
             //realizo el guardado mediante ajax
@@ -195,13 +249,13 @@ $(document).ready(function() {
                 data: formDataArray,
                 success: function (response) {
                     $('#crearModal').modal('hide');  // Cierra el modal
-                    var table = $('#proyectoTable').DataTable();
+                    var table = $('#terrenoTable').DataTable();
                     table.ajax.reload(null, false);
                     mostrarMensaje(response, 'success');
                 },
                 error: function (xhr, status, error) {
                     $('#crearModal').modal('hide'); // Cierra el modal
-                    var errorMessage = xhr.responseText || 'Error al actualizar el proyecto.';
+                    var errorMessage = xhr.responseText || 'Error al actualizar el terreno.';
                     mostrarMensaje(errorMessage, 'danger');
                 }
             });
@@ -210,7 +264,7 @@ $(document).ready(function() {
 
     // metodo para mostrar el modal segun sea si editar o nuevo registro
         $(document).on('click', '.abrirModal-btn', function () {
-            var idProyecto = $(this).data('id');
+            var idTerreno = $(this).data('id');
             var modal = $('#crearModal');
             var tituloModal = modal.find('.modal-title');
             var form = modal.find('form');
@@ -218,11 +272,11 @@ $(document).ready(function() {
             validator.resetForm();  // Restablecer la validación
             formGuardar.find('.is-invalid').removeClass('is-invalid');
 
-            if (idProyecto) {
-                tituloModal.text('Editar Proyecto');//titulo del modal
+            if (idTerreno) {
+                tituloModal.text('Editar Terreno');//titulo del modal
                 
                 $.ajax({//utilizo ajax para obtener los datos
-                    url: '/ObtenerProyecto/' + idProyecto,
+                    url: '/ObtenerTerreno/' + idTerreno,
                     type: 'GET',
                     success: function (response) {
                        
@@ -231,25 +285,33 @@ $(document).ready(function() {
                         for (var i = 0; i < checkboxes.length; i++) {
                             checkboxes[i].checked = false;
                         }
-                        $('#nombre').val(response.nombre);
-                        $('#empresa').val(response.empresa);
+                        $('#matricula').val(response.matricula);
+                        $('#poligono').val(response.poligono);
+                        $('#numero').val(response.numero);
+                        $('#seccion').val(response.seccion);
+                        $('#areaMetros').val(response.areaMetros);
+                        $('#areaVaras').val(response.areaVaras);
                         $('#idProyecto').val(response.idProyecto);
+                        $('#idTerreno').val(response.idTerreno);
 
                     },
                     error: function () {
-                        alert('Error al obtener los datos del proyecto.');
+                        alert('Error al obtener los datos del terreno.');
                     }
                 });
             } else {
                 var checkboxes = document.querySelectorAll(".checkClean");
                 
                 // en caso de presionar el boton de nuevo solo se abrira el modal
-                tituloModal.text('Agregar Proyecto');
-                form.attr('action', '/AgregarProyecto');
-                $('#nombre').val('');
-                $('#empresa').val('');
-                $('#idProyecto').val('');
-
+                tituloModal.text('Agregar Terreno');
+                form.attr('action', '/AgregarTerreno');
+                $('#matricula').val('');
+                $('#poligono').val('');
+                $('#numero').val('');
+                $('#seccion').val('');
+                $('#areaMetros').val('');
+                $('#areaVaras').val('');
+                $('#idTerreno').val('');
             }
             modal.modal('show');
    });
@@ -257,48 +319,48 @@ $(document).ready(function() {
    
    // Método para mostrar el modal de eliminación
     $(document).on('click', '.eliminarModal-btn', function () {
-        var idProyecto = $(this).data('id');
+        var idTerreno = $(this).data('id');
 
         var modal = $('#confirmarEliminarModal');
         var tituloModal = modal.find('.modal-title');
         var cuerpoModal = modal.find('.modal-body');
-        var eliminarBtn = modal.find('#eliminarProyectoBtn');
+        var eliminarBtn = modal.find('#eliminarTerrenoBtn');
 
         // Actualizar el contenido del modal con los parámetros recibidos
         tituloModal.text('Confirmar eliminación');
-        cuerpoModal.html('<strong>¿Estás seguro de eliminar el proyecto seleccionado?</strong><br>Ten en cuenta que se eliminarán \n\
-        los datos relacionados al proyecto');
+        cuerpoModal.html('<strong>¿Estás seguro de eliminar el terreno seleccionado?</strong><br>Ten en cuenta que se eliminarán \n\
+        los datos relacionados al terreno');
 
         // Actualizar el atributo href del botón de eliminación con el idCohorte
-        eliminarBtn.data('id', idProyecto);
+        eliminarBtn.data('id', idTerreno);
 
         modal.modal('show');
     });
    
    
    //Método para enviar la solicitud de eliminar
-    $(document).on('click', '#eliminarProyectoBtn', function () {
+    $(document).on('click', '#eliminarTerrenoBtn', function () {
         
-        var idProyecto = $(this).data('id');
+        var idTerreno = $(this).data('id');
         // Actualizar la acción del formulario
-        $('#eliminarProyectoForm').attr('action', '/EliminarProyecto/' + idProyecto);
+        $('#eliminarTerrenoForm').attr('action', '/EliminarTerreno/' + idTerreno);
 
         // Realizar la solicitud POST al método de eliminación
         $.ajax({
-            url: $('#eliminarProyectoForm').attr('action'),
+            url: $('#eliminarTerrenoForm').attr('action'),
             type: 'POST',
-            data: $('#eliminarProyectoForm').serialize(), // Incluir los datos del formulario en la solicitud
+            data: $('#eliminarTerrenoForm').serialize(), // Incluir los datos del formulario en la solicitud
             success: function (response) {
               $('#confirmarEliminarModal').modal('hide');
               // Recargar el DataTable
-              $('#proyectoTable').DataTable().ajax.reload();
+              $('#terrenoTable').DataTable().ajax.reload();
               // Mostrar el mensaje de éxito del controlador
                mostrarMensaje(response, 'success');
             },
             error: function () {
               $('#confirmarEliminarModal').modal('hide');
               // Mostrar mensaje de error en caso de que la solicitud falle
-              mostrarMensaje('Error al eliminar el proyecto.', 'danger');
+              mostrarMensaje('Error al eliminar el terreno.', 'danger');
             }
         });
         

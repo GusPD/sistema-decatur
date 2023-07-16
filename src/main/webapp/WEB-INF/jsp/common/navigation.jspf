@@ -114,14 +114,14 @@
                 <sec:authorize access="hasAuthority('GESTIONAR_PROYECTO_PRIVILAGE')">
                     <li class="nav-item ${requestScope['javax.servlet.forward.request_uri'] == '/GestionarProyecto' ? 'menu-open' : ''}">
                         <a href="#" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == '/GestionarProyecto' ? 'active' : ''}">
-                            <i class="nav-icon fas fa-unlock"></i>
+                            <i class="nav-icon fa-solid fa-folder-closed"></i>
                             <p>Administración<i class="right fas fa-angle-left"></i></p>
                         </a>
                         <ul class="nav nav-treeview">
                             <sec:authorize access="hasAuthority('GESTIONAR_PROYECTO_PRIVILAGE')">
                             <li class="nav-item">
                                 <a href="/GestionarProyecto" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == '/GestionarProyecto' ? 'active' : ''}">
-                                    <i class="fa-solid fa-user nav-icon text-warning"></i>
+                                    <i class="fa-solid fa-mountain-sun nav-icon text-warning"></i>
                                     <p>Proyectos</p>
                                 </a>
                             </li>

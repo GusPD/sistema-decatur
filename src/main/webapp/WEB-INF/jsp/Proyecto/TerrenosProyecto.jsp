@@ -1,4 +1,7 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!-- Main content -->
+<div id="proyectoId" class="hidden" data-id="${proyecto.idProyecto}"></div>
 <section class="content pb-5">
     <div>
         <c:if test="${not empty mensaje}">
@@ -24,17 +27,20 @@
         <div class="row col-sm-12 margenBoton">
             <div class="col-sm-4 botonExportar"></div>
             <div class="col-sm-7"></div>
-            <sec:authorize access="hasAuthority('AGREGAR_PROYECTO_PRIVILAGE')"> 
+            <sec:authorize access="hasAuthority('AGREGAR_TERRENO_PRIVILAGE')"> 
                 <button type="button" class="btn-add btn abrirModal-btn col-sm-1 btn-sm" data-bs-toggle="modal" data-bs-target="#crearModal" data-action="agregar">Agregar</button>
             </sec:authorize>
         </div>
         <div>
             <div class="table-responsive-md">
-                <table id="proyectoTable" class="table table-striped">
+                <table id="terrenoTable" class="table table-striped">
                     <thead class="table-light">
                         <tr>
-                            <th class="text-center">Nombre del Proyecto</th>
-                            <th class="text-center">Empresa</th>
+                            <th class="text-center">Polígono</th>
+                            <th class="text-center">Lote</th>
+                            <th class="text-center">Matrícula</th>
+                            <th class="text-center">Área (m²)</th>
+                            <th class="text-center">Área (v²)</th>
                             <th class="text-center">Acciones</th>
                         </tr>
                     </thead>
@@ -51,20 +57,39 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="crearModalLabel">Agregar Proyecto</h5>
+                <h5 class="modal-title" id="crearModalLabel">Agregar Terreno</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form id='formGuardar' accept-charset="UTF-8">
-                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
-                    <input type="hidden" id="idProyecto">
-                    <div class="form-group">
-                        <label for="nombre" class="form-label">Nombre del proyecto: </label>
-                        <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Proyecto" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="empresa" class="form-label">Nombre de la empresa: </label>
-                        <input type="text" class="form-control" id="empresa" name="empresa" placeholder="Empresa" required>
+                    <div  class="overflow-auto">
+                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+                        <input type="hidden" id="idTerreno">
+                        <input type="hidden" id="idProyecto" value="${proyecto.getIdProyecto()}">
+                        <div class="form-group">
+                            <label for="matricula" class="form-label">Matrícula: </label>
+                            <input type="text" class="form-control" id="matricula" name="matricula" placeholder="Ingrese la matrícula del terreno" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="poligono" class="form-label">Polígono: </label>
+                            <input type="text" class="form-control" id="poligono" name="poligono" placeholder="Ingrese el polígono del terreno" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="numero" class="form-label">Número de terreno: </label>
+                            <input type="text" class="form-control" id="numero" name="numero" placeholder="Ingrese el número del terreno" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="seccion" class="form-label">Sección del terreno: </label>
+                            <input type="text" class="form-control" id="seccion" name="seccion" placeholder="Ingrese la sección del terreno">
+                        </div>
+                        <div class="form-group">
+                            <label for="areaMetros" class="form-label">Área (m²): </label>
+                            <input type="text" class="form-control" id="areaMetros" name="areaMetros" placeholder="Ingrese el área en metros cuadrados del terreno">
+                        </div>
+                        <div class="form-group">
+                            <label for="areaVaras" class="form-label">Área (v²): </label>
+                            <input type="text" class="form-control" id="areaVaras" name="areaVaras" placeholder="Ingrese el área en varas cuadradas del terreno">
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
@@ -85,33 +110,18 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <strong>¿Estás seguro de eliminar al proyecto seleccionado?</strong>
-                <p>Ten en cuenta que se eliminarán los datos relacionados al proyecto <span id="nombre"></span>.</p>
+                <strong>¿Estás seguro de eliminar el terreno seleccionado?</strong>
+                <p>Ten en cuenta que se eliminarán los datos relacionados al terreno <span id="poligono"></span>-<span id="numero"></span><span id="seccion"></span>.</p>
             </div>
             <div class="modal-footer">
-              <button id="eliminarProyectoBtn" class="btn btn-outline-danger btn-sm">Eliminar</button>
+              <button id="eliminarTerrenoBtn" class="btn btn-outline-danger btn-sm">Eliminar</button>
               <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
             </div>
         </div>
     </div>
 </div>
 
-<form id="eliminarProyectoForm" method="post" action="/EliminarProyecto/{idProyecto}">
+<form id="eliminarTerrenoForm" method="post" action="/EliminarTerreno/{idTerreno}">
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 </form>
 <!-- /.Modal de eliminar -->
-
-<!-- Script de la página -->
-<sec:authorize access="hasAuthority('VER_PROYECTO_PRIVILAGE')" var="hasPrivilegeVerProyecto"></sec:authorize>
-<script>var hasPrivilegeVerProyecto = ${hasPrivilegeVerProyecto};</script>    
-        
-<sec:authorize access="hasAuthority('EDITAR_PROYECTO_PRIVILAGE')" var="hasPrivilegeEditarProyecto"></sec:authorize>
-<script>var hasPrivilegeEditarProyecto = ${hasPrivilegeEditarProyecto};</script>
-
-<sec:authorize access="hasAuthority('ELIMINAR_PROYECTO_PRIVILAGE')" var="hasPrivilegeEliminarProyecto"></sec:authorize>
-<script>var hasPrivilegeEliminarProyecto = ${hasPrivilegeEliminarProyecto};</script>
-
-<%@ include file="../common/footer.jspf"%>
-
-<script src="${pageContext.request.contextPath}/js/proyecto.js"></script>
-
