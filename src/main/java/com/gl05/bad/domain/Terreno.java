@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.SequenceGenerator;
@@ -54,8 +55,11 @@ public class Terreno implements Serializable {
     private Double areaMetros;
     @Column(name = "AREA_VARAS")
     private Double areaVaras;
+    @ManyToOne
     @JoinColumn(name = "ID_PROYECTO")
-    private Long idProyecto;
+    private Proyecto idProyecto;
+    //@JoinColumn(name = "ID_PROYECTO")
+    //private Long idProyecto;
 
     @Override
     public int hashCode() {

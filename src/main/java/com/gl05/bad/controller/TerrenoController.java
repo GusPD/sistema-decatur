@@ -17,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -54,9 +55,13 @@ public class TerrenoController {
     }
 
 
-    @PostMapping("/AgregarTerreno")
-    public ResponseEntity AgregarTerreno(Terreno terreno, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    @PostMapping("/AgregarTerreno/{idProyecto}")
+    public ResponseEntity AgregarTerreno(@PathVariable("idProyecto") Long idProyecto,Terreno terreno, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
+            //Obtener el proyecto por ID
+            Proyecto proyecto = proyectoService.encontrarProyecto(idProyecto);
+            // Asignar el proyecto al terreno
+            terreno.setIdProyecto(proyecto);
             terrenoService.agregarTerreno(terreno);
             String mensaje = "Se ha agregado un terreno.";
             bitacoraService.registrarAccion("Agregar terreno");
@@ -90,9 +95,13 @@ public class TerrenoController {
         }
     }
 
-    @PostMapping("/ActualizarTerreno")
-    public ResponseEntity ActualizarTerreno(Terreno terreno, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    @PostMapping("/ActualizarTerreno/{idProyecto}")
+    public ResponseEntity ActualizarTerreno(@PathVariable("idProyecto") Long idProyecto, Terreno terreno, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
+            //Obtener el proyecto por ID
+            Proyecto proyecto = proyectoService.encontrarProyecto(idProyecto);
+            // Asignar el proyecto al terreno
+            terreno.setIdProyecto(proyecto);
             terrenoService.actualizarTerreno(terreno);
             String mensaje = "Se ha actualizado el terreno correctamente.";
             bitacoraService.registrarAccion("Actualizar terreno");
