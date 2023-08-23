@@ -103,7 +103,7 @@ $(document).ready(function() {
             "sEmptyTable": "Ningún dato disponible en esta tabla",
             "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
             "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
-            "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+            "sInfoFiltered": "",//(filtrado de un total de _MAX_ registros)
             "sInfoPostFix": "",
             "sSearch": "Buscar:",
             "sUrl": "",
@@ -229,17 +229,17 @@ $(document).ready(function() {
         submitHandler: function(form) {
                event.preventDefault();//detiene el evento del envio del form 
             var idTerreno = $('#idTerreno').val();//tomo la id
-
+            var idProyecto = $('#idProyecto').val();
             var formDataArray = formGuardar.serializeArray();//tomo los datos del array
 
             console.log(formDataArray);
             var url;//valido el tipo de url si editar o crear
             if (idTerreno) {
-                url = '/ActualizarTerreno';
+                url = '/ActualizarTerreno/'+idProyecto;
                 //meto la id en el campo de envio
                 formDataArray.push({name: 'idTerreno', value: idTerreno});
             } else {
-                url = '/AgregarTerreno';
+                url = '/AgregarTerreno/'+idProyecto;
             }
 
             //realizo el guardado mediante ajax
@@ -265,6 +265,7 @@ $(document).ready(function() {
     // metodo para mostrar el modal segun sea si editar o nuevo registro
         $(document).on('click', '.abrirModal-btn', function () {
             var idTerreno = $(this).data('id');
+            var idProyecto = $("#idProyecto").val();
             var modal = $('#crearModal');
             var tituloModal = modal.find('.modal-title');
             var form = modal.find('form');
@@ -291,7 +292,7 @@ $(document).ready(function() {
                         $('#seccion').val(response.seccion);
                         $('#areaMetros').val(response.areaMetros);
                         $('#areaVaras').val(response.areaVaras);
-                        $('#idProyecto').val(response.idProyecto);
+                        $('#idProyecto').val(response.idProyecto.idProyecto);
                         $('#idTerreno').val(response.idTerreno);
 
                     },
@@ -304,7 +305,7 @@ $(document).ready(function() {
                 
                 // en caso de presionar el boton de nuevo solo se abrira el modal
                 tituloModal.text('Agregar Terreno');
-                form.attr('action', '/AgregarTerreno');
+                form.attr('action', '/AgregarTerreno/'+idProyecto);
                 $('#matricula').val('');
                 $('#poligono').val('');
                 $('#numero').val('');
