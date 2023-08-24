@@ -27,26 +27,14 @@ public class ProyectoController {
     @Autowired
     private ProyectoService proyectoService;
 
-    @GetMapping("/GestionarProyecto")
+    /*@GetMapping("/GestionarProyecto")
     public String GestionarProyecto(Model model) {
         model.addAttribute("pageTitle", "Proyectos");
 
         var elemento = proyectoService.listaProyectos();
         model.addAttribute("proyectos", elemento);
-
         return "/Proyecto/GestionarProyecto";
-    }
-    
-    @GetMapping("/Proyecto/{idProyecto}")
-    public String mostrarProyecto(Model model, Proyecto proyecto) {
-        model.addAttribute("pageTitle", "Proyectos");
-        Proyecto proyectoEncontrado = proyectoService.encontrarProyecto(proyecto.getIdProyecto());
-        var listaProyectos = proyectoService.listaProyectos();
-        model.addAttribute("proyectos", listaProyectos);
-        model.addAttribute("proyecto", proyectoEncontrado);
-        
-        return "/Proyecto/MostrarProyecto";
-    }
+    }*/
     
     @GetMapping("/proyectos/data")
     @ResponseBody

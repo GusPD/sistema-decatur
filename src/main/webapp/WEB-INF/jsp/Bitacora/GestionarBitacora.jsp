@@ -18,10 +18,12 @@
         </div>
     </section>
     <section class="content">
-        <div  class="overflow-auto">
         <!-- Main content -->
         <section class="content">
             <div class="container">
+                <div class="col-sm-12 d-flex justify-content-end">
+                    <div class="botonExportar"></div>
+                </div>
                 <div class="table-responsive-md">
                     <table id="bitacoraTable" class="table table-striped">
                         <thead class="table-light">
@@ -39,7 +41,6 @@
                 </div>
             </div><!-- /.container-fluid -->
         </section>
-    </div>
     </section>
 <%@ include file="../common/footer.jspf"%>
 <script src="${pageContext.request.contextPath}/js/bitacora.js"></script>

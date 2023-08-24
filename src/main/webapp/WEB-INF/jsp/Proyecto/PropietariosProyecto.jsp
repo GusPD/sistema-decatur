@@ -11,7 +11,7 @@
                 <div class="col-sm-12">
                     <div class="titulo-Perfil">
                         <div class="container container-titulo">
-                            <h1>Terrenos del Proyecto ${proyecto.nombre} - ${proyecto.empresa}</h1>
+                            <h1>Propietarios del Proyecto ${proyecto.nombre} - ${proyecto.empresa}</h1>
                         </div>
                     </div>
                 </div>
@@ -44,7 +44,7 @@
                     </div>
                     <div class="col-sm-12 d-flex justify-content-end">
                         <div class="botonExportar"></div>
-                        <sec:authorize access="hasAuthority('AGREGAR_TERRENO_PRIVILAGE')"> 
+                        <sec:authorize access="hasAuthority('AGREGAR_PROPIETARIO_PRIVILAGE')"> 
                             <button type="button" class="btn-add btn abrirModal-btn btn-sm" data-bs-toggle="modal" data-bs-target="#crearModal" data-action="agregar">Agregar</button>
                         </sec:authorize>
                     </div>

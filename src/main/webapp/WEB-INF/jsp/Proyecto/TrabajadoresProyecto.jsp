@@ -42,10 +42,11 @@
                         <strong><i class="bi bi-exclamation-triangle"></i> Error!&nbsp;</strong>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
-                    <div class="col-sm-12 d-flex justify-content-end">
-                        <div class="botonExportar"></div>
+                    <div class="row col-sm-12 margenBoton">
+                        <div class="col-sm-4 botonExportar"></div>
+                        <div class="col-sm-7"></div>
                         <sec:authorize access="hasAuthority('AGREGAR_TERRENO_PRIVILAGE')"> 
-                            <button type="button" class="btn-add btn abrirModal-btn btn-sm" data-bs-toggle="modal" data-bs-target="#crearModal" data-action="agregar">Agregar</button>
+                            <button type="button" class="btn-add btn abrirModal-btn col-sm-1 btn-sm" data-bs-toggle="modal" data-bs-target="#crearModal" data-action="agregar">Agregar</button>
                         </sec:authorize>
                     </div>
                     <div>

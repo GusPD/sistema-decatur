@@ -1,5 +1,6 @@
 package com.gl05.bad.controller;
 
+import com.gl05.bad.domain.Proyecto;
 import com.gl05.bad.domain.Usuario;
 import com.gl05.bad.servicio.UserService;
 import java.io.IOException;
@@ -32,6 +33,9 @@ public class IndexController {
             // En caso de que el usuario no tenga permisos
             model.addAttribute("mensaje", "Usuario autenticado pero sin permisos");
         }
+        Proyecto proyecto=new Proyecto();
+        proyecto.setIdProyecto(0L);
+        model.addAttribute("proyecto", proyecto);
         return "welcome";
     }
     

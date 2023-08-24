@@ -57,7 +57,7 @@ public class Terreno implements Serializable {
     private Double areaVaras;
     @ManyToOne
     @JoinColumn(name = "ID_PROYECTO")
-    private Proyecto idProyecto;
+    private Proyecto proyecto;
     //@JoinColumn(name = "ID_PROYECTO")
     //private Long idProyecto;
 

@@ -18,7 +18,6 @@
         </div>
     </section>
     <section class="content">
-        <div  class="overflow-auto">
         <!-- Main content -->
         <section class="content pb-5">
             <div class="container">
@@ -42,11 +41,10 @@
                     <strong><i class="bi bi-exclamation-triangle"></i> Error!&nbsp;</strong>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
-                <div class="row col-sm-12 margenBoton">
-                    <div class="col-sm-4 botonExportar"></div>
-                    <div class="col-sm-7"></div>
+                <div class="col-sm-12 d-flex justify-content-end">
+                    <div class="botonExportar"></div>
                     <sec:authorize access="hasAuthority('AGREGAR_USUARIO_PRIVILAGE')"> 
-                        <button type="button" class="btn-add btn abrirModal-btn col-sm-1 btn-sm" data-bs-toggle="modal" data-bs-target="#crearModal" data-action="agregar">Agregar</button>
+                        <button type="button" class="btn-add btn abrirModal-btn btn-sm" data-bs-toggle="modal" data-bs-target="#crearModal" data-action="agregar">Agregar</button>
                     </sec:authorize>
                 </div>
                 <div>
@@ -68,7 +66,6 @@
                 </div>
             </div><!-- /.container-fluid -->
         </section>
-    </div>
     </section>
     
    <!-- Modal para Usuarios -->
@@ -81,46 +78,48 @@
                 </div>
                 <div class="modal-body">
                     <form id='formGuardar' accept-charset="UTF-8">
-                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
-                        <input type="hidden" id="UsuarioId">
-                        <div class="form-group">
-                             <label for="username" class="form-label">Nombre de usuario: </label>
-                            <input type="text" class="form-control" id="username" name="username" placeholder="Nombre de Usuario" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="email" class="form-label">Correo Electronico: </label>
-                            <input type="text" class="form-control" id="email" name="email" placeholder="Correo" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="password" class="form-label">Contraseña: </label>
-                            <input type="password" class="form-control" id="password" name="password" placeholder="Contraseña" required>
-                        </div>
-                        <input type="hidden" name="numerointentos" value="0">
-                        <div class="form-group oculto" hidden>
-                            <label for="habilitado" class="form-label">Usuario: </label>
-                            <select class="form-control" id="habilitado" name="habilitado" required>
-                                <option value="1">Habilitado</option>
-                                <option value="0">Deshabilitado</option>
-                            </select>
-                        </div>
-                        <div class="form-group oculto" hidden>
-                            <label for="bloqueado" class="form-label">Usuario: </label>
-                            <select class="form-control" id="bloqueado" name="bloqueado" required>
-                                <option value="0" >Desbloqueado</option>
-                                <option value="1" >Bloqueado</option>
-                            </select>
-                        </div>
-                        <div id="roles-error" class="error-message"></div>
-                        <div class="form-group">
-                            <label for="roles" class="form-label">Selecciona roles: </label>
-                            <c:forEach items="${roles}" var="elementoRol" varStatus="status" >
-                                <div>
-                                    <li>
-                                        <input class="checkClean" type="checkbox" id="rol${elementoRol.idRol}" name="roles[]" value="${elementoRol.idRol}">
-                                        <label for="rol${elementoRol.idRol}">${elementoRol.nombre}</label>
-                                    </li>
-                                </div>
-                            </c:forEach>
+                        <div  class="overflow-auto">
+                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+                            <input type="hidden" id="UsuarioId">
+                            <div class="form-group">
+                                 <label for="username" class="form-label">Nombre de usuario: </label>
+                                <input type="text" class="form-control" id="username" name="username" placeholder="Nombre de Usuario" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email" class="form-label">Correo Electronico: </label>
+                                <input type="text" class="form-control" id="email" name="email" placeholder="Correo" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="password" class="form-label">Contraseña: </label>
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Contraseña" required>
+                            </div>
+                            <input type="hidden" name="numerointentos" value="0">
+                            <div class="form-group oculto" hidden>
+                                <label for="habilitado" class="form-label">Usuario: </label>
+                                <select class="form-control" id="habilitado" name="habilitado" required>
+                                    <option value="1">Habilitado</option>
+                                    <option value="0">Deshabilitado</option>
+                                </select>
+                            </div>
+                            <div class="form-group oculto" hidden>
+                                <label for="bloqueado" class="form-label">Usuario: </label>
+                                <select class="form-control" id="bloqueado" name="bloqueado" required>
+                                    <option value="0" >Desbloqueado</option>
+                                    <option value="1" >Bloqueado</option>
+                                </select>
+                            </div>
+                            <div id="roles-error" class="error-message"></div>
+                            <div class="form-group">
+                                <label for="roles" class="form-label">Selecciona roles: </label>
+                                <c:forEach items="${roles}" var="elementoRol" varStatus="status" >
+                                    <div>
+                                        <li>
+                                            <input class="checkClean" type="checkbox" id="rol${elementoRol.idRol}" name="roles[]" value="${elementoRol.idRol}">
+                                            <label for="rol${elementoRol.idRol}">${elementoRol.nombre}</label>
+                                        </li>
+                                    </div>
+                                </c:forEach>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>

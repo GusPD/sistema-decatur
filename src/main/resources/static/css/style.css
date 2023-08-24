@@ -1,6 +1,26 @@
 @import url(//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css);
 @import url(https://fonts.googleapis.com/css?family=Titillium+Web:300);
 
+#desktop-header {
+  position: fixed!Important;
+  top: 0!Important;
+  left: 0!Important;
+  right: 0!Important;
+  z-index: 9998!Important;
+}
+
+#menu-header {
+    position: fixed !Important;
+    top: 0 !Important;
+    left: 0 !Important;
+    bottom: 0 !Important;
+    z-index: 9999!Important;
+}
+
+.sidebar {
+    height: auto !Important;
+}
+
 body{
     overflow-x: hidden;
     background-color: #fff;
@@ -63,6 +83,16 @@ text-decoration:none;
 
 .content-wrapper{
     background-color: #fff;
+}
+
+#confirmarEliminarModal{
+    margin-top: 50px !Important;
+    margin-bottom: 10px !Important;
+}
+
+#crearModal{
+    margin-top: 50px !Important;
+    margin-bottom: 10px !Important;
 }
 
 .pushmenu{
@@ -273,10 +303,16 @@ div.dataTables_wrapper div.dataTables_info {
     padding-top: 0px !Important;
 }
 
-.content{
-    margin-top: 4px !Important;
+.overflow-auto{
+    max-height: 55vh !Important;
+    padding-right: 3px!Important;
 }
 
-.overflow-auto{
-    max-height: 65vh !Important;
+.form-group{
+    padding-left:3%!Important;
+    padding-right:3%!Important;
+}
+
+#EspacioEncabezado{
+    height: 40px!Important;
 }
