@@ -73,7 +73,7 @@ public class TerrenoServiceImp implements TerrenoService{
     @Transactional(readOnly = true)
     public DataTablesOutput<Terreno> listarTerrenos(DataTablesInput input, Long idProyecto) {
         Specification<Terreno> specification = (root, query, builder) -> {
-            return builder.equal(root.get("idProyecto").get("idProyecto"), idProyecto);
+            return builder.equal(root.get("proyecto").get("idProyecto"), idProyecto);
         };
         return terrenoDao.findAll(input, specification);
     }

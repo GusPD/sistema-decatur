@@ -18,7 +18,6 @@
         </div>
     </section>
     <section class="content">
-        <div  class="overflow-auto">
         <!-- Main content -->
         <section class="content pb-5">
             <div class="container">
@@ -42,11 +41,10 @@
                     <strong><i class="bi bi-exclamation-triangle"></i> Error!&nbsp;</strong>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
-                <div class="row col-sm-12 margenBoton">
-                    <div class="col-sm-4 botonExportar"></div>
-                    <div class="col-sm-7"></div>
+                <div class="col-sm-12 d-flex justify-content-end">
+                    <div class="botonExportar"></div>
                     <sec:authorize access="hasAuthority('AGREGAR_ROL_PRIVILAGE')"> 
-                        <button type="button" class="btn-add btn abrirModal-btn col-sm-1 btn-sm" data-bs-toggle="modal" data-bs-target="#crearModal" data-action="agregar">Agregar</button>
+                        <button type="button" class="btn-add btn abrirModal-btn btn-sm" data-bs-toggle="modal" data-bs-target="#crearModal" data-action="agregar">Agregar</button>
                     </sec:authorize>
                 </div>
                 <div>
@@ -66,7 +64,6 @@
                 </div>
             </div><!-- /.container-fluid -->
         </section>
-    </div>
     </section>
             
     <!-- Modal para roles -->
@@ -79,23 +76,25 @@
                 </div>
                 <div class="modal-body">
                     <form id='formGuardar' accept-charset="UTF-8">
-                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
-                        <input type="hidden" id="rolId">
-                        <div class="form-group">
-                            <label for="nombre" class="form-label">Nombre de rol: </label>
-                            <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" required>
-                        </div>
-                        <div id="permisos-error" class="error-message"></div>
-                        <div class="form-group">
-                            <label for="permisos" class="form-label">Permisos: </label>
-                            <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
-                                <div>
-                                    <li>
-                                        <input class="checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
-                                        <label for="permiso${elementoPermiso.idPermiso}">${elementoPermiso.nombre}</label>
-                                    </li>
-                                </div>
-                            </c:forEach>
+                        <div  class="overflow-auto">
+                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+                            <input type="hidden" id="rolId">
+                            <div class="form-group">
+                                <label for="nombre" class="form-label">Nombre de rol: </label>
+                                <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" required>
+                            </div>
+                            <div id="permisos-error" class="error-message"></div>
+                            <div class="form-group">
+                                <label for="permisos" class="form-label">Permisos: </label>
+                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                    <div>
+                                        <li>
+                                            <input class="checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                            <label for="permiso${elementoPermiso.idPermiso}">${elementoPermiso.nombre}</label>
+                                        </li>
+                                    </div>
+                                </c:forEach>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button id='btnSumit' type="submit" class="btn btn-outline-success btn-sm">Guardar</button>

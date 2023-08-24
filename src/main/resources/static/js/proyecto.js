@@ -60,7 +60,7 @@ $(document).ready(function() {
                     var actionsHtml = '';
                     
                     if(hasPrivilegeVerProyecto === true){
-                        actionsHtml = '<a type="button" class="btn btn-outline-secondary" href="/Proyecto/' + row.idProyecto + '">';
+                        actionsHtml = '<a type="button" class="btn btn-outline-secondary" href="/Terrenos/' + row.idProyecto + '">';
                         actionsHtml += '<i class="bi bi-eye"></i></a>';
                     }
                     

@@ -32,15 +32,19 @@ public class TerrenoController {
     
     @Autowired
     private ProyectoService proyectoService;
-
-    @GetMapping("/Proyecto/Proyecto/{idProyecto}")
-    public String TerrenosProyecto(Model model, Proyecto proyecto) {
+    
+    @GetMapping("/Terrenos/{idProyecto}")
+    public String mostrarProyecto(Model model, Proyecto proyecto) {
+        model.addAttribute("pageTitle", "Proyectos");
         Proyecto proyectoEncontrado = proyectoService.encontrarProyecto(proyecto.getIdProyecto());
+        var listaProyectos = proyectoService.listaProyectos();
+        model.addAttribute("proyectos", listaProyectos);
         model.addAttribute("proyecto", proyectoEncontrado);
+        
         return "/Proyecto/TerrenosProyecto";
     }
     
-    @GetMapping("/Proyecto/{idProyecto}/Terreno/{idTerreno}")
+    @GetMapping("/Terreno/{idProyecto}/{idTerreno}")
     public String MostrarTerrenoProyecto(Model model, Terreno terreno) {
         model.addAttribute("pageTitle", "Proyectos");
         Terreno terrenoEncontrado = terrenoService.encontrarTerreno(terreno.getIdTerreno());
@@ -54,14 +58,15 @@ public class TerrenoController {
         return terrenoService.listarTerrenos(input, idProyecto);
     }
 
-
     @PostMapping("/AgregarTerreno/{idProyecto}")
     public ResponseEntity AgregarTerreno(@PathVariable("idProyecto") Long idProyecto,Terreno terreno, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             //Obtener el proyecto por ID
             Proyecto proyecto = proyectoService.encontrarProyecto(idProyecto);
             // Asignar el proyecto al terreno
-            terreno.setIdProyecto(proyecto);
+            terreno.setProyecto(proyecto);
+            terreno.setPoligono(terreno.getPoligono().toString().toUpperCase().charAt(0));
+            terreno.setSeccion(terreno.getSeccion().toString().toLowerCase().charAt(0));
             terrenoService.agregarTerreno(terreno);
             String mensaje = "Se ha agregado un terreno.";
             bitacoraService.registrarAccion("Agregar terreno");
@@ -101,7 +106,9 @@ public class TerrenoController {
             //Obtener el proyecto por ID
             Proyecto proyecto = proyectoService.encontrarProyecto(idProyecto);
             // Asignar el proyecto al terreno
-            terreno.setIdProyecto(proyecto);
+            terreno.setProyecto(proyecto);
+            terreno.setPoligono(terreno.getPoligono().toString().toUpperCase().charAt(0));
+            terreno.setSeccion(terreno.getSeccion().toString().toLowerCase().charAt(0));
             terrenoService.actualizarTerreno(terreno);
             String mensaje = "Se ha actualizado el terreno correctamente.";
             bitacoraService.registrarAccion("Actualizar terreno");

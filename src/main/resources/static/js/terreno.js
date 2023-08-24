@@ -11,8 +11,8 @@ $(document).ready(function() {
              "<'row w-100'<'col-sm-6'l><'col-sm-6'f>>" +
              "<'row w-100'<'col-sm-12 my-4'tr>>" +
              "<'row w-100'<'col-sm-5'i><'col-sm-7'p>>",
-        lengthMenu: [[3, 25, 50, 100, -1], [3, 25, 50, 100, 'Todos']], // Opciones de selección para mostrar registros por página
-        pageLength: 3, // Cantidad de registros por página por defecto
+        lengthMenu: [[5, 25, 50, 100, -1], [5, 25, 50, 100, 'Todos']], // Opciones de selección para mostrar registros por página
+        pageLength: 5, // Cantidad de registros por página por defecto
         buttons: [
             {
                 extend: 'copy',
@@ -50,8 +50,28 @@ $(document).ready(function() {
             { data: 'poligono', width: '10%' },
             { data: 'numero', width: '10%' },
             { data: 'matricula', width: '20%' },
-            { data: 'areaMetros', width: '15%', searchable: false },
-            { data: 'areaVaras', width: '15%', searchable: false },
+            {
+                data: 'areaMetros',
+                width: '15%',
+                searchable: false,
+                render: function(data, type, row) {
+                    if (type === 'display' || type === 'filter') {
+                        return parseFloat(data).toFixed(2);
+                    }
+                    return data;
+                }
+            },
+            {
+                data: 'areaVaras',
+                width: '15%',
+                searchable: false,
+                render: function(data, type, row) {
+                    if (type === 'display' || type === 'filter') {
+                        return parseFloat(data).toFixed(2);
+                    }
+                    return data;
+                }
+            },
             {
                 data: null,
                 title: 'Acciones',
@@ -168,26 +188,75 @@ $(document).ready(function() {
         var seconds = String(date.getSeconds()).padStart(2, '0');
 
         return year + month + day + '_' + hours + minutes + seconds;
-    }         
-
+    }
+    document.getElementById("areaMetros").addEventListener("input", function() {
+        const metros = parseFloat(document.getElementById('areaMetros').value);
+        if (!isNaN(metros)) {
+            const varas = metros * 1.4233213046;
+            document.getElementById('areaVaras').value = varas.toFixed(2);
+        } else {
+            document.getElementById('areaVaras').value = '';
+        }
+    });
+    
+    $.validator.addMethod(
+        "validarPoligono",
+        function(value, element) {
+            return this.optional(element) || /^[A-Za-z\s,]+$/.test(value);
+        },
+        "No se aceptan números ni caracteres especiales"
+    );
+    $.validator.addMethod(
+        "validarNumero",
+        function(value, element) {
+            return this.optional(element) || /^\d+$/.test(value);
+        },
+        "Solo se aceptan números"
+    );
+    $.validator.addMethod(
+        "validarSeccion",
+        function(value, element) {
+            return this.optional(element) || /^[A-Za-z\s,]+$/.test(value);
+        },
+        "No se aceptan números ni caracteres especiales"
+    );
+    $.validator.addMethod(
+        "validarArea",
+        function(value, element) {
+            return this.optional(element) || /^\d+(\.\d+)?$/.test(value);
+        },
+        "Ingrese un número válido"
+    );
      var formGuardar = $('#formGuardar'); // Almacenar referencia al formulario
      var validator = $('#formGuardar').validate({
          
         rules: {
            matricula: {
-               required: true
+               required: true,
+               maxlength: 18
            },
            poligono: {
-               required: true
+               required: true,
+               validarPoligono: true,
+               maxlength: 1
            },
            numero: {
-               required: true
+               required: true,
+               validarNumero: true,
+               maxlength: 3
+           },
+           seccion:{
+               required: true,
+               validarSeccion: true,
+               maxlength: 1
            },
            areaMetros: {
-               required: true
+               required: true,
+               validarArea: true,
+               maxlength: 20
            },
            areaVaras:{
-               required: true
+               maxlength: 20
            }          
         },
         
@@ -199,6 +268,9 @@ $(document).ready(function() {
                 required: 'Este campo es requerido'
             },
             numero:{
+                required: 'Este campo es requerido'
+            },
+            seccion:{
                 required: 'Este campo es requerido'
             },
             areaMetros:{
@@ -218,7 +290,7 @@ $(document).ready(function() {
         },
         
         errorPlacement: function(error, element) {
-            if (element.attr("name") === "matricula" || element.attr("name") === "poligono" || element.attr("name") === "numero" || element.attr("name") === "areaMetros" || element.attr("name") === "areaVaras") {
+            if (element.attr("name") === "matricula" || element.attr("name") === "poligono" || element.attr("name") === "numero" || element.attr("name") === "seccion" || element.attr("name") === "areaMetros" || element.attr("name") === "areaVaras") {
                 error.insertAfter(element);
             }        
         },
@@ -229,7 +301,7 @@ $(document).ready(function() {
         submitHandler: function(form) {
                event.preventDefault();//detiene el evento del envio del form 
             var idTerreno = $('#idTerreno').val();//tomo la id
-            var idProyecto = $('#idProyecto').val();
+            var idProyecto = $('#proyecto').val();
             var formDataArray = formGuardar.serializeArray();//tomo los datos del array
 
             console.log(formDataArray);
@@ -265,7 +337,7 @@ $(document).ready(function() {
     // metodo para mostrar el modal segun sea si editar o nuevo registro
         $(document).on('click', '.abrirModal-btn', function () {
             var idTerreno = $(this).data('id');
-            var idProyecto = $("#idProyecto").val();
+            var idProyecto = $("#proyecto").val();
             var modal = $('#crearModal');
             var tituloModal = modal.find('.modal-title');
             var form = modal.find('form');
@@ -292,7 +364,7 @@ $(document).ready(function() {
                         $('#seccion').val(response.seccion);
                         $('#areaMetros').val(response.areaMetros);
                         $('#areaVaras').val(response.areaVaras);
-                        $('#idProyecto').val(response.idProyecto.idProyecto);
+                        $('#proyecto').val(response.proyecto.idProyecto);
                         $('#idTerreno').val(response.idTerreno);
 
                     },
@@ -375,5 +447,5 @@ $(document).ready(function() {
         }, 5000); // Ocultar el mensaje después de 3 segundos (ajusta el valor según tus necesidades)
     }
     
-});
+}); 
 
