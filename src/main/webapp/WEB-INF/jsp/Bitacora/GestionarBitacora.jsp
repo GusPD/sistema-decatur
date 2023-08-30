@@ -1,5 +1,5 @@
 <%@ include file="../common/header.jspf"%>
-<%@ include file="../common/navigation.jspf"%>
+<%@ include file="../common/navigationAdministracion.jspf"%>
 
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -24,8 +24,8 @@
                 <div class="col-sm-12 d-flex justify-content-end">
                     <div class="botonExportar"></div>
                 </div>
-                <div class="table-responsive-md">
-                    <table id="bitacoraTable" class="table table-striped">
+                <div class="table-responsive-md table-container">
+                    <table id="bitacoraTable" class="table table-striped custom-fixed-header">
                         <thead class="table-light">
                             <tr>
                                 <th class="text-center">Nombre de Usuario</th>

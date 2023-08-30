@@ -8,20 +8,21 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import lombok.Data;
 
-/**
- *
- * @author Gustavo Delgado
- */
+@Data
 @Entity
 @Table(name = "REFERENCIA")
 @XmlRootElement
@@ -39,7 +40,9 @@ public class Referencia implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "ID_REFERENCIA")
-    private Integer idReferencia;
+    @SequenceGenerator(name = "S_REFERENCIA", sequenceName = "S_REFERENCIA", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "S_REFERENCIA")
+    private Long idReferencia;
     @Size(max = 200)
     @Column(name = "NOMBRE")
     private String nombre;
@@ -47,68 +50,12 @@ public class Referencia implements Serializable {
     @Column(name = "APELLIDO")
     private String apellido;
     @Column(name = "TELEFONO")
-    private Long telefono;
+    private String telefono;
     @Size(max = 150)
     @Column(name = "CORREO")
     private String correo;
     @JoinColumn(name = "ID_PROPIETARIO", referencedColumnName = "ID_PROPIETARIO")
-    @ManyToOne
-    private Propietario idPropietario;
-
-    public Referencia() {
-    }
-
-    public Referencia(Integer idReferencia) {
-        this.idReferencia = idReferencia;
-    }
-
-    public Integer getIdReferencia() {
-        return idReferencia;
-    }
-
-    public void setIdReferencia(Integer idReferencia) {
-        this.idReferencia = idReferencia;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getApellido() {
-        return apellido;
-    }
-
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
-    }
-
-    public Long getTelefono() {
-        return telefono;
-    }
-
-    public void setTelefono(Long telefono) {
-        this.telefono = telefono;
-    }
-
-    public String getCorreo() {
-        return correo;
-    }
-
-    public void setCorreo(String correo) {
-        this.correo = correo;
-    }
-
-    public Propietario getIdPropietario() {
-        return idPropietario;
-    }
-
-    public void setIdPropietario(Propietario idPropietario) {
-        this.idPropietario = idPropietario;
-    }
+    private Long idPropietario;
 
     @Override
     public int hashCode() {

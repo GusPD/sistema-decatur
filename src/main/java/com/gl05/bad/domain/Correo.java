@@ -8,20 +8,21 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import lombok.Data;
 
-/**
- *
- * @author Gustavo Delgado
- */
+@Data
 @Entity
 @Table(name = "CORREO")
 @XmlRootElement
@@ -37,7 +38,9 @@ public class Correo implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "ID_CORREO")
-    private Integer idCorreo;
+    @SequenceGenerator(name = "S_CORREO", sequenceName = "S_CORREO", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "S_CORREO")
+    private Long idCorreo;
     @Size(max = 20)
     @Column(name = "TIPO")
     private String tipo;
@@ -45,47 +48,7 @@ public class Correo implements Serializable {
     @Column(name = "CORREO")
     private String correo;
     @JoinColumn(name = "ID_PROPIETARIO", referencedColumnName = "ID_PROPIETARIO")
-    @ManyToOne
-    private Propietario idPropietario;
-
-    public Correo() {
-    }
-
-    public Correo(Integer idCorreo) {
-        this.idCorreo = idCorreo;
-    }
-
-    public Integer getIdCorreo() {
-        return idCorreo;
-    }
-
-    public void setIdCorreo(Integer idCorreo) {
-        this.idCorreo = idCorreo;
-    }
-
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
-
-    public String getCorreo() {
-        return correo;
-    }
-
-    public void setCorreo(String correo) {
-        this.correo = correo;
-    }
-
-    public Propietario getIdPropietario() {
-        return idPropietario;
-    }
-
-    public void setIdPropietario(Propietario idPropietario) {
-        this.idPropietario = idPropietario;
-    }
+    private Long idPropietario;
 
     @Override
     public int hashCode() {

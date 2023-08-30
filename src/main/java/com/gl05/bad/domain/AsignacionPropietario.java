@@ -8,25 +8,26 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
+import lombok.Data;
 
-/**
- *
- * @author Gustavo Delgado
- */
+@Data
 @Entity
 @Table(name = "ASIGNACION_PROPIETARIO")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "AsignacionPropietario.findAll", query = "SELECT a FROM AsignacionPropietario a"),
-    @NamedQuery(name = "AsignacionPropietario.findByIdAsigPropietario", query = "SELECT a FROM AsignacionPropietario a WHERE a.idAsigPropietario = :idAsigPropietario")})
+    @NamedQuery(name = "AsignacionPropietario.findByIdAsignacion", query = "SELECT a FROM AsignacionPropietario a WHERE a.idAsignacion = :idAsignacion")})
 public class AsignacionPropietario implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -34,49 +35,20 @@ public class AsignacionPropietario implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "ID_ASIG_PROPIETARIO")
-    private Integer idAsigPropietario;
+    @SequenceGenerator(name = "S_ASIGNACION_PROPIETARIO", sequenceName = "S_ASIGNACION_PROPIETARIO", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "S_ASIGNACION_PROPIETARIO")
+    private Long idAsignacion;
     @JoinColumn(name = "ID_PROPIETARIO", referencedColumnName = "ID_PROPIETARIO")
     @ManyToOne
-    private Propietario idPropietario;
+    private Propietario propietario;
     @JoinColumn(name = "ID_VENTA", referencedColumnName = "ID_VENTA")
     @ManyToOne
-    private Venta idVenta;
-
-    public AsignacionPropietario() {
-    }
-
-    public AsignacionPropietario(Integer idAsigPropietario) {
-        this.idAsigPropietario = idAsigPropietario;
-    }
-
-    public Integer getIdAsigPropietario() {
-        return idAsigPropietario;
-    }
-
-    public void setIdAsigPropietario(Integer idAsigPropietario) {
-        this.idAsigPropietario = idAsigPropietario;
-    }
-
-    public Propietario getIdPropietario() {
-        return idPropietario;
-    }
-
-    public void setIdPropietario(Propietario idPropietario) {
-        this.idPropietario = idPropietario;
-    }
-
-    public Venta getIdVenta() {
-        return idVenta;
-    }
-
-    public void setIdVenta(Venta idVenta) {
-        this.idVenta = idVenta;
-    }
+    private Venta venta;
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (idAsigPropietario != null ? idAsigPropietario.hashCode() : 0);
+        hash += (idAsignacion != null ? idAsignacion.hashCode() : 0);
         return hash;
     }
 
@@ -87,7 +59,7 @@ public class AsignacionPropietario implements Serializable {
             return false;
         }
         AsignacionPropietario other = (AsignacionPropietario) object;
-        if ((this.idAsigPropietario == null && other.idAsigPropietario != null) || (this.idAsigPropietario != null && !this.idAsigPropietario.equals(other.idAsigPropietario))) {
+        if ((this.idAsignacion == null && other.idAsignacion != null) || (this.idAsignacion != null && !this.idAsignacion.equals(other.idAsignacion))) {
             return false;
         }
         return true;
@@ -95,7 +67,7 @@ public class AsignacionPropietario implements Serializable {
 
     @Override
     public String toString() {
-        return "com.gl05.bad.domain.AsignacionPropietario[ idAsigPropietario=" + idAsigPropietario + " ]";
+        return "com.gl05.bad.domain.AsignacionPropietario[ idAsignacion=" + idAsignacion + " ]";
     }
     
 }

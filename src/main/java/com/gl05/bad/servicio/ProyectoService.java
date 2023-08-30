@@ -1,5 +1,6 @@
 package com.gl05.bad.servicio;
 
+import com.gl05.bad.domain.AsignacionPropietario;
 import com.gl05.bad.domain.Proyecto;
 import java.util.List;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;

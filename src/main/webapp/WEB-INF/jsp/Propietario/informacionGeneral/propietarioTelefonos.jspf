@@ -1,0 +1,107 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<div id="perfil-telefono-electronico">
+    <div class="subtitulo-Perfil">
+        <h3>Teléfonos
+            <sec:authorize access="hasAuthority('AGREGAR_TELEFONO_PROPIETARIO_PRIVILAGE')">
+                <button type="button" id="AgregarTelefono" class="btn-add btn abrirModal-btn pull-right btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalTelefono" data-action="agregar">Agregar</button>
+            </sec:authorize>
+        </h3>
+    </div>
+    <div class="overflow-auto">
+        <table style="width:100%; " class="table table-bordered custom-fixed-header small" id="tabla-telefonos">
+            <thead>
+                <tr>
+                    <th scope="col">N°</th>
+                    <th scope="col">Tipo</th>
+                    <th scope="col">Teléfono</th>
+                    <th scope="col">Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <c:if test="${empty telefonos}">
+                    <tr>
+                        <td colspan="4">No hay registros</td>
+                    </tr>
+                </c:if>
+                <c:if test="${not empty telefonos}">
+                    <c:forEach items="${telefonos}" var="eTelefono" varStatus="numeroTelefono">
+                        <tr>
+                            <td>${numeroTelefono.index+1}</td>
+                            <td>${eTelefono.tipo}</td>
+                            <td>${eTelefono.telefono}</td>
+                            <td>
+                                <sec:authorize access="hasAuthority('ELIMINAR_TELEFONO_PROPIETARIO_PRIVILAGE')">
+                                <button type="button" class="btn btn-outline-danger eliminarModalTelefono-btn btn-sm" data-id="${eTelefono.idTelefono}" 'data-cod="${eTelefono.idTelefono}"><i class="far fa-trash-alt"></i></button>
+                                </sec:authorize>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                </c:if>
+            </tbody>
+        </table>
+    </div>
+</div>
+<!-- Modal para Telefonos -->
+<div style="text-align: left;">
+    <!-- Modal para crear aspirantes -->
+    <div class="modal fade" id="crearModalTelefono" tabindex="-1" aria-labelledby="crearModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="crearModalLabel">Agregar Teléfono</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id='formGuardarTelefono' accept-charset="UTF-8">
+                        <div  class="overflow-auto">
+                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+                            <input type="hidden" id="idTelefono">
+                            <div class="form-group">
+                                <label for="tipo" class="form-label">Tipo de Teléfono:</label>
+                                <select type="text" class="form-select" id="tipo" name="tipo" required>
+                                    <option value="">Seleccione una opción</option>
+                                    <c:forEach items="${tiposTelefonos}" var="eTipoTelefono" varStatus="status">
+                                        <option value="${eTipoTelefono}">${eTipoTelefono}</option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="telefono" class="form-label">Teléfono:</label>
+                                <input type="text" class="form-control" id="telefono" name="telefono" maxlength="12" placeholder="Ingrese el número de teléfono" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
+                            <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal de eliminar -->
+<div class="modal fade" id="confirmarEliminarModalTelefono" tabindex="-1" aria-labelledby="confirmarEliminarLabelTelefono" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmarEliminarLabelTelefono">Confirmar eliminación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <strong>¿Estás seguro de eliminar el teléfono seleccionado?</strong>
+                <p>Ten en cuenta que se eliminarán los datos relacionados al teléfono <span id="telefono"></span>.</p>
+            </div>
+            <div class="modal-footer">
+              <button id="eliminarTelefonoBtn" class="btn btn-outline-danger btn-sm">Eliminar</button>
+              <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form id="eliminarTelefonoForm" method="post" action="/EliminarTelefono/{idTelefono}">
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+</form>
+
+                  

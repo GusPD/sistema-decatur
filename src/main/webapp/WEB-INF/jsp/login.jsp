@@ -6,9 +6,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Iniciar sesión</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <script src="https://kit.fontawesome.com/93d73f179d.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css" integrity="sha384-b6lVK+yci+bfDmaY1u0zE8YYJt0TZxLEAFyYSLHId4xoVvsrQu3INevFKo+Xir8e" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/recursosOnline/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/style.css">
     ${_csrfMetaTags}
 </head>
@@ -40,12 +38,12 @@
                         <div class="input-group">
                             <input type="password" name="password" id="password" class="form-control" placeholder= "Ingrese contraseña" required>
                                 <button class="btn btn-outline-secondary" type="button" id="password-toggle" onclick="togglePasswordVisibility()">
-                                <i id="eye-icon" class="bi bi-eye"></i>
+                                <i id="eye-icon" class="far fa-eye"></i>
                             </button>
                         </div>
                         </div>
 
-                        <div class="d-grid">
+                        <div class="d-flex justify-content-end">
                             <button type="submit" class="btn btn-primary">Iniciar sesión</button>
                         </div>
                     </form>
@@ -53,10 +51,10 @@
             </div>
         </div>
     </div>
-    
-    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
-    <script src="${pageContext.request.contextPath}/js/login.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/recursosOnline/js/kit.fontawesome.com.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/recursosOnline/js/jquery-3.7.0.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/recursosOnline/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/login.js"></script>
 </body>
 </html>
 

@@ -6,29 +6,28 @@ package com.gl05.bad.domain;
 
 import java.io.Serializable;
 import java.math.BigInteger;
-import java.util.Collection;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
-/**
- *
- * @author Gustavo Delgado
- */
+@Data
 @Entity
 @Table(name = "VISITA")
 @XmlRootElement
@@ -49,6 +48,8 @@ public class Visita implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "ID_VISITA")
+    @SequenceGenerator(name = "S_VISITA", sequenceName = "S_VISITA", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "S_VISITA")
     private Integer idVisita;
     @Column(name = "CANTIDAD_ADULTOS")
     private BigInteger cantidadAdultos;
@@ -56,12 +57,14 @@ public class Visita implements Serializable {
     private BigInteger cantidadNinos;
     @Column(name = "FECHA_ENTRADA")
     @Temporal(TemporalType.TIMESTAMP)
+     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date fechaEntrada;
     @Column(name = "HORA_ENTRADA")
     @Temporal(TemporalType.TIMESTAMP)
     private Date horaEntrada;
     @Column(name = "FECHA_SALIDA")
     @Temporal(TemporalType.TIMESTAMP)
+     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date fechaSalida;
     @Column(name = "HORA_SALIDA")
     @Temporal(TemporalType.TIMESTAMP)
@@ -69,99 +72,6 @@ public class Visita implements Serializable {
     @Size(max = 500)
     @Column(name = "OBSERVACIONES")
     private String observaciones;
-    @OneToMany(mappedBy = "idVisita")
-    private Collection<Visitante> visitanteCollection;
-    @JoinColumn(name = "ID_PROYECTO", referencedColumnName = "ID_PROYECTO")
-    @ManyToOne
-    private Proyecto idProyecto;
-
-    public Visita() {
-    }
-
-    public Visita(Integer idVisita) {
-        this.idVisita = idVisita;
-    }
-
-    public Integer getIdVisita() {
-        return idVisita;
-    }
-
-    public void setIdVisita(Integer idVisita) {
-        this.idVisita = idVisita;
-    }
-
-    public BigInteger getCantidadAdultos() {
-        return cantidadAdultos;
-    }
-
-    public void setCantidadAdultos(BigInteger cantidadAdultos) {
-        this.cantidadAdultos = cantidadAdultos;
-    }
-
-    public BigInteger getCantidadNinos() {
-        return cantidadNinos;
-    }
-
-    public void setCantidadNinos(BigInteger cantidadNinos) {
-        this.cantidadNinos = cantidadNinos;
-    }
-
-    public Date getFechaEntrada() {
-        return fechaEntrada;
-    }
-
-    public void setFechaEntrada(Date fechaEntrada) {
-        this.fechaEntrada = fechaEntrada;
-    }
-
-    public Date getHoraEntrada() {
-        return horaEntrada;
-    }
-
-    public void setHoraEntrada(Date horaEntrada) {
-        this.horaEntrada = horaEntrada;
-    }
-
-    public Date getFechaSalida() {
-        return fechaSalida;
-    }
-
-    public void setFechaSalida(Date fechaSalida) {
-        this.fechaSalida = fechaSalida;
-    }
-
-    public Date getHoraSalida() {
-        return horaSalida;
-    }
-
-    public void setHoraSalida(Date horaSalida) {
-        this.horaSalida = horaSalida;
-    }
-
-    public String getObservaciones() {
-        return observaciones;
-    }
-
-    public void setObservaciones(String observaciones) {
-        this.observaciones = observaciones;
-    }
-
-    @XmlTransient
-    public Collection<Visitante> getVisitanteCollection() {
-        return visitanteCollection;
-    }
-
-    public void setVisitanteCollection(Collection<Visitante> visitanteCollection) {
-        this.visitanteCollection = visitanteCollection;
-    }
-
-    public Proyecto getIdProyecto() {
-        return idProyecto;
-    }
-
-    public void setIdProyecto(Proyecto idProyecto) {
-        this.idProyecto = idProyecto;
-    }
 
     @Override
     public int hashCode() {
