@@ -10,7 +10,7 @@
                 <div class="col-sm-12">
                     <div class="titulo-Perfil">
                         <div class="container container-titulo">
-                            <h1>Bitácoras</h1>
+                            <h1>Bitácora</h1>
                         </div>
                     </div>
                 </div>
