@@ -1,5 +1,5 @@
 <%@ include file="../common/header.jspf"%>
-<%@ include file="../common/navigation.jspf"%>
+<%@ include file="../common/navigationAdministracion.jspf"%>
 
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -48,8 +48,8 @@
                     </sec:authorize>
                 </div>
                 <div>
-                    <div class="table-responsive-md">
-                        <table id="proyectoTable" class="table table-striped">
+                    <div class="table-responsive-md table-container">
+                        <table id="proyectoTable" class="table table-striped custom-fixed-header">
                             <thead class="table-light">
                                 <tr>
                                     <th class="text-center">Nombre del Proyecto</th>

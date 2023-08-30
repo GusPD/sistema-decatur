@@ -120,8 +120,7 @@ $(document).ready(function() {
             return: true
         }
     });
-    table.columns.adjust();
-    new $.fn.dataTable.FixedHeader(table);
+    table.columns.adjust();    
     table.buttons().container().appendTo('.botonExportar');
     // Función para obtener la fecha y hora actual en formato deseado
     function getCurrentDateTime() {

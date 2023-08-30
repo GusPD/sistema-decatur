@@ -60,20 +60,20 @@ $(document).ready(function() {
                     var actionsHtml = '';
                     
                     if(hasPrivilegeVerProyecto === true){
-                        actionsHtml = '<a type="button" class="btn btn-outline-secondary" href="/Terrenos/' + row.idProyecto + '">';
-                        actionsHtml += '<i class="bi bi-eye"></i></a>';
+                        actionsHtml = '<a type="button" class="btn btn-outline-secondary btn-sm" href="/Terrenos/' + row.idProyecto + '">';
+                        actionsHtml += '<i class="far fa-eye"></i></a>';
                     }
                     
                     if(hasPrivilegeEditarProyecto === true){
-                        actionsHtml += '<button type="button" class="btn btn-outline-primary abrirModal-btn" data-bs-toggle="modal" ';
+                        actionsHtml += '<button type="button" class="btn btn-outline-primary abrirModal-btn btn-sm" data-bs-toggle="modal" ';
                         actionsHtml += 'data-bs-target="#crearModal" data-tipo="editar" data-id="' + row.idProyecto + '" data-modo="actualizar">';
-                        actionsHtml += '<i class="bi bi-pencil-square"></i></button>';
+                        actionsHtml += '<i class="far fa-edit"></i></button>';
                     }
                     
                     if(hasPrivilegeEliminarProyecto === true){
-                    actionsHtml += '<button type="button" class="btn btn-outline-danger eliminarModal-btn" data-id="' + row.idProyecto + '" ';
+                    actionsHtml += '<button type="button" class="btn btn-outline-danger eliminarModal-btn btn-sm" data-id="' + row.idProyecto + '" ';
                     actionsHtml += 'data-cod="' + row.idProyecto + '">';
-                    actionsHtml += '<i class="bi bi-trash"></i></button>';
+                    actionsHtml += '<i class="far fa-trash-alt"></i></button>';
                    }
                     
                     return actionsHtml || '';
@@ -117,7 +117,6 @@ $(document).ready(function() {
         }
     });
     table.columns.adjust();
-    new $.fn.dataTable.FixedHeader(table);
     table.buttons().container().appendTo('.botonExportar');
     // Función para obtener la fecha y hora actual en formato deseado
     function getCurrentDateTime() {

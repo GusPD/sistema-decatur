@@ -1,5 +1,5 @@
 <%@ include file="../common/header.jspf"%>
-<%@ include file="../common/navigation.jspf"%>
+<%@ include file="../common/navigationProyecto.jspf"%>
 
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -50,8 +50,8 @@
                         </sec:authorize>
                     </div>
                     <div>
-                        <div class="table-responsive-md">
-                            <table id="terrenoTable" class="table table-striped">
+                        <div class="table-responsive-md table-container">
+                            <table id="terrenoTable" class="table table-striped custom-fixed-header">
                                 <thead class="table-light">
                                     <tr>
                                         <th class="text-center">Polígono</th>

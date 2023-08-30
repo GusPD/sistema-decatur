@@ -5,6 +5,7 @@ $(document).ready(function() {
             url: '/terrenos/data/' + idProyecto,
             dataSrc: 'data'
         },
+        order: [[0, 'asc'],[1, 'asc'],[2, 'asc']],
         processing: true,
         serverSide: true,
         dom: "<'row w-100'<'col-sm-12 mb-4'B>>" +
@@ -26,7 +27,7 @@ $(document).ready(function() {
                 extend: 'excel',
                 text: 'Exportar a Excel',
                 class: 'btn-sm',
-                title: 'Terrenos del sistema', // Título del reporte en Excel
+                title: 'Terrenos del proyecto', // Título del reporte en Excel
                 filename: 'Terrenos ' + getCurrentDateTime(), // Nombre del archivo Excel
                 exportOptions: {
                   columns: [0, 1, 2, 3, 4] // Índices de las columnas que se exportarán
@@ -36,7 +37,7 @@ $(document).ready(function() {
                 extend: 'pdf',
                 text: 'Exportar a PDF',
                 class: 'btn-sm',
-                title: 'Terrenos del sistema', // Título del reporte en PDF
+                title: 'Terrenos del proyecto', // Título del reporte en PDF
                 filename: 'Terrenos ' + getCurrentDateTime(), // Nombre del archivo PDF
                 exportOptions: {
                   columns: [0, 1, 2, 3, 4] // Índices de las columnas que se exportarán
@@ -49,10 +50,12 @@ $(document).ready(function() {
         columns: [
             { data: 'poligono', width: '10%' },
             { data: 'numero', width: '10%' },
-            { data: 'matricula', width: '20%' },
+            { data: 'seccion', width: '10%' },
+            { data: 'matricula', width: '20%', sortable: false, searchable: false,},
             {
                 data: 'areaMetros',
                 width: '15%',
+                sortable: false,
                 searchable: false,
                 render: function(data, type, row) {
                     if (type === 'display' || type === 'filter') {
@@ -64,6 +67,7 @@ $(document).ready(function() {
             {
                 data: 'areaVaras',
                 width: '15%',
+                sortable: false,
                 searchable: false,
                 render: function(data, type, row) {
                     if (type === 'display' || type === 'filter') {
@@ -77,7 +81,7 @@ $(document).ready(function() {
                 title: 'Acciones',
                 sortable: false,
                 searchable: false,
-                width: '30%',
+                width: '20%',
                 render: function (data, type, row) {
                     // Aquí puedes construir el HTML para las acciones según tus necesidades
 //                    var actionsHtml = '<a type="button" class="btn btn-outline-secondary" href="/DetalleMaestria/' + row.idMaestria + '">';
@@ -86,33 +90,23 @@ $(document).ready(function() {
                     var actionsHtml = '';
                     
                     if(hasPrivilegeVerTerreno === true){
-                        actionsHtml = '<a type="button" class="btn btn-outline-secondary" href="/Terreno/' + row.idTerreno + '">';
-                        actionsHtml += '<i class="bi bi-eye"></i></a>';
+                        actionsHtml = '<a type="button" class="btn btn-outline-secondary btn-sm" href="/Ventas/' + row.idTerreno + '">';
+                        actionsHtml += '<i class="far fa-eye"></i></a>';
                     }
                     
                     if(hasPrivilegeEditarTerreno === true){
-                        actionsHtml += '<button type="button" class="btn btn-outline-primary abrirModal-btn" data-bs-toggle="modal" ';
+                        actionsHtml += '<button type="button" class="btn btn-outline-primary abrirModal-btn btn-sm" data-bs-toggle="modal" ';
                         actionsHtml += 'data-bs-target="#crearModal" data-tipo="editar" data-id="' + row.idTerreno + '" data-modo="actualizar">';
-                        actionsHtml += '<i class="bi bi-pencil-square"></i></button>';
+                        actionsHtml += '<i class="far fa-edit"></i></button>';
                     }
                     
                     if(hasPrivilegeEliminarTerreno === true){
-                    actionsHtml += '<button type="button" class="btn btn-outline-danger eliminarModal-btn" data-id="' + row.idTerreno + '" ';
+                    actionsHtml += '<button type="button" class="btn btn-outline-danger eliminarModal-btn btn-sm" data-id="' + row.idTerreno + '" ';
                     actionsHtml += 'data-cod="' + row.idTerreno + '">';
-                    actionsHtml += '<i class="bi bi-trash"></i></button>';
+                    actionsHtml += '<i class="far fa-trash-alt"></i></button>';
                    }
                     
                     return actionsHtml || '';
-                }
-            }
-        ],
-        columnDefs: [
-            {
-                data: null,
-                searchable: true,
-                targets: 1,
-                render: function (data, type, row) {
-                    return row.numero + row.seccion;
                 }
             }
         ],
@@ -156,7 +150,6 @@ $(document).ready(function() {
         }
     });
     table.columns.adjust();
-    new $.fn.dataTable.FixedHeader(table);
     table.buttons().container().appendTo('.botonExportar');
     
     // Obtén la referencia al DataTable
@@ -246,7 +239,6 @@ $(document).ready(function() {
                maxlength: 3
            },
            seccion:{
-               required: true,
                validarSeccion: true,
                maxlength: 1
            },
@@ -302,6 +294,7 @@ $(document).ready(function() {
                event.preventDefault();//detiene el evento del envio del form 
             var idTerreno = $('#idTerreno').val();//tomo la id
             var idProyecto = $('#proyecto').val();
+            
             var formDataArray = formGuardar.serializeArray();//tomo los datos del array
 
             console.log(formDataArray);

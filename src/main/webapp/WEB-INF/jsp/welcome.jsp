@@ -1,5 +1,5 @@
 <%@ include file="common/header.jspf"%>
-<%@ include file="common/navigation.jspf"%>
+<%@ include file="common/navigationAdministracion.jspf"%>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -78,12 +78,12 @@
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                         <input type="hidden" id="idProyecto">
                         <div class="form-group">
-                            <label for="nombre" class="form-label">Nombre del proyecto: </label>
-                            <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Proyecto" required>
+                            <label for="nombre" class="form-label">Proyecto: </label>
+                            <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ingrese el nombre del proyecto" required>
                         </div>
                         <div class="form-group">
-                            <label for="empresa" class="form-label">Nombre de la empresa: </label>
-                            <input type="text" class="form-control" id="empresa" name="empresa" placeholder="Empresa" required>
+                            <label for="empresa" class="form-label">Empresa: </label>
+                            <input type="text" class="form-control" id="empresa" name="empresa" placeholder="Ingrese el nombre de la empresa" required>
                         </div>
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>

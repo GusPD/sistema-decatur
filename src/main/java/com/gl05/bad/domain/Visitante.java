@@ -8,20 +8,21 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import lombok.Data;
 
-/**
- *
- * @author Gustavo Delgado
- */
+@Data
 @Entity
 @Table(name = "VISITANTE")
 @XmlRootElement
@@ -37,6 +38,8 @@ public class Visitante implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "ID_VISITANTE")
+    @SequenceGenerator(name = "S_VISITANTE", sequenceName = "S_VISITANTE", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "S_VISITANTE")
     private Integer idVisitante;
     @Size(max = 20)
     @Column(name = "ROL")
@@ -46,68 +49,9 @@ public class Visitante implements Serializable {
     private String empresa;
     @JoinColumn(name = "ID_PERSONA", referencedColumnName = "ID_PERSONA")
     @ManyToOne
-    private Persona idPersona;
-    @JoinColumn(name = "ID_PROYECTO", referencedColumnName = "ID_PROYECTO")
-    @ManyToOne
-    private Proyecto idProyecto;
-    @JoinColumn(name = "ID_VISITA", referencedColumnName = "ID_VISITA")
-    @ManyToOne
-    private Visita idVisita;
-
-    public Visitante() {
-    }
-
-    public Visitante(Integer idVisitante) {
-        this.idVisitante = idVisitante;
-    }
-
-    public Integer getIdVisitante() {
-        return idVisitante;
-    }
-
-    public void setIdVisitante(Integer idVisitante) {
-        this.idVisitante = idVisitante;
-    }
-
-    public String getRol() {
-        return rol;
-    }
-
-    public void setRol(String rol) {
-        this.rol = rol;
-    }
-
-    public String getEmpresa() {
-        return empresa;
-    }
-
-    public void setEmpresa(String empresa) {
-        this.empresa = empresa;
-    }
-
-    public Persona getIdPersona() {
-        return idPersona;
-    }
-
-    public void setIdPersona(Persona idPersona) {
-        this.idPersona = idPersona;
-    }
-
-    public Proyecto getIdProyecto() {
-        return idProyecto;
-    }
-
-    public void setIdProyecto(Proyecto idProyecto) {
-        this.idProyecto = idProyecto;
-    }
-
-    public Visita getIdVisita() {
-        return idVisita;
-    }
-
-    public void setIdVisita(Visita idVisita) {
-        this.idVisita = idVisita;
-    }
+    private Persona persona;
+    @Column(name = "ID_LIST_DOCUMENTO")
+    private Integer idDocumento;
 
     @Override
     public int hashCode() {

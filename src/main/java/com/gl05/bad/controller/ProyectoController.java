@@ -1,8 +1,11 @@
 package com.gl05.bad.controller;
 
+import com.gl05.bad.domain.AsignacionPropietario;
 import com.gl05.bad.domain.Proyecto;
+import com.gl05.bad.servicio.AsigPropietarioVentaService;
 import com.gl05.bad.servicio.BitacoraServiceImp;
 import com.gl05.bad.servicio.ProyectoService;
+import com.gl05.bad.servicio.TerrenoService;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +29,9 @@ public class ProyectoController {
 
     @Autowired
     private ProyectoService proyectoService;
+    
+    @Autowired
+    private AsigPropietarioVentaService asigPropietarioService;
 
     /*@GetMapping("/GestionarProyecto")
     public String GestionarProyecto(Model model) {
@@ -40,6 +46,19 @@ public class ProyectoController {
     @ResponseBody
     public DataTablesOutput<Proyecto> GetProyectos(@Valid DataTablesInput input) {
         return proyectoService.listarProyectos(input);
+    }
+    
+    @GetMapping("/Propietarios/{idProyecto}")
+    public String mostrarPropietariosProyecto(Model model, Proyecto proyecto) {
+        model.addAttribute("pageTitle", "Propietarios Proyecto");
+        model.addAttribute("proyecto", proyecto);
+        return "/Proyecto/PropietariosProyecto";
+    }
+    
+    @GetMapping("/propietariosProyecto/data/{idProyecto}")
+    @ResponseBody
+    public DataTablesOutput<AsignacionPropietario> GetVentas(@Valid DataTablesInput input, @PathVariable Long idProyecto) {
+        return asigPropietarioService.listarPropietarios(input, idProyecto);
     }
 
     @PostMapping("/AgregarProyecto")

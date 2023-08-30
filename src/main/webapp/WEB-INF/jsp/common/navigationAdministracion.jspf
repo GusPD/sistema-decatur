@@ -1,0 +1,148 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page import="java.time.LocalDateTime" %>
+<%@ page import="java.time.format.DateTimeFormatter" %>
+<!-- Navbar -->
+<nav id="desktop-header" class="main-header navbar navbar-expand navbar-dark navbar-light" style="background-color: #001f3f;">
+    <!-- Left navbar links -->
+    <ul class="navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link text-white pushmenu" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars"></i></a>
+        </li>
+    </ul>
+
+    <!--mostrar hora del sistema-->
+    <div class="d-flex align-items-center justify-content-center text-white">
+        <span id="hora"></span>
+    </div>
+
+    <ul class="navbar-nav ml-auto">
+        <li class="nav-item d-inline-block">
+            <div class="dropdown nav-link p-menu-perfil" style="background-color: transparent;">
+                <div id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: transparent; color: white; cursor: pointer;">
+                    <!-- Sidebar user (optional) -->
+                    <div id="userPanel" class="user-panel d-flex">
+                        <div class="image">
+                            <img src="${pageContext.request.contextPath}/images/usuario.png" class="img-circle-perfil" style="width: auto; height: 30px;">
+                        </div>
+                        <div class="info align-items-center justify-content-center " style="margin-top: -10px; margin-left: -10px;">
+                            <a href="#" class="nav-link text-white dropdown-toggle"></a>
+                        </div>
+                    </div>
+                </div>
+                <ul id="user-dropdownMenu" class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <li><a class="dropdown-item small" href="#" onclick="logout()"><i class="fa-solid fa-power-off text-danger"></i>&nbsp;Salir</a></li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+ </nav>
+ <!-- /.navbar -->
+
+ <!-- Main Sidebar Container -->
+ <aside id="menu-header" class="main-sidebar sidebar-light-navy elevation-1">
+    <!-- Brand Logo -->
+    <div class="sidebar">
+        <div class="mt-2">
+            <div class="nav nav-pills nav-sidebar flex-column">
+                <div class="nav-item">
+                    <div>
+                        <a href="/" class="nav-link" style="background-color: transparent; color: inherit; text-decoration: none; border-bottom: 1px solid #000;">
+                            <i class="nav-icon fas fa-home"></i>
+                            <span class="brand-text font-weight-light" style="font-size: 18px;">&nbsp;Inicio</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <sec:authorize access="hasAuthority('GESTIONAR_PROYECTO_PRIVILAGE')">
+                    <li class="nav-item ${requestScope['javax.servlet.forward.request_uri'] == '/' ? 'menu-open' : ''}">
+                        <a href="#" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == '/' ? 'active' : ''}">
+                            <i class="nav-icon fa-solid fa-folder-closed"></i>
+                            <p>Administración<i class="right fas fa-angle-left"></i></p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <sec:authorize access="hasAuthority('GESTIONAR_PROYECTO_PRIVILAGE')">
+                            <li class="nav-item">
+                                <a href="/" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == '/' ? 'active' : ''}">
+                                    <i class="fa-solid fa-globe nav-icon text-warning"></i>
+                                    <p>Proyectos</p>
+                                </a>
+                            </li>
+                            </sec:authorize>
+                        </ul>
+                    </li>
+                </sec:authorize>
+                <sec:authorize access="hasAuthority('GESTIONAR_PROPIETARIOS_PRIVILAGE') or hasAuthority('GESTIONAR_TRABAJADORES_PRIVILAGE')">
+                    <c:set var="urlMostrarPropietarioAdministracion" value="/MostrarPropietario/${persona.idPersona}" />
+                    <li class="nav-item ${requestScope['javax.servlet.forward.request_uri'] == '/GestionarPropietarios' || requestScope['javax.servlet.forward.request_uri'] == '/GestionarTrabajadores' || requestScope['javax.servlet.forward.request_uri'] == urlMostrarPropietarioAdministracion ? 'menu-open' : ''}">
+                        <a href="#" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == '/GestionarPropietarios' || requestScope['javax.servlet.forward.request_uri'] == '/GestionarTrabajadores' || requestScope['javax.servlet.forward.request_uri'] == urlMostrarPropietarioAdministracion? 'active' : ''}">
+                            <i class="nav-icon fas fa-server"></i>
+                            <p>Datos de Proyectos<i class="right fas fa-angle-left"></i></p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <sec:authorize access="hasAuthority('GESTIONAR_PROPIETARIOS_PRIVILAGE')">
+                            <li class="nav-item">
+                                <a href="/GestionarPropietarios" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == '/GestionarPropietarios' || requestScope['javax.servlet.forward.request_uri'] == urlMostrarPropietarioAdministracion ? 'active' : ''}">
+                                    <i class="fa-solid fa-user-tie nav-icon text-warning"></i>
+                                    <p>Propietarios</p>
+                                </a>
+                            </li>
+                            </sec:authorize>
+                            <sec:authorize access="hasAuthority('GESTIONAR_TRABAJADORES_PRIVILAGE')">
+                                <li class="nav-item">
+                                    <a href="/GestionarTrabajadores"class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == '/GestionarTrabajadores' ? 'active' : ''}">
+                                        <i class="fa-solid fa-users nav-icon text-warning"></i>
+                                        <p>Trabajadores</p>
+                                    </a>
+                                </li>
+                            </sec:authorize>
+                        </ul>
+                    </li>
+                </sec:authorize>
+                <sec:authorize access="hasAuthority('GESTIONAR_USUARIO_PRIVILAGE') or hasAuthority('GESTIONAR_ROL_PRIVILAGE') or hasAuthority('BITACORA_PRIVILAGE')">
+                    <li class="nav-item ${requestScope['javax.servlet.forward.request_uri'] == '/GestionarUsuarios' || requestScope['javax.servlet.forward.request_uri'] == '/GestionarRoles' || requestScope['javax.servlet.forward.request_uri'] == '/GestionarBitacora' ? 'menu-open' : ''}">
+                        <a href="#" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == '/GestionarUsuarios' || requestScope['javax.servlet.forward.request_uri'] == '/GestionarRoles' || requestScope['javax.servlet.forward.request_uri'] == '/GestionarBitacora' ? 'active' : ''}">
+                            <i class="nav-icon fas fa-unlock"></i>
+                            <p>Seguridad<i class="right fas fa-angle-left"></i></p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <sec:authorize access="hasAuthority('GESTIONAR_USUARIO_PRIVILAGE')">
+                            <li class="nav-item">
+                                <a href="/GestionarUsuarios" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == '/GestionarUsuarios' ? 'active' : ''}">
+                                    <i class="fa-solid fa-user nav-icon text-warning"></i>
+                                    <p>Usuarios</p>
+                                </a>
+                            </li>
+                            </sec:authorize>
+                            <sec:authorize access="hasAuthority('GESTIONAR_ROL_PRIVILAGE')">
+                                <li class="nav-item">
+                                    <a href="/GestionarRoles"class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == '/GestionarRoles' ? 'active' : ''}">
+                                        <i class="fa-solid fa-user-gear nav-icon text-warning"></i>
+                                        <p>Roles</p>
+                                    </a>
+                                </li>
+                            </sec:authorize>
+                            <sec:authorize access="hasAuthority('BITACORA_PRIVILAGE')">
+                                <li class="nav-item">
+                                    <a href="/GestionarBitacora"class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == '/GestionarBitacora' ? 'active' : ''}">
+                                        <i class="fas fa-book nav-icon fas text-warning"></i>
+                                        <p>Bitácora</p>
+                                    </a>
+                                </li>
+                            </sec:authorize>
+                        </ul>
+                    </li>
+                </sec:authorize>
+            </ul>
+        </nav>
+        <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+</aside>
+<div id="EspacioEncabezado"></div>

@@ -5,6 +5,7 @@ import com.gl05.bad.domain.Terreno;
 import com.gl05.bad.servicio.BitacoraServiceImp;
 import com.gl05.bad.servicio.ProyectoService;
 import com.gl05.bad.servicio.TerrenoService;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -34,22 +34,13 @@ public class TerrenoController {
     private ProyectoService proyectoService;
     
     @GetMapping("/Terrenos/{idProyecto}")
-    public String mostrarProyecto(Model model, Proyecto proyecto) {
-        model.addAttribute("pageTitle", "Proyectos");
+    public String mostrarTerrenoProyecto(Model model, Proyecto proyecto) {
+        model.addAttribute("pageTitle", "Terrenos");
         Proyecto proyectoEncontrado = proyectoService.encontrarProyecto(proyecto.getIdProyecto());
         var listaProyectos = proyectoService.listaProyectos();
         model.addAttribute("proyectos", listaProyectos);
         model.addAttribute("proyecto", proyectoEncontrado);
-        
         return "/Proyecto/TerrenosProyecto";
-    }
-    
-    @GetMapping("/Terreno/{idProyecto}/{idTerreno}")
-    public String MostrarTerrenoProyecto(Model model, Terreno terreno) {
-        model.addAttribute("pageTitle", "Proyectos");
-        Terreno terrenoEncontrado = terrenoService.encontrarTerreno(terreno.getIdTerreno());
-        model.addAttribute("terreno", terrenoEncontrado);
-        return "/Proyecto/MostrarTerrenoProyecto";
     }
     
     @GetMapping("/terrenos/data/{idProyecto}")
@@ -61,16 +52,30 @@ public class TerrenoController {
     @PostMapping("/AgregarTerreno/{idProyecto}")
     public ResponseEntity AgregarTerreno(@PathVariable("idProyecto") Long idProyecto,Terreno terreno, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
-            //Obtener el proyecto por ID
-            Proyecto proyecto = proyectoService.encontrarProyecto(idProyecto);
-            // Asignar el proyecto al terreno
-            terreno.setProyecto(proyecto);
-            terreno.setPoligono(terreno.getPoligono().toString().toUpperCase().charAt(0));
-            terreno.setSeccion(terreno.getSeccion().toString().toLowerCase().charAt(0));
-            terrenoService.agregarTerreno(terreno);
-            String mensaje = "Se ha agregado un terreno.";
-            bitacoraService.registrarAccion("Agregar terreno");
-            return ResponseEntity.ok(mensaje);
+            char valorPoligono = terreno.getPoligono().toString().toUpperCase().charAt(0);
+            char valorSeccion = terreno.getSeccion().toString().toLowerCase().charAt(0);
+            Boolean existeTerreno = true;
+            List<Terreno> listaTerrenos = terrenoService.listaTerrenos();
+            for (Terreno eTerreno : listaTerrenos) {
+                if(eTerreno.getMatricula().equals(terreno.getMatricula()) || (eTerreno.getPoligono().equals(valorPoligono) && eTerreno.getNumero().equals(terreno.getNumero()) && eTerreno.getSeccion().equals(valorSeccion) && eTerreno.getProyecto().getIdProyecto().equals(idProyecto))){
+                    existeTerreno = false;
+                }
+            }
+            if(existeTerreno){
+                //Obtener el proyecto por ID
+                Proyecto proyecto = proyectoService.encontrarProyecto(idProyecto);
+                // Asignar el proyecto al terreno
+                terreno.setProyecto(proyecto);
+                terreno.setPoligono(valorPoligono);
+                terreno.setSeccion(valorSeccion);
+                terrenoService.agregarTerreno(terreno);
+                String mensaje = "Se ha agregado un terreno.";
+                bitacoraService.registrarAccion("Agregar terreno");
+                return ResponseEntity.ok(mensaje);
+            }else{
+                String error = "El terreno ya se encuentra registrado.";
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+            }
         } catch (Exception e) {
             String error = "Ocurrió un error al agregar el terreno.";
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
@@ -114,7 +119,7 @@ public class TerrenoController {
             bitacoraService.registrarAccion("Actualizar terreno");
             return ResponseEntity.ok(mensaje);
         } catch (Exception e) {
-            String error = "Ha ocurrido un error al actualizar el proyecto.";
+            String error = "Ha ocurrido un error al actualizar el terreno.";
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
     }

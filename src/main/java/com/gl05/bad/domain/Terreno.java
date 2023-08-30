@@ -41,7 +41,7 @@ public class Terreno implements Serializable {
     @SequenceGenerator(name = "S_TERRENO", sequenceName = "S_TERRENO", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "S_TERRENO")
     private Long idTerreno;
-    @Size(max = 20)
+    @Size(max = 18)
     @Column(name = "MATRICULA")
     private String matricula;
     @Column(name = "NUMERO")
@@ -58,8 +58,6 @@ public class Terreno implements Serializable {
     @ManyToOne
     @JoinColumn(name = "ID_PROYECTO")
     private Proyecto proyecto;
-    //@JoinColumn(name = "ID_PROYECTO")
-    //private Long idProyecto;
 
     @Override
     public int hashCode() {

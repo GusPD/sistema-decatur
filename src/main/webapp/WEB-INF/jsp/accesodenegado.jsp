@@ -3,7 +3,7 @@
 <html>
 <head>
     <!-- Agrega el enlace al archivo CSS de FontAwesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/recursosOnline/css/all.min.css">
 </head>
 <body>
     <div class="content-wrapper" style="display: flex; justify-content: center; align-items: center;">

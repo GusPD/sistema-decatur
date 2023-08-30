@@ -11,34 +11,36 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
-/**
- *
- * @author Gustavo Delgado
- */
+@Data
 @Entity
 @Table(name = "CUOTA_MANTENIMIENTO")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "CuotaMantenimiento.findAll", query = "SELECT c FROM CuotaMantenimiento c"),
     @NamedQuery(name = "CuotaMantenimiento.findByIdCuotaMantenimiento", query = "SELECT c FROM CuotaMantenimiento c WHERE c.idCuotaMantenimiento = :idCuotaMantenimiento"),
-    @NamedQuery(name = "CuotaMantenimiento.findByFechaCuotaM", query = "SELECT c FROM CuotaMantenimiento c WHERE c.fechaCuotaM = :fechaCuotaM"),
-    @NamedQuery(name = "CuotaMantenimiento.findByMontoM", query = "SELECT c FROM CuotaMantenimiento c WHERE c.montoM = :montoM"),
-    @NamedQuery(name = "CuotaMantenimiento.findByFechaRecargoM", query = "SELECT c FROM CuotaMantenimiento c WHERE c.fechaRecargoM = :fechaRecargoM"),
-    @NamedQuery(name = "CuotaMantenimiento.findByRecargoM", query = "SELECT c FROM CuotaMantenimiento c WHERE c.recargoM = :recargoM"),
-    @NamedQuery(name = "CuotaMantenimiento.findByConceptoDescuentoM", query = "SELECT c FROM CuotaMantenimiento c WHERE c.conceptoDescuentoM = :conceptoDescuentoM"),
-    @NamedQuery(name = "CuotaMantenimiento.findByDescuentoM", query = "SELECT c FROM CuotaMantenimiento c WHERE c.descuentoM = :descuentoM"),
+    @NamedQuery(name = "CuotaMantenimiento.findByFechaCuota", query = "SELECT c FROM CuotaMantenimiento c WHERE c.fechaCuota = :fechaCuota"),
+    @NamedQuery(name = "CuotaMantenimiento.findByMonto", query = "SELECT c FROM CuotaMantenimiento c WHERE c.monto = :monto"),
+    @NamedQuery(name = "CuotaMantenimiento.findByFechaRecargo", query = "SELECT c FROM CuotaMantenimiento c WHERE c.fechaRecargo = :fechaRecargo"),
+    @NamedQuery(name = "CuotaMantenimiento.findByRecargo", query = "SELECT c FROM CuotaMantenimiento c WHERE c.recargo = :recargo"),
+    @NamedQuery(name = "CuotaMantenimiento.findByConceptoDescuentoM", query = "SELECT c FROM CuotaMantenimiento c WHERE c.conceptoDescuento = :conceptoDescuento"),
+    @NamedQuery(name = "CuotaMantenimiento.findByDescuento", query = "SELECT c FROM CuotaMantenimiento c WHERE c.descuento = :descuento"),
     @NamedQuery(name = "CuotaMantenimiento.findByEstadoMantenimiento", query = "SELECT c FROM CuotaMantenimiento c WHERE c.estadoMantenimiento = :estadoMantenimiento"),
     @NamedQuery(name = "CuotaMantenimiento.findByEstadoRecargo", query = "SELECT c FROM CuotaMantenimiento c WHERE c.estadoRecargo = :estadoRecargo")})
 public class CuotaMantenimiento implements Serializable {
@@ -48,128 +50,36 @@ public class CuotaMantenimiento implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "ID_CUOTA_MANTENIMIENTO")
+    @SequenceGenerator(name = "S_CUOTA_MANTENIMIENTO", sequenceName = "S_CUOTA_MANTENIMIENTO", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "S_CUOTA_MANTENIMIENTO")
     private Integer idCuotaMantenimiento;
-    @Column(name = "FECHA_CUOTA_M")
+    @Column(name = "FECHA_CUOTA")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaCuotaM;
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private Date fechaCuota;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(name = "MONTO_M")
-    private BigDecimal montoM;
-    @Column(name = "FECHA_RECARGO_M")
+    @Column(name = "MONTO")
+    private BigDecimal monto;
+    @Column(name = "FECHA_RECARGO")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaRecargoM;
-    @Column(name = "RECARGO_M")
-    private BigDecimal recargoM;
+    private Date fechaRecargo;
+    @Column(name = "RECARGO")
+    private BigDecimal recargo;
     @Size(max = 200)
-    @Column(name = "CONCEPTO_DESCUENTO_M")
-    private String conceptoDescuentoM;
-    @Column(name = "DESCUENTO_M")
-    private BigDecimal descuentoM;
+    @Column(name = "CONCEPTO_DESCUENTO")
+    private String conceptoDescuento;
+    @Column(name = "DESCUENTO")
+    private BigDecimal descuento;
     @Column(name = "ESTADO_MANTENIMIENTO")
     private BigInteger estadoMantenimiento;
     @Column(name = "ESTADO_RECARGO")
     private BigInteger estadoRecargo;
     @JoinColumn(name = "ID_PAGO", referencedColumnName = "ID_PAGO")
     @ManyToOne
-    private Pago idPago;
+    private Pago pago;
     @JoinColumn(name = "ID_VENTA", referencedColumnName = "ID_VENTA")
     @ManyToOne
-    private Venta idVenta;
-
-    public CuotaMantenimiento() {
-    }
-
-    public CuotaMantenimiento(Integer idCuotaMantenimiento) {
-        this.idCuotaMantenimiento = idCuotaMantenimiento;
-    }
-
-    public Integer getIdCuotaMantenimiento() {
-        return idCuotaMantenimiento;
-    }
-
-    public void setIdCuotaMantenimiento(Integer idCuotaMantenimiento) {
-        this.idCuotaMantenimiento = idCuotaMantenimiento;
-    }
-
-    public Date getFechaCuotaM() {
-        return fechaCuotaM;
-    }
-
-    public void setFechaCuotaM(Date fechaCuotaM) {
-        this.fechaCuotaM = fechaCuotaM;
-    }
-
-    public BigDecimal getMontoM() {
-        return montoM;
-    }
-
-    public void setMontoM(BigDecimal montoM) {
-        this.montoM = montoM;
-    }
-
-    public Date getFechaRecargoM() {
-        return fechaRecargoM;
-    }
-
-    public void setFechaRecargoM(Date fechaRecargoM) {
-        this.fechaRecargoM = fechaRecargoM;
-    }
-
-    public BigDecimal getRecargoM() {
-        return recargoM;
-    }
-
-    public void setRecargoM(BigDecimal recargoM) {
-        this.recargoM = recargoM;
-    }
-
-    public String getConceptoDescuentoM() {
-        return conceptoDescuentoM;
-    }
-
-    public void setConceptoDescuentoM(String conceptoDescuentoM) {
-        this.conceptoDescuentoM = conceptoDescuentoM;
-    }
-
-    public BigDecimal getDescuentoM() {
-        return descuentoM;
-    }
-
-    public void setDescuentoM(BigDecimal descuentoM) {
-        this.descuentoM = descuentoM;
-    }
-
-    public BigInteger getEstadoMantenimiento() {
-        return estadoMantenimiento;
-    }
-
-    public void setEstadoMantenimiento(BigInteger estadoMantenimiento) {
-        this.estadoMantenimiento = estadoMantenimiento;
-    }
-
-    public BigInteger getEstadoRecargo() {
-        return estadoRecargo;
-    }
-
-    public void setEstadoRecargo(BigInteger estadoRecargo) {
-        this.estadoRecargo = estadoRecargo;
-    }
-
-    public Pago getIdPago() {
-        return idPago;
-    }
-
-    public void setIdPago(Pago idPago) {
-        this.idPago = idPago;
-    }
-
-    public Venta getIdVenta() {
-        return idVenta;
-    }
-
-    public void setIdVenta(Venta idVenta) {
-        this.idVenta = idVenta;
-    }
+    private Venta venta;
 
     @Override
     public int hashCode() {

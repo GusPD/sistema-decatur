@@ -72,15 +72,15 @@ $(document).ready(function() {
                     var actionsHtml = '';
                     
                     if(hasPrivilegeEditarUsuario === true){
-                        actionsHtml = '<button type="button" class="btn btn-outline-primary abrirModal-btn" data-bs-toggle="modal" ';
+                        actionsHtml = '<button type="button" class="btn btn-outline-primary abrirModal-btn btn-sm" data-bs-toggle="modal" ';
                         actionsHtml += 'data-bs-target="#crearModal" data-tipo="editar" data-id="' + row.idUsuario + '" data-modo="actualizar">';
-                        actionsHtml += '<i class="bi bi-pencil-square"></i></button>';
+                        actionsHtml += '<i class="far fa-edit"></i></button>';
                     }
                     
                     if(hasPrivilegeEliminarUsuario === true){
-                    actionsHtml += '<button type="button" class="btn btn-outline-danger eliminarModal-btn" data-id="' + row.idUsuario + '" ';
+                    actionsHtml += '<button type="button" class="btn btn-outline-danger eliminarModal-btn btn-sm" data-id="' + row.idUsuario + '" ';
                     actionsHtml += 'data-cod="' + row.idUsuario + '">';
-                    actionsHtml += '<i class="bi bi-trash"></i></button>';
+                    actionsHtml += '<i class="far fa-trash-alt"></i></button>';
                    }
                     
                     return actionsHtml || '';
@@ -124,7 +124,6 @@ $(document).ready(function() {
         }
     });
     table.columns.adjust();
-    new $.fn.dataTable.FixedHeader(table);
     table.buttons().container().appendTo('.botonExportar');
     // Función para obtener la fecha y hora actual en formato deseado
     function getCurrentDateTime() {

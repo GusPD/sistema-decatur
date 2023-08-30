@@ -5,24 +5,22 @@
 package com.gl05.bad.domain;
 
 import java.io.Serializable;
-import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
+import lombok.Data;
 
-/**
- *
- * @author Gustavo Delgado
- */
+@Data
 @Entity
 @Table(name = "PERSONA")
 @XmlRootElement
@@ -39,76 +37,17 @@ public class Persona implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "ID_PERSONA")
-    private Integer idPersona;
+    @SequenceGenerator(name = "S_PERSONA", sequenceName = "S_PERSONA", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "S_PERSONA")
+    private Long idPersona;
     @Column(name = "DUI")
-    private Integer dui;
+    private String dui;
     @Size(max = 200)
     @Column(name = "NOMBRE")
     private String nombre;
     @Size(max = 200)
     @Column(name = "APELLIDO")
     private String apellido;
-    @OneToMany(mappedBy = "idPersona")
-    private Collection<Visitante> visitanteCollection;
-    @OneToMany(mappedBy = "idPersona")
-    private Collection<Propietario> propietarioCollection;
-
-    public Persona() {
-    }
-
-    public Persona(Integer idPersona) {
-        this.idPersona = idPersona;
-    }
-
-    public Integer getIdPersona() {
-        return idPersona;
-    }
-
-    public void setIdPersona(Integer idPersona) {
-        this.idPersona = idPersona;
-    }
-
-    public Integer getDui() {
-        return dui;
-    }
-
-    public void setDui(Integer dui) {
-        this.dui = dui;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getApellido() {
-        return apellido;
-    }
-
-    public void setApellido(String apellido) {
-        this.apellido = apellido;
-    }
-
-    @XmlTransient
-    public Collection<Visitante> getVisitanteCollection() {
-        return visitanteCollection;
-    }
-
-    public void setVisitanteCollection(Collection<Visitante> visitanteCollection) {
-        this.visitanteCollection = visitanteCollection;
-    }
-
-    @XmlTransient
-    public Collection<Propietario> getPropietarioCollection() {
-        return propietarioCollection;
-    }
-
-    public void setPropietarioCollection(Collection<Propietario> propietarioCollection) {
-        this.propietarioCollection = propietarioCollection;
-    }
 
     @Override
     public int hashCode() {
@@ -134,5 +73,4 @@ public class Persona implements Serializable {
     public String toString() {
         return "com.gl05.bad.domain.Persona[ idPersona=" + idPersona + " ]";
     }
-    
 }

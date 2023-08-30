@@ -1,5 +1,5 @@
 <%@ include file="../common/header.jspf"%>
-<%@ include file="../common/navigation.jspf"%>
+<%@ include file="../common/navigationProyecto.jspf"%>
 
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
@@ -11,7 +11,7 @@
                 <div class="col-sm-12">
                     <div class="titulo-Perfil">
                         <div class="container container-titulo">
-                            <h1>Terrenos del Proyecto ${proyecto.nombre} - ${proyecto.empresa}</h1>
+                            <h1>Proyecto ${proyecto.nombre} - Terrenos</h1>
                         </div>
                     </div>
                 </div>
@@ -49,12 +49,13 @@
                         </sec:authorize>
                     </div>
                     <div>
-                        <div class="table-responsive-md">
-                            <table id="terrenoTable" class="table table-striped">
+                        <div class="table-responsive-md table-container">
+                            <table id="terrenoTable" class="table table-striped custom-fixed-header">
                                 <thead class="table-light">
                                     <tr>
                                         <th class="text-center">Polígono</th>
                                         <th class="text-center">Lote</th>
+                                        <th class="text-center">Sección</th>
                                         <th class="text-center">Matrícula</th>
                                         <th class="text-center">Área (m²)</th>
                                         <th class="text-center">Área (v²)</th>
@@ -97,7 +98,7 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="seccion" class="form-label">Sección del terreno: </label>
-                                        <input type="text" class="form-control" id="seccion" name="seccion" maxlength="1" placeholder="Ingrese la sección del terreno" required>
+                                        <input type="text" class="form-control" id="seccion" name="seccion" maxlength="1" placeholder="Ingrese la sección del terreno">
                                     </div>
                                     <div class="form-group">
                                         <label for="areaMetros" class="form-label">Área (m²): </label>

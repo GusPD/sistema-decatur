@@ -85,12 +85,7 @@ text-decoration:none;
     background-color: #fff;
 }
 
-#confirmarEliminarModal{
-    margin-top: 50px !Important;
-    margin-bottom: 10px !Important;
-}
-
-#crearModal{
+.modal{
     margin-top: 50px !Important;
     margin-bottom: 10px !Important;
 }
@@ -315,4 +310,56 @@ div.dataTables_wrapper div.dataTables_info {
 
 #EspacioEncabezado{
     height: 40px!Important;
+}
+
+.table-container {
+    /* Otras propiedades de estilo que puedas necesitar */
+    height: 400px; /* Establece la altura fija deseada */
+    overflow-y: auto; /* Permite el desplazamiento vertical */
+    overflow-x: hidden; 
+    margin-top: 10px !Important;
+}
+.table{
+    width: 100%!Important;
+}
+thead {
+    /* Otras propiedades de estilo que puedas necesitar */
+    position: sticky;
+    border-style: solid;
+    top:0px;
+}
+
+th {
+  position: sticky;
+  top: 0px;
+}
+
+#tabla-correos thead tr{
+    background-color: #DCDAE9;
+}
+
+#tabla-telefonos thead tr{
+    background-color: #DCDAE9;
+}
+
+#tabla-referencias thead tr{
+    background-color: #DCDAE9;
+}
+
+#tabla-documentos thead tr{
+    background-color: #DCDAE9;
+}
+
+#numeroTerrenoVenta{
+    font-weight: bold!Important;
+    font-size: 4rem !Important;
+}
+
+#poligonoTerrenoVenta{
+    font-weight: bold!Important;
+    font-size: 1rem !Important;
+}
+
+#imagenPropietario{
+    font-size: 7rem !Important;
 }

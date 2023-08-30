@@ -11,28 +11,30 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
+import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
-/**
- *
- * @author Gustavo Delgado
- */
+@Data
 @Entity
 @Table(name = "CUOTA_FINANCIAMIENTO")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "CuotaFinanciamiento.findAll", query = "SELECT c FROM CuotaFinanciamiento c"),
     @NamedQuery(name = "CuotaFinanciamiento.findByIdCuotaFinanciamiento", query = "SELECT c FROM CuotaFinanciamiento c WHERE c.idCuotaFinanciamiento = :idCuotaFinanciamiento"),
-    @NamedQuery(name = "CuotaFinanciamiento.findByFechaCuotaM", query = "SELECT c FROM CuotaFinanciamiento c WHERE c.fechaCuotaM = :fechaCuotaM"),
+    @NamedQuery(name = "CuotaFinanciamiento.findByFechaCuota", query = "SELECT c FROM CuotaFinanciamiento c WHERE c.fechaCuota = :fechaCuota"),
     @NamedQuery(name = "CuotaFinanciamiento.findByDiasInteresCorriente", query = "SELECT c FROM CuotaFinanciamiento c WHERE c.diasInteresCorriente = :diasInteresCorriente"),
     @NamedQuery(name = "CuotaFinanciamiento.findByInteresCorriente", query = "SELECT c FROM CuotaFinanciamiento c WHERE c.interesCorriente = :interesCorriente"),
     @NamedQuery(name = "CuotaFinanciamiento.findByDiasInteresMora", query = "SELECT c FROM CuotaFinanciamiento c WHERE c.diasInteresMora = :diasInteresMora"),
@@ -40,7 +42,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "CuotaFinanciamiento.findByPagadoInteres", query = "SELECT c FROM CuotaFinanciamiento c WHERE c.pagadoInteres = :pagadoInteres"),
     @NamedQuery(name = "CuotaFinanciamiento.findByPendienteInteres", query = "SELECT c FROM CuotaFinanciamiento c WHERE c.pendienteInteres = :pendienteInteres"),
     @NamedQuery(name = "CuotaFinanciamiento.findByComision", query = "SELECT c FROM CuotaFinanciamiento c WHERE c.comision = :comision"),
-    @NamedQuery(name = "CuotaFinanciamiento.findByRecargoM", query = "SELECT c FROM CuotaFinanciamiento c WHERE c.recargoM = :recargoM"),
+    @NamedQuery(name = "CuotaFinanciamiento.findByRecargo", query = "SELECT c FROM CuotaFinanciamiento c WHERE c.recargo = :recargo"),
     @NamedQuery(name = "CuotaFinanciamiento.findByOtros", query = "SELECT c FROM CuotaFinanciamiento c WHERE c.otros = :otros"),
     @NamedQuery(name = "CuotaFinanciamiento.findByPagadoOtros", query = "SELECT c FROM CuotaFinanciamiento c WHERE c.pagadoOtros = :pagadoOtros"),
     @NamedQuery(name = "CuotaFinanciamiento.findByPendienteOtros", query = "SELECT c FROM CuotaFinanciamiento c WHERE c.pendienteOtros = :pendienteOtros"),
@@ -53,10 +55,13 @@ public class CuotaFinanciamiento implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "ID_CUOTA_FINANCIAMIENTO")
+    @SequenceGenerator(name = "S_CUOTA_FINANCIAMIENTO", sequenceName = "S_CUOTA_FINANCIAMIENTO", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "S_CUOTA_FINANCIAMIENTO")
     private Integer idCuotaFinanciamiento;
-    @Column(name = "FECHA_CUOTA_M")
+    @Column(name = "FECHA_CUOTA")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaCuotaM;
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private Date fechaCuota;
     @Column(name = "DIAS_INTERES_CORRIENTE")
     private BigInteger diasInteresCorriente;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
@@ -72,8 +77,8 @@ public class CuotaFinanciamiento implements Serializable {
     private BigDecimal pendienteInteres;
     @Column(name = "COMISION")
     private BigDecimal comision;
-    @Column(name = "RECARGO_M")
-    private BigDecimal recargoM;
+    @Column(name = "RECARGO")
+    private BigDecimal recargo;
     @Column(name = "OTROS")
     private BigDecimal otros;
     @Column(name = "PAGADO_OTROS")
@@ -86,153 +91,10 @@ public class CuotaFinanciamiento implements Serializable {
     private BigDecimal saldo;
     @JoinColumn(name = "ID_PAGO", referencedColumnName = "ID_PAGO")
     @ManyToOne
-    private Pago idPago;
+    private Pago pago;
     @JoinColumn(name = "ID_VENTA", referencedColumnName = "ID_VENTA")
     @ManyToOne
-    private Venta idVenta;
-
-    public CuotaFinanciamiento() {
-    }
-
-    public CuotaFinanciamiento(Integer idCuotaFinanciamiento) {
-        this.idCuotaFinanciamiento = idCuotaFinanciamiento;
-    }
-
-    public Integer getIdCuotaFinanciamiento() {
-        return idCuotaFinanciamiento;
-    }
-
-    public void setIdCuotaFinanciamiento(Integer idCuotaFinanciamiento) {
-        this.idCuotaFinanciamiento = idCuotaFinanciamiento;
-    }
-
-    public Date getFechaCuotaM() {
-        return fechaCuotaM;
-    }
-
-    public void setFechaCuotaM(Date fechaCuotaM) {
-        this.fechaCuotaM = fechaCuotaM;
-    }
-
-    public BigInteger getDiasInteresCorriente() {
-        return diasInteresCorriente;
-    }
-
-    public void setDiasInteresCorriente(BigInteger diasInteresCorriente) {
-        this.diasInteresCorriente = diasInteresCorriente;
-    }
-
-    public BigDecimal getInteresCorriente() {
-        return interesCorriente;
-    }
-
-    public void setInteresCorriente(BigDecimal interesCorriente) {
-        this.interesCorriente = interesCorriente;
-    }
-
-    public BigInteger getDiasInteresMora() {
-        return diasInteresMora;
-    }
-
-    public void setDiasInteresMora(BigInteger diasInteresMora) {
-        this.diasInteresMora = diasInteresMora;
-    }
-
-    public BigDecimal getInteresMora() {
-        return interesMora;
-    }
-
-    public void setInteresMora(BigDecimal interesMora) {
-        this.interesMora = interesMora;
-    }
-
-    public BigDecimal getPagadoInteres() {
-        return pagadoInteres;
-    }
-
-    public void setPagadoInteres(BigDecimal pagadoInteres) {
-        this.pagadoInteres = pagadoInteres;
-    }
-
-    public BigDecimal getPendienteInteres() {
-        return pendienteInteres;
-    }
-
-    public void setPendienteInteres(BigDecimal pendienteInteres) {
-        this.pendienteInteres = pendienteInteres;
-    }
-
-    public BigDecimal getComision() {
-        return comision;
-    }
-
-    public void setComision(BigDecimal comision) {
-        this.comision = comision;
-    }
-
-    public BigDecimal getRecargoM() {
-        return recargoM;
-    }
-
-    public void setRecargoM(BigDecimal recargoM) {
-        this.recargoM = recargoM;
-    }
-
-    public BigDecimal getOtros() {
-        return otros;
-    }
-
-    public void setOtros(BigDecimal otros) {
-        this.otros = otros;
-    }
-
-    public BigDecimal getPagadoOtros() {
-        return pagadoOtros;
-    }
-
-    public void setPagadoOtros(BigDecimal pagadoOtros) {
-        this.pagadoOtros = pagadoOtros;
-    }
-
-    public BigDecimal getPendienteOtros() {
-        return pendienteOtros;
-    }
-
-    public void setPendienteOtros(BigDecimal pendienteOtros) {
-        this.pendienteOtros = pendienteOtros;
-    }
-
-    public BigDecimal getCapital() {
-        return capital;
-    }
-
-    public void setCapital(BigDecimal capital) {
-        this.capital = capital;
-    }
-
-    public BigDecimal getSaldo() {
-        return saldo;
-    }
-
-    public void setSaldo(BigDecimal saldo) {
-        this.saldo = saldo;
-    }
-
-    public Pago getIdPago() {
-        return idPago;
-    }
-
-    public void setIdPago(Pago idPago) {
-        this.idPago = idPago;
-    }
-
-    public Venta getIdVenta() {
-        return idVenta;
-    }
-
-    public void setIdVenta(Venta idVenta) {
-        this.idVenta = idVenta;
-    }
+    private Venta venta;
 
     @Override
     public int hashCode() {

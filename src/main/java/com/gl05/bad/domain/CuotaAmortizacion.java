@@ -11,29 +11,31 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
+import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
-/**
- *
- * @author Gustavo Delgado
- */
+@Data
 @Entity
 @Table(name = "CUOTA_AMORTIZACION")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "CuotaAmortizacion.findAll", query = "SELECT c FROM CuotaAmortizacion c"),
     @NamedQuery(name = "CuotaAmortizacion.findByIdCuotaAmortizacion", query = "SELECT c FROM CuotaAmortizacion c WHERE c.idCuotaAmortizacion = :idCuotaAmortizacion"),
-    @NamedQuery(name = "CuotaAmortizacion.findByFechaCuotaM", query = "SELECT c FROM CuotaAmortizacion c WHERE c.fechaCuotaM = :fechaCuotaM"),
-    @NamedQuery(name = "CuotaAmortizacion.findByMontoM", query = "SELECT c FROM CuotaAmortizacion c WHERE c.montoM = :montoM"),
+    @NamedQuery(name = "CuotaAmortizacion.findByFechaCuota", query = "SELECT c FROM CuotaAmortizacion c WHERE c.fechaCuota = :fechaCuota"),
+    @NamedQuery(name = "CuotaAmortizacion.findByMonto", query = "SELECT c FROM CuotaAmortizacion c WHERE c.monto = :monto"),
     @NamedQuery(name = "CuotaAmortizacion.findByDiasInteres", query = "SELECT c FROM CuotaAmortizacion c WHERE c.diasInteres = :diasInteres"),
     @NamedQuery(name = "CuotaAmortizacion.findByInteres", query = "SELECT c FROM CuotaAmortizacion c WHERE c.interes = :interes"),
     @NamedQuery(name = "CuotaAmortizacion.findByComision", query = "SELECT c FROM CuotaAmortizacion c WHERE c.comision = :comision"),
@@ -46,13 +48,16 @@ public class CuotaAmortizacion implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "ID_CUOTA_AMORTIZACION")
+    @SequenceGenerator(name = "S_CUOTA_AMORTIZACION", sequenceName = "S_CUOTA_AMORTIZACION", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "S_CUOTA_AMORTIZACION")
     private Integer idCuotaAmortizacion;
-    @Column(name = "FECHA_CUOTA_M")
+    @Column(name = "FECHA_CUOTA")
     @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaCuotaM;
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private Date fechaCuota;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
-    @Column(name = "MONTO_M")
-    private BigDecimal montoM;
+    @Column(name = "MONTO")
+    private BigDecimal monto;
     @Column(name = "DIAS_INTERES")
     private BigInteger diasInteres;
     @Column(name = "INTERES")
@@ -65,86 +70,7 @@ public class CuotaAmortizacion implements Serializable {
     private BigDecimal saldo;
     @JoinColumn(name = "ID_VENTA", referencedColumnName = "ID_VENTA")
     @ManyToOne
-    private Venta idVenta;
-
-    public CuotaAmortizacion() {
-    }
-
-    public CuotaAmortizacion(Integer idCuotaAmortizacion) {
-        this.idCuotaAmortizacion = idCuotaAmortizacion;
-    }
-
-    public Integer getIdCuotaAmortizacion() {
-        return idCuotaAmortizacion;
-    }
-
-    public void setIdCuotaAmortizacion(Integer idCuotaAmortizacion) {
-        this.idCuotaAmortizacion = idCuotaAmortizacion;
-    }
-
-    public Date getFechaCuotaM() {
-        return fechaCuotaM;
-    }
-
-    public void setFechaCuotaM(Date fechaCuotaM) {
-        this.fechaCuotaM = fechaCuotaM;
-    }
-
-    public BigDecimal getMontoM() {
-        return montoM;
-    }
-
-    public void setMontoM(BigDecimal montoM) {
-        this.montoM = montoM;
-    }
-
-    public BigInteger getDiasInteres() {
-        return diasInteres;
-    }
-
-    public void setDiasInteres(BigInteger diasInteres) {
-        this.diasInteres = diasInteres;
-    }
-
-    public BigDecimal getInteres() {
-        return interes;
-    }
-
-    public void setInteres(BigDecimal interes) {
-        this.interes = interes;
-    }
-
-    public BigDecimal getComision() {
-        return comision;
-    }
-
-    public void setComision(BigDecimal comision) {
-        this.comision = comision;
-    }
-
-    public BigDecimal getCapital() {
-        return capital;
-    }
-
-    public void setCapital(BigDecimal capital) {
-        this.capital = capital;
-    }
-
-    public BigDecimal getSaldo() {
-        return saldo;
-    }
-
-    public void setSaldo(BigDecimal saldo) {
-        this.saldo = saldo;
-    }
-
-    public Venta getIdVenta() {
-        return idVenta;
-    }
-
-    public void setIdVenta(Venta idVenta) {
-        this.idVenta = idVenta;
-    }
+    private Venta venta;
 
     @Override
     public int hashCode() {

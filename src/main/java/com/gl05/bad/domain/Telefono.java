@@ -8,20 +8,20 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import lombok.Data;
 
-/**
- *
- * @author Gustavo Delgado
- */
+@Data
 @Entity
 @Table(name = "TELEFONO")
 @XmlRootElement
@@ -37,54 +37,16 @@ public class Telefono implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "ID_TELEFONO")
-    private Integer idTelefono;
+    @SequenceGenerator(name = "S_TELEFONO", sequenceName = "S_TELEFONO", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "S_TELEFONO")
+    private Long idTelefono;
     @Size(max = 20)
     @Column(name = "TIPO")
     private String tipo;
     @Column(name = "TELEFONO")
-    private Long telefono;
+    private String telefono;
     @JoinColumn(name = "ID_PROPIETARIO", referencedColumnName = "ID_PROPIETARIO")
-    @ManyToOne
-    private Propietario idPropietario;
-
-    public Telefono() {
-    }
-
-    public Telefono(Integer idTelefono) {
-        this.idTelefono = idTelefono;
-    }
-
-    public Integer getIdTelefono() {
-        return idTelefono;
-    }
-
-    public void setIdTelefono(Integer idTelefono) {
-        this.idTelefono = idTelefono;
-    }
-
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
-
-    public Long getTelefono() {
-        return telefono;
-    }
-
-    public void setTelefono(Long telefono) {
-        this.telefono = telefono;
-    }
-
-    public Propietario getIdPropietario() {
-        return idPropietario;
-    }
-
-    public void setIdPropietario(Propietario idPropietario) {
-        this.idPropietario = idPropietario;
-    }
+    private Long idPropietario;
 
     @Override
     public int hashCode() {

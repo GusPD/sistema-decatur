@@ -9,22 +9,23 @@ import java.util.Collection;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import lombok.Data;
 
-/**
- *
- * @author Gustavo Delgado
- */
+@Data
 @Entity
 @Table(name = "CUENTA_BANCARIA")
 @XmlRootElement
@@ -42,6 +43,8 @@ public class CuentaBancaria implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "ID_CUENTA_BANCARIA")
+    @SequenceGenerator(name = "S_CUENTA_BANCARIA", sequenceName = "S_CUENTA_BANCARIA", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "S_CUENTA_BANCARIA")
     private Integer idCuentaBancaria;
     @Size(max = 200)
     @Column(name = "NOMBRE")
@@ -57,73 +60,7 @@ public class CuentaBancaria implements Serializable {
     private String cuenta;
     @JoinColumn(name = "ID_PROYECTO", referencedColumnName = "ID_PROYECTO")
     @ManyToOne
-    private Proyecto idProyecto;
-    @OneToMany(mappedBy = "idCuentaBancaria")
-    private Collection<Pago> pagoCollection;
-
-    public CuentaBancaria() {
-    }
-
-    public CuentaBancaria(Integer idCuentaBancaria) {
-        this.idCuentaBancaria = idCuentaBancaria;
-    }
-
-    public Integer getIdCuentaBancaria() {
-        return idCuentaBancaria;
-    }
-
-    public void setIdCuentaBancaria(Integer idCuentaBancaria) {
-        this.idCuentaBancaria = idCuentaBancaria;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
-
-    public String getTitular() {
-        return titular;
-    }
-
-    public void setTitular(String titular) {
-        this.titular = titular;
-    }
-
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
-
-    public String getCuenta() {
-        return cuenta;
-    }
-
-    public void setCuenta(String cuenta) {
-        this.cuenta = cuenta;
-    }
-
-    public Proyecto getIdProyecto() {
-        return idProyecto;
-    }
-
-    public void setIdProyecto(Proyecto idProyecto) {
-        this.idProyecto = idProyecto;
-    }
-
-    @XmlTransient
-    public Collection<Pago> getPagoCollection() {
-        return pagoCollection;
-    }
-
-    public void setPagoCollection(Collection<Pago> pagoCollection) {
-        this.pagoCollection = pagoCollection;
-    }
+    private Proyecto proyecto;
 
     @Override
     public int hashCode() {
