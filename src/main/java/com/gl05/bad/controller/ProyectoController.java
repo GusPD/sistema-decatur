@@ -2,10 +2,12 @@ package com.gl05.bad.controller;
 
 import com.gl05.bad.domain.AsignacionPropietario;
 import com.gl05.bad.domain.Proyecto;
+import com.gl05.bad.domain.Usuario;
 import com.gl05.bad.servicio.AsigPropietarioVentaService;
 import com.gl05.bad.servicio.BitacoraServiceImp;
 import com.gl05.bad.servicio.ProyectoService;
 import com.gl05.bad.servicio.TerrenoService;
+import com.gl05.bad.servicio.UserService;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,8 @@ import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +36,9 @@ public class ProyectoController {
     
     @Autowired
     private AsigPropietarioVentaService asigPropietarioService;
+    
+    @Autowired
+    private UserService userService;
 
     /*@GetMapping("/GestionarProyecto")
     public String GestionarProyecto(Model model) {
@@ -54,17 +61,14 @@ public class ProyectoController {
         model.addAttribute("proyecto", proyecto);
         return "/Proyecto/PropietariosProyecto";
     }
-    
-    @GetMapping("/propietariosProyecto/data/{idProyecto}")
-    @ResponseBody
-    public DataTablesOutput<AsignacionPropietario> GetVentas(@Valid DataTablesInput input, @PathVariable Long idProyecto) {
-        return asigPropietarioService.listarPropietarios(input, idProyecto);
-    }
 
     @PostMapping("/AgregarProyecto")
     public ResponseEntity AgregarProyecto(Proyecto proyecto, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             proyectoService.agregarProyecto(proyecto);
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            Usuario usuario=userService.encontrarUsuarioPorUsername(authentication.getName());
+            usuario.añadirProyecto(proyecto);
             String mensaje = "Se ha agregado un proyecto.";
             bitacoraService.registrarAccion("Agregar proyecto");
             return ResponseEntity.ok(mensaje);
@@ -77,11 +81,17 @@ public class ProyectoController {
     @PostMapping("/EliminarProyecto/{idProyecto}")
     public ResponseEntity EliminarProyecto(Proyecto proyecto) {
         try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            Usuario usuario=userService.encontrarUsuarioPorUsername(authentication.getName());
+            usuario.eliminarProyecto(proyecto);
             proyectoService.eliminarProyecto(proyecto);
-             String mensaje = "Se ha eliminado un proyecto correctamente.";
-             bitacoraService.registrarAccion("Eliminar proyecto");
+            String mensaje = "Se ha eliminado un proyecto correctamente.";
+            bitacoraService.registrarAccion("Eliminar proyecto");
             return ResponseEntity.ok(mensaje);
         } catch (Exception e) {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            Usuario usuario=userService.encontrarUsuarioPorUsername(authentication.getName());
+            usuario.añadirProyecto(proyecto);
             String error = "Ha ocurrido un error al eliminar el proyecto";
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }

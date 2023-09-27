@@ -43,17 +43,22 @@
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                     <div class="col-sm-12 d-flex justify-content-end">
-                        <div class="botonExportar"></div>
+                        <sec:authorize access="hasAuthority('EXPORTAR_PROPIETARIOS_PROYECTO_PRIVILAGE')"> 
+                            <button id="export-copy" class="btn btn-sm btn-outline-secondary buttons-copy" type="button"><span>Copiar  </span><i class="fa-regular fa-copy"></i></button> 
+                            <button id="export-excel" class="btn btn-sm btn-outline-success buttons-excel" type="button"><span>Exportar </span><i class="fa-solid fa-file-csv"></i></button> 
+                            <button id="export-pdf" class="btn btn-sm btn-outline-danger buttons-pdf" type="button"><span>Exportar </span><i class="fa-regular fa-file-pdf"></i></button> 
+                        </sec:authorize>
                     </div>
                     <div>
                         <div class="table-responsive-md table-container">
                             <table id="propietarioTable" class="table table-striped custom-fixed-header">
                                 <thead class="table-light">
                                     <tr>
+                                        <th class="text-center">Terreno</th>
                                         <th class="text-center">DUI</th>
                                         <th class="text-center">Nombre</th>
-                                        <th class="text-center">Apellido</th>
-                                        <th class="text-center">Terreno</th>
+                                        <th class="text-center">Correos</th>
+                                        <th class="text-center">Telefonos</th>
                                         <th class="text-center">Acciones</th>
                                     </tr>
                                 </thead>

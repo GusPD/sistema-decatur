@@ -22,7 +22,11 @@
         <section class="content">
             <div class="container">
                 <div class="col-sm-12 d-flex justify-content-end">
-                    <div class="botonExportar"></div>
+                    <sec:authorize access="hasAuthority('EXPORTAR_BITACORA_PRIVILAGE')"> 
+                        <button id="export-copy" class="btn btn-sm btn-outline-secondary buttons-copy" type="button"><span>Copiar  </span><i class="fa-regular fa-copy"></i></button> 
+                        <button id="export-excel" class="btn btn-sm btn-outline-success buttons-excel" type="button"><span>Exportar </span><i class="fa-solid fa-file-csv"></i></button> 
+                        <button id="export-pdf" class="btn btn-sm btn-outline-danger buttons-pdf" type="button"><span>Exportar </span><i class="fa-regular fa-file-pdf"></i></button> 
+                    </sec:authorize>
                 </div>
                 <div class="table-responsive-md table-container">
                     <table id="bitacoraTable" class="table table-striped custom-fixed-header">

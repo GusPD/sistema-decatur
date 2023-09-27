@@ -1,5 +1,6 @@
 package com.gl05.bad.controller;
 
+import com.gl05.bad.domain.AsignacionPropietario;
 import com.gl05.bad.domain.Correo;
 import com.gl05.bad.domain.Documento;
 import com.gl05.bad.domain.Persona;
@@ -7,6 +8,7 @@ import com.gl05.bad.domain.Proyecto;
 import com.gl05.bad.domain.Propietario;
 import com.gl05.bad.domain.Referencia;
 import com.gl05.bad.domain.Telefono;
+import com.gl05.bad.domain.VistaPropietariosProyecto;
 import com.gl05.bad.servicio.BitacoraServiceImp;
 import com.gl05.bad.servicio.CorreoService;
 import com.gl05.bad.servicio.DocumentoService;
@@ -14,6 +16,7 @@ import com.gl05.bad.servicio.PersonaService;
 import com.gl05.bad.servicio.PropietarioService;
 import com.gl05.bad.servicio.ReferenciaService;
 import com.gl05.bad.servicio.TelefonoService;
+import com.gl05.bad.servicio.VistaPropietariosProyectoService;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -50,6 +53,9 @@ public class PropietarioController {
     
     @Autowired
     private PropietarioService propietarioService;
+    
+    @Autowired
+    private VistaPropietariosProyectoService vistaPropietariosService;
     
     @Autowired
     private PersonaService personaService;
@@ -131,6 +137,12 @@ public class PropietarioController {
     @ResponseBody
     public DataTablesOutput<Persona> GetPropietarios(@Valid DataTablesInput input) {
         return propietarioService.listarPropietarios(input);
+    }
+    
+    @GetMapping("/propietariosProyecto/data/{idProyecto}")
+    @ResponseBody
+    public DataTablesOutput<VistaPropietariosProyecto> GetPropietariosProyecto(@Valid DataTablesInput input, @PathVariable Long idProyecto) {
+        return vistaPropietariosService.listarPropietarios(input, idProyecto);
     }
 
     @PostMapping("/AgregarPropietario")

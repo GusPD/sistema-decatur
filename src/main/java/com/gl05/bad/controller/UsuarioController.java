@@ -2,6 +2,7 @@ package com.gl05.bad.controller;
 
 import com.gl05.bad.domain.Usuario;
 import com.gl05.bad.servicio.BitacoraServiceImp;
+import com.gl05.bad.servicio.ProyectoService;
 import com.gl05.bad.servicio.RolesService;
 import com.gl05.bad.servicio.UserService;
 import javax.servlet.http.HttpServletRequest;
@@ -31,6 +32,9 @@ public class UsuarioController {
 
     @Autowired
     private RolesService rolesService;
+    
+    @Autowired
+    private ProyectoService proyectoService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -41,9 +45,11 @@ public class UsuarioController {
         model.addAttribute("pageTitle", "Usuarios");
 
         var elemento = userService.listaUsuarios();
-        model.addAttribute("usuarios", elemento);
-
         var elementoRol = rolesService.listaRoles();
+        var proyectos = proyectoService.listaProyectos();
+        
+        model.addAttribute("proyectos", proyectos);
+        model.addAttribute("usuarios", elemento);
         model.addAttribute("roles", elementoRol);
         model.addAttribute("usuario", new Usuario());
 
@@ -76,8 +82,8 @@ public class UsuarioController {
     public ResponseEntity EliminarUsuario(Usuario usuario) {
         try {
             userService.eliminarUsuario(usuario);
-             String mensaje = "Se ha eliminado al usuario correctamente.";
-             bitacoraService.registrarAccion("Eliminar usuario");
+            String mensaje = "Se ha eliminado al usuario correctamente.";
+            bitacoraService.registrarAccion("Eliminar usuario");
             return ResponseEntity.ok(mensaje);
         } catch (Exception e) {
             String error = "Ha ocurrido un error al eliminar el usuario";

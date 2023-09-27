@@ -5,7 +5,7 @@ $(document).ready(function() {
             url: '/propietariosProyecto/data/' + idProyecto,
             dataSrc: 'data'
         },
-        order: [[1, 'asc'],[2, 'asc']],
+        order: [[0, 'asc'],[2, 'asc']],
         processing: true,
         serverSide: true,
         dom: "<'row w-100'<'col-sm-12 mb-4'B>>" +
@@ -18,29 +18,26 @@ $(document).ready(function() {
             {
                 extend: 'copy',
                 text: 'Copiar',
-                class: 'btn-sm',
                 exportOptions: {
-                  columns: [0, 1, 2] // Índices de las columnas que se copiarán
+                  columns: [0, 1, 2, 3, 4] // Índices de las columnas que se copiarán
                 }
             },
             {
                 extend: 'excel',
                 text: 'Exportar a Excel',
-                class: 'btn-sm',
                 title: 'Propietarios del proyecto', // Título del reporte en Excel
                 filename: 'Propietarios ' + getCurrentDateTime(), // Nombre del archivo Excel
                 exportOptions: {
-                  columns: [0, 1, 2] // Índices de las columnas que se exportarán
+                  columns: [0, 1, 2, 3, 4] // Índices de las columnas que se exportarán
                 }
             },
             {
                 extend: 'pdf',
                 text: 'Exportar a PDF',
-                class: 'btn-sm',
                 title: 'Propietarios del proyecto', // Título del reporte en PDF
                 filename: 'Propietarios ' + getCurrentDateTime(), // Nombre del archivo PDF
                 exportOptions: {
-                  columns: [0, 1, 2] // Índices de las columnas que se exportarán
+                  columns: [0, 1, 2, 3, 4] // Índices de las columnas que se exportarán
                 },
                 customize: function (doc) {
                   doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split('');
@@ -48,26 +45,17 @@ $(document).ready(function() {
             }
         ],
         columns: [
-            { data: 'propietario.persona.dui', width: '15%' },
-            { data: 'propietario.persona.nombre', width: '25%' },
-            { data: 'propietario.persona.apellido', width: '25%' },
-            { 
-                data: null,
-                sortable: false,
-                searchable: false,
-                width: '15%' ,
-                render: function (data, type, row) {
-                    var terreno = '';
-                    terreno += row.venta.terreno.poligono + '-' + row.venta.terreno.numero + row.venta.terreno.seccion;
-                    return terreno;
-                }
-            },
+            { data: 'lote', width: '10%' },
+            { data: 'dui', width: '10%' },
+            { data: 'nombre', width: '30%' },
+            { data: 'correos', width: '20%' },
+            { data: 'telefonos', width: '20%' },
             {
                 data: null,
                 title: 'Acciones',
                 sortable: false,
                 searchable: false,
-                width: '20%',
+                width: '10%',
                 render: function (data, type, row) {
                     // Aquí puedes construir el HTML para las acciones según tus necesidades
 //                    var actionsHtml = '<a type="button" class="btn btn-outline-secondary" href="/DetalleMaestria/' + row.idMaestria + '">';
@@ -76,7 +64,7 @@ $(document).ready(function() {
                     var actionsHtml = '';
                     
                     if(hasPrivilegeVerPropietarioProyecto === true){
-                        actionsHtml = '<a type="button" class="btn btn-outline-secondary btn-sm" href="/VerPropietarioVenta/'+ row.venta.terreno.proyecto.idProyecto + '/' + row.propietario.persona.idPersona + '">';
+                        actionsHtml = '<a type="button" class="btn btn-outline-secondary btn-sm" href="/VerPropietarioVenta/'+ row.idProyecto + '/' + row.idPersona + '">';
                         actionsHtml += '<i class="far fa-eye"></i></a>';
                     }
                     
@@ -124,7 +112,15 @@ $(document).ready(function() {
         }
     });
     table.columns.adjust();
-    table.buttons().container().appendTo('.botonExportar');
+    $('#export-pdf').on('click', function() {
+        table.button('.buttons-pdf').trigger();
+    });
+    $('#export-excel').on('click', function() {
+        table.button('.buttons-excel').trigger();
+    });
+    $('#export-copy').on('click', function() {
+        table.button('.buttons-copy').trigger();
+    });
     
     // Obtén la referencia al DataTable
     var table = $('#propietarioTable').DataTable();

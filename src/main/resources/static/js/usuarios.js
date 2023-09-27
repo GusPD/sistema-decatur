@@ -14,7 +14,6 @@ $(document).ready(function() {
             {
                 extend: 'copy',
                 text: 'Copiar',
-                class: 'btn-sm',
                 exportOptions: {
                   columns: [0, 1, 2, 3] // Índices de las columnas que se copiarán
                 }
@@ -22,7 +21,6 @@ $(document).ready(function() {
             {
                 extend: 'excel',
                 text: 'Exportar a Excel',
-                class: 'btn-sm',
                 title: 'Usuarios del sistema', // Título del reporte en Excel
                 filename: 'Usuarios ' + getCurrentDateTime(), // Nombre del archivo Excel
                 exportOptions: {
@@ -32,7 +30,6 @@ $(document).ready(function() {
             {
                 extend: 'pdf',
                 text: 'Exportar a PDF',
-                class: 'btn-sm',
                 title: 'Usuarios del sistema', // Título del reporte en PDF
                 filename: 'Usuarios ' + getCurrentDateTime(), // Nombre del archivo PDF
                 exportOptions: {
@@ -124,7 +121,15 @@ $(document).ready(function() {
         }
     });
     table.columns.adjust();
-    table.buttons().container().appendTo('.botonExportar');
+    $('#export-pdf').on('click', function() {
+        table.button('.buttons-pdf').trigger();
+    });
+    $('#export-excel').on('click', function() {
+        table.button('.buttons-excel').trigger();
+    });
+    $('#export-copy').on('click', function() {
+        table.button('.buttons-copy').trigger();
+    });
     // Función para obtener la fecha y hora actual en formato deseado
     function getCurrentDateTime() {
         var date = new Date();
@@ -181,6 +186,10 @@ $(document).ready(function() {
             "roles[]": {
                 required: true,
                 minlength: 1
+            },
+            
+            "proyectos[]": {
+                minlength: 1
             }
             
            
@@ -202,8 +211,11 @@ $(document).ready(function() {
             
             "roles[]": {
                 required: "Selecciona al menos un rol"
+            },
+            
+            "proyectos[]": {
+                required: "Selecciona al menos un proyecto"
             }
-        
         },
         
         highlight: function(element) {
@@ -215,17 +227,15 @@ $(document).ready(function() {
         },
         
         errorPlacement: function(error, element) {
-            if (element.attr("name") === "username" || element.attr("name") === "email" || element.attr("name") === "password" ) {
+            if (element.attr("name") === "username" || element.attr("name") === "email" || element.attr("name") === "password") {
                 error.insertAfter(element);
-              }
-           
-           if (element.attr("name") === "roles[]") {
-              error.appendTo("#roles-error");
-            } else {
-              error.insertAfter(element);
             }
            
-            
+            if (element.attr("name") === "roles[]" || element.attr("name") === "proyectos[]") {
+                error.appendTo(element);
+            } else {
+                error.insertAfter(element);
+            }
          },
          
         errorElement: 'div',
@@ -301,6 +311,15 @@ $(document).ready(function() {
 
                         $.each(response.roles, function (index, valor) {
                             var miCheckbox = document.getElementById('rol' + valor.idRol);
+                            if (miCheckbox !== null) {
+                                miCheckbox.checked = true;
+                            } else {
+                                console.log("El checkbox no se encontró en el documento.");
+                            }
+                        });
+                        
+                        $.each(response.proyectos, function (index, valor) {
+                            var miCheckbox = document.getElementById('proyecto' + valor.idProyecto);
                             if (miCheckbox !== null) {
                                 miCheckbox.checked = true;
                             } else {
