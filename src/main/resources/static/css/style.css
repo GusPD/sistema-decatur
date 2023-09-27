@@ -29,6 +29,14 @@ body{
     font-weight: normal;
 }
 
+.btn{
+    margin-left: 5px;
+}
+
+.text-blue{
+    color: #001f3f !Important;
+}
+
 .btn-add {
   color: #004077 !Important;
   background-color: transparent !Important;
@@ -232,6 +240,8 @@ pre{
     padding: auto !Important;
 }
 
+
+
 .btn-secondary {
     color: #fff !Important;
     border: none !important;
@@ -298,32 +308,26 @@ div.dataTables_wrapper div.dataTables_info {
     padding-top: 0px !Important;
 }
 
-.overflow-auto{
-    max-height: 55vh !Important;
-    padding-right: 3px!Important;
-}
-
-.form-group{
-    padding-left:3%!Important;
-    padding-right:3%!Important;
-}
-
 #EspacioEncabezado{
     height: 40px!Important;
 }
 
+/*Configuración de las tablas*/
+.dataTables_wrapper .dt-buttons {
+    display: none;
+}
 .table-container {
-    /* Otras propiedades de estilo que puedas necesitar */
-    height: 400px; /* Establece la altura fija deseada */
-    overflow-y: auto; /* Permite el desplazamiento vertical */
+    height: 400px;
+    overflow-y: auto;
     overflow-x: hidden; 
     margin-top: 10px !Important;
 }
+
 .table{
     width: 100%!Important;
 }
+
 thead {
-    /* Otras propiedades de estilo que puedas necesitar */
     position: sticky;
     border-style: solid;
     top:0px;
@@ -350,6 +354,7 @@ th {
     background-color: #DCDAE9;
 }
 
+/* Configuración de la Venta de Terreno */
 #numeroTerrenoVenta{
     font-weight: bold!Important;
     font-size: 4rem !Important;
@@ -362,4 +367,28 @@ th {
 
 #imagenPropietario{
     font-size: 7rem !Important;
+}
+
+/* AConfiguración de Modales */
+.form-group{
+    padding-left:3%!Important;
+    padding-right:3%!Important;
+}
+
+.overflow-auto{
+    max-height: 55vh !Important;
+    padding-right: 3px!Important;
+}
+
+.select2-results {
+    position: relative;
+    z-index: 9997;
+}
+
+.modal {
+    z-index: 9996;
+}
+
+.select2-container {
+    z-index: 9997;
 }

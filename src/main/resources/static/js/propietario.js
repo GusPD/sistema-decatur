@@ -17,7 +17,6 @@ $(document).ready(function() {
             {
                 extend: 'copy',
                 text: 'Copiar',
-                class: 'btn-sm',
                 exportOptions: {
                   columns: [0, 1, 2] // Índices de las columnas que se copiarán
                 }
@@ -25,7 +24,6 @@ $(document).ready(function() {
             {
                 extend: 'excel',
                 text: 'Exportar a Excel',
-                class: 'btn-sm',
                 title: 'Propietarios del sistema', // Título del reporte en Excel
                 filename: 'Propietarios ' + getCurrentDateTime(), // Nombre del archivo Excel
                 exportOptions: {
@@ -35,7 +33,6 @@ $(document).ready(function() {
             {
                 extend: 'pdf',
                 text: 'Exportar a PDF',
-                class: 'btn-sm',
                 title: 'Propietarios del sistema', // Título del reporte en PDF
                 filename: 'Propietarios ' + getCurrentDateTime(), // Nombre del archivo PDF
                 exportOptions: {
@@ -124,7 +121,15 @@ $(document).ready(function() {
         }
     });
     table.columns.adjust();
-    table.buttons().container().appendTo('.botonExportar');
+    $('#export-pdf').on('click', function() {
+        table.button('.buttons-pdf').trigger();
+    });
+    $('#export-excel').on('click', function() {
+        table.button('.buttons-excel').trigger();
+    });
+    $('#export-copy').on('click', function() {
+        table.button('.buttons-copy').trigger();
+    });
     
     // Obtén la referencia al DataTable
     var table = $('#propietarioTable').DataTable();

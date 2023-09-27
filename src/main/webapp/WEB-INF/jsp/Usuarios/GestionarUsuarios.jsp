@@ -42,7 +42,11 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                 <div class="col-sm-12 d-flex justify-content-end">
-                    <div class="botonExportar"></div>
+                    <sec:authorize access="hasAuthority('EXPORTAR_USUARIO_PRIVILAGE')"> 
+                        <button id="export-copy" class="btn btn-sm btn-outline-secondary buttons-copy" type="button"><span>Copiar  </span><i class="fa-regular fa-copy"></i></button> 
+                        <button id="export-excel" class="btn btn-sm btn-outline-success buttons-excel" type="button"><span>Exportar </span><i class="fa-solid fa-file-csv"></i></button> 
+                        <button id="export-pdf" class="btn btn-sm btn-outline-danger buttons-pdf" type="button"><span>Exportar </span><i class="fa-regular fa-file-pdf"></i></button> 
+                    </sec:authorize>
                     <sec:authorize access="hasAuthority('AGREGAR_USUARIO_PRIVILAGE')"> 
                         <button type="button" class="btn-add btn abrirModal-btn btn-sm" data-bs-toggle="modal" data-bs-target="#crearModal" data-action="agregar">Agregar</button>
                     </sec:authorize>
@@ -108,14 +112,26 @@
                                     <option value="1" >Bloqueado</option>
                                 </select>
                             </div>
-                            <div id="roles-error" class="error-message"></div>
+                            <div id="roles-error" name="roles-error" class="error-message"></div>
                             <div class="form-group">
-                                <label for="roles" class="form-label">Selecciona roles: </label>
+                                <label for="roles" class="form-label">Seleccione los roles: </label>
                                 <c:forEach items="${roles}" var="elementoRol" varStatus="status" >
                                     <div>
                                         <li>
                                             <input class="checkClean" type="checkbox" id="rol${elementoRol.idRol}" name="roles[]" value="${elementoRol.idRol}">
                                             <label for="rol${elementoRol.idRol}">${elementoRol.nombre}</label>
+                                        </li>
+                                    </div>
+                                </c:forEach>
+                            </div>
+                            <div id="proyectos-error" name="proyectos-error" class="error-message"></div>
+                            <div class="form-group">
+                                <label for="proyectos" class="form-label">Seleccione los proyectos: </label>
+                                <c:forEach items="${proyectos}" var="elementoProyecto" varStatus="status" >
+                                    <div>
+                                        <li>
+                                            <input class="checkClean" type="checkbox" id="proyecto${elementoProyecto.idProyecto}" name="proyectos[]" value="${elementoProyecto.idProyecto}">
+                                            <label for="proyecto${elementoProyecto.idProyecto}">${elementoProyecto.nombre}</label>
                                         </li>
                                     </div>
                                 </c:forEach>

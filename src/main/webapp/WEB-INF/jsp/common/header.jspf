@@ -9,11 +9,14 @@
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/recursosOnline/css/fonts.googleapis.com.css">
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/recursosOnline/css/dataTables.bootstrap5.min.css"/>
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/recursosOnline/css/buttons.bootstrap5.min.css">
-        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/recursosOnline/css/select2.min.css">
-        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/recursosOnline/css/select2-bootstrap-5-theme.min.css">
+
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/recursosOnline/css/fixedHeader.dataTables.min.css">
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/recursosOnline/css/adminlte.css">
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/style.css">
+        
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/recursosOnline/css/select2.min.css" />
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/recursosOnline/css/select2-bootstrap-5-theme.min.css" />
+        
         ${_csrfMetaTags}
     </head>
     <body class="hold-transition sidebar-mini">

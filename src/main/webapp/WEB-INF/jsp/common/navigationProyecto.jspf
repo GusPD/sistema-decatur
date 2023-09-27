@@ -78,7 +78,7 @@
                             <sec:authorize access="hasAuthority('GESTIONAR_PAGOS_PRIVILAGE')">
                             <li class="nav-item">
                                 <a href="/GestionarPagos" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == '/GestionarPagos' ? 'active' : ''}">
-                                    <i class="fa-solid fa-cash-register nav-icon text-warning"></i>
+                                    <i class="fa-solid fa-cash-register nav-icon text-blue"></i>
                                     <p>Registro de Pagos</p>
                                 </a>
                             </li>
@@ -86,7 +86,7 @@
                             <sec:authorize access="hasAuthority('GESTIONAR_MONITOREO_PAGOS_PRIVILAGE')">
                                 <li class="nav-item">
                                     <a href="/GestionarMonitoreoPagos"class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == '/GestionarMonitoreoPagos' ? 'active' : ''}">
-                                        <i class="fa-solid fa-chart-line nav-icon text-warning"></i>
+                                        <i class="fa-solid fa-chart-line nav-icon text-blue"></i>
                                         <p>Monitoreo de Pagos</p>
                                     </a>
                                 </li>
@@ -94,7 +94,7 @@
                             <sec:authorize access="hasAuthority('GESTIONAR_CUENTAS_BANCARIAS_PRIVILAGE')">
                                 <li class="nav-item">
                                     <a href="/GestionarCuentasBancarias"class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == '/GestionarCuentasBancarias' ? 'active' : ''}">
-                                        <i class="fa-solid fa-dollar-sign nav-icon text-warning"></i>
+                                        <i class="fa-solid fa-dollar-sign nav-icon text-blue"></i>
                                         <p>Cuentas Bancarias</p>
                                     </a>
                                 </li>
@@ -118,7 +118,7 @@
                             <sec:authorize access="hasAuthority('GESTIONAR_TERRENOS_PRIVILAGE')">
                             <li class="nav-item">
                                 <a href="/Terrenos/${proyecto.idProyecto}" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlTerrenos || requestScope['javax.servlet.forward.request_uri'] == urlVentas || requestScope['javax.servlet.forward.request_uri'] == urlVenta ? 'active' : ''}">
-                                    <i class="fa-solid fa-globe-americas nav-icon text-warning"></i>
+                                    <i class="fa-solid fa-globe-americas nav-icon text-blue"></i>
                                     <p>Terrenos</p>
                                 </a>
                             </li>
@@ -126,7 +126,7 @@
                             <sec:authorize access="hasAuthority('GESTIONAR_PROPIETARIOS_PROYECTO_PRIVILAGE')">
                             <li class="nav-item">
                                 <a href="/Propietarios/${proyecto.idProyecto}" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlPropietarios || requestScope['javax.servlet.forward.request_uri'] == urlPropietario ? 'active' : ''}">
-                                    <i class="fa-solid fa-user-tie nav-icon text-warning"></i>
+                                    <i class="fa-solid fa-user-tie nav-icon text-blue"></i>
                                     <p>Propietarios</p>
                                 </a>
                             </li>
@@ -134,7 +134,7 @@
                             <sec:authorize access="hasAuthority('GESTIONAR_TRABAJADORES_PROYECTO_PRIVILAGE')">
                             <li class="nav-item">
                                 <a href="/Trabajadores/${proyecto.idProyecto}" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlTrabajadores ? 'active' : ''}">
-                                    <i class="fa-solid fa-users nav-icon text-warning"></i>
+                                    <i class="fa-solid fa-users nav-icon text-blue"></i>
                                     <p>Trabajadores</p>
                                 </a>
                             </li>
@@ -152,7 +152,7 @@
                             <sec:authorize access="hasAuthority('GESTIONAR_VISITAS_PROYECTO_PRIVILAGE')">
                             <li class="nav-item">
                                 <a href="/GestionarVisitas" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == '/GestionarVisitas' ? 'active' : ''}">
-                                    <i class="fa-solid fa-street-view nav-icon text-warning"></i>
+                                    <i class="fa-solid fa-street-view nav-icon text-blue"></i>
                                     <p>Registro de Visitas</p>
                                 </a>
                             </li>

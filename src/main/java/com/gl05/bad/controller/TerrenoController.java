@@ -2,9 +2,11 @@ package com.gl05.bad.controller;
 
 import com.gl05.bad.domain.Proyecto;
 import com.gl05.bad.domain.Terreno;
+import com.gl05.bad.domain.VistaTerreno;
 import com.gl05.bad.servicio.BitacoraServiceImp;
 import com.gl05.bad.servicio.ProyectoService;
 import com.gl05.bad.servicio.TerrenoService;
+import com.gl05.bad.servicio.VistaTerrenoService;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -31,6 +33,9 @@ public class TerrenoController {
     private TerrenoService terrenoService;
     
     @Autowired
+    private VistaTerrenoService vistaTerrenoService;
+    
+    @Autowired
     private ProyectoService proyectoService;
     
     @GetMapping("/Terrenos/{idProyecto}")
@@ -45,8 +50,8 @@ public class TerrenoController {
     
     @GetMapping("/terrenos/data/{idProyecto}")
     @ResponseBody
-    public DataTablesOutput<Terreno> GetTerrenos(@Valid DataTablesInput input, @PathVariable Long idProyecto) {
-        return terrenoService.listarTerrenos(input, idProyecto);
+    public DataTablesOutput<VistaTerreno> GetTerrenos(@Valid DataTablesInput input, @PathVariable Long idProyecto) {
+        return vistaTerrenoService.listarTerrenos(input, idProyecto);
     }
 
     @PostMapping("/AgregarTerreno/{idProyecto}")

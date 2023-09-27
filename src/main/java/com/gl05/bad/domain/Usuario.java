@@ -71,16 +71,33 @@ public class Usuario implements Serializable {
     //Establezco la relación con la base de datos
     @ManyToMany//(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(
-           name = "USUARIO_ROL",
-            joinColumns = @JoinColumn(name="ID_USUARIO"),
-            inverseJoinColumns = @JoinColumn(name="ID_ROL")
+        name = "USUARIO_ROL",
+        joinColumns = @JoinColumn(name = "ID_USUARIO"),
+        inverseJoinColumns = @JoinColumn(name = "ID_ROL")
     )
-    
     private Set<Rol> roles = new HashSet<>();
+
+    @ManyToMany//(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(
+        name = "ASIGNACION_PROYECTO",
+        joinColumns = @JoinColumn(name = "ID_USUARIO"),
+        inverseJoinColumns = @JoinColumn(name = "ID_PROYECTO")
+    )
+    private Set<Proyecto> proyectos = new HashSet<>();
     
     //Añade roles al usuario
     public void añadirRol(Rol rol){
         this.roles.add(rol);
+    }
+    
+    //Añade proyectos al usuario
+    public void añadirProyecto(Proyecto proyecto){
+        this.proyectos.add(proyecto);
+    }
+    
+    //Elimina proyectos al usuario
+    public void eliminarProyecto(Proyecto proyecto){
+        this.proyectos.remove(proyecto);
     }
 
     @Override
