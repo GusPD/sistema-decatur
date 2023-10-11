@@ -11,11 +11,11 @@ public interface RolesService {
     
     public DataTablesOutput<Rol> listarRoles(DataTablesInput input);
    
-    public void AgregarRol(Rol rol);
+    public void agregar(Rol rol);
     
-    public Rol encontrarRol(Long rol);
+    public Rol encontrar(Long rol);
     
-    public void eliminarRol(Rol rol);
+    public void eliminar(Rol rol);
     
-    public void actualizarRol(Rol rol);
+    public void actualizar(Rol rol);
 }

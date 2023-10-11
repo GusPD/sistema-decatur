@@ -9,13 +9,13 @@ public interface VentaService {
     
     public List<Venta> listaVentas();
     
-    public DataTablesOutput<Venta> listarVentas(DataTablesInput input, Long idProyecto);
+    public DataTablesOutput<Venta> listarVentas(DataTablesInput input, Long idTerreno);
    
-    public void agregarVenta(Venta venta);
+    public void agregar(Venta venta);
         
-    public void eliminarVenta(Venta venta);
+    public void eliminar(Venta venta);
     
-    public Venta encontrarVenta(Long idVenta);
+    public Venta encontrar(Long idVenta);
     
-    public void actualizarVenta(Venta venta);
+    public void actualizar(Venta venta);
 }

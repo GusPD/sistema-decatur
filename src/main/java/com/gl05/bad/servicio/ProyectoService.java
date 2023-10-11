@@ -12,11 +12,11 @@ public interface ProyectoService {
     
     public DataTablesOutput<Proyecto> listarProyectos(DataTablesInput input);
    
-    public void agregarProyecto(Proyecto proyecto);
+    public void agregar(Proyecto proyecto);
         
-    public void eliminarProyecto(Proyecto proyecto);
+    public void eliminar(Proyecto proyecto);
     
-    public Proyecto encontrarProyecto(Long idProyecto);
+    public Proyecto encontrar(Long idProyecto);
     
-    public void actualizarProyecto(Proyecto proyecto);
+    public void actualizar(Proyecto proyecto);
 }

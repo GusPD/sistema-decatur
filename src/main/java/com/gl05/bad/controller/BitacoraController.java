@@ -18,7 +18,7 @@ public class BitacoraController {
     private BitacoraServiceImp bitacoraService;
 
     //Obtener los usuarios y mostrarlos en tablas
-    @GetMapping("/GestionarBitacora")
+    @GetMapping("/Bitacora")
     public String mostrarUsuarios(Model model) {
         model.addAttribute("pageTitle", "Bitácora");
         return "/Bitacora/GestionarBitacora";

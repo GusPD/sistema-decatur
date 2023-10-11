@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.gl05.bad.domain;
 
 import java.io.Serializable;
@@ -30,7 +26,7 @@ import lombok.Data;
     @NamedQuery(name = "Visitante.findAll", query = "SELECT v FROM Visitante v"),
     @NamedQuery(name = "Visitante.findByIdVisitante", query = "SELECT v FROM Visitante v WHERE v.idVisitante = :idVisitante"),
     @NamedQuery(name = "Visitante.findByRol", query = "SELECT v FROM Visitante v WHERE v.rol = :rol"),
-    @NamedQuery(name = "Visitante.findByEmpresa", query = "SELECT v FROM Visitante v WHERE v.empresa = :empresa")})
+    @NamedQuery(name = "Visitante.findByEmpleador", query = "SELECT v FROM Visitante v WHERE v.empleador = :empleador")})
 public class Visitante implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -40,13 +36,13 @@ public class Visitante implements Serializable {
     @Column(name = "ID_VISITANTE")
     @SequenceGenerator(name = "S_VISITANTE", sequenceName = "S_VISITANTE", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "S_VISITANTE")
-    private Integer idVisitante;
+    private Long idVisitante;
     @Size(max = 20)
     @Column(name = "ROL")
     private String rol;
     @Size(max = 200)
-    @Column(name = "EMPRESA")
-    private String empresa;
+    @Column(name = "EMPLEADOR")
+    private String empleador;
     @JoinColumn(name = "ID_PERSONA", referencedColumnName = "ID_PERSONA")
     @ManyToOne
     private Persona persona;
@@ -62,7 +58,6 @@ public class Visitante implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof Visitante)) {
             return false;
         }

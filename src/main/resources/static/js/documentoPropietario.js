@@ -55,7 +55,7 @@ $(document).ready(function() {
             var formDataArray = new FormData(formGuardar[0]);//tomo los datos del array
 
             console.log(formDataArray);
-            var url = '/AgregarDocumento';
+            var url = '/AgregarDocumentoPropietario';
             formDataArray.append('idDocumento', idDocumento);
             formDataArray.append('idPropietario', idPropietario);
 
@@ -104,7 +104,7 @@ $(document).ready(function() {
 
             // en caso de presionar el boton de nuevo solo se abrira el modal
             tituloModal.text('Agregar Documento');
-            form.attr('action', '/AgregarDocumento');
+            form.attr('action', '/AgregarDocumentoPropietario');
             $('.form-control').val('');
 
             modal.modal('show');
@@ -136,7 +136,7 @@ $(document).ready(function() {
         var idPersona = $('#idPersona').val();
         var idDocumento = $(this).data('id');
         // Actualizar la acción del formulario
-        $('#eliminarDocumentoForm').attr('action', '/EliminarDocumento/' + idDocumento);
+        $('#eliminarDocumentoForm').attr('action', '/EliminarDocumentoPropietario/' + idDocumento);
 
         // Realizar la solicitud POST al método de eliminación
         $.ajax({

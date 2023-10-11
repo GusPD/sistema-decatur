@@ -20,10 +20,6 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import lombok.Data;
 
-/**
- *
- * @author Gustavo Delgado
- */
 @Data
 @Entity
 @Table(name = "PERMISO")

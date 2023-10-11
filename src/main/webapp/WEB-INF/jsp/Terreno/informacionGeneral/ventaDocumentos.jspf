@@ -4,14 +4,14 @@
     <div class="subtitulo-Perfil">
         <h3>Documentos
             <sec:authorize access="hasAuthority('AGREGAR_DOCUMENTO_VENTA_PRIVILAGE')"> 
-                <button type="button" id="AgregarDocumento" class="btn-add btn abrirModal-btn pull-right btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalDocumento" data-action="agregar">Agregar</button>
+                <button type="button" id="AgregarDocumento" class="btn-blue btn abrirModal-btn pull-right btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalDocumento" data-action="agregar">Agregar</button>
             </sec:authorize>
         </h3>
     </div>
     <div class="overflow-auto">
-        <table style="width:100%; " " class="table table-bordered custom-fixed-header small" id="tabla-documentos">
+        <table style="width:100%; " class="table table-bordered custom-fixed-header small" id="tabla-documentos">
             <thead>
-                <tr>
+                <tr class="encabezado-tabla">
                     <th scope="col" width="10%">N°</th>
                     <th scope="col">Nombre</th>
                     <th scope="col" width="25%">Opciones</th>
@@ -30,7 +30,7 @@
                             <td>${documento.nombre}</td>
                             <td>
                                 <sec:authorize access="hasAuthority('VER_DOCUMENTO_VENTA_PRIVILAGE')"> 
-                                    <a type="button" id="VerDocumento" class="btn btn-outline-secondary btn-sm" href="/VerDocumentoVenta/${documento.idDocumento}" target="_blank"><i class="far fa-eye"></i></a>
+                                    <a type="button" id="VerDocumento" class="btn btn-outline-secondary btn-sm" href="/DocumentoVenta/${documento.idDocumento}" target="_blank"><i class="far fa-eye"></i></a>
                                 </sec:authorize>
                                 <sec:authorize access="hasAuthority('ELIMINAR_DOCUMENTO_VENTA_PRIVILAGE')"> 
                                     <button type="button" class="btn btn-outline-danger eliminarModalDocumento-btn btn-sm" data-id="${documento.idDocumento}" 'data-cod="${documento.idDocumento}"><i class="far fa-trash-alt"></i></button>

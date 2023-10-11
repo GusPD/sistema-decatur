@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.gl05.bad.domain;
 
 import java.io.Serializable;
@@ -38,12 +34,6 @@ import org.springframework.format.annotation.DateTimeFormat;
     @NamedQuery(name = "Venta.findByPrecio", query = "SELECT v FROM Venta v WHERE v.precio = :precio"),
     @NamedQuery(name = "Venta.findByDescuento", query = "SELECT v FROM Venta v WHERE v.descuento = :descuento"),
     @NamedQuery(name = "Venta.findByMonto", query = "SELECT v FROM Venta v WHERE v.monto = :monto"),
-    @NamedQuery(name = "Venta.findByPlazo", query = "SELECT v FROM Venta v WHERE v.plazo = :plazo"),
-    @NamedQuery(name = "Venta.findByTasa", query = "SELECT v FROM Venta v WHERE v.tasa = :tasa"),
-    @NamedQuery(name = "Venta.findByCuotaKi", query = "SELECT v FROM Venta v WHERE v.cuotaKi = :cuotaKi"),
-    @NamedQuery(name = "Venta.findByCuotaMantenimiento", query = "SELECT v FROM Venta v WHERE v.cuotaMantenimiento = :cuotaMantenimiento"),
-    @NamedQuery(name = "Venta.findByMultaMantenimiento", query = "SELECT v FROM Venta v WHERE v.multaMantenimiento = :multaMantenimiento"),
-    @NamedQuery(name = "Venta.findByMultaFinanciamiento", query = "SELECT v FROM Venta v WHERE v.multaFinanciamiento = :multaFinanciamiento"),
     @NamedQuery(name = "Venta.findByEstado", query = "SELECT v FROM Venta v WHERE v.estado = :estado")})
 public class Venta implements Serializable {
 
@@ -61,25 +51,12 @@ public class Venta implements Serializable {
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date fecha;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "PRECIO")
     private BigDecimal precio;
     @Column(name = "DESCUENTO")
     private BigDecimal descuento;
     @Column(name = "MONTO")
     private BigDecimal monto;
-    @Column(name = "PLAZO")
-    private Integer plazo;
-    @Column(name = "TASA")
-    private BigDecimal tasa;
-    @Column(name = "CUOTA_KI")
-    private BigDecimal cuotaKi;
-    @Column(name = "CUOTA_MANTENIMIENTO")
-    private BigDecimal cuotaMantenimiento;
-    @Column(name = "MULTA_MANTENIMIENTO")
-    private BigDecimal multaMantenimiento;
-    @Column(name = "MULTA_FINANCIAMIENTO")
-    private BigDecimal multaFinanciamiento;
     @JoinColumn(name = "ID_LIST_DOCUMENTO")
     private Integer idListDocumento;
     @JoinColumn(name = "ESTADO")
@@ -97,7 +74,6 @@ public class Venta implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof Venta)) {
             return false;
         }

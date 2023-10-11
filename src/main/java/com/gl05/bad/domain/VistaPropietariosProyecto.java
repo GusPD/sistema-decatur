@@ -26,8 +26,8 @@ public class VistaPropietariosProyecto implements Serializable{
     @Column(name = "NOMBRE")
     private String nombre;
     
-    @Column(name = "LOTE")
-    private String lote;
+    @Column(name = "LOTES")
+    private String lotes;
     
     @Column(name = "CORREOS")
     private String correos;

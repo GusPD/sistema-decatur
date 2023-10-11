@@ -2,6 +2,7 @@ package com.gl05.bad.controller;
 
 import com.gl05.bad.domain.Usuario;
 import com.gl05.bad.servicio.BitacoraServiceImp;
+import com.gl05.bad.servicio.EmpresaService;
 import com.gl05.bad.servicio.ProyectoService;
 import com.gl05.bad.servicio.RolesService;
 import com.gl05.bad.servicio.UserService;
@@ -35,19 +36,24 @@ public class UsuarioController {
     
     @Autowired
     private ProyectoService proyectoService;
+    
+    @Autowired
+    private EmpresaService empresaService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
 
     //Obtener los usuarios y mostrarlos en tablas
-    @GetMapping("/GestionarUsuarios")
+    @GetMapping("/Usuarios")
     public String mostrarUsuarios(Model model) {
         model.addAttribute("pageTitle", "Usuarios");
 
         var elemento = userService.listaUsuarios();
         var elementoRol = rolesService.listaRoles();
         var proyectos = proyectoService.listaProyectos();
+        var empresas = empresaService.listaEmpresas();
         
+        model.addAttribute("empresas", empresas);
         model.addAttribute("proyectos", proyectos);
         model.addAttribute("usuarios", elemento);
         model.addAttribute("roles", elementoRol);
@@ -68,7 +74,7 @@ public class UsuarioController {
             String password = usuario.getPassword();
             String encryptedPassword = passwordEncoder.encode(password);
             usuario.setPassword(encryptedPassword);
-            userService.AgregarUsuarios(usuario);
+            userService.agregar(usuario);
             String mensaje = "Se ha agregado un usuario.";
             bitacoraService.registrarAccion("Agregar usuario");
             return ResponseEntity.ok(mensaje);
@@ -81,7 +87,7 @@ public class UsuarioController {
     @PostMapping("/EliminarUsuario/{idUsuario}")
     public ResponseEntity EliminarUsuario(Usuario usuario) {
         try {
-            userService.eliminarUsuario(usuario);
+            userService.eliminar(usuario);
             String mensaje = "Se ha eliminado al usuario correctamente.";
             bitacoraService.registrarAccion("Eliminar usuario");
             return ResponseEntity.ok(mensaje);
@@ -93,7 +99,7 @@ public class UsuarioController {
 
     @GetMapping("/ObtenerUsuario/{id}")
     public ResponseEntity<Usuario> obtenerUsuario(@PathVariable Long id) {
-        Usuario usuario = userService.encontrarUsuario(id);
+        Usuario usuario = userService.encontrar(id);
         if (usuario != null) {
             return ResponseEntity.ok(usuario);
         } else {
@@ -112,11 +118,11 @@ public class UsuarioController {
                 usuario.setPassword(encryptedPassword);
             } else {
                 // No se proporcionó una nueva contraseña, mantener la existente en la base de datos
-                Usuario existingUsuario = userService.encontrarUsuario(usuario.getIdUsuario());
+                Usuario existingUsuario = userService.encontrar(usuario.getIdUsuario());
                 usuario.setPassword(existingUsuario.getPassword());
             }
 
-            userService.actualizarUsuario(usuario);
+            userService.actualizar(usuario);
             String mensaje = "Se ha actualizado el usuario correctamente.";
             bitacoraService.registrarAccion("Actualizar usuario");
             return ResponseEntity.ok(mensaje);

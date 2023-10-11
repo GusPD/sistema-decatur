@@ -62,10 +62,7 @@ $(document).ready(function() {
                 searchable: false,
                 width: '20%',
                 render: function (data, type, row) {
-                    // Aquí puedes construir el HTML para las acciones según tus necesidades
-//                    var actionsHtml = '<a type="button" class="btn btn-outline-secondary" href="/DetalleMaestria/' + row.idMaestria + '">';
-//                    actionsHtml += '<i class="bi bi-eye"></i></a>';
-                    
+              
                     var actionsHtml = '';
                     
                     if(hasPrivilegeEditarUsuario === true){
@@ -190,8 +187,11 @@ $(document).ready(function() {
             
             "proyectos[]": {
                 minlength: 1
-            }
+            },
             
+            "empresas[]": {
+                minlength: 1
+            }
            
         },
         
@@ -215,6 +215,10 @@ $(document).ready(function() {
             
             "proyectos[]": {
                 required: "Selecciona al menos un proyecto"
+            },
+            
+            "empresas[]": {
+                required: "Selecciona al menos una empresa"
             }
         },
         
@@ -231,7 +235,7 @@ $(document).ready(function() {
                 error.insertAfter(element);
             }
            
-            if (element.attr("name") === "roles[]" || element.attr("name") === "proyectos[]") {
+            if (element.attr("name") === "roles[]" || element.attr("name") === "proyectos[]" || element.attr("name") === "empresas[]") {
                 error.appendTo(element);
             } else {
                 error.insertAfter(element);
@@ -320,6 +324,15 @@ $(document).ready(function() {
                         
                         $.each(response.proyectos, function (index, valor) {
                             var miCheckbox = document.getElementById('proyecto' + valor.idProyecto);
+                            if (miCheckbox !== null) {
+                                miCheckbox.checked = true;
+                            } else {
+                                console.log("El checkbox no se encontró en el documento.");
+                            }
+                        });
+                        
+                        $.each(response.empresas, function (index, valor) {
+                            var miCheckbox = document.getElementById('empresa' + valor.idEmpresa);
                             if (miCheckbox !== null) {
                                 miCheckbox.checked = true;
                             } else {

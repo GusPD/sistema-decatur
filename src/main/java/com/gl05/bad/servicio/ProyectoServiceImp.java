@@ -32,25 +32,25 @@ public class ProyectoServiceImp implements ProyectoService{
 
     @Override
     @Transactional
-    public void agregarProyecto(Proyecto proyecto) {
+    public void agregar(Proyecto proyecto) {
         proyectoDao.save(proyecto);
     }
 
     @Override
     @Transactional
-    public void eliminarProyecto(Proyecto proyecto) {
+    public void eliminar(Proyecto proyecto) {
         proyectoDao.delete(proyecto);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Proyecto encontrarProyecto(Long idProyecto) {
+    public Proyecto encontrar(Long idProyecto) {
         return proyectoDao.findById(idProyecto).orElse(null);
     }
 
     @Override
     @Transactional
-    public void actualizarProyecto(Proyecto proyecto) {
+    public void actualizar(Proyecto proyecto) {
         if (proyectoDao.existsById(proyecto.getIdProyecto())) {
             proyectoDao.save(proyecto);
         } else {

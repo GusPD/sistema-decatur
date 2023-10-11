@@ -1,0 +1,42 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<div id="perfil-correo-electronico">
+    <div class="subtitulo-Perfil">
+        <h3>Terrenos</h3>
+    </div>
+    <div class="overflow-auto">
+        <table style="width:100%; " class="table table-bordered custom-fixed-header small" id="tabla-correos">
+            <thead>
+                <tr class="encabezado-tabla">
+                    <th scope="col">N°</th>
+                    <th scope="col">Proyecto</th>
+                    <th scope="col">Matrícula</th>
+                    <th scope="col">Polígono</th>
+                    <th scope="col">Lote</th>
+                    <th class="text-center">Área (m²)</th>
+                    <th class="text-center">Área (v²)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <c:if test="${empty terrenos}">
+                    <tr>
+                        <td colspan="6">No hay registros</td>
+                    </tr>
+                </c:if>
+                <c:if test="${not empty terrenos}">
+                    <c:forEach items="${terrenos}" var="eElemento" varStatus="numeroTerreno">
+                        <tr>
+                            <td>${numeroTerreno.index+1}</td>
+                            <td>${eElemento.proyecto.nombre}</td>
+                            <td>${eElemento.matricula}</td>
+                            <td>${eElemento.poligono}</td>
+                            <td>${eElemento.numero}${eElemento.seccion}</td>
+                            <td>${eElemento.areaMetros}</td>
+                            <td>${eElemento.areaVaras}</td>
+                        </tr>
+                    </c:forEach>
+                </c:if>
+            </tbody>
+        </table>
+    </div>
+</div>
+

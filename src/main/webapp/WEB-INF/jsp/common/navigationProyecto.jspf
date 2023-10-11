@@ -69,15 +69,15 @@
                     </li>
                 </sec:authorize>
                 <sec:authorize access="hasAuthority('GESTIONAR_PAGOS_PRIVILAGE') or hasAuthority('GESTIONAR_CUENTAS_BANCARIAS_PRIVILAGE') or hasAuthority('GESTIONAR_MONITOREO_PAGOS_PRIVILAGE')">
-                    <li class="nav-item ${requestScope['javax.servlet.forward.request_uri'] == '/GestionarPagos' || requestScope['javax.servlet.forward.request_uri'] == '/GestionarCuentasBancarias' || requestScope['javax.servlet.forward.request_uri'] == '/GestionarMonitoreoPagos' ? 'menu-open' : ''}">
-                        <a href="#" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == '/GestionarPagos' || requestScope['javax.servlet.forward.request_uri'] == '/GestionarCuentasBancarias' || requestScope['javax.servlet.forward.request_uri'] == '/GestionarMonitoreoPagos' ? 'active' : ''}">
+                    <li class="nav-item ${requestScope['javax.servlet.forward.request_uri'] == '/Pagos' || requestScope['javax.servlet.forward.request_uri'] == '/CuentasBancarias' || requestScope['javax.servlet.forward.request_uri'] == '/MonitoreoPagos' ? 'menu-open' : ''}">
+                        <a href="#" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == '/Pagos' || requestScope['javax.servlet.forward.request_uri'] == '/CuentasBancarias' || requestScope['javax.servlet.forward.request_uri'] == '/MonitoreoPagos' ? 'active' : ''}">
                             <i class="nav-icon fas fa-coins"></i>
                             <p>Facturación<i class="right fas fa-angle-left"></i></p>
                         </a>
                         <ul class="nav nav-treeview">
                             <sec:authorize access="hasAuthority('GESTIONAR_PAGOS_PRIVILAGE')">
                             <li class="nav-item">
-                                <a href="/GestionarPagos" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == '/GestionarPagos' ? 'active' : ''}">
+                                <a href="/Pagos" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == '/Pagos' ? 'active' : ''}">
                                     <i class="fa-solid fa-cash-register nav-icon text-blue"></i>
                                     <p>Registro de Pagos</p>
                                 </a>
@@ -85,7 +85,7 @@
                             </sec:authorize>
                             <sec:authorize access="hasAuthority('GESTIONAR_MONITOREO_PAGOS_PRIVILAGE')">
                                 <li class="nav-item">
-                                    <a href="/GestionarMonitoreoPagos"class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == '/GestionarMonitoreoPagos' ? 'active' : ''}">
+                                    <a href="/MonitoreoPagos"class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == '/MonitoreoPagos' ? 'active' : ''}">
                                         <i class="fa-solid fa-chart-line nav-icon text-blue"></i>
                                         <p>Monitoreo de Pagos</p>
                                     </a>
@@ -93,7 +93,7 @@
                             </sec:authorize>
                             <sec:authorize access="hasAuthority('GESTIONAR_CUENTAS_BANCARIAS_PRIVILAGE')">
                                 <li class="nav-item">
-                                    <a href="/GestionarCuentasBancarias"class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == '/GestionarCuentasBancarias' ? 'active' : ''}">
+                                    <a href="/CuentasBancarias"class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == '/CuentasBancarias' ? 'active' : ''}">
                                         <i class="fa-solid fa-dollar-sign nav-icon text-blue"></i>
                                         <p>Cuentas Bancarias</p>
                                     </a>
@@ -102,20 +102,30 @@
                         </ul>
                     </li>
                 </sec:authorize>
-                <sec:authorize access="hasAuthority('GESTIONAR_TERRENOS_PRIVILAGE') or hasAuthority('GESTIONAR_PROPIETARIOS_PROYECTO_PRIVILAGE') or hasAuthority('GESTIONAR_TRABAJADORES_PROYECTO_PRIVILAGE')">
+                <sec:authorize access="hasAuthority('GESTIONAR_TERRENO_PRIVILAGE') or hasAuthority('GESTIONAR_VENTAS_ACTIVAS_PRIVILAGE') or hasAuthority('GESTIONAR_PROPIETARIOS_PROYECTO_PRIVILAGE') or hasAuthority('GESTIONAR_TRABAJADORES_PROYECTO_PRIVILAGE')">
                     <c:set var="urlTerrenos" value="/Terrenos/${proyecto.idProyecto}" />
+                    <c:set var="urlVentasActivas" value="/VentasActivas/${proyecto.idProyecto}" />
                     <c:set var="urlPropietarios" value="/Propietarios/${proyecto.idProyecto}" />
                     <c:set var="urlTrabajadores" value="/Trabajadores/${proyecto.idProyecto}" />
                     <c:set var="urlVentas" value="/Ventas/${terreno.idTerreno}" />
                     <c:set var="urlVenta" value="/Venta/${venta.idVenta}" />
-                    <c:set var="urlPropietario" value="/VerPropietarioVenta/${proyecto.idProyecto}/${persona.idPersona}" />
-                    <li class="nav-item ${requestScope['javax.servlet.forward.request_uri'] == urlTerrenos || requestScope['javax.servlet.forward.request_uri'] == urlPropietarios || requestScope['javax.servlet.forward.request_uri'] == urlTrabajadores || requestScope['javax.servlet.forward.request_uri'] == urlVentas || requestScope['javax.servlet.forward.request_uri'] == urlVenta || requestScope['javax.servlet.forward.request_uri'] == urlPropietario ? 'menu-open' : ''}">
-                        <a href="#" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlTerrenos || requestScope['javax.servlet.forward.request_uri'] == urlPropietarios || requestScope['javax.servlet.forward.request_uri'] == urlTrabajadores || requestScope['javax.servlet.forward.request_uri'] == urlVentas || requestScope['javax.servlet.forward.request_uri'] == urlVenta || requestScope['javax.servlet.forward.request_uri'] == urlPropietario ? 'active' : ''}">
+                    <c:set var="urlPropietario" value="/Propietario/${proyecto.idProyecto}/${persona.idPersona}" />
+                    <c:set var="urlTrabajador" value="/Trabajador/${proyecto.idProyecto}/${persona.idPersona}" />
+                    <li class="nav-item ${requestScope['javax.servlet.forward.request_uri'] == urlTerrenos || requestScope['javax.servlet.forward.request_uri'] == urlVentasActivas || requestScope['javax.servlet.forward.request_uri'] == urlPropietarios || requestScope['javax.servlet.forward.request_uri'] == urlTrabajadores || requestScope['javax.servlet.forward.request_uri'] == urlVentas || requestScope['javax.servlet.forward.request_uri'] == urlVenta || requestScope['javax.servlet.forward.request_uri'] == urlPropietario || requestScope['javax.servlet.forward.request_uri'] == urlTrabajador ? 'menu-open' : ''}">
+                        <a href="#" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlTerrenos || requestScope['javax.servlet.forward.request_uri'] == urlVentasActivas || requestScope['javax.servlet.forward.request_uri'] == urlPropietarios || requestScope['javax.servlet.forward.request_uri'] == urlTrabajadores || requestScope['javax.servlet.forward.request_uri'] == urlVentas || requestScope['javax.servlet.forward.request_uri'] == urlVenta || requestScope['javax.servlet.forward.request_uri'] == urlPropietario || requestScope['javax.servlet.forward.request_uri'] == urlTrabajador ? 'active' : ''}">
                             <i class="nav-icon fa-solid fa-folder-closed"></i>
                             <p>Administración<i class="right fas fa-angle-left"></i></p>
                         </a>
                         <ul class="nav nav-treeview">
-                            <sec:authorize access="hasAuthority('GESTIONAR_TERRENOS_PRIVILAGE')">
+                            <sec:authorize access="hasAuthority('GESTIONAR_VENTAS_ACTIVAS_PRIVILAGE')">
+                            <li class="nav-item">
+                                <a href="/VentasActivas/${proyecto.idProyecto}" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlVentasActivas || requestScope['javax.servlet.forward.request_uri'] == urlVentas || requestScope['javax.servlet.forward.request_uri'] == urlVenta ? 'active' : ''}">
+                                    <i class="fa-solid fa-file-signature nav-icon text-blue"></i>
+                                    <p>Ventas Activas</p>
+                                </a>
+                            </li>
+                            </sec:authorize>
+                            <sec:authorize access="hasAuthority('GESTIONAR_TERRENO_PRIVILAGE')">
                             <li class="nav-item">
                                 <a href="/Terrenos/${proyecto.idProyecto}" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlTerrenos || requestScope['javax.servlet.forward.request_uri'] == urlVentas || requestScope['javax.servlet.forward.request_uri'] == urlVenta ? 'active' : ''}">
                                     <i class="fa-solid fa-globe-americas nav-icon text-blue"></i>
@@ -133,7 +143,7 @@
                             </sec:authorize>
                             <sec:authorize access="hasAuthority('GESTIONAR_TRABAJADORES_PROYECTO_PRIVILAGE')">
                             <li class="nav-item">
-                                <a href="/Trabajadores/${proyecto.idProyecto}" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlTrabajadores ? 'active' : ''}">
+                                <a href="/Trabajadores/${proyecto.idProyecto}" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlTrabajadores || requestScope['javax.servlet.forward.request_uri'] == urlTrabajador ? 'active' : ''}">
                                     <i class="fa-solid fa-users nav-icon text-blue"></i>
                                     <p>Trabajadores</p>
                                 </a>
@@ -143,15 +153,15 @@
                     </li>
                 </sec:authorize>
                 <sec:authorize access="hasAuthority('GESTIONAR_VISITAS_PROYECTO_PRIVILAGE')">
-                    <li class="nav-item ${requestScope['javax.servlet.forward.request_uri'] == '/GestionarVisitas' ? 'menu-open' : ''}">
-                        <a href="#" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == '/GestionarVisitas' ? 'active' : ''}">
+                    <li class="nav-item ${requestScope['javax.servlet.forward.request_uri'] == '/Visitas' ? 'menu-open' : ''}">
+                        <a href="#" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == '/Visitas' ? 'active' : ''}">
                             <i class="nav-icon fas fa-map-marked-alt"></i>
                             <p>Visitas al Proyecto<i class="right fas fa-angle-left"></i></p>
                         </a>
                         <ul class="nav nav-treeview">
                             <sec:authorize access="hasAuthority('GESTIONAR_VISITAS_PROYECTO_PRIVILAGE')">
                             <li class="nav-item">
-                                <a href="/GestionarVisitas" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == '/GestionarVisitas' ? 'active' : ''}">
+                                <a href="/Visitas" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == '/Visitas' ? 'active' : ''}">
                                     <i class="fa-solid fa-street-view nav-icon text-blue"></i>
                                     <p>Registro de Visitas</p>
                                 </a>

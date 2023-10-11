@@ -24,37 +24,32 @@ public class TerrenoServiceImp implements TerrenoService{
 
     @Override
     @Transactional
-    public void agregarTerreno(Terreno terreno) {
+    public void agregar(Terreno terreno) {
         terrenoDao.save(terreno);
     }
 
     @Override
     @Transactional
-    public void eliminarTerreno(Terreno terreno) {
+    public void eliminar(Terreno terreno) {
         terrenoDao.delete(terreno);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Terreno encontrarTerreno(Long idTerreno) {
+    public Terreno encontrar(Long idTerreno) {
         return terrenoDao.findById(idTerreno).orElse(null);
     }
 
     @Override
     @Transactional
-    public void actualizarTerreno(Terreno terreno) {
+    public void actualizar(Terreno terreno) {
         if (terrenoDao.existsById(terreno.getIdTerreno())) {
             terrenoDao.save(terreno);
         } else {
             throw new IllegalArgumentException("El terreno no existe.");
         }
     }
-
-    /*@Override
-    @Transactional(readOnly = true)
-    public DataTablesOutput<Terreno> listarTerrenos(DataTablesInput input) {
-        return (DataTablesOutput<Terreno>) terrenoDao.findAll(input);
-    }*/
+    
     @Override
     @Transactional(readOnly = true)
     public DataTablesOutput<Terreno> listarTerrenos(DataTablesInput input, Long idProyecto) {

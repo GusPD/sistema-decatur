@@ -10,15 +10,15 @@ public interface PropietarioService {
     
     public List<Propietario> listaPropietarios();
     
-    public DataTablesOutput<Persona> listarPropietarios(DataTablesInput input);
+    public DataTablesOutput<Propietario> listarPropietarios(DataTablesInput input);
    
-    public void agregarPropietario(Propietario propietario);
+    public void agregar(Propietario propietario);
         
-    public void eliminarPropietario(Propietario propietario);
+    public void eliminar(Propietario propietario);
     
-    public Propietario encontrarPropietario(Long idPropietario);
+    public Propietario encontrar(Long idPropietario);
     
-    public Propietario encontrarPropietarioPersona(Persona persona);
+    public Propietario encontrarPersona(Persona persona);
     
-    public void actualizarPropietario(Propietario propietario);
+    public void actualizar(Propietario propietario);
 }

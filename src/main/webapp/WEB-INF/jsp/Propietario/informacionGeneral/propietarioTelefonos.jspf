@@ -3,14 +3,14 @@
     <div class="subtitulo-Perfil">
         <h3>Teléfonos
             <sec:authorize access="hasAuthority('AGREGAR_TELEFONO_PROPIETARIO_PRIVILAGE')">
-                <button type="button" id="AgregarTelefono" class="btn-add btn abrirModal-btn pull-right btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalTelefono" data-action="agregar">Agregar</button>
+                <button type="button" id="AgregarTelefono" class="btn-blue btn abrirModal-btn pull-right btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalTelefono" data-action="agregar">Agregar</button>
             </sec:authorize>
         </h3>
     </div>
     <div class="overflow-auto">
         <table style="width:100%; " class="table table-bordered custom-fixed-header small" id="tabla-telefonos">
             <thead>
-                <tr>
+                <tr class="encabezado-tabla">
                     <th scope="col">N°</th>
                     <th scope="col">Tipo</th>
                     <th scope="col">Teléfono</th>

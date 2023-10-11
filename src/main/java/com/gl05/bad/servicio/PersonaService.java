@@ -11,13 +11,13 @@ public interface PersonaService {
     
     public DataTablesOutput<Persona> listarPersonas(DataTablesInput input);
    
-    public void agregarPersona(Persona persona);
+    public void agregar(Persona persona);
         
-    public void eliminarPersona(Persona persona);
+    public void eliminar(Persona persona);
     
-    public Persona encontrarPersona(Long idPersona);
+    public Persona encontrar(Long idPersona);
     
-    public Persona encontrarPersona(String dui);
+    public Persona encontrarDui(String dui);
     
-    public void actualizarPersona(Persona persona);
+    public void actualizar(Persona persona);
 }

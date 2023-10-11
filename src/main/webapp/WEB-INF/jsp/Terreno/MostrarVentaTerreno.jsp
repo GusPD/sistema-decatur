@@ -74,6 +74,9 @@
                                         <button class="tab-perfil list-group-item list-group-item-info btn-info" id="tab_documentos" data-url="#" title="Documentos" type="button" onclick="setActiveButton('tab_documentos')">
                                             Documentos
                                         </button>
+                                        <button class="tab-perfil list-group-item list-group-item-info btn-info" id="tab_facturacion" data-url="#" title="Facturación" type="button" onclick="setActiveButton('tab_facturacion')">
+                                            Facturación
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -93,6 +96,9 @@
                                         </div>
                                         <div id="content_tab_trabajadores" class="row d-none content_tab tab_trabajadores">
                                             <%@ include file="informacionGeneral/ventaTrabajadores.jspf"%>
+                                        </div>
+                                        <div id="content_tab_facturacion" class="row d-none content_tab tab_facturacion">
+                                            <%@ include file="informacionGeneral/ventaFacturacion.jspf"%>
                                         </div>
                                     </div>
                                 </div>

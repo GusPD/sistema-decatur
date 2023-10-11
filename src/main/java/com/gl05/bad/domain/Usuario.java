@@ -53,8 +53,7 @@ public class Usuario implements Serializable {
     @Size(max = 100)
     @Column(name = "PASSWORD")
     private String password;
-    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
-    
+
     @Size(max = 100)
     @Column(name = "EMAIL")
     private String email;
@@ -68,8 +67,7 @@ public class Usuario implements Serializable {
     @Column(name = "HABILITADO")
     private boolean habilitado;
 
-    //Establezco la relación con la base de datos
-    @ManyToMany//(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(
         name = "USUARIO_ROL",
         joinColumns = @JoinColumn(name = "ID_USUARIO"),
@@ -77,7 +75,7 @@ public class Usuario implements Serializable {
     )
     private Set<Rol> roles = new HashSet<>();
 
-    @ManyToMany//(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(
         name = "ASIGNACION_PROYECTO",
         joinColumns = @JoinColumn(name = "ID_USUARIO"),
@@ -85,19 +83,32 @@ public class Usuario implements Serializable {
     )
     private Set<Proyecto> proyectos = new HashSet<>();
     
-    //Añade roles al usuario
+    @ManyToMany
+    @JoinTable(
+        name = "ASIGNACION_EMPRESA",
+        joinColumns = @JoinColumn(name = "ID_USUARIO"),
+        inverseJoinColumns = @JoinColumn(name = "ID_EMPRESA")
+    )
+    private Set<Empresa> empresas = new HashSet<>();
+    
     public void añadirRol(Rol rol){
         this.roles.add(rol);
     }
     
-    //Añade proyectos al usuario
     public void añadirProyecto(Proyecto proyecto){
         this.proyectos.add(proyecto);
     }
     
-    //Elimina proyectos al usuario
     public void eliminarProyecto(Proyecto proyecto){
         this.proyectos.remove(proyecto);
+    }
+    
+    public void añadirEmpresa(Empresa empresa){
+        this.empresas.add(empresa);
+    }
+    
+    public void eliminarEmpresa(Empresa empresa){
+        this.empresas.remove(empresa);
     }
 
     @Override

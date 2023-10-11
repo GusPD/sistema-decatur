@@ -49,7 +49,7 @@
                                     <div class="list-group info">
                                         <div class="border p-3 rounded">
                                             <div class="row align-items-center mt-1 mb-1">
-                                                <i id="imagenPropietario" class="fa-solid fa-user-tie text-center"></i>
+                                                <i id="imagenPerfil" class="fa-solid fa-user-tie text-center"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -73,6 +73,9 @@
                                         <button class="tab-perfil list-group-item list-group-item-info btn-info" id="tab_documentos" data-url="#" title="Documentos" type="button" onclick="setActiveButton('tab_documentos')">
                                             Documentos
                                         </button>
+                                        <button class="tab-perfil list-group-item list-group-item-info btn-info" id="tab_terrenos" data-url="#" title="Terrenos" type="button" onclick="setActiveButton('tab_terrenos')">
+                                            Terrenos
+                                        </button>
                                     </div>
                               </div>
                             </div>
@@ -95,6 +98,9 @@
                                         </div>
                                         <div id="content_tab_referencias" class="row d-none content_tab tab_referencias">
                                             <%@ include file="informacionGeneral/propietarioReferencias.jspf"%>
+                                        </div>
+                                        <div id="content_tab_terrenos" class="row d-none content_tab tab_terrenos">
+                                            <%@ include file="informacionGeneral/propietarioTerrenos.jspf"%>
                                         </div>
                                     </div>
                                 </div>

@@ -11,11 +11,11 @@ public interface TerrenoService {
     
     public DataTablesOutput<Terreno> listarTerrenos(DataTablesInput input, Long idProyecto);
    
-    public void agregarTerreno(Terreno terreno);
+    public void agregar(Terreno terreno);
         
-    public void eliminarTerreno(Terreno terreno);
+    public void eliminar(Terreno terreno);
     
-    public Terreno encontrarTerreno(Long idTerreno);
+    public Terreno encontrar(Long idTerreno);
     
-    public void actualizarTerreno(Terreno terreno);
+    public void actualizar(Terreno terreno);
 }

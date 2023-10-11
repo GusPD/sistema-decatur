@@ -1,12 +1,10 @@
 package com.gl05.bad.controller;
 
-import com.gl05.bad.domain.AsignacionPropietario;
 import com.gl05.bad.domain.Proyecto;
 import com.gl05.bad.domain.Usuario;
-import com.gl05.bad.servicio.AsigPropietarioVentaService;
 import com.gl05.bad.servicio.BitacoraServiceImp;
+import com.gl05.bad.servicio.EmpresaService;
 import com.gl05.bad.servicio.ProyectoService;
-import com.gl05.bad.servicio.TerrenoService;
 import com.gl05.bad.servicio.UserService;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -35,18 +33,27 @@ public class ProyectoController {
     private ProyectoService proyectoService;
     
     @Autowired
-    private AsigPropietarioVentaService asigPropietarioService;
+    private EmpresaService empresaService;
     
     @Autowired
     private UserService userService;
-
-    /*@GetMapping("/GestionarProyecto")
-    public String GestionarProyecto(Model model) {
-        model.addAttribute("pageTitle", "Proyectos");
-
-        var elemento = proyectoService.listaProyectos();
-        model.addAttribute("proyectos", elemento);
-        return "/Proyecto/GestionarProyecto";
+    
+    /*@GetMapping("/")
+    public String index(Model model, Authentication authentication) {
+        model.addAttribute("pageTitle", "Inicio");
+        if (authentication.getAuthorities().isEmpty()) {
+            // En caso de que el usuario no tenga permisos
+            model.addAttribute("mensaje", "Usuario autenticado pero sin permisos");
+        }
+        
+        var empresas = empresaService.listaEmpresas();
+        
+        Proyecto proyecto=new Proyecto();
+        proyecto.setIdProyecto(0L);
+        
+        model.addAttribute("empresas", empresas);
+        model.addAttribute("proyecto", proyecto);
+        return "Proyecto/GestionaProyecto";
     }*/
     
     @GetMapping("/proyectos/data")
@@ -61,13 +68,20 @@ public class ProyectoController {
         model.addAttribute("proyecto", proyecto);
         return "/Proyecto/PropietariosProyecto";
     }
+    
+    @GetMapping("/Trabajadores/{idProyecto}")
+    public String mostrarTrabajadoresProyecto(Model model, Proyecto proyecto) {
+        model.addAttribute("pageTitle", "Trabajadores Proyecto");
+        model.addAttribute("proyecto", proyecto);
+        return "/Proyecto/TrabajadoresProyecto";
+    }
 
     @PostMapping("/AgregarProyecto")
     public ResponseEntity AgregarProyecto(Proyecto proyecto, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
-            proyectoService.agregarProyecto(proyecto);
+            proyectoService.agregar(proyecto);
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            Usuario usuario=userService.encontrarUsuarioPorUsername(authentication.getName());
+            Usuario usuario=userService.encontrarUsername(authentication.getName());
             usuario.añadirProyecto(proyecto);
             String mensaje = "Se ha agregado un proyecto.";
             bitacoraService.registrarAccion("Agregar proyecto");
@@ -82,15 +96,15 @@ public class ProyectoController {
     public ResponseEntity EliminarProyecto(Proyecto proyecto) {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            Usuario usuario=userService.encontrarUsuarioPorUsername(authentication.getName());
+            Usuario usuario=userService.encontrarUsername(authentication.getName());
             usuario.eliminarProyecto(proyecto);
-            proyectoService.eliminarProyecto(proyecto);
+            proyectoService.eliminar(proyecto);
             String mensaje = "Se ha eliminado un proyecto correctamente.";
             bitacoraService.registrarAccion("Eliminar proyecto");
             return ResponseEntity.ok(mensaje);
         } catch (Exception e) {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            Usuario usuario=userService.encontrarUsuarioPorUsername(authentication.getName());
+            Usuario usuario=userService.encontrarUsername(authentication.getName());
             usuario.añadirProyecto(proyecto);
             String error = "Ha ocurrido un error al eliminar el proyecto";
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
@@ -99,7 +113,7 @@ public class ProyectoController {
 
     @GetMapping("/ObtenerProyecto/{id}")
     public ResponseEntity<Proyecto> ObtenerProyecto(@PathVariable Long id) {
-        Proyecto proyecto = proyectoService.encontrarProyecto(id);
+        Proyecto proyecto = proyectoService.encontrar(id);
         if (proyecto != null) {
             return ResponseEntity.ok(proyecto);
         } else {
@@ -110,7 +124,7 @@ public class ProyectoController {
     @PostMapping("/ActualizarProyecto")
     public ResponseEntity ActualizarProyecto(Proyecto proyecto, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
-            proyectoService.actualizarProyecto(proyecto);
+            proyectoService.actualizar(proyecto);
             String mensaje = "Se ha actualizado el proyecto correctamente.";
             bitacoraService.registrarAccion("Actualizar proyecto");
             return ResponseEntity.ok(mensaje);
