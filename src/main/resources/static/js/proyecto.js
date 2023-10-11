@@ -42,7 +42,7 @@ $(document).ready(function() {
         ],
         columns: [
             { data: 'nombre', width: '35%' },
-            { data: 'empresa', width: '35%' },
+            { data: 'empresa.nombre', width: '35%' },
             {
                 data: null,
                 title: 'Acciones',
@@ -236,7 +236,7 @@ $(document).ready(function() {
                             checkboxes[i].checked = false;
                         }
                         $('#nombre').val(response.nombre);
-                        $('#empresa').val(response.empresa);
+                        $('#empresa').val(response.empresa.nombre);
                         $('#idProyecto').val(response.idProyecto);
 
                     },

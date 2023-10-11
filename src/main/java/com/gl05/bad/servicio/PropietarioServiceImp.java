@@ -16,9 +16,6 @@ public class PropietarioServiceImp implements PropietarioService{
     
     @Autowired
     private PropietarioDao propietarioDao;
-    
-    @Autowired
-    private PersonaDao personaDao;
 
     @Override
     @Transactional(readOnly = true)
@@ -28,31 +25,31 @@ public class PropietarioServiceImp implements PropietarioService{
 
     @Override
     @Transactional
-    public void agregarPropietario(Propietario propietario) {
+    public void agregar(Propietario propietario) {
         propietarioDao.save(propietario);
     }
 
     @Override
     @Transactional
-    public void eliminarPropietario(Propietario propietario) {
+    public void eliminar(Propietario propietario) {
         propietarioDao.delete(propietario);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Propietario encontrarPropietario(Long idPropietario) {
+    public Propietario encontrar(Long idPropietario) {
         return propietarioDao.findById(idPropietario).orElse(null);
     }
     
     @Override
     @Transactional(readOnly = true)
-    public Propietario encontrarPropietarioPersona(Persona persona) {
+    public Propietario encontrarPersona(Persona persona) {
         return propietarioDao.findByPersona(persona);
     }
 
     @Override
     @Transactional
-    public void actualizarPropietario(Propietario propietario) {
+    public void actualizar(Propietario propietario) {
         if (propietarioDao.existsById(propietario.getIdPropietario())) {
             propietarioDao.save(propietario);
         } else {
@@ -62,7 +59,7 @@ public class PropietarioServiceImp implements PropietarioService{
 
     @Override
     @Transactional(readOnly = true)
-    public DataTablesOutput<Persona> listarPropietarios(DataTablesInput input) {
-        return personaDao.findAll(input);
+    public DataTablesOutput<Propietario> listarPropietarios(DataTablesInput input) {
+        return propietarioDao.findAll(input);
     }
 }

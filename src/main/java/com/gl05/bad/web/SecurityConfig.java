@@ -1,8 +1,10 @@
 package com.gl05.bad.web;
 
 import com.gl05.bad.dao.UsuarioDao;
+import com.gl05.bad.domain.ConfiguracionCorreo;
 import com.gl05.bad.domain.Usuario;
 import com.gl05.bad.servicio.BitacoraServiceImp;
+import com.gl05.bad.servicio.ConfiguracionCorreoServiceImp;
 import java.io.IOException;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,26 +42,27 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private final BitacoraServiceImp bitacoraService;
     
-//    @Autowired
-//    private JavaMailSender javaMailSender;
+    @Autowired
+    private final ConfiguracionCorreoServiceImp configuracionCorreoService;
+    
+    @Autowired
+    private UsuarioDao usuarioDao;
+    
     @Bean
     public JavaMailSender javaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-
-        mailSender.setHost("smtp.gmail.com");
-        mailSender.setPort(587);
-        mailSender.setUsername("gustavopineda400@gmail.com");
-        mailSender.setPassword("Herminia22Gustavo");
-
+        ConfiguracionCorreo configuracionCorreo = configuracionCorreoService.obtenerConfiguracionCorreo();
+        mailSender.setHost(configuracionCorreo.getHost());
+        mailSender.setPort(Integer.parseInt(configuracionCorreo.getPort()));
+        mailSender.setUsername(configuracionCorreo.getUsername());
+        mailSender.setPassword(configuracionCorreo.getPassword());
         Properties props = mailSender.getJavaMailProperties();
-        props.put("mail.transport.protocol", "smtp");
-        props.put("mail.smtp.auth", "true");
-        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.transport.protocol", configuracionCorreo.getProtocol());
+        props.put("mail.smtp.auth", String.valueOf(configuracionCorreo.getSmtp_auth()));
+        props.put("mail.smtp.starttls.enable", String.valueOf(configuracionCorreo.getStart_tls()));
         props.put("mail.debug", "true");
-
         Session session = Session.getDefaultInstance(props);
         mailSender.setSession(session);
-
         return mailSender;
     }
 
@@ -92,8 +95,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
           
         http.authorizeRequests()          
-                //Aqui debo de poner todos los permisos de ver privilage para que haga el bloqueo al estar
-                
+                //Aqui se debe de ponder todos los permisos de bloqueo al estar
                 .antMatchers("/", "/logout")
                 .authenticated()
     
@@ -130,9 +132,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public AuthenticationSuccessHandler authenticationSuccessHandler() {
         return (AuthenticationSuccessHandler) new CustomAuthenticationSuccessHandler();
     }
-
-    @Autowired
-    private UsuarioDao usuarioDao;
     
     private class CustomAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 

@@ -44,9 +44,9 @@ $(document).ready(function() {
             }
         ],
         columns: [
-            { data: 'dui', width: '20%' },
-            { data: 'nombre', width: '30%' },
-            { data: 'apellido', width: '30%' },
+            { data: 'persona.dui', width: '20%' },
+            { data: 'persona.nombre', width: '30%' },
+            { data: 'persona.apellido', width: '30%' },
             {
                 data: null,
                 title: 'Acciones',
@@ -61,19 +61,19 @@ $(document).ready(function() {
                     var actionsHtml = '';
                     
                     if(hasPrivilegeVerPropietario === true){
-                        actionsHtml = '<a type="button" class="btn btn-outline-secondary btn-sm" href="/MostrarPropietario/' + row.idPersona + '">';
+                        actionsHtml = '<a type="button" class="btn btn-outline-secondary btn-sm" href="/PropietarioSistema/' + row.persona.idPersona + '">';
                         actionsHtml += '<i class="far fa-eye"></i></a>';
                     }
                     
                     if(hasPrivilegeEditarPropietario === true){
                         actionsHtml += '<button type="button" class="btn btn-outline-primary abrirModal-btn btn-sm" data-bs-toggle="modal" ';
-                        actionsHtml += 'data-bs-target="#crearModal" data-tipo="editar" data-id="' + row.idPersona + '" data-modo="actualizar">';
+                        actionsHtml += 'data-bs-target="#crearModal" data-tipo="editar" data-id="' + row.persona.idPersona + '" data-modo="actualizar">';
                         actionsHtml += '<i class="far fa-edit"></i></button>';
                     }
                     
                     if(hasPrivilegeEliminarPropietario === true){
-                    actionsHtml += '<button type="button" class="btn btn-outline-danger eliminarModal-btn btn-sm" data-id="' + row.idPersona + '" ';
-                    actionsHtml += 'data-cod="' + row.idPersona + '">';
+                    actionsHtml += '<button type="button" class="btn btn-outline-danger eliminarModal-btn btn-sm" data-id="' + row.persona.idPersona + '" ';
+                    actionsHtml += 'data-cod="' + row.persona.idPersona + '">';
                     actionsHtml += '<i class="far fa-trash-alt"></i></button>';
                    }
                     
@@ -129,24 +129,6 @@ $(document).ready(function() {
     });
     $('#export-copy').on('click', function() {
         table.button('.buttons-copy').trigger();
-    });
-    
-    // Obtén la referencia al DataTable
-    var table = $('#propietarioTable').DataTable();
-
-    // Agrega un evento al filtro de búsqueda
-    $('#propietarioTable_filter input').on('keyup', function () {
-        // Obtén el valor del filtro de búsqueda
-        var searchTerm = $(this).val().trim();
-
-        // Verifica si el valor no está vacío
-        if (searchTerm !== '') {
-            // Aplica el filtro personalizado en la columna "Dui"
-            table.column[0,2].search('^' + searchTerm + '$', true, false).draw();
-        } else {
-            // Si el valor está vacío, muestra todos los registros
-            table.column[0,2].search('').draw();
-        }
     });
     
     // Función para obtener la fecha y hora actual en formato deseado
@@ -226,7 +208,7 @@ $(document).ready(function() {
             },
             direccionTrabajo:{
                 required: 'Este campo es requerido'
-            }        
+            }
         },
         
         highlight: function(element) {

@@ -23,29 +23,26 @@ public class RolesServiceImp implements RolesService {
 
     @Override
     @Transactional
-    public void AgregarRol(Rol rol) {
+    public void agregar(Rol rol) {
         rolDao.save(rol);
     }
 
     @Override
     @Transactional
-    public void eliminarRol(Rol rol) {
+    public void eliminar(Rol rol) {
         rolDao.delete(rol);
     }
 
     @Override
     @Transactional(readOnly=true)
-    public Rol encontrarRol(Long rol) {
+    public Rol encontrar(Long rol) {
         return rolDao.findById(rol).orElse(null);
     }
 
     @Override
     @Transactional
-    public void actualizarRol(Rol rol) {
-//        System.out.println(1);
-        // Verifica si el rol existe en la base de datos
+    public void actualizar(Rol rol) {
         if (rolDao.existsById(rol.getIdRol())) {
-            // Actualiza el rol en la base de datos
             rolDao.save(rol);
         } else {
             throw new IllegalArgumentException("El rol no existe.");
@@ -57,5 +54,4 @@ public class RolesServiceImp implements RolesService {
     public DataTablesOutput<Rol> listarRoles(DataTablesInput input) {
         return (DataTablesOutput<Rol>)rolDao.findAll(input);
     }
-    
 }

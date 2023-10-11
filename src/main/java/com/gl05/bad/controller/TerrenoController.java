@@ -41,7 +41,7 @@ public class TerrenoController {
     @GetMapping("/Terrenos/{idProyecto}")
     public String mostrarTerrenoProyecto(Model model, Proyecto proyecto) {
         model.addAttribute("pageTitle", "Terrenos");
-        Proyecto proyectoEncontrado = proyectoService.encontrarProyecto(proyecto.getIdProyecto());
+        Proyecto proyectoEncontrado = proyectoService.encontrar(proyecto.getIdProyecto());
         var listaProyectos = proyectoService.listaProyectos();
         model.addAttribute("proyectos", listaProyectos);
         model.addAttribute("proyecto", proyectoEncontrado);
@@ -57,8 +57,11 @@ public class TerrenoController {
     @PostMapping("/AgregarTerreno/{idProyecto}")
     public ResponseEntity AgregarTerreno(@PathVariable("idProyecto") Long idProyecto,Terreno terreno, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
-            char valorPoligono = terreno.getPoligono().toString().toUpperCase().charAt(0);
-            char valorSeccion = terreno.getSeccion().toString().toLowerCase().charAt(0);
+            String valorSeccion = "";
+            String valorPoligono = terreno.getPoligono().toUpperCase();
+            if(terreno.getSeccion()!=null){
+                valorSeccion = terreno.getSeccion().toLowerCase();
+            }
             Boolean existeTerreno = true;
             List<Terreno> listaTerrenos = terrenoService.listaTerrenos();
             for (Terreno eTerreno : listaTerrenos) {
@@ -68,12 +71,12 @@ public class TerrenoController {
             }
             if(existeTerreno){
                 //Obtener el proyecto por ID
-                Proyecto proyecto = proyectoService.encontrarProyecto(idProyecto);
+                Proyecto proyecto = proyectoService.encontrar(idProyecto);
                 // Asignar el proyecto al terreno
                 terreno.setProyecto(proyecto);
                 terreno.setPoligono(valorPoligono);
                 terreno.setSeccion(valorSeccion);
-                terrenoService.agregarTerreno(terreno);
+                terrenoService.agregar(terreno);
                 String mensaje = "Se ha agregado un terreno.";
                 bitacoraService.registrarAccion("Agregar terreno");
                 return ResponseEntity.ok(mensaje);
@@ -90,7 +93,7 @@ public class TerrenoController {
     @PostMapping("/EliminarTerreno/{idTerreno}")
     public ResponseEntity EliminarTerreno(Terreno terreno) {
         try {
-            terrenoService.eliminarTerreno(terreno);
+            terrenoService.eliminar(terreno);
              String mensaje = "Se ha eliminado un terreno correctamente.";
              bitacoraService.registrarAccion("Eliminar terreno");
             return ResponseEntity.ok(mensaje);
@@ -102,7 +105,7 @@ public class TerrenoController {
 
     @GetMapping("/ObtenerTerreno/{id}")
     public ResponseEntity<Terreno> ObtenerTerreno(@PathVariable Long id) {
-        Terreno terreno = terrenoService.encontrarTerreno(id);
+        Terreno terreno = terrenoService.encontrar(id);
         if (terreno != null) {
             return ResponseEntity.ok(terreno);
         } else {
@@ -114,12 +117,12 @@ public class TerrenoController {
     public ResponseEntity ActualizarTerreno(@PathVariable("idProyecto") Long idProyecto, Terreno terreno, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             //Obtener el proyecto por ID
-            Proyecto proyecto = proyectoService.encontrarProyecto(idProyecto);
+            Proyecto proyecto = proyectoService.encontrar(idProyecto);
             // Asignar el proyecto al terreno
             terreno.setProyecto(proyecto);
-            terreno.setPoligono(terreno.getPoligono().toString().toUpperCase().charAt(0));
-            terreno.setSeccion(terreno.getSeccion().toString().toLowerCase().charAt(0));
-            terrenoService.actualizarTerreno(terreno);
+            terreno.setPoligono(terreno.getPoligono().toUpperCase());
+            terreno.setSeccion(terreno.getSeccion().toLowerCase());
+            terrenoService.actualizar(terreno);
             String mensaje = "Se ha actualizado el terreno correctamente.";
             bitacoraService.registrarAccion("Actualizar terreno");
             return ResponseEntity.ok(mensaje);

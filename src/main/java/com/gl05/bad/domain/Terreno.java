@@ -47,10 +47,9 @@ public class Terreno implements Serializable {
     @Column(name = "NUMERO")
     private Long numero;
     @Column(name = "POLIGONO")
-    private Character poligono;
+    private String poligono;
     @Column(name = "SECCION")
-    private Character seccion;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
+    private String seccion;
     @Column(name = "AREA_METROS")
     private Double areaMetros;
     @Column(name = "AREA_VARAS")

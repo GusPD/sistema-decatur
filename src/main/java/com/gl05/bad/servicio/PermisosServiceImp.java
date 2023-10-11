@@ -21,6 +21,4 @@ public class PermisosServiceImp implements PermisosService {
     public void AgregarPermiso(Permiso permiso) {
         permisoDao.save(permiso);
     }
-    
-    
 }

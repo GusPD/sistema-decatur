@@ -26,17 +26,13 @@ public class UsuarioService implements UserDetailsService {
     @Override
     @Transactional(readOnly = true)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        //Recuperamos al usuario
         Usuario usuario = usuarioDao.findByUsername(username);
         if (usuario == null) {
             throw new UsernameNotFoundException("Usuario no encontrado");
-            
         }
-
         if (usuario.getBloqueado() == 1) {
             throw new LockedException("La cuenta está bloqueada");
         }
-
         return new org.springframework.security.core.userdetails.User(
                 usuario.getUsername(), usuario.getPassword(), usuario.isHabilitado(), true, true,
                 true, getAuthorities(usuario.getRoles()));
@@ -66,5 +62,4 @@ public class UsuarioService implements UserDetailsService {
         }
         return authorities;
     }
-
 }

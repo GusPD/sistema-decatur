@@ -54,11 +54,11 @@
                             <table id="propietarioTable" class="table table-striped custom-fixed-header">
                                 <thead class="table-light">
                                     <tr>
-                                        <th class="text-center">Terreno</th>
                                         <th class="text-center">DUI</th>
                                         <th class="text-center">Nombre</th>
                                         <th class="text-center">Correos</th>
                                         <th class="text-center">Telefonos</th>
+                                        <th class="text-center">Terrenos</th>
                                         <th class="text-center">Acciones</th>
                                     </tr>
                                 </thead>
@@ -74,7 +74,7 @@
 </div>
 
 <!-- Script de la página -->
-<sec:authorize access="hasAuthority('VER_PROPIETARIO_PROYECTO_PRIVILAGE')" var="hasPrivilegeVerPropietarioProyecto"></sec:authorize>
+<sec:authorize access="hasAuthority('VER_PROPIETARIO_PRIVILAGE')" var="hasPrivilegeVerPropietarioProyecto"></sec:authorize>
 <script>var hasPrivilegeVerPropietarioProyecto = ${hasPrivilegeVerPropietarioProyecto};</script>    
 
 <%@ include file="../common/footer.jspf"%>

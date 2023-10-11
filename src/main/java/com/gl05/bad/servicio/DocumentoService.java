@@ -7,10 +7,10 @@ public interface DocumentoService {
   
   public List<Documento> listarDocumentos();
   
-  public Documento encontrarDoc(Documento doc);
+  public Documento encontrar(Documento doc);
   
-  public void agregarDocumento(Documento doc);
+  public void agregar(Documento doc);
   
-  public void eliminarDocumento(Documento doc);
+  public void eliminar(Documento doc);
   
 }

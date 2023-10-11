@@ -49,7 +49,7 @@
                             <button id="export-pdf" class="btn btn-sm btn-outline-danger buttons-pdf" type="button"><span>Exportar </span><i class="fa-regular fa-file-pdf"></i></button> 
                         </sec:authorize>
                         <sec:authorize access="hasAuthority('AGREGAR_PROPIETARIO_PRIVILAGE')"> 
-                            <button type="button" class="btn-add btn abrirModal-btn btn-sm" data-bs-toggle="modal" data-bs-target="#crearModal" data-action="agregar">Agregar</button>
+                            <button type="button" class="btn-blue btn abrirModal-btn btn-sm" data-bs-toggle="modal" data-bs-target="#crearModal" data-action="agregar">Agregar</button>
                         </sec:authorize>
                     </div>
                     <div>

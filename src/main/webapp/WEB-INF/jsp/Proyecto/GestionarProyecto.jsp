@@ -1,6 +1,5 @@
-<%@ include file="../common/header.jspf"%>
-<%@ include file="../common/navigationAdministracion.jspf"%>
-
+<%@ include file="common/header.jspf"%>
+<%@ include file="common/navigationAdministracion.jspf"%>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -48,12 +47,12 @@
                         <button id="export-pdf" class="btn btn-sm btn-outline-danger buttons-pdf" type="button"><span>Exportar </span><i class="fa-regular fa-file-pdf"></i></button> 
                     </sec:authorize>
                     <sec:authorize access="hasAuthority('AGREGAR_PROYECTO_PRIVILAGE')"> 
-                        <button type="button" class="btn-add btn abrirModal-btn btn-sm" data-bs-toggle="modal" data-bs-target="#crearModal" data-action="agregar">Agregar</button>
+                        <button type="button" class="btn-blue btn abrirModal-btn btn-sm" data-bs-toggle="modal" data-bs-target="#crearModal" data-action="agregar">Agregar</button>
                     </sec:authorize>
                 </div>
                 <div>
-                    <div class="table-responsive-md table-container">
-                        <table id="proyectoTable" class="table table-striped custom-fixed-header">
+                    <div class="table-responsive-md">
+                        <table id="proyectoTable" class="table table-striped">
                             <thead class="table-light">
                                 <tr>
                                     <th class="text-center">Nombre del Proyecto</th>
@@ -83,12 +82,19 @@
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                         <input type="hidden" id="idProyecto">
                         <div class="form-group">
-                            <label for="nombre" class="form-label">Nombre del proyecto: </label>
-                            <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Proyecto" required>
+                            <label for="nombre" class="form-label">Proyecto: </label>
+                            <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ingrese el nombre del proyecto" required>
                         </div>
                         <div class="form-group">
-                            <label for="empresa" class="form-label">Nombre de la empresa: </label>
-                            <input type="text" class="form-control" id="empresa" name="empresa" placeholder="Empresa" required>
+                            <label for="empresa" class="form-label">Empresa: </label>
+                            
+                            <select class="form-select" id="empresa" name="empresa" placeholder="Seleccione una empresa" required>
+                                <c:if test="${not empty empresas}">
+                                    <c:forEach items="${empresas}" var="eEmpresa">
+                                        <option value="${eEmpresa.idEmpresa}">${eEmpresa.nombre}</option>
+                                    </c:forEach>
+                                </c:if>
+                            </select>
                         </div>
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
@@ -135,7 +141,6 @@
 <sec:authorize access="hasAuthority('ELIMINAR_PROYECTO_PRIVILAGE')" var="hasPrivilegeEliminarProyecto"></sec:authorize>
 <script>var hasPrivilegeEliminarProyecto = ${hasPrivilegeEliminarProyecto};</script>
 
-<%@ include file="../common/footer.jspf"%>
+<%@ include file="common/footer.jspf"%>
 
 <script src="${pageContext.request.contextPath}/js/proyecto.js"></script>
-

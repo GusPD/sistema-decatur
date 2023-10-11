@@ -25,50 +25,44 @@ public class UserServiceImp implements UserService {
 
     @Override
     @Transactional
-    public void AgregarUsuarios(Usuario usuario) {
+    public void agregar(Usuario usuario) {
         usuarioDao.save(usuario);
     }
 
     @Override
     @Transactional
-    public void eliminarUsuario(Usuario usuario) {
-        // Obtener el usuario iniciado en sesión
+    public void eliminar(Usuario usuario) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName();
         Usuario usuarioActual = usuarioDao.findByUsername(username);
-
-        // Verificar si el usuario a eliminar es el usuario iniciado en sesión
         if (usuarioActual.getIdUsuario().equals(usuario.getIdUsuario())) {
             throw new IllegalArgumentException("No se puede eliminar el usuario iniciado en sesión.");
         }
-
-        // Proceder con la eliminación del usuario
         usuarioDao.delete(usuario);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Usuario encontrarUsuario(Long idUsuario) {
+    public Usuario encontrar(Long idUsuario) {
         return usuarioDao.findById(idUsuario).orElse(null);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Usuario encontrarUsuarioPorUsername(String username) {
+    public Usuario encontrarUsername(String username) {
         return usuarioDao.findByUsername(username);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Usuario encontrarUsuarioPorEmail(String email) {
+    public Usuario encontrarEmail(String email) {
         return usuarioDao.findByEmail(email);
     }
 
     @Override
     @Transactional
-    public void actualizarUsuario(Usuario usuario) {
+    public void actualizar(Usuario usuario) {
         if (usuarioDao.existsById(usuario.getIdUsuario())) {
-            // Actualiza el rol en la base de datos
             usuarioDao.save(usuario);
         } else {
             throw new IllegalArgumentException("El usuario no existe.");
@@ -80,5 +74,4 @@ public class UserServiceImp implements UserService {
     public DataTablesOutput<Usuario> listarUsuarios(DataTablesInput input) {
         return (DataTablesOutput<Usuario>) usuarioDao.findAll(input);
     }
-
 }

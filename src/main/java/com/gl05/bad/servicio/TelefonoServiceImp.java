@@ -20,24 +20,24 @@ public class TelefonoServiceImp implements TelefonoService{
 
     @Override
     @Transactional
-    public void agregarT(Telefono telefono) {
+    public void agregar(Telefono telefono) {
         telefonoDao.save(telefono);
     }
     
     @Override
     @Transactional
-    public void actualizarT(Telefono telefono) {
+    public void actualizar(Telefono telefono) {
         Telefono telefonoExistente = telefonoDao.findById(telefono.getIdTelefono()).orElse(null);
         telefonoDao.save(telefonoExistente);
     }
 
     @Override
-    public void eliminarT(Telefono telefono) {
+    public void eliminar(Telefono telefono) {
         telefonoDao.delete(telefono);
     }
 
     @Override
-    public Telefono encontrarT(Telefono telefono) {
+    public Telefono encontrar(Telefono telefono) {
         return telefonoDao.findById(telefono.getIdTelefono()).orElse(null);
     }
     

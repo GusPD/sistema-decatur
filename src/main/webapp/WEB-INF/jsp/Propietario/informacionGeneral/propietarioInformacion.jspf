@@ -13,31 +13,31 @@
         <table style="width:100%; " class="table table-bordered" id="tabla-informacion">
             <tbody>
                 <tr>
-                    <td width="20%" style="background-color: #DCDAE9;">DUI</td>
+                    <td width="20%" class="encabezado-tabla">DUI</td>
                     <td><c:if test="${not empty persona.dui}">${persona.dui}</c:if></td>
                 </tr>
                 <tr>
-                    <td style="background-color: #DCDAE9;">Nombre</td>
+                    <td class="encabezado-tabla">Nombre</td>
                     <td><c:if test="${not empty persona.nombre}">${persona.nombre}</c:if></td>
                 </tr>
                 <tr>
-                    <td style="background-color: #DCDAE9;">Apellido</td>
+                    <td class="encabezado-tabla">Apellido</td>
                     <td><c:if test="${not empty persona.apellido}">${persona.apellido}</c:if></td>
                 </tr>
                 <tr>
-                    <td style="background-color: #DCDAE9;">Profesión</td>
+                    <td class="encabezado-tabla">Profesión</td>
                     <td><c:if test="${not empty propietario.profesion}">${propietario.profesion}</c:if></td>
                 </tr>
                 <tr>
-                    <td style="background-color: #DCDAE9;">Dirección de Casa</td>
+                    <td class="encabezado-tabla">Dirección de Casa</td>
                     <td><c:if test="${not empty propietario.direccionCasa}">${propietario.direccionCasa}</c:if></td>
                 </tr>
                 <tr>
-                    <td style="background-color: #DCDAE9;">Lugar de Trabajo</td>
+                    <td class="encabezado-tabla">Lugar de Trabajo</td>
                     <td><c:if test="${not empty propietario.lugarTrabajo}">${propietario.lugarTrabajo}</c:if></td>
                 </tr>
                 <tr>
-                    <td style="background-color: #DCDAE9;">Dirección de Trabajo</td>
+                    <td class="encabezado-tabla">Dirección de Trabajo</td>
                     <td><c:if test="${not empty propietario.direccionTrabajo}">${propietario.direccionTrabajo}</c:if></td>
                 </tr>
             </tbody>

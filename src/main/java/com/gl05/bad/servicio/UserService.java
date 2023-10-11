@@ -11,15 +11,15 @@ public interface UserService {
     
     public DataTablesOutput<Usuario> listarUsuarios(DataTablesInput input);
    
-    public void AgregarUsuarios(Usuario usuario);
+    public void agregar(Usuario usuario);
         
-    public void eliminarUsuario(Usuario usuario);
+    public void eliminar(Usuario usuario);
     
-    public Usuario encontrarUsuario(Long usuario);
+    public Usuario encontrar(Long usuario);
     
-    public Usuario encontrarUsuarioPorUsername(String username);
+    public Usuario encontrarUsername(String username);
     
-    public Usuario encontrarUsuarioPorEmail(String email);
+    public Usuario encontrarEmail(String email);
     
-    public void actualizarUsuario(Usuario usuario);
+    public void actualizar(Usuario usuario);
 }

@@ -43,11 +43,11 @@
                 <div class="col-sm-12 d-flex justify-content-end">
                     <sec:authorize access="hasAuthority('EXPORTAR_PROYECTO_PRIVILAGE')"> 
                         <button id="export-copy" class="btn btn-sm btn-outline-secondary buttons-copy" type="button"><span>Copiar  </span><i class="fa-regular fa-copy"></i></button> 
-                        <button id="export-excel" class="btn btn-sm btn-outline-success buttons-excel" type="button"><span>Exportar </span><i class="fa-solid fa-file-csv"></i></button> 
-                        <button id="export-pdf" class="btn btn-sm btn-outline-danger buttons-pdf" type="button"><span>Exportar </span><i class="fa-regular fa-file-pdf"></i></button> 
+                        <button id="export-excel" class="btn btn-sm btn-outline-success buttons-excel ml-2" type="button"><span>Exportar </span><i class="fa-solid fa-file-csv"></i></button> 
+                        <button id="export-pdf" class="btn btn-sm btn-outline-danger buttons-pdf ml-2" type="button"><span>Exportar </span><i class="fa-regular fa-file-pdf"></i></button> 
                     </sec:authorize>
                     <sec:authorize access="hasAuthority('AGREGAR_PROYECTO_PRIVILAGE')"> 
-                        <button type="button" class="btn-add btn abrirModal-btn btn-sm" data-bs-toggle="modal" data-bs-target="#crearModal" data-action="agregar">Agregar</button>
+                        <button type="button" class="btn-blue btn abrirModal-btn btn-sm ml-2" data-bs-toggle="modal" data-bs-target="#crearModal" data-action="agregar">Agregar</button>
                     </sec:authorize>
                 </div>
                 <div>
@@ -87,7 +87,14 @@
                         </div>
                         <div class="form-group">
                             <label for="empresa" class="form-label">Empresa: </label>
-                            <input type="text" class="form-control" id="empresa" name="empresa" placeholder="Ingrese el nombre de la empresa" required>
+                            
+                            <select class="form-select" id="empresa" name="empresa" placeholder="Seleccione una empresa" required>
+                                <c:if test="${not empty empresas}">
+                                    <c:forEach items="${empresas}" var="eEmpresa">
+                                        <option value="${eEmpresa.idEmpresa}">${eEmpresa.nombre}</option>
+                                    </c:forEach>
+                                </c:if>
+                            </select>
                         </div>
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>

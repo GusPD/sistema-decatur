@@ -5,7 +5,7 @@ $(document).ready(function() {
             url: '/propietariosProyecto/data/' + idProyecto,
             dataSrc: 'data'
         },
-        order: [[0, 'asc'],[2, 'asc']],
+        order: [[1, 'asc']],
         processing: true,
         serverSide: true,
         dom: "<'row w-100'<'col-sm-12 mb-4'B>>" +
@@ -45,11 +45,11 @@ $(document).ready(function() {
             }
         ],
         columns: [
-            { data: 'lote', width: '10%' },
             { data: 'dui', width: '10%' },
             { data: 'nombre', width: '30%' },
             { data: 'correos', width: '20%' },
-            { data: 'telefonos', width: '20%' },
+            { data: 'telefonos', width: '15%' },
+            { data: 'lotes', width: '15%' },
             {
                 data: null,
                 title: 'Acciones',
@@ -57,14 +57,11 @@ $(document).ready(function() {
                 searchable: false,
                 width: '10%',
                 render: function (data, type, row) {
-                    // Aquí puedes construir el HTML para las acciones según tus necesidades
-//                    var actionsHtml = '<a type="button" class="btn btn-outline-secondary" href="/DetalleMaestria/' + row.idMaestria + '">';
-//                    actionsHtml += '<i class="bi bi-eye"></i></a>';
                     
                     var actionsHtml = '';
                     
                     if(hasPrivilegeVerPropietarioProyecto === true){
-                        actionsHtml = '<a type="button" class="btn btn-outline-secondary btn-sm" href="/VerPropietarioVenta/'+ row.idProyecto + '/' + row.idPersona + '">';
+                        actionsHtml = '<a type="button" class="btn btn-outline-secondary btn-sm" href="/Propietario/'+ row.idProyecto + '/' + row.idPersona + '">';
                         actionsHtml += '<i class="far fa-eye"></i></a>';
                     }
                     
@@ -120,24 +117,6 @@ $(document).ready(function() {
     });
     $('#export-copy').on('click', function() {
         table.button('.buttons-copy').trigger();
-    });
-    
-    // Obtén la referencia al DataTable
-    var table = $('#propietarioTable').DataTable();
-
-    // Agrega un evento al filtro de búsqueda
-    $('#propietarioTable_filter input').on('keyup', function () {
-        // Obtén el valor del filtro de búsqueda
-        var searchTerm = $(this).val().trim();
-
-        // Verifica si el valor no está vacío
-        if (searchTerm !== '') {
-            // Aplica el filtro personalizado en la columna "Dui"
-            table.column[0,2].search('^' + searchTerm + '$', true, false).draw();
-        } else {
-            // Si el valor está vacío, muestra todos los registros
-            table.column[0,2].search('').draw();
-        }
     });
     
     // Función para obtener la fecha y hora actual en formato deseado

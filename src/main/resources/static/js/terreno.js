@@ -156,24 +156,6 @@ $(document).ready(function() {
         table.button('.buttons-copy').trigger();
     });
     
-    // Obtén la referencia al DataTable
-    var table = $('#terrenoTable').DataTable();
-
-    // Agrega un evento al filtro de búsqueda
-    $('#terrenoTable_filter input').on('keyup', function () {
-        // Obtén el valor del filtro de búsqueda
-        var searchTerm = $(this).val().trim();
-
-        // Verifica si el valor no está vacío
-        if (searchTerm !== '') {
-            // Aplica el filtro personalizado en la columna "Lote"
-            table.column[0,1].search('^' + searchTerm + '$', true, false).draw();
-        } else {
-            // Si el valor está vacío, muestra todos los registros
-            table.column[0,1].search('').draw();
-        }
-    });
-    
     // Función para obtener la fecha y hora actual en formato deseado
     function getCurrentDateTime() {
         var date = new Date();
@@ -213,7 +195,7 @@ $(document).ready(function() {
     $.validator.addMethod(
         "validarSeccion",
         function(value, element) {
-            return this.optional(element) || /^[A-Za-z\s,]+$/.test(value);
+            return this.optional(element) || /^[A-Za-z\s,]*$/.test(value);
         },
         "No se aceptan números ni caracteres especiales"
     );

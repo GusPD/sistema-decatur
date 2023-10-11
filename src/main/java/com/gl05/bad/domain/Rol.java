@@ -51,8 +51,7 @@ public class Rol implements Serializable {
     @JsonIgnore
     private Collection<Usuario> users;
 
-    // Establezco la relación con la base de datos
-    @ManyToMany//(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(
             name = "ROL_PERMISO",
             joinColumns = @JoinColumn(name = "ID_ROL"),
@@ -65,7 +64,6 @@ public class Rol implements Serializable {
         return nombre ;
     }
 
-    //Añade permisos al rol
     public void añadirPermiso(Permiso permiso){
         this.permisos.add(permiso);
     }

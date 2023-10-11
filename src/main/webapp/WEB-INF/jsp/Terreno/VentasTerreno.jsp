@@ -49,7 +49,7 @@
                             <button id="export-pdf" class="btn btn-sm btn-outline-danger buttons-pdf" type="button"><span>Exportar </span><i class="fa-regular fa-file-pdf"></i></button> 
                         </sec:authorize>
                         <sec:authorize access="hasAuthority('AGREGAR_VENTA_PRIVILAGE')"> 
-                            <button type="button" class="btn-add btn abrirModal-btn btn-sm" data-bs-toggle="modal" data-bs-target="#crearModal" data-action="agregar">Agregar</button>
+                            <button type="button" class="btn-blue btn abrirModal-btn btn-sm" data-bs-toggle="modal" data-bs-target="#crearModal" data-action="agregar">Agregar</button>
                         </sec:authorize>
                     </div>
                     <div>
@@ -102,38 +102,6 @@
                                     <div class="form-group">
                                         <label for="descuento" class="form-label">Descuento: </label>
                                         <input type="text" class="form-control" id="descuento" name="descuento" maxlength="9" placeholder="Ingrese el descuento de la venta">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="prima" class="form-label">Prima: </label>
-                                        <input type="text" class="form-control" id="prima" name="prima" placeholder="0.00" data-prima="${valorPrima}" readonly>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="monto" class="form-label">Monto: </label>
-                                        <input type="text" class="form-control" id="monto" name="monto" placeholder="0.00" readonly>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="plazo" class="form-label">Plazo: </label>
-                                        <input type="text" class="form-control" id="plazo" name="plazo" maxlength="3" placeholder="Ingrese el plazo del financiamiento">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="tasa" class="form-label">Tasa: </label>
-                                        <input type="text" class="form-control" id="tasa" name="tasa" maxlength="6" placeholder="Ingrese la tasa del financiamiento">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="cuotaKi" class="form-label">Cuota KI: </label>
-                                        <input type="text" class="form-control" id="cuotaKi" name="cuotaKi" placeholder="0.00" readonly>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="cuotaMantenimiento" class="form-label">Cuota Mantenimiento: </label>
-                                        <input type="text" class="form-control" id="cuotaMantenimiento" name="cuotaMantenimiento" maxlength="9" placeholder="Ingrese la cuota de mantenimiento">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="multaMantenimiento" class="form-label">Multa Mantenimiento: </label>
-                                        <input type="text" class="form-control" id="multaMantenimiento" name="multaMantenimiento" maxlength="9" placeholder="Ingrese la multa de mantenimiento">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="multaFinanciamiento" class="form-label">Multa Financiamiento: </label>
-                                        <input type="text" class="form-control" id="multaFinanciamiento" name="multaFinanciamiento" maxlength="9" placeholder="Ingrese la multa de financiamientos">
                                     </div>
                                 </div>
                                 <div class="modal-footer">

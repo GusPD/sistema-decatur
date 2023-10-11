@@ -23,27 +23,49 @@
 
 body{
     overflow-x: hidden;
-    background-color: #fff;
+    background-color: white !Important;
     font-family: "Poppins", Arial, sans-serif;
     font-size: 14px !Important;
     font-weight: normal;
 }
 
-.btn{
-    margin-left: 5px;
+.content-wrapper{
+    background-color: white !Important;
+}
+
+.container{
+    max-width: 100%!Important;
+}
+
+.overflow-auto-page{
+    max-height: 70vh !Important;
+    padding-right: 3px!Important;
+}
+
+.h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 .text-blue{
-    color: #001f3f !Important;
+    color: #004077 !Important;
 }
 
-.btn-add {
+.background-blue{
+    background-color: #004077 !Important;
+}
+
+.btn{
+    margin-left: 5px !important;
+}
+
+.btn-blue {
   color: #004077 !Important;
   background-color: transparent !Important;
   border-color: #004077 !important;
 }
 
-.btn-add:hover {
+.btn-blue:hover {
   color: #fff !Important;
   background-color: #004077 !Important;
   border-color: transparent !important;
@@ -67,8 +89,14 @@ a:hover,a:focus {
 text-decoration:none;
 }
 
-/* PERFIL GENERAL*/
+.mensaje-error {
+    width: 100%;
+    margin-top: 0.25rem;
+    font-size: 80%;
+    color: #dc3545;
+}
 
+/* PERFIL GENERAL*/
 .titulo-Perfil{
   text-align:left !Important;
   color: #004077 !Important;
@@ -87,10 +115,6 @@ text-decoration:none;
 .subtitulo-Perfil i{
   font-size: 20px !Important;
   color: #004077 !Important;
-}
-
-.content-wrapper{
-    background-color: #fff;
 }
 
 .modal{
@@ -140,12 +164,6 @@ pre{
   text-align: justify;
 }
 
-.login-form {
-    max-width: 400px;
-    margin: 0 auto;
-    margin-top: 100px;
-}
-
 .links-cohorte{
     text-decoration: none;
     color: #000;
@@ -160,46 +178,6 @@ pre{
 
 .p-menu-perfil{
     padding: 0.25rem;
-}
-
-.maestrias-grid {
-        display: grid;
-        gap: 20px;
-    }
-
-.card-index {
-    display: flex;
-    align-items: center;
-    padding: 2rem;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.maestria-card{
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
-    background-color: #fff;
-    padding: 2rem;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-
- /* Estilos para pantallas más grandes */
-@media (min-width: 768px) {
-    .maestrias-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
-}
-
-/* Estilos para pantallas más pequeñas, como dispositivos móviles */
-@media (max-width: 767px) {
-    .maestrias-grid {
-        grid-template-columns: 1fr;
-    }
 }
 
 .button-container {
@@ -227,11 +205,6 @@ pre{
   color: #fff;
 }
 
-.card-title {
-  margin-bottom: 18px;
-  color: #333;
-}
-
 .h1,h1{
     font-size: calc(1.25rem + 0.75vw) !Important;
 }
@@ -240,23 +213,46 @@ pre{
     padding: auto !Important;
 }
 
-
-
-.btn-secondary {
-    color: #fff !Important;
-    border: none !important;
-    background-color: #43627D !important;
-    border-color: #004077 !important;
-    font-size: 13px !Important;
-    margin-right: 4px !Important;
+.w-100 {
+    width: auto !important;
 }
 
-.btn-secondary:hover {
-    color: #000 !Important;
-    background-color: #fff !Important;
-    border: #43627D !Important;
+.container-titulo{
+    padding: 0px !Important;
 }
 
+#EspacioEncabezado{
+    height: 40px!Important;
+}
+
+.font-weight-bold{
+    font-weight: bold !Important;
+}
+
+.tarjeta-container{
+    display: flex;
+    align-items: stretch;
+}
+
+.tarjeta-facturacion-izquierda{
+    width: 48%;
+}
+
+.tarjeta-facturacion-derecha{
+    margin-left:2%;
+    width: 50%;
+}
+
+.tarjeta-venta-izquierda{
+    width: 25%;
+}
+
+.tarjeta-venta-derecha{
+    margin-left: 2%;
+    width: 75%;
+}
+
+/*Configuración de las tablas*/
 div.dataTables_wrapper div.dataTables_filter input {
     font-size: 12px !Important;
     border-color: #004077 !important;
@@ -283,6 +279,7 @@ table.dataTable {
     font-size: small !Important;
     margin: 0px !Important;
     width: 100% !Important;
+    background-color: white;
 }
 
 table.dataTable thead>tr>th {
@@ -296,23 +293,10 @@ table.dataTable thead>tr>th {
     border-color: #004077 !Important;
 }
 
-.w-100 {
-    width: auto !important;
-}
-
-.container-titulo{
-    padding: 0px !Important;
-}
-
 div.dataTables_wrapper div.dataTables_info {
     padding-top: 0px !Important;
 }
 
-#EspacioEncabezado{
-    height: 40px!Important;
-}
-
-/*Configuración de las tablas*/
 .dataTables_wrapper .dt-buttons {
     display: none;
 }
@@ -338,20 +322,8 @@ th {
   top: 0px;
 }
 
-#tabla-correos thead tr{
-    background-color: #DCDAE9;
-}
-
-#tabla-telefonos thead tr{
-    background-color: #DCDAE9;
-}
-
-#tabla-referencias thead tr{
-    background-color: #DCDAE9;
-}
-
-#tabla-documentos thead tr{
-    background-color: #DCDAE9;
+.encabezado-tabla{
+    background-color: #DCDAE9!Important;
 }
 
 /* Configuración de la Venta de Terreno */
@@ -359,36 +331,93 @@ th {
     font-weight: bold!Important;
     font-size: 4rem !Important;
 }
-
 #poligonoTerrenoVenta{
     font-weight: bold!Important;
     font-size: 1rem !Important;
 }
-
-#imagenPropietario{
+#imagenPerfil{
     font-size: 7rem !Important;
 }
 
-/* AConfiguración de Modales */
+/* Configuración de Modales */
+.modal {
+    z-index: 9996;
+}
 .form-group{
     padding-left:3%!Important;
     padding-right:3%!Important;
 }
-
 .overflow-auto{
     max-height: 55vh !Important;
     padding-right: 3px!Important;
 }
-
 .select2-results {
     position: relative;
     z-index: 9997;
 }
-
-.modal {
-    z-index: 9996;
-}
-
 .select2-container {
     z-index: 9997;
+}
+
+/*Configuración de Icono Ver Contraseña Login*/
+.input-group-text{
+    width: 45px !Important;
+    justify-content: center;
+}
+#icono-ver{
+    display: none;
+}
+#icono-ver-confirm{
+    display: none;
+}
+#password-toggle:hover{
+    cursor: pointer;
+}
+#password-toggle:hover #icono-candado {
+    display: none;
+}
+#password-toggle:hover #icono-ver {
+    display: inline-block;
+}
+#password-toggle-new:hover{
+    cursor: pointer;
+}
+#password-toggle-new:hover #icono-candado {
+    display: none;
+}
+#password-toggle-new:hover #icono-ver {
+    display: inline-block;
+}
+#password-toggle-confirm:hover{
+    cursor: pointer;
+}
+#password-toggle-confirm:hover #icono-candado {
+    display: none;
+}
+#password-toggle-confirm:hover #icono-ver-confirm {
+    display: inline-block;
+}
+
+/*Configuración Inicio de Sesión*/
+.card-header {
+    background-color: white;
+    border-bottom: 0px solid rgba(0,0,0,.125);
+}
+.card-footer {
+    background-color: white;
+    border-top: 0px solid rgba(0,0,0,.125);
+}
+.login-box{
+    max-width: 400px;
+}
+.background-login{
+    background-color: #154360;
+}
+.link-reset-password{
+    color: #004077 !Important;
+    text-decoration: none;
+}
+
+.text-align-justify{
+    text-align: justify;
 }

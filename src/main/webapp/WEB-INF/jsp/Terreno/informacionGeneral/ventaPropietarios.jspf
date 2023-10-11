@@ -2,13 +2,13 @@
 <div id="perfil-propietario">
     <div class="subtitulo-Perfil">
         <h3>Propietarios
-            <sec:authorize access="hasAuthority('SELECCIONAR_PROPIETARIO_VENTA_PRIVILAGE')">
+            <sec:authorize access="hasAuthority('SELECCIONAR_PROPIETARIO_PRIVILAGE')">
                 <span id="SeleccionarPropietario" class="btn abrirModal-btn text-info puntero pull-right btn-sm" data-bs-toggle="modal" data-bs-target="#seleccionarModalPropietario" data-action="seleccionar" style="cursor: pointer;">
                     <i class="fas fa-user-check"></i>
                 </span>
             </sec:authorize>
-            <sec:authorize access="hasAuthority('AGREGAR_PROPIETARIO_VENTA_PRIVILAGE')">
-                <span id="AgregarPropietario" class="btn abrirModal-btn text-info puntero pull-right btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalPropietario" data-action="agregar" style="cursor: pointer;">
+            <sec:authorize access="hasAuthority('AGREGAR_PROPIETARIO_PRIVILAGE')">
+                <span id="AgregarPropietario" class="btn abrirModalPropietario-btn text-info puntero pull-right btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalPropietario" data-action="agregar" style="cursor: pointer;">
                     <i class="fas fa-user-plus"></i>
                 </span>
             </sec:authorize>
@@ -17,15 +17,14 @@
     <div class="overflow-auto">
         <table style="width:100%; " class="table table-bordered custom-fixed-header small" id="tabla-propietarios">
             <thead>
-                <tr>
+                <tr class="encabezado-tabla">
                     <th scope="col">N°</th>
                     <th scope="col">Nombre</th>
                     <th scope="col">Apellido</th>
-                    <th scope="col">Estado</th>
+                    <th scope="col">Impresión Comprobante</th>
                     <th scope="col">Opciones</th>
                 </tr>
             </thead>
-            ${propietariosAsigandos}
             <tbody>
                 <c:if test="${empty propietariosAsignados}">
                     <tr>
@@ -38,13 +37,16 @@
                             <td>${numeroAsignacion.index+1}</td>
                             <td>${eAsignacion.propietario.persona.nombre}</td>
                             <td>${eAsignacion.propietario.persona.apellido}</td>
-                            <td>casa</td>
+                            <td>${eAsignacion.estado}</td>
                             <td>
-                                <sec:authorize access="hasAuthority('VER_PROPIETARIO_VENTA_PRIVILAGE')">
-                                <a type="button" id="VerPropietarioVenta" class="btn btn-outline-secondary btn-sm" href="/VerPropietarioVenta/${eAsignacion.venta.terreno.proyecto.idProyecto}/${eAsignacion.propietario.persona.idPersona}" target="_self"><i class="far fa-eye"></i></a>
+                                <sec:authorize access="hasAuthority('VER_PROPIETARIO_PRIVILAGE')">
+                                <a type="button" id="VerPropietarioVenta" class="btn btn-outline-secondary btn-sm" href="/Propietario/${eAsignacion.venta.terreno.proyecto.idProyecto}/${eAsignacion.propietario.persona.idPersona}" target="_self"><i class="far fa-eye"></i></a>
                                 </sec:authorize>
-                                <sec:authorize access="hasAuthority('ELIMINAR_PROPIETARIO_VENTA_PRIVILAGE')">
-                                <button type="button" class="btn btn-outline-danger eliminarModalPropietario-btn btn-sm" data-id="${eAsignacion.propietario.persona.idPersona}" 'data-cod="${eAsignacion.propietario.persona.idPersona}"><i class="far fa-trash-alt"></i></button>
+                                <sec:authorize access="hasAuthority('EDITAR_PROPIETARIO_PRIVILAGE')">
+                                <button type="button" class="btn btn-outline-primary abrirModalPropietario-btn btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalPropietario" data-tipo="editar" data-id="${eAsignacion.idAsignacion}" data-modo="actualizar"><i class="far fa-edit"></i></button>
+                                </sec:authorize>
+                                <sec:authorize access="hasAuthority('ELIMINAR_PROPIETARIO_PRIVILAGE')">
+                                <button type="button" class="btn btn-outline-danger eliminarModalPropietario-btn btn-sm" data-id="${eAsignacion.idAsignacion}" 'data-cod="${eAsignacion.idAsignacion}"><i class="far fa-trash-alt"></i></button>
                                 </sec:authorize>
                             </td>
                         </tr>
@@ -70,13 +72,15 @@
                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                             <input type="hidden" id="idPropietario">
                             <input type="hidden" id="idPersona">
+                            <input type="hidden" id="idDocumento">
+                            <input type="hidden" id="idAsignacion">
                             <div class="form-group">
                                 <label for="dui" class="form-label">DUI: </label>
                                 <input type="text" class="form-control" id="dui" name="dui" maxlength="9" placeholder="Ingrese el número de DUI sin guiones" required>
                             </div>
                             <div class="form-group">
-                                <label for="nombre" class="form-label">Nombre: </label>
-                                <input type="text" class="form-control" id="nombre" name="nombre" maxlength="200" placeholder="Ingrese el nombre" required>
+                                <label for="nombreP" class="form-label">Nombre: </label>
+                                <input type="text" class="form-control" id="nombreP" name="nombreP" maxlength="200" placeholder="Ingrese el nombre" required>
                             </div>
                             <div class="form-group">
                                 <label for="apellido" class="form-label">Apellido: </label>
@@ -97,6 +101,14 @@
                             <div class="form-group">
                                 <label for="direccionTrabajo" class="form-label">Dirección de Trabajo: </label>
                                 <input type="text" class="form-control" id="direccionTrabajo" name="direccionTrabajo" placeholder="Ingrese la dirección del trabajo" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="estadoP" class="form-label">Impresión Comprobante: </label>
+                                <select class="form-control" id="estadoP" name="estadoP" required>
+                                    <option value="">Seleccione el estado</option>
+                                    <option value="Seleccionado">Seleccionado</option>
+                                    <option value="No seleccionado">No seleccionado</option>
+                                </select>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -127,6 +139,15 @@
                                             <option value="${ePropietario.idPropietario}">${ePropietario.persona.dui} ${ePropietario.persona.nombre} ${ePropietario.persona.apellido}</option>
                                         </c:forEach>
                                     </c:if>
+                                </select>
+                                <div id="span-propietarios-error" class="mensaje-error d-none" style=""><span>Este campo es requerido</span></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="estadoS" class="form-label">Impresión Comprobante: </label>
+                                <select class="form-control" id="estadoS" name="estadoS" required>
+                                    <option value="">Seleccione el estado</option>
+                                    <option value="Seleccionado">Seleccionado</option>
+                                    <option value="No seleccionado">No seleccionado</option>
                                 </select>
                             </div>
                         </div>

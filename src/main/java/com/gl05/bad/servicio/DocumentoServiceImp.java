@@ -19,17 +19,17 @@ public class DocumentoServiceImp implements DocumentoService{
   }
 
   @Override
-  public Documento encontrarDoc(Documento doc) {
+  public Documento encontrar(Documento doc) {
     return docDao.findById(doc.getIdDocumento()).orElse(null);
   }
   @Override
   @Transactional
-  public void agregarDocumento(Documento doc) {
+  public void agregar(Documento doc) {
     docDao.save(doc);
   }
   
   @Override
-  public void eliminarDocumento(Documento doc) {
+  public void eliminar(Documento doc) {
     docDao.delete(doc);
   }
 }

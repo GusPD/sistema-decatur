@@ -24,25 +24,25 @@ public class VentaServiceImp implements VentaService{
 
     @Override
     @Transactional
-    public void agregarVenta(Venta venta) {
+    public void agregar(Venta venta) {
         ventaDao.save(venta);
     }
 
     @Override
     @Transactional
-    public void eliminarVenta(Venta venta) {
+    public void eliminar(Venta venta) {
         ventaDao.delete(venta);
     }
 
     @Override
     @Transactional(readOnly = true)
-    public Venta encontrarVenta(Long idVenta) {
+    public Venta encontrar(Long idVenta) {
         return ventaDao.findById(idVenta).orElse(null);
     }
 
     @Override
     @Transactional
-    public void actualizarVenta(Venta venta) {
+    public void actualizar(Venta venta) {
         if (ventaDao.existsById(venta.getIdVenta())) {
             ventaDao.save(venta);
         } else {
@@ -50,11 +50,6 @@ public class VentaServiceImp implements VentaService{
         }
     }
 
-    /*@Override
-    @Transactional(readOnly = true)
-    public DataTablesOutput<Terreno> listarTerrenos(DataTablesInput input) {
-        return (DataTablesOutput<Terreno>) terrenoDao.findAll(input);
-    }*/
     @Override
     @Transactional(readOnly = true)
     public DataTablesOutput<Venta> listarVentas(DataTablesInput input, Long idTerreno) {

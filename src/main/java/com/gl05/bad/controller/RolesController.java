@@ -36,7 +36,7 @@ public class RolesController {
     private RolDao rolDao;
 
     //Obtener los roles y mostrarlos en tablas
-    @GetMapping("/GestionarRoles")
+    @GetMapping("/Roles")
     public String mostrarRoles(Model model) {
         model.addAttribute("pageTitle", "Roles");
 
@@ -60,7 +60,7 @@ public class RolesController {
     public ResponseEntity AgregarRol(Rol rol, HttpServletRequest request, RedirectAttributes redirectAttributes) {
          
         try {
-            rolesService.AgregarRol(rol);
+            rolesService.agregar(rol);
             String mensaje = "Se ha agregado un rol.";
             bitacoraService.registrarAccion("Agregar rol");
             return ResponseEntity.ok(mensaje);
@@ -73,7 +73,7 @@ public class RolesController {
     @PostMapping("/EliminarRol/{idRol}")
     public ResponseEntity EliminarRol(Rol rol, RedirectAttributes redirectAttributes) {
         try {
-            rolesService.eliminarRol(rol);
+            rolesService.eliminar(rol);
             String mensaje = "Se ha eliminado el rol correctamente.";
             bitacoraService.registrarAccion("Eliminar rol");
             return ResponseEntity.ok(mensaje);
@@ -85,7 +85,7 @@ public class RolesController {
 
     @GetMapping("/ObtenerRol/{id}")
     public ResponseEntity<Rol> obtenerRol(@PathVariable Long id) {
-        Rol rol = rolesService.encontrarRol(id);
+        Rol rol = rolesService.encontrar(id);
         if (rol != null) {
             return ResponseEntity.ok(rol);
         } else {
@@ -96,7 +96,7 @@ public class RolesController {
     @PostMapping("/ActualizarRol")
     public ResponseEntity ActualizarRol(Rol rol, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
-            rolesService.actualizarRol(rol);
+            rolesService.actualizar(rol);
             String mensaje = "Se ha actualizado el rol correctamente.";
             bitacoraService.registrarAccion("Actualizar rol");
             return ResponseEntity.ok(mensaje);

@@ -8,14 +8,18 @@ import com.gl05.bad.domain.Proyecto;
 import com.gl05.bad.domain.Propietario;
 import com.gl05.bad.domain.Referencia;
 import com.gl05.bad.domain.Telefono;
+import com.gl05.bad.domain.Terreno;
 import com.gl05.bad.domain.VistaPropietariosProyecto;
+import com.gl05.bad.servicio.AsigPropietarioVentaService;
 import com.gl05.bad.servicio.BitacoraServiceImp;
 import com.gl05.bad.servicio.CorreoService;
 import com.gl05.bad.servicio.DocumentoService;
 import com.gl05.bad.servicio.PersonaService;
 import com.gl05.bad.servicio.PropietarioService;
+import com.gl05.bad.servicio.ProyectoService;
 import com.gl05.bad.servicio.ReferenciaService;
 import com.gl05.bad.servicio.TelefonoService;
+import com.gl05.bad.servicio.TerrenoService;
 import com.gl05.bad.servicio.VistaPropietariosProyectoService;
 import java.sql.Blob;
 import java.sql.SQLException;
@@ -43,7 +47,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @Controller
 public class PropietarioController {
@@ -72,17 +75,26 @@ public class PropietarioController {
     @Autowired
     private DocumentoService documentoService;
     
-    @GetMapping("/GestionarPropietarios")
+    @Autowired
+    private TerrenoService terrenoService;
+    
+    @Autowired
+    private ProyectoService proyectoService;
+    
+    @Autowired
+    private AsigPropietarioVentaService asigPropietarioService;
+    
+    @GetMapping("/PropietariosSistema")
     public String mostrarProyecto(Model model, Proyecto proyecto) {
         model.addAttribute("pageTitle", "Propietarios");
         return "/Datos de Proyecto/PropietariosSistema";
     }
     
-    @GetMapping("/MostrarPropietario/{idPersona}")
+    @GetMapping("/PropietarioSistema/{idPersona}")
     public String MostrarPropietario(Model model, Persona persona) {
         model.addAttribute("pageTitle", "Perfil Propietario");
-        Persona newPersona = personaService.encontrarPersona(persona.getIdPersona());
-        Propietario newPropietario = propietarioService.encontrarPropietarioPersona(newPersona);
+        Persona newPersona = personaService.encontrar(persona.getIdPersona());
+        Propietario newPropietario = propietarioService.encontrarPersona(newPersona);
         
         //Manejo de correos
         var correos = correoService.listarCorreos();
@@ -122,6 +134,24 @@ public class PropietarioController {
             }
         }
         
+        //Manejo de terrenos
+        List<Terreno> listaTerrenos = terrenoService.listaTerrenos();
+        List<AsignacionPropietario> listaAsignaciones = asigPropietarioService.listaAsignacion();
+        List<Terreno> terrenosPropietario = new ArrayList();
+        boolean existeAsignacion = false;
+        for (var terreno : listaTerrenos) {
+            for (var asignacion : listaAsignaciones) {
+                if(Objects.equals(terreno.getIdTerreno(), asignacion.getVenta().getTerreno().getIdTerreno()) && Objects.equals(newPropietario.getIdPropietario(), asignacion.getPropietario().getIdPropietario())){
+                    existeAsignacion = true;
+                }
+            }
+            if(existeAsignacion==true){
+                terrenosPropietario.add(terreno);
+                existeAsignacion = false;
+            }
+        }
+        
+        model.addAttribute("terrenos", terrenosPropietario);
         model.addAttribute("documentos", documentosPropietario);
         model.addAttribute("referencias", referenciasPropietario);
         model.addAttribute("correos", correosPropietario);
@@ -133,9 +163,84 @@ public class PropietarioController {
         return "/Propietario/MostrarPropietarioAdministracion";
     }
     
+    @GetMapping("/Propietario/{idProyecto}/{idPersona}")
+    public String VerPropietarioVenta(Model model, Persona persona, Proyecto proyecto) {
+        model.addAttribute("pageTitle", "Perfil Propietario");
+        Persona newPersona = personaService.encontrar(persona.getIdPersona());
+        Propietario newPropietario = propietarioService.encontrarPersona(newPersona);
+        Proyecto newProyecto = proyectoService.encontrar(proyecto.getIdProyecto());
+        
+        //Manejo de correos
+        var correos = correoService.listarCorreos();
+        List<String> tiposCorreo = listarTiposCorreos();
+        List<Correo> correosPropietario = new ArrayList();
+        for (var eCorreo : correos) {
+            if(Objects.equals(eCorreo.getIdPropietario(), newPropietario.getIdPropietario())){
+                correosPropietario.add(eCorreo);
+            }
+        }
+        
+        //Manejo de telefonos
+        var telefonos = telefonoService.listarTelefonos();
+        List<String> tiposTelefono = listarTipoTelefono();
+        List<Telefono> telefonosPropietario = new ArrayList();
+        for (var eTelefono: telefonos) {
+            if(Objects.equals(eTelefono.getIdPropietario(), newPropietario.getIdPropietario())){
+                telefonosPropietario.add(eTelefono);
+            }
+        }
+        
+        //Manejo de referencias
+        var referencias = referenciaService.listarReferencias();
+        List<Referencia> referenciasPropietario = new ArrayList();
+        for (var eReferencia: referencias) {
+            if(Objects.equals(eReferencia.getIdPropietario(), newPropietario.getIdPropietario())){
+                referenciasPropietario.add(eReferencia);
+            }
+        }
+        
+        //Manejo de documentos
+        List<Documento> listaDocumentos = documentoService.listarDocumentos();
+        List<Documento> documentosPropietario = new ArrayList();
+        for (var documento : listaDocumentos) {
+            if(documento.getIdListDocumento() == (int) newPropietario.getIdDocumento()){
+                documentosPropietario.add(documento);
+            }
+        }
+        
+        //Manejo de terrenos
+        List<Terreno> listaTerrenos = terrenoService.listaTerrenos();
+        List<AsignacionPropietario> listaAsignaciones = asigPropietarioService.listaAsignacion();
+        List<Terreno> terrenosPropietario = new ArrayList();
+        boolean existeAsignacion = false;
+        for (var terreno : listaTerrenos) {
+            for (var asignacion : listaAsignaciones) {
+                if(Objects.equals(terreno.getIdTerreno(), asignacion.getVenta().getTerreno().getIdTerreno()) && Objects.equals(newPropietario.getIdPropietario(), asignacion.getPropietario().getIdPropietario()) && Objects.equals(asignacion.getVenta().getTerreno().getProyecto().getIdProyecto(),newProyecto.getIdProyecto())){
+                    existeAsignacion = true;
+                }
+            }
+            if(existeAsignacion==true){
+                terrenosPropietario.add(terreno);
+                existeAsignacion = false;
+            }
+        }
+        
+        model.addAttribute("terrenos", terrenosPropietario);
+        model.addAttribute("proyecto", newProyecto);
+        model.addAttribute("documentos", documentosPropietario);
+        model.addAttribute("referencias", referenciasPropietario);
+        model.addAttribute("correos", correosPropietario);
+        model.addAttribute("tiposCorreo", tiposCorreo);
+        model.addAttribute("telefonos", telefonosPropietario);
+        model.addAttribute("tiposTelefonos", tiposTelefono);
+        model.addAttribute("propietario", newPropietario);
+        model.addAttribute("persona", newPersona);
+        return "/Propietario/MostrarPropietarioProyecto";
+    }
+    
     @GetMapping("/propietarios/data")
     @ResponseBody
-    public DataTablesOutput<Persona> GetPropietarios(@Valid DataTablesInput input) {
+    public DataTablesOutput<Propietario> GetPropietarios(@Valid DataTablesInput input) {
         return propietarioService.listarPropietarios(input);
     }
     
@@ -148,11 +253,11 @@ public class PropietarioController {
     @PostMapping("/AgregarPropietario")
     public ResponseEntity AgregarPropietario(Propietario propietario, Persona persona, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
-            if(personaService.encontrarPersona(persona.getDui())== null){
-                personaService.agregarPersona(persona);
-                Persona newPersona = personaService.encontrarPersona(persona.getDui());
+            if(personaService.encontrarDui(persona.getDui())== null){
+                personaService.agregar(persona);
+                Persona newPersona = personaService.encontrarDui(persona.getDui());
                 propietario.setPersona(newPersona);
-                propietarioService.agregarPropietario(propietario);
+                propietarioService.agregar(propietario);
                 String mensaje = "Se ha agregado un propietario.";
                 bitacoraService.registrarAccion("Agregar propietario");
                 return ResponseEntity.ok(mensaje);
@@ -169,9 +274,9 @@ public class PropietarioController {
     @PostMapping("/EliminarPropietario/{idPersona}")
     public ResponseEntity EliminarPropietario(Persona persona) {
         try {
-             Propietario newPropietario = propietarioService.encontrarPropietarioPersona(persona);
-             propietarioService.eliminarPropietario(newPropietario);
-             personaService.eliminarPersona(persona);
+             Propietario newPropietario = propietarioService.encontrarPersona(persona);
+             propietarioService.eliminar(newPropietario);
+             personaService.eliminar(persona);
              String mensaje = "Se ha eliminado un propietario correctamente.";
              bitacoraService.registrarAccion("Eliminar propietario");
             return ResponseEntity.ok(mensaje);
@@ -183,12 +288,26 @@ public class PropietarioController {
 
     @GetMapping("/ObtenerPropietario/{id}")
     public ResponseEntity<Object> ObtenerPropietario(@PathVariable Long id) {
-        Persona persona = personaService.encontrarPersona(id);
-        Propietario propietario = propietarioService.encontrarPropietarioPersona(persona);
+        Persona persona = personaService.encontrar(id);
+        Propietario propietario = propietarioService.encontrarPersona(persona);
         if (propietario != null && persona != null) {
             Map<String, Object> entidadesMap = new HashMap<>();
             entidadesMap.put("propietario", propietario);
             entidadesMap.put("persona", persona);
+            return ResponseEntity.ok(entidadesMap);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    
+    @GetMapping("/ObtenerPropietarioProyecto/{id}")
+    public ResponseEntity<Object> ObtenerPropietarioProyecto(@PathVariable Long id) {
+        AsignacionPropietario asignacion = asigPropietarioService.encontrar(id);
+        Persona persona = asignacion.getPropietario().getPersona();
+        Propietario propietario = asignacion.getPropietario();
+        if (asignacion != null) {
+            Map<String, Object> entidadesMap = new HashMap<>();
+            entidadesMap.put("asignacion", asignacion);
             return ResponseEntity.ok(entidadesMap);
         } else {
             return ResponseEntity.notFound().build();
@@ -199,8 +318,8 @@ public class PropietarioController {
     public ResponseEntity ActualizarPropietario( Propietario propietario, Persona persona, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             propietario.setPersona(persona);
-            propietarioService.actualizarPropietario(propietario);
-            personaService.actualizarPersona(persona);
+            propietarioService.actualizar(propietario);
+            personaService.actualizar(persona);
             String mensaje = "Se ha actualizado el propietario correctamente.";
             bitacoraService.registrarAccion("Actualizar propietario");
             return ResponseEntity.ok(mensaje);
@@ -221,7 +340,7 @@ public class PropietarioController {
                 newCorreo.setTipo(tipoCorreo);
                 newCorreo.setCorreo(correo);
                 newCorreo.setIdPropietario(idPropietario);
-                correoService.agregarC(newCorreo);
+                correoService.agregar(newCorreo);
                 String mensaje = "Se ha agregado el correo correctamente.";
                 bitacoraService.registrarAccion("Agregar correo del propietario");
                 return ResponseEntity.ok(mensaje);
@@ -238,7 +357,7 @@ public class PropietarioController {
     @PostMapping("/EliminarCorreo/{idCorreo}")
     public ResponseEntity eliminarCorreoPropietario(Correo correo, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
-            correoService.eliminarC(correo);
+            correoService.eliminar(correo);
             String mensaje = "Se ha eliminado el correo correctamente.";
             bitacoraService.registrarAccion("Eliminar correo del propietario");
             return ResponseEntity.ok(mensaje);
@@ -259,7 +378,7 @@ public class PropietarioController {
                 newTelefono.setTipo(tipoTelefono);
                 newTelefono.setTelefono(telefono);
                 newTelefono.setIdPropietario(idPropietario);
-                telefonoService.agregarT(newTelefono);
+                telefonoService.agregar(newTelefono);
                 String mensaje = "Se ha agregado el teléfono correctamente.";
                 bitacoraService.registrarAccion("Agregar teléfono del propietario");
                 return ResponseEntity.ok(mensaje);
@@ -276,7 +395,7 @@ public class PropietarioController {
     @PostMapping("/EliminarTelefono/{idTelefono}")
     public ResponseEntity eliminarTelefonoPropietario(Telefono telefono, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
-            telefonoService.eliminarT(telefono);
+            telefonoService.eliminar(telefono);
             String mensaje = "Se ha eliminado el teléfono correctamente.";
             bitacoraService.registrarAccion("Eliminar teléfono del propietario");
             return ResponseEntity.ok(mensaje);
@@ -323,7 +442,7 @@ public class PropietarioController {
         }
     }
     
-    @PostMapping("/AgregarDocumento")
+    @PostMapping("/AgregarDocumentoPropietario")
     public ResponseEntity agregarDocumentoPropietario(HttpServletRequest request, RedirectAttributes redirectAttributes,
             @RequestParam("nombre") String nombre,
             @RequestParam("documento") MultipartFile documento,
@@ -334,12 +453,12 @@ public class PropietarioController {
             byte[] fileBytes = documento.getBytes();
             Blob documentoConvertido = new javax.sql.rowset.serial.SerialBlob(fileBytes);
             
-            Propietario newPropietario = propietarioService.encontrarPropietario(idPropietario);
+            Propietario newPropietario = propietarioService.encontrar(idPropietario);
             
             newDocumento.setNombre(nombre);
             newDocumento.setDocumento(documentoConvertido);
             newDocumento.setIdListDocumento(newPropietario.getIdDocumento());
-            documentoService.agregarDocumento(newDocumento);
+            documentoService.agregar(newDocumento);
             String mensaje = "Se ha agregado el documento correctamente.";
             bitacoraService.registrarAccion("Agregar documento del propietario");
             return ResponseEntity.ok(mensaje);
@@ -349,10 +468,10 @@ public class PropietarioController {
         }
     }
     
-    @PostMapping("/EliminarDocumento/{idDocumento}")
+    @PostMapping("/EliminarDocumentoPropietario/{idDocumento}")
     public ResponseEntity eliminarDocumentoPropietario(Documento documento, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
-            documentoService.eliminarDocumento(documento);
+            documentoService.eliminar(documento);
             String mensaje = "Se ha eliminado el documento correctamente.";
             bitacoraService.registrarAccion("Eliminar documento del propietario");
             return ResponseEntity.ok(mensaje);
@@ -362,11 +481,11 @@ public class PropietarioController {
         }
     }
     
-    @GetMapping("/VerDocumento/{IdDocumento}")
-    public ResponseEntity <byte[]> mostrarDocumentoPDF(@PathVariable("IdDocumento") Long id) {
+    @GetMapping("/DocumentoPropietario/{IdDocumento}")
+    public ResponseEntity <byte[]> mostrarDocumentoPDFPropietario(@PathVariable("IdDocumento") Long id) {
         Documento archivo = new Documento();
         archivo.setIdDocumento(id);
-        Documento archivoExistente = documentoService.encontrarDoc(archivo);
+        Documento archivoExistente = documentoService.encontrar(archivo);
 
         Blob pdfBlob = archivoExistente.getDocumento();
         byte[] pdfBytes;

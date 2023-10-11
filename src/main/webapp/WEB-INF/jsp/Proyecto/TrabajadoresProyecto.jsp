@@ -11,7 +11,7 @@
                 <div class="col-sm-12">
                     <div class="titulo-Perfil">
                         <div class="container container-titulo">
-                            <h1>Terrenos del Proyecto ${proyecto.nombre} - ${proyecto.empresa}</h1>
+                            <h1>Proyecto ${proyecto.nombre} - Trabajadores</h1>
                         </div>
                     </div>
                 </div>
@@ -42,26 +42,22 @@
                         <strong><i class="bi bi-exclamation-triangle"></i> Error!&nbsp;</strong>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
-                    <div class="row col-sm-12 margenBoton">
-                        <sec:authorize access="hasAuthority('EXPORTAR_PROPIETARIOS_PROYECTO_PRIVILAGE')"> 
+                    <div class="col-sm-12 d-flex justify-content-end">
+                        <sec:authorize access="hasAuthority('EXPORTAR_TRABAJADORES_PROYECTO_PRIVILAGE')"> 
                             <button id="export-copy" class="btn btn-sm btn-outline-secondary buttons-copy" type="button"><span>Copiar  </span><i class="fa-regular fa-copy"></i></button> 
                             <button id="export-excel" class="btn btn-sm btn-outline-success buttons-excel" type="button"><span>Exportar </span><i class="fa-solid fa-file-csv"></i></button> 
                             <button id="export-pdf" class="btn btn-sm btn-outline-danger buttons-pdf" type="button"><span>Exportar </span><i class="fa-regular fa-file-pdf"></i></button> 
                         </sec:authorize>
-                        <sec:authorize access="hasAuthority('AGREGAR_TERRENO_PRIVILAGE')"> 
-                            <button type="button" class="btn-add btn abrirModal-btn col-sm-1 btn-sm" data-bs-toggle="modal" data-bs-target="#crearModal" data-action="agregar">Agregar</button>
-                        </sec:authorize>
                     </div>
                     <div>
                         <div class="table-responsive-md table-container">
-                            <table id="terrenoTable" class="table table-striped custom-fixed-header">
+                            <table id="trabajadorTable" class="table table-striped custom-fixed-header">
                                 <thead class="table-light">
                                     <tr>
-                                        <th class="text-center">Polígono</th>
-                                        <th class="text-center">Lote</th>
-                                        <th class="text-center">Matrícula</th>
-                                        <th class="text-center">Área (m²)</th>
-                                        <th class="text-center">Área (v²)</th>
+                                        <th class="text-center">DUI</th>
+                                        <th class="text-center">Nombre</th>
+                                        <th class="text-center">Especialidad</th>
+                                        <th class="text-center">Terrenos</th>
                                         <th class="text-center">Acciones</th>
                                     </tr>
                                 </thead>
@@ -72,93 +68,14 @@
                     </div>
                 </div><!-- /.container-fluid -->
             </section>
-
-            <!-- Modal para Terrenos -->
-            <div class="modal fade" id="crearModal" tabindex="-1" aria-labelledby="crearModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="crearModalLabel">Agregar Terreno</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <form id='formGuardar' accept-charset="UTF-8">
-                                <div  class="overflow-auto">
-                                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
-                                    <input type="hidden" id="idTerreno">
-                                    <input type="hidden" id="proyecto" value="${proyecto.getIdProyecto()}">
-                                    <div class="form-group">
-                                        <label for="matricula" class="form-label">Matrícula: </label>
-                                        <input type="text" class="form-control" id="matricula" name="matricula" maxlength="18" placeholder="Ingrese la matrícula del terreno" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="poligono" class="form-label">Polígono: </label>
-                                        <input type="text" class="form-control" id="poligono" name="poligono" maxlength="1" placeholder="Ingrese el polígono del terreno" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="numero" class="form-label">Número de terreno: </label>
-                                        <input type="text" class="form-control" id="numero" name="numero" maxlength="3" placeholder="Ingrese el número del terreno" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="seccion" class="form-label">Sección del terreno: </label>
-                                        <input type="text" class="form-control" id="seccion" name="seccion" maxlength="1" placeholder="Ingrese la sección del terreno" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="areaMetros" class="form-label">Área (m²): </label>
-                                        <input type="text" class="form-control" id="areaMetros" name="areaMetros" maxlength="18" placeholder="Ingrese el área en metros cuadrados del terreno" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="areaVaras" class="form-label">Área (v²): </label>
-                                        <input type="text" class="form-control" id="areaVaras" name="areaVaras" placeholder="Ingrese el área en varas cuadradas del terreno" readonly>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
-                                    <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal">Cancelar</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Modal de eliminar -->
-            <div class="modal fade" id="confirmarEliminarModal" tabindex="-1" aria-labelledby="confirmarEliminarLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="confirmarEliminarLabel">Confirmar eliminación</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <strong>¿Estás seguro de eliminar el terreno seleccionado?</strong>
-                            <p>Ten en cuenta que se eliminarán los datos relacionados al terreno <span id="poligono"></span>-<span id="numero"></span><span id="seccion"></span>.</p>
-                        </div>
-                        <div class="modal-footer">
-                          <button id="eliminarTerrenoBtn" class="btn btn-outline-danger btn-sm">Eliminar</button>
-                          <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <form id="eliminarTerrenoForm" method="post" action="/EliminarTerreno/{idTerreno}">
-                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
-            </form>
         </div>
     </section>
 </div>
 
 <!-- Script de la página -->
-<sec:authorize access="hasAuthority('VER_TERRENO_PRIVILAGE')" var="hasPrivilegeVerTerreno"></sec:authorize>
-<script>var hasPrivilegeVerTerreno = ${hasPrivilegeVerTerreno};</script>    
-        
-<sec:authorize access="hasAuthority('EDITAR_TERRENO_PRIVILAGE')" var="hasPrivilegeEditarTerreno"></sec:authorize>
-<script>var hasPrivilegeEditarTerreno = ${hasPrivilegeEditarTerreno};</script>
-
-<sec:authorize access="hasAuthority('ELIMINAR_TERRENO_PRIVILAGE')" var="hasPrivilegeEliminarTerreno"></sec:authorize>
-<script>var hasPrivilegeEliminarTerreno = ${hasPrivilegeEliminarTerreno};</script>
+<sec:authorize access="hasAuthority('VER_TRABAJADOR_PRIVILAGE')" var="hasPrivilegeVerTrabajadorProyecto"></sec:authorize>
+<script>var hasPrivilegeVerTrabajadorProyecto = ${hasPrivilegeVerTrabajadorProyecto};</script>    
 
 <%@ include file="../common/footer.jspf"%>
 
-<script src="${pageContext.request.contextPath}/js/terreno.js"></script>
+<script src="${pageContext.request.contextPath}/js/trabajadorProyecto.js"></script>

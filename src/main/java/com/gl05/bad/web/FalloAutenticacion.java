@@ -1,7 +1,10 @@
 package com.gl05.bad.web;
 
 import com.gl05.bad.dao.UsuarioDao;
+import com.gl05.bad.domain.ConfiguracionCorreo;
 import com.gl05.bad.domain.Usuario;
+import com.gl05.bad.servicio.ConfiguracionCorreoServiceImp;
+import com.gl05.bad.servicio.CorreoServiceImp;
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +26,12 @@ public class FalloAutenticacion implements AuthenticationFailureHandler {
 
     @Autowired
     private UserDetailsService usuarioService;
+    
+    @Autowired
+    private ConfiguracionCorreoServiceImp configuracionCorreoService;
+    
+    @Autowired
+    private CorreoServiceImp correoService;
 
     public FalloAutenticacion(JavaMailSender javaMailSender, UserDetailsService usuarioService) {
         this.javaMailSender = javaMailSender;
@@ -36,10 +45,11 @@ public class FalloAutenticacion implements AuthenticationFailureHandler {
         String errorMessage = null;
         
         try{
-            //Formulario
         String username = request.getParameter("username");
-        //Base
+        
         Usuario usuario = usuarioDao.findByUsername(username);
+        
+        ConfiguracionCorreo configuracionCorreo = configuracionCorreoService.obtenerConfiguracionCorreo();
 
         if (username.equals(usuario.getUsername()) && usuario.getBloqueado() == 1 && usuario.isHabilitado() == false) {
            errorMessage = "Usuario Bloqueado e Inhabilitado! , Contacte al administrador del sistema para realizar las acciones pertinentes";
@@ -69,11 +79,10 @@ public class FalloAutenticacion implements AuthenticationFailureHandler {
                 usuarioDao.save(usuario);
                 // Enviar correo electrónico al administrador 
                 String usuarioEmail = usuario.getEmail();
-                String adminEmail = "gustavopineda400@gmail.com";
                 String subject = "Usuario bloqueado";
                 String message = "El usuario " + username + " con correo " + usuarioEmail + " ha sido bloqueado después de 3 intentos fallidos de inicio de sesión.";
-                sendEmail(usuarioEmail, adminEmail, subject, message);
-                
+                correoService.enviarCorreo(configuracionCorreo.getUsername(), subject, message);
+
                 //response.sendRedirect("/errorpage");
                 errorMessage = "Se ha bloqueado su usuario despues de 3 intentos, se ha enviado un correo al administrador para su desbloqueo";
                 HttpSession session = request.getSession();
@@ -89,7 +98,7 @@ public class FalloAutenticacion implements AuthenticationFailureHandler {
             }
         }
         }catch (NullPointerException e){       
-            errorMessage = "Credenciales de inicio de sesión No existentes, Usuario no encontrado.";
+            errorMessage = "Credenciales de inicio de sesión NO EXISTENTES, Usuario no encontrado.";
             // Almacenar el mensaje de error en la sesión
             HttpSession session = request.getSession();
             session.setAttribute("errorMessage", errorMessage);
@@ -97,15 +106,5 @@ public class FalloAutenticacion implements AuthenticationFailureHandler {
             // Redireccionar a la página de inicio de sesión
             response.sendRedirect(request.getContextPath() + "/login");
         }
-    }
-
-    //Metodo para el envio de correo electronico
-    private void sendEmail(String from, String to, String subject, String message) {
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setFrom(from);
-        mailMessage.setTo(to);
-        mailMessage.setSubject(subject);
-        mailMessage.setText(message);
-        javaMailSender.send(mailMessage);
     }
 }

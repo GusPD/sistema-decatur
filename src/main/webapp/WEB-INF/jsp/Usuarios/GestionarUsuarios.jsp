@@ -48,7 +48,7 @@
                         <button id="export-pdf" class="btn btn-sm btn-outline-danger buttons-pdf" type="button"><span>Exportar </span><i class="fa-regular fa-file-pdf"></i></button> 
                     </sec:authorize>
                     <sec:authorize access="hasAuthority('AGREGAR_USUARIO_PRIVILAGE')"> 
-                        <button type="button" class="btn-add btn abrirModal-btn btn-sm" data-bs-toggle="modal" data-bs-target="#crearModal" data-action="agregar">Agregar</button>
+                        <button type="button" class="btn-blue btn abrirModal-btn btn-sm" data-bs-toggle="modal" data-bs-target="#crearModal" data-action="agregar">Agregar</button>
                     </sec:authorize>
                 </div>
                 <div>
@@ -132,6 +132,18 @@
                                         <li>
                                             <input class="checkClean" type="checkbox" id="proyecto${elementoProyecto.idProyecto}" name="proyectos[]" value="${elementoProyecto.idProyecto}">
                                             <label for="proyecto${elementoProyecto.idProyecto}">${elementoProyecto.nombre}</label>
+                                        </li>
+                                    </div>
+                                </c:forEach>
+                            </div>
+                            <div id="empresas-error" name="empresas-error" class="error-message"></div>
+                            <div class="form-group">
+                                <label for="empresas" class="form-label">Seleccione las empresas: </label>
+                                <c:forEach items="${empresas}" var="elementoEmpresa" varStatus="status" >
+                                    <div>
+                                        <li>
+                                            <input class="checkClean" type="checkbox" id="empresa${elementoEmpresa.idEmpresa}" name="empresas[]" value="${elementoEmpresa.idEmpresa}">
+                                            <label for="empresa${elementoEmpresa.idEmpresa}">${elementoEmpresa.nombre}</label>
                                         </li>
                                     </div>
                                 </c:forEach>

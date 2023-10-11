@@ -178,74 +178,6 @@ $(document).ready(function() {
         return year + month + day + '_' + hours + minutes + seconds;
     }
     
-    document.getElementById("precio").addEventListener("input", function() {
-        const precio = parseFloat(document.getElementById('precio').value);
-        const descuento = parseFloat(document.getElementById('descuento').value);
-        const primaElement = document.getElementById('prima');
-        const prima = parseFloat(primaElement.getAttribute('data-prima'));
-        if (!isNaN(precio) && !isNaN(descuento)) {
-            const monto = precio - descuento - prima;
-            document.getElementById('monto').value = monto.toFixed(2);
-        } else if(!isNaN(precio)){
-            const monto = precio - prima;
-            document.getElementById('monto').value = monto.toFixed(2);
-        }else if(!isNaN(descuento)){
-            const monto = 0 - (descuento + prima);
-            document.getElementById('monto').value = monto.toFixed(2);
-        }else{
-            document.getElementById('monto').value = '0.00';
-        }
-    });
-    
-    document.getElementById("descuento").addEventListener("input", function() {
-        const precio = parseFloat(document.getElementById('precio').value);
-        const descuento = parseFloat(document.getElementById('descuento').value);
-        const primaElement = document.getElementById('prima');
-        const prima = parseFloat(primaElement.getAttribute('data-prima'));
-        if (!isNaN(precio) && !isNaN(descuento)) {
-            const monto = precio - descuento - prima;
-            document.getElementById('monto').value = monto.toFixed(2);
-        } else if(!isNaN(precio)){
-            const monto = precio - prima;
-            document.getElementById('monto').value = monto.toFixed(2);
-        }else if(!isNaN(descuento)){
-            const monto = 0 - (descuento + prima);
-            document.getElementById('monto').value = monto.toFixed(2);
-        }else{
-            document.getElementById('monto').value = '0.00';
-        }
-    });
-    
-    document.getElementById("plazo").addEventListener("input", function() {
-        const tasa = parseFloat(document.getElementById('tasa').value);
-        const plazo = parseFloat(document.getElementById('plazo').value);
-        const monto = parseFloat(document.getElementById('monto').value);
-        if (!isNaN(tasa) && !isNaN(plazo) && !isNaN(monto) ){
-            const valorCuota = calcularCuotaKi(tasa, plazo, monto);
-            document.getElementById('cuotaKi').value = valorCuota.toFixed(2);
-        }else{
-            document.getElementById('cuotaKi').value = "0.00";
-        }
-    });
-    
-    document.getElementById("tasa").addEventListener("input", function() {
-        const tasa = parseFloat(document.getElementById('tasa').value);
-        const plazo = parseFloat(document.getElementById('plazo').value);
-        const monto = parseFloat(document.getElementById('monto').value);
-        if (!isNaN(tasa) && !isNaN(plazo) && !isNaN(monto) ){
-            const valorCuota = calcularCuotaKi(tasa, plazo, monto);
-            document.getElementById('cuotaKi').value = valorCuota.toFixed(2);
-        }else{
-            document.getElementById('cuotaKi').value = "0.00";
-        }
-    });
-    
-    function calcularCuotaKi(tasa, nper, va) {
-        tasa = (tasa / 100)/12;
-        const cuota = (va * tasa) / (1 - Math.pow(1 + tasa, -nper));
-        return cuota;
-    }
-    
     $.validator.addMethod(
         "validarPrecio",
         function(value, element) {
@@ -255,55 +187,6 @@ $(document).ready(function() {
     );
     $.validator.addMethod(
         "validarDescuento",
-        function(value, element) {
-            return this.optional(element) || /^\d+(\.\d+)?$/.test(value);
-        },
-        "Ingrese un número válido"
-    );
-    $.validator.addMethod(
-        "validarMonto",
-        function(value, element) {
-            return this.optional(element) || /^\d+(\.\d+)?$/.test(value);
-        },
-        "Ingrese un número válido"
-    );
-    $.validator.addMethod(
-        "validarPlazo",
-        function(value, element) {
-            return this.optional(element) || /^\d+$/.test(value);
-        },
-        "Solo se aceptan números"
-    );
-    $.validator.addMethod(
-        "validarTasa",
-        function(value, element) {
-            return this.optional(element) || /^(100(\.0+)?|[0-9]?[0-9](\.\d+)?)$/.test(value);
-        },
-        "Ingrese un número válido"
-    );
-    $.validator.addMethod(
-        "validarCuotaKi",
-        function(value, element) {
-            return this.optional(element) || /^\d+(\.\d+)?$/.test(value);
-        },
-        "Ingrese un número válido"
-    );
-    $.validator.addMethod(
-        "validarCuotaMantenimiento",
-        function(value, element) {
-            return this.optional(element) || /^\d+(\.\d+)?$/.test(value);
-        },
-        "Ingrese un número válido"
-    );
-    $.validator.addMethod(
-        "validarMultaMantenimiento",
-        function(value, element) {
-            return this.optional(element) || /^\d+(\.\d+)?$/.test(value);
-        },
-        "Ingrese un número válido"
-    );
-    $.validator.addMethod(
-        "validarMultaFinanciamiento",
         function(value, element) {
             return this.optional(element) || /^\d+(\.\d+)?$/.test(value);
         },
@@ -330,32 +213,6 @@ $(document).ready(function() {
                required: true,
                validarDescuento: true,
                maxlength: 9
-           },
-           monto:{
-               validarMonto: true
-           },
-           plazo:{
-               validarPlazo: true,
-               maxlength: 3
-           },
-           tasa: {
-               validarTasa: true,
-               maxlength: 6
-           },
-           cuotaKi:{
-               validarMonto: true
-           },
-           cuotaMantenimiento: {
-               validarCuotaMantenimiento: true,
-               maxlength: 9
-           },
-           multaMantenimiento: {
-               validarMultaMantenimiento: true,
-               maxlength: 9
-           },
-           multaFinanciamiento: {
-               validarMultaFinanciamiento: true,
-               maxlength: 9
            }
         },
         
@@ -371,22 +228,7 @@ $(document).ready(function() {
             },
             descuento:{
                 required: 'Este campo es requerido'
-            },
-            plazo:{
-                required: 'Este campo es requerido'
-            },
-            tasa: {
-                required: 'Este campo es requerido'
-            },
-            cuotaMantenimiento: {
-                required: 'Este campo es requerido'
-            },
-            multaMantenimiento: {
-                required: 'Este campo es requerido'
-            },
-            multaFinanciamiento: {
-                required: 'Este campo es requerido'
-            }        
+            }    
         },
         
         highlight: function(element) {
@@ -398,7 +240,7 @@ $(document).ready(function() {
         },
         
         errorPlacement: function(error, element) {
-            if (element.attr("name") === "nombre" || element.attr("name") === "fecha" || element.attr("name") === "precio" || element.attr("name") === "descuento" || element.attr("name") === "monto" || element.attr("name") === "plazo" || element.attr("name") === "tasa" || element.attr("name") === "cuotaKi" || element.attr("name") === "cuotaMantenimiento" || element.attr("name") === "multaFinanciamiento" || element.attr("name") === "multaMantenimiento") {
+            if (element.attr("name") === "nombre" || element.attr("name") === "fecha" || element.attr("name") === "precio" || element.attr("name") === "descuento") {
                 error.insertAfter(element);
             }        
         },
@@ -484,13 +326,6 @@ $(document).ready(function() {
                         $('#fecha').val(response.fecha);
                         $('#precio').val(response.precio);
                         $('#descuento').val(response.descuento);
-                        $('#monto').val(response.monto);
-                        $('#plazo').val(response.plazo);
-                        $('#tasa').val(response.tasa);
-                        $('#cuotaKi').val(response.cuotaKi);
-                        $('#cuotaMantenimiento').val(response.cuotaMantenimiento);
-                        $('#multaMantenimiento').val(response.multaMantenimiento);
-                        $('#multaFinanciamiento').val(response.multaFinanciamiento);
                         $('#idListDocumento').val(response.idListDocumento);
                         $('#estado').val(response.estado);
                         $('#terreno').val(response.terreno.idTerreno);

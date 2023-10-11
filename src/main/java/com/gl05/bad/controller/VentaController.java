@@ -1,30 +1,29 @@
 package com.gl05.bad.controller;
 
 import com.gl05.bad.domain.AsignacionPropietario;
-import com.gl05.bad.domain.Correo;
+import com.gl05.bad.domain.AsignacionVisitante;
 import com.gl05.bad.domain.Documento;
 import com.gl05.bad.domain.Persona;
 import com.gl05.bad.domain.Propietario;
 import com.gl05.bad.domain.Proyecto;
-import com.gl05.bad.domain.Referencia;
-import com.gl05.bad.domain.Telefono;
 import com.gl05.bad.domain.Terreno;
 import com.gl05.bad.domain.Venta;
+import com.gl05.bad.domain.Visitante;
+import com.gl05.bad.domain.VistaVentasActiva;
 import com.gl05.bad.servicio.AsigPropietarioVentaService;
+import com.gl05.bad.servicio.AsignacionVisitanteService;
 import com.gl05.bad.servicio.BitacoraServiceImp;
-import com.gl05.bad.servicio.CorreoService;
 import com.gl05.bad.servicio.DocumentoService;
 import com.gl05.bad.servicio.PersonaService;
 import com.gl05.bad.servicio.PropietarioService;
 import com.gl05.bad.servicio.ProyectoService;
-import com.gl05.bad.servicio.ReferenciaService;
-import com.gl05.bad.servicio.TelefonoService;
 import com.gl05.bad.servicio.TerrenoService;
 import com.gl05.bad.servicio.VentaService;
+import com.gl05.bad.servicio.VisitanteService;
+import com.gl05.bad.servicio.VistaVentasActivaService;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
@@ -56,6 +55,9 @@ public class VentaController {
     private VentaService ventaService;
     
     @Autowired
+    private VistaVentasActivaService vistaVentasActivaService;
+    
+    @Autowired
     private TerrenoService terrenoService;
     
     @Autowired
@@ -68,16 +70,13 @@ public class VentaController {
     private PropietarioService propietarioService;
     
     @Autowired
+    private VisitanteService visitanteService;
+    
+    @Autowired
     private AsigPropietarioVentaService asigPropietarioVentaService;
     
     @Autowired
-    private TelefonoService telefonoService;
-    
-    @Autowired
-    private CorreoService correoService;
-    
-    @Autowired
-    private ReferenciaService referenciaService;
+    private AsignacionVisitanteService asigVisitanteService;
     
     @Autowired
     private ProyectoService proyectoService;
@@ -85,7 +84,7 @@ public class VentaController {
     @GetMapping("/Ventas/{idTerreno}")
     public String mostrarVentas(Model model, Terreno terreno) {
         model.addAttribute("pageTitle", "Ventas");
-        Terreno terrenoEncontrado = terrenoService.encontrarTerreno(terreno.getIdTerreno());
+        Terreno terrenoEncontrado = terrenoService.encontrar(terreno.getIdTerreno());
         model.addAttribute("terreno", terrenoEncontrado);
         double prima = 0;
         Proyecto proyecto = terrenoEncontrado.getProyecto();
@@ -97,7 +96,7 @@ public class VentaController {
     @GetMapping("/Venta/{idVenta}")
     public String mostrarVenta(Model model, Venta venta) {
         model.addAttribute("pageTitle", "Venta");
-        Venta ventaEncontrada = ventaService.encontrarVenta(venta.getIdVenta());
+        Venta ventaEncontrada = ventaService.encontrar(venta.getIdVenta());
         Terreno terrenoEncontrado = ventaEncontrada.getTerreno();
         double prima = 0;
         Proyecto proyecto = terrenoEncontrado.getProyecto();
@@ -118,7 +117,7 @@ public class VentaController {
         boolean existePropietarioAsignado = false;
         for (var propietario : listaPropietarios) {
             for (var asignacion : listaAsignaciones) {
-                if(Objects.equals(propietario.getIdPropietario(), asignacion.getPropietario().getIdPropietario())){
+                if(Objects.equals(propietario.getIdPropietario(), asignacion.getPropietario().getIdPropietario()) && Objects.equals(asignacion.getVenta().getIdVenta(), ventaEncontrada.getIdVenta())){
                     existePropietarioAsignado = true;
                 }
             }
@@ -136,8 +135,43 @@ public class VentaController {
             }
         }
         
+         //Manejo de trabajadores
+        List<Visitante> listaVisitantes = visitanteService.listaVisitantes();
+        List<AsignacionVisitante> listaAsignacionesVisitante = asigVisitanteService.listaAsignacionVisitantes();
+        List<Visitante> visitantesNoVenta = new ArrayList();
+        boolean existeVisitanteAsignado = false;
+        for (var visitante : listaVisitantes) {
+            for (var asignacion : listaAsignacionesVisitante) {
+                if(Objects.equals(visitante.getIdVisitante(), asignacion.getVisitante().getIdVisitante()) && Objects.equals(asignacion.getVenta().getIdVenta(), ventaEncontrada.getIdVenta())){
+                    existeVisitanteAsignado = true;
+                }
+            }
+            if(existeVisitanteAsignado==false){
+                visitantesNoVenta.add(visitante);
+            }else{
+                existeVisitanteAsignado = false;
+            }
+        }
+        
+        List<AsignacionVisitante> trabajadores = new ArrayList();
+        for (var trabajador : listaAsignacionesVisitante) {
+            if(Objects.equals(trabajador.getVenta().getIdVenta(), venta.getIdVenta())){
+                trabajadores.add(trabajador);
+            }
+        }
+        
+        List<AsignacionPropietario> propietariosSeleccionados = new ArrayList();
+        for (var propietario : propietarios) {
+            if(Objects.equals(propietario.getEstado(), "Seleccionado")){
+                propietariosSeleccionados.add(propietario);
+            }
+        }
+        
+        model.addAttribute("consumidorFinal", propietariosSeleccionados);
         model.addAttribute("propietariosAsignados", propietarios);
         model.addAttribute("propietariosNoVenta", propietariosNoVenta);
+        model.addAttribute("trabajadoresAsignados", trabajadores);
+        model.addAttribute("trabajadoresNoVenta", visitantesNoVenta);
         model.addAttribute("documentos", documentosVenta);
         model.addAttribute("proyecto", proyecto);
         model.addAttribute("terreno", terrenoEncontrado);
@@ -150,6 +184,20 @@ public class VentaController {
     @ResponseBody
     public DataTablesOutput<Venta> GetVentas(@Valid DataTablesInput input, @PathVariable Long idTerreno) {
         return ventaService.listarVentas(input, idTerreno);
+    }
+    
+    @GetMapping("/VentasActivas/{idProyecto}")
+    public String mostrarVentasActivas(Model model, Proyecto proyecto) {
+        model.addAttribute("pageTitle", "Ventas Activas");
+        Proyecto newProyecto = proyectoService.encontrar(proyecto.getIdProyecto());
+        model.addAttribute("proyecto", newProyecto);
+        return "/Proyecto/VentasActivasProyecto";
+    }
+    
+    @GetMapping("/ventasActiva/data/{idProyecto}")
+    @ResponseBody
+    public DataTablesOutput<VistaVentasActiva> GetVentasActivas(@Valid DataTablesInput input, @PathVariable Long idProyecto) {
+        return vistaVentasActivaService.listarTerrenos(input, idProyecto);
     }
 
     @PostMapping("/AgregarVenta/{idTerreno}")
@@ -164,9 +212,9 @@ public class VentaController {
                 }
             }
             //Obtener el proyecto por ID
-            Terreno terreno = terrenoService.encontrarTerreno(idTerreno);
+            Terreno terreno = terrenoService.encontrar(idTerreno);
             venta.setTerreno(terreno);
-            ventaService.agregarVenta(venta);
+            ventaService.agregar(venta);
             String mensaje = "Se ha agregado una venta.";
             bitacoraService.registrarAccion("Agregar venta");
             return ResponseEntity.ok(mensaje);
@@ -179,9 +227,22 @@ public class VentaController {
     @PostMapping("/EliminarVenta/{idVenta}")
     public ResponseEntity EliminarVenta(Venta venta) {
         try {
-            ventaService.eliminarVenta(venta);
-             String mensaje = "Se ha eliminado una venta correctamente.";
-             bitacoraService.registrarAccion("Eliminar venta");
+            ventaService.eliminar(venta);
+            List<Venta> listadoVentas = ventaService.listaVentas();
+            List<Venta> listadoVentasTerreno = new ArrayList();
+            if(!listadoVentas.isEmpty()){
+                for (Venta valorVenta : listadoVentas){
+                    if(valorVenta.getTerreno().getIdTerreno().equals(venta.getTerreno().getIdTerreno())){
+                        listadoVentasTerreno.add(valorVenta);
+                    }
+                }
+            }
+            Venta ultimaVenta= listadoVentasTerreno.get(listadoVentasTerreno.size() - 1);
+            if (ultimaVenta != null) {
+                ultimaVenta.setEstado("Activo");
+            }
+            String mensaje = "Se ha eliminado una venta correctamente.";
+            bitacoraService.registrarAccion("Eliminar venta");
             return ResponseEntity.ok(mensaje);
         } catch (Exception e) {
             String error = "Ha ocurrido un error al eliminar la venta";
@@ -191,7 +252,7 @@ public class VentaController {
 
     @GetMapping("/ObtenerVenta/{id}")
     public ResponseEntity<Venta> ObtenerVenta(@PathVariable Long id) {
-        Venta venta = ventaService.encontrarVenta(id);
+        Venta venta = ventaService.encontrar(id);
         if (venta != null) {
             return ResponseEntity.ok(venta);
         } else {
@@ -203,9 +264,9 @@ public class VentaController {
     public ResponseEntity ActualizarVenta(@PathVariable("idTerreno") Long idTerreno, Venta venta, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             //Obtener el proyecto por ID
-            Terreno terreno = terrenoService.encontrarTerreno(idTerreno);
+            Terreno terreno = terrenoService.encontrar(idTerreno);
             venta.setTerreno(terreno);
-            ventaService.actualizarVenta(venta);
+            ventaService.actualizar(venta);
             String mensaje = "Se ha actualizado la venta correctamente.";
             bitacoraService.registrarAccion("Actualizar venta");
             return ResponseEntity.ok(mensaje);
@@ -226,12 +287,12 @@ public class VentaController {
             byte[] fileBytes = documento.getBytes();
             Blob documentoConvertido = new javax.sql.rowset.serial.SerialBlob(fileBytes);
             
-            Venta newVenta = ventaService.encontrarVenta(idVenta);
+            Venta newVenta = ventaService.encontrar(idVenta);
             
             newDocumento.setNombre(nombre);
             newDocumento.setDocumento(documentoConvertido);
             newDocumento.setIdListDocumento(newVenta.getIdListDocumento());
-            documentoService.agregarDocumento(newDocumento);
+            documentoService.agregar(newDocumento);
             String mensaje = "Se ha agregado el documento correctamente.";
             bitacoraService.registrarAccion("Agregar documento de la venta");
             return ResponseEntity.ok(mensaje);
@@ -244,7 +305,7 @@ public class VentaController {
     @PostMapping("/EliminarDocumentoVenta/{idDocumento}")
     public ResponseEntity eliminarDocumentoVenta(Documento documento, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
-            documentoService.eliminarDocumento(documento);
+            documentoService.eliminar(documento);
             String mensaje = "Se ha eliminado el documento correctamente.";
             bitacoraService.registrarAccion("Eliminar documento de la venta");
             return ResponseEntity.ok(mensaje);
@@ -254,11 +315,11 @@ public class VentaController {
         }
     }
     
-    @GetMapping("/VerDocumentoVenta/{IdDocumento}")
+    @GetMapping("/DocumentoVenta/{IdDocumento}")
     public ResponseEntity <byte[]> mostrarDocumentoPDF(@PathVariable("IdDocumento") Long id) {
         Documento archivo = new Documento();
         archivo.setIdDocumento(id);
-        Documento archivoExistente = documentoService.encontrarDoc(archivo);
+        Documento archivoExistente = documentoService.encontrar(archivo);
 
         Blob pdfBlob = archivoExistente.getDocumento();
         byte[] pdfBytes;
@@ -279,17 +340,19 @@ public class VentaController {
     }
     
     @PostMapping("/AgregarPropietarioVenta")
-    public ResponseEntity AgregarPropietarioVenta(@RequestParam("idVenta") Long idVenta, Propietario propietario, Persona persona, HttpServletRequest request, RedirectAttributes redirectAttributes) {
-       try {
-            if(personaService.encontrarPersona(persona.getDui())== null){
-                personaService.agregarPersona(persona);
-                Persona newPersona = personaService.encontrarPersona(persona.getDui());
+    public ResponseEntity AgregarPropietarioVenta(@RequestParam("idVenta") Long idVenta, @RequestParam("estadoP") String estado,  @RequestParam("nombreP") String nombre, Propietario propietario, Persona persona, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        try {
+            if(personaService.encontrarDui(persona.getDui())== null){
+                persona.setNombre(nombre);
+                personaService.agregar(persona);
+                Persona newPersona = personaService.encontrarDui(persona.getDui());
                 propietario.setPersona(newPersona);
-                propietarioService.agregarPropietario(propietario);
-                Venta venta= ventaService.encontrarVenta(idVenta);
+                propietarioService.agregar(propietario);
+                Venta venta= ventaService.encontrar(idVenta);
                 AsignacionPropietario newAsignacionVenta = new AsignacionPropietario();
                 newAsignacionVenta.setPropietario(propietario);
                 newAsignacionVenta.setVenta(venta);
+                newAsignacionVenta.setEstado(estado);
                 asigPropietarioVentaService.agregar(newAsignacionVenta);
                 String mensaje = "Se ha agregado un propietario a la venta.";
                 bitacoraService.registrarAccion("Agregar propietario venta");
@@ -304,15 +367,57 @@ public class VentaController {
         }
     }
     
-    @PostMapping("/SeleccionarPropietariosVenta")
-    public ResponseEntity SeleccionarPropietariosVenta(@RequestParam("idVenta") Long idVenta, @RequestParam("propietarios") List<Long> propietarios, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    @PostMapping("/ActualizarPropietarioVenta")
+    public ResponseEntity ActualizarPropietario( HttpServletRequest request, RedirectAttributes redirectAttributes,
+            @RequestParam("dui") String dui,
+            @RequestParam("nombreP") String nombre, 
+            @RequestParam("apellido") String apellido,
+            @RequestParam("profesion") String profesion,
+            @RequestParam("direccionCasa") String direccionCasa,
+            @RequestParam("lugarTrabajo") String lugarTrabajo,
+            @RequestParam("direccionTrabajo") String direccionTrabajo,
+            @RequestParam("estadoP") String estado,
+            @RequestParam("idPersona") Long idPersona,
+            @RequestParam("idPropietario") Long idPropietario,
+            @RequestParam("idVenta") Long idVenta, 
+            @RequestParam("idAsignacion") Long idAsignacion,
+            @RequestParam("idDocumento") Integer idDocumento){
         try {
-            Venta venta= ventaService.encontrarVenta(idVenta);
+            Persona newPersona = personaService.encontrar(idPersona);
+            newPersona.setDui(dui);
+            newPersona.setNombre(nombre);
+            newPersona.setApellido(apellido);
+            Propietario newPropietario = propietarioService.encontrar(idPropietario);
+            newPropietario.setProfesion(profesion);
+            newPropietario.setDireccionCasa(direccionCasa);
+            newPropietario.setLugarTrabajo(lugarTrabajo);
+            newPropietario.setDireccionTrabajo(direccionTrabajo);
+            newPropietario.setPersona(newPersona);
+            newPropietario.setIdDocumento(idDocumento);
+            personaService.actualizar(newPersona);
+            propietarioService.actualizar(newPropietario);
+            AsignacionPropietario asignacion = asigPropietarioVentaService.encontrar(idAsignacion);
+            asignacion.setEstado(estado);
+            asigPropietarioVentaService.actualizar(asignacion);
+            String mensaje = "Se ha actualizado un propietario de la venta.";
+            bitacoraService.registrarAccion("Actualizar propietario venta");
+            return ResponseEntity.ok(mensaje);
+        } catch (Exception e) {
+            String error = "Ha ocurrido un error al actualizar el propietario.";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        }
+    }
+    
+    @PostMapping("/SeleccionarPropietariosVenta")
+    public ResponseEntity SeleccionarPropietariosVenta(@RequestParam("idVenta") Long idVenta, @RequestParam("estadoS") String estado, @RequestParam("propietarios") List<Long> propietarios, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        try {
+            Venta venta= ventaService.encontrar(idVenta);
             for (var idpropietario : propietarios) {
-                Propietario propietario = propietarioService.encontrarPropietario(idpropietario);
+                Propietario propietario = propietarioService.encontrar(idpropietario);
                 AsignacionPropietario newAsignacionVenta = new AsignacionPropietario();
                 newAsignacionVenta.setPropietario(propietario);
                 newAsignacionVenta.setVenta(venta);
+                newAsignacionVenta.setEstado(estado);
                 asigPropietarioVentaService.agregar(newAsignacionVenta);
             }            
             String mensaje = "Se ha agregado un propietario a la venta.";
@@ -324,12 +429,10 @@ public class VentaController {
         }
     }
 
-    @PostMapping("/EliminarPropietarioVenta/{idPersona}")
-    public ResponseEntity EliminarPropietarioVenta(Persona persona) {
+    @PostMapping("/EliminarPropietarioVenta/{idAsignacion}")
+    public ResponseEntity EliminarPropietarioVenta(AsignacionPropietario asignacion) {
         try {
-             Propietario newPropietario = propietarioService.encontrarPropietarioPersona(persona);
-             AsignacionPropietario asignacionPropietario=asigPropietarioVentaService.encontrarPropietario(newPropietario);
-             asigPropietarioVentaService.eliminar(asignacionPropietario);
+             asigPropietarioVentaService.eliminar(asignacion);
              String mensaje = "Se ha eliminado un propietario de la venta correctamente.";
              bitacoraService.registrarAccion("Eliminar propietario venta");
             return ResponseEntity.ok(mensaje);
@@ -339,70 +442,62 @@ public class VentaController {
         }
     }
     
-    @GetMapping("/VerPropietarioVenta/{idProyecto}/{idPersona}")
-    public String VerPropietarioVenta(Model model, Persona persona, Proyecto proyecto) {
-        model.addAttribute("pageTitle", "Perfil Propietario");
-        Persona newPersona = personaService.encontrarPersona(persona.getIdPersona());
-        Propietario newPropietario = propietarioService.encontrarPropietarioPersona(newPersona);
-        Proyecto newProyecto = proyectoService.encontrarProyecto(proyecto.getIdProyecto());
-        
-        //Manejo de correos
-        var correos = correoService.listarCorreos();
-        List<String> tiposCorreo = listarTiposCorreos();
-        List<Correo> correosPropietario = new ArrayList();
-        for (var eCorreo : correos) {
-            if(Objects.equals(eCorreo.getIdPropietario(), newPropietario.getIdPropietario())){
-                correosPropietario.add(eCorreo);
+    @PostMapping("/AgregarTrabajadorVenta")
+    public ResponseEntity AgregarTrabajadorVenta(@RequestParam("idVenta") Long idVenta, Visitante visitante, Persona persona, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+       try {
+            if(personaService.encontrarDui(persona.getDui())== null){
+                personaService.agregar(persona);
+                Persona newPersona = personaService.encontrarDui(persona.getDui());
+                visitante.setPersona(newPersona);
+                visitanteService.agregar(visitante);
+                Venta venta= ventaService.encontrar(idVenta);
+                AsignacionVisitante newAsignacionVenta = new AsignacionVisitante();
+                newAsignacionVenta.setVisitante(visitante);
+                newAsignacionVenta.setVenta(venta);
+                asigVisitanteService.agregar(newAsignacionVenta);
+                String mensaje = "Se ha agregado un trabajador a la venta.";
+                bitacoraService.registrarAccion("Agregar trabajador venta");
+                return ResponseEntity.ok(mensaje);
+            }else{
+                String error = "Ya se encuentra registrado el trabajador.";
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
             }
+        } catch (Exception e) {
+            String error = "Ocurrió un error al agregar el trabajador a la venta.";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
-        
-        //Manejo de telefonos
-        var telefonos = telefonoService.listarTelefonos();
-        List<String> tiposTelefono = listarTipoTelefono();
-        List<Telefono> telefonosPropietario = new ArrayList();
-        for (var eTelefono: telefonos) {
-            if(Objects.equals(eTelefono.getIdPropietario(), newPropietario.getIdPropietario())){
-                telefonosPropietario.add(eTelefono);
-            }
-        }
-        
-        //Manejo de referencias
-        var referencias = referenciaService.listarReferencias();
-        List<Referencia> referenciasPropietario = new ArrayList();
-        for (var eReferencia: referencias) {
-            if(Objects.equals(eReferencia.getIdPropietario(), newPropietario.getIdPropietario())){
-                referenciasPropietario.add(eReferencia);
-            }
-        }
-        
-        //Manejo de documentos
-        List<Documento> listaDocumentos = documentoService.listarDocumentos();
-        List<Documento> documentosPropietario = new ArrayList();
-        for (var documento : listaDocumentos) {
-            if(documento.getIdListDocumento() == (int) newPropietario.getIdDocumento()){
-                documentosPropietario.add(documento);
-            }
-        }
-        
-        model.addAttribute("proyecto", newProyecto);
-        model.addAttribute("documentos", documentosPropietario);
-        model.addAttribute("referencias", referenciasPropietario);
-        model.addAttribute("correos", correosPropietario);
-        model.addAttribute("tiposCorreo", tiposCorreo);
-        model.addAttribute("telefonos", telefonosPropietario);
-        model.addAttribute("tiposTelefonos", tiposTelefono);
-        model.addAttribute("propietario", newPropietario);
-        model.addAttribute("persona", newPersona);
-        return "/Propietario/MostrarPropietarioProyecto";
     }
     
-    public List<String> listarTiposCorreos() {
-        List<String> tiposCorreos = Arrays.asList("Trabajo", "Privado","Personal","Institucional");
-        return tiposCorreos;
+    @PostMapping("/SeleccionarTrabajadoresVenta")
+    public ResponseEntity SeleccionarTrabajadoresVenta(@RequestParam("idVenta") Long idVenta, @RequestParam("trabajadores") List<Long> trabajadores, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        try {
+            Venta venta= ventaService.encontrar(idVenta);
+            for (var idtrabajador : trabajadores) {
+                Visitante visitante = visitanteService.encontrar(idtrabajador);
+                AsignacionVisitante newAsignacionVenta = new AsignacionVisitante();
+                newAsignacionVenta.setVisitante(visitante);
+                newAsignacionVenta.setVenta(venta);
+                asigVisitanteService.agregar(newAsignacionVenta);
+            }            
+            String mensaje = "Se ha agregado un trabajador a la venta.";
+            bitacoraService.registrarAccion("Agregar trabajador venta");
+            return ResponseEntity.ok(mensaje);
+        } catch (Exception e) {
+            String error = "Ocurrió un error al agregar el trabajador a la venta.";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        }
     }
-    
-    public List<String> listarTipoTelefono() {
-        List<String> tipoTelefono = Arrays.asList("Casa", "Oficina","Fijo", "Móvil");
-        return tipoTelefono;
+
+    @PostMapping("/EliminarTrabajadorVenta/{idAsignacion}")
+    public ResponseEntity EliminarTrabajadorVenta(AsignacionVisitante asignacion) {
+        try {
+             asigVisitanteService.eliminar(asignacion);
+             String mensaje = "Se ha eliminado un trabajador de la venta correctamente.";
+             bitacoraService.registrarAccion("Eliminar trabajador venta");
+            return ResponseEntity.ok(mensaje);
+        } catch (Exception e) {
+            String error = "Ha ocurrido un error al eliminar el trabajador de la venta.";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        }
     }
 }
