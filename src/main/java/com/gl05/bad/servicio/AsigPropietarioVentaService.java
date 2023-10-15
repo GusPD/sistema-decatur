@@ -21,4 +21,6 @@ public interface AsigPropietarioVentaService {
     public void actualizar(AsignacionPropietario asignacionPropietario);
     
     public DataTablesOutput<AsignacionPropietario> listarPropietarios(DataTablesInput input, Long idProyecto);
+    
+    public DataTablesOutput<AsignacionPropietario> listarPropietariosVenta(DataTablesInput input, Long idVenta);
 }

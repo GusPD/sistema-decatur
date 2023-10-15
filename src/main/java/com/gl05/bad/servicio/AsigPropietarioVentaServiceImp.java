@@ -65,4 +65,13 @@ public class AsigPropietarioVentaServiceImp implements AsigPropietarioVentaServi
         };
         return asignacionDao.findAll(input, specification);
     }
+    
+    @Override
+    @Transactional(readOnly = true)
+    public DataTablesOutput<AsignacionPropietario> listarPropietariosVenta(DataTablesInput input, Long idVenta) {
+        Specification<AsignacionPropietario> specification = (root, query, builder) -> {
+            return builder.equal(root.get("venta").get("idVenta"), idVenta);
+        };
+        return asignacionDao.findAll(input, specification);
+    }
 }

@@ -82,3 +82,38 @@ function actualizarHora() {
 }
 // Llamar a la función actualizarHora cada segundo
 setInterval(actualizarHora, 1000);
+
+$(document).ready(function() {
+    $("#boton-menu").click(function() {
+        var windowWidth = window.innerWidth;
+        var navIconoLogo = $("#nav-icono-logo");
+        var navLogo = $("#nav-logo");
+        if (windowWidth > 768) {
+            if (navIconoLogo.length > 0) {
+                if (isSidebarCollapsed()) {
+                    navIconoLogo.hide();
+                    navLogo.show();
+                } else {
+                    navIconoLogo.show();
+                    navLogo.hide();
+                }
+            }
+        }else{
+            if (navIconoLogo.length > 0) {
+                navIconoLogo.hide();
+                navLogo.show();
+            }
+        }
+    });
+});
+
+function isSidebarCollapsed() {
+  var sidebar = document.querySelector('body');
+  return sidebar.classList.contains('sidebar-collapse');
+}
+
+toastr.options = {
+    closeButton: true,
+    progressBar: true,
+    positionClass: "toast-top-right"
+};

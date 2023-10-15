@@ -2,7 +2,9 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <!-- Agrega el enlace al archivo CSS de FontAwesome -->
+    <title>Acceso Denegado</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="${pageContext.request.contextPath}/images/favicon-logo.ico" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/recursosOnline/css/all.min.css">
 </head>
 <body>

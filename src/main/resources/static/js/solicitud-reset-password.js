@@ -35,11 +35,13 @@ var validator = $('#form-reset-password').validate({
         event.preventDefault();
         var formDataArray = formReset.serializeArray();
         console.log(formDataArray);
+        $("#animacion-loading").show();
         $.ajax({
             url: '/RestablecerPassword',
             type: 'POST',
             data: formDataArray,
             success: function (response) {
+                $("#animacion-loading").hide();
                 mostrarMensaje(response, 'success');
                 $("#username").val("");
             },

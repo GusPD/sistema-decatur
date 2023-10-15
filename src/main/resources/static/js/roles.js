@@ -58,10 +58,7 @@ $(document).ready(function () {
                 searchable: false,
                 width: '25%',
                 render: function (data, type, row) {
-                    // Aquí puedes construir el HTML para las acciones según tus necesidades
-//                    var actionsHtml = '<a type="button" class="btn btn-outline-secondary" href="/DetalleMaestria/' + row.idMaestria + '">';
-//                    actionsHtml += '<i class="bi bi-eye"></i></a>';
-                
+           
                  var actionsHtml = '';
 
                     if(hasPrivilegeEditarRol === true){

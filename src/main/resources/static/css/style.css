@@ -1,6 +1,7 @@
 @import url(//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css);
 @import url(https://fonts.googleapis.com/css?family=Titillium+Web:300);
 
+/*Configuracion Plantilla Page*/
 #desktop-header {
   position: fixed!Important;
   top: 0!Important;
@@ -17,20 +18,36 @@
     z-index: 9999!Important;
 }
 
+#etiqueta-inicio{
+    background-color: transparent; 
+    color: inherit; 
+    text-decoration: none; 
+    border-bottom: 1px solid #000;
+}
+
+#nav-logo{
+    max-height: 40px;
+}
+
+#nav-icono-logo{
+    max-height: 40px;
+    display: none;
+}
+
 .sidebar {
     height: auto !Important;
 }
 
 body{
     overflow-x: hidden;
-    background-color: white !Important;
+    background-color: #E3E7EA !Important;
     font-family: "Poppins", Arial, sans-serif;
     font-size: 14px !Important;
     font-weight: normal;
 }
 
 .content-wrapper{
-    background-color: white !Important;
+    background-color: #E3E7EA !Important;
 }
 
 .container{
@@ -40,6 +57,10 @@ body{
 .overflow-auto-page{
     max-height: 70vh !Important;
     padding-right: 3px!Important;
+}
+
+.card-header{
+    background-color: white;
 }
 
 .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
@@ -96,30 +117,24 @@ text-decoration:none;
     color: #dc3545;
 }
 
-/* PERFIL GENERAL*/
-.titulo-Perfil{
+/* Configuracion Titulos*/
+.titulo-page{
   text-align:left !Important;
   color: #004077 !Important;
   margin-top: 1em !Important;
-  margin-bottom: 1em !Important;
   border-bottom: 1px solid black !Important;
   border-color: #BECECF !Important;
+  padding: 0px !Important;
 }
 
-.subtitulo-Perfil{
+.subtitulo-page{
   text-align:left !Important;
   color: #596064 !Important;
-  margin-top:1em !Important;
 }
 
-.subtitulo-Perfil i{
+.subtitulo-page i{
   font-size: 20px !Important;
   color: #004077 !Important;
-}
-
-.modal{
-    margin-top: 50px !Important;
-    margin-bottom: 10px !Important;
 }
 
 .pushmenu{
@@ -146,14 +161,6 @@ input[type="number"]::-webkit-outer-spin-button:disabled {
   pointer-events: auto;
 }
 
-.img-circle {
-    border-radius: 50%;
-}
-
-.img-circle-perfil {
-    border-radius: 10%;
-}
-
 pre{
   font-family: "Poppins", Arial, sans-serif;
   font-size: 10px;
@@ -164,17 +171,6 @@ pre{
   text-align: justify;
 }
 
-.links-cohorte{
-    text-decoration: none;
-    color: #000;
-    cursor: pointer;
-    transition: all 0.3s;
-}
-
-.links-cohorte:hover{
-    color: #000;
-    border-color: #293462;
-}
 
 .p-menu-perfil{
     padding: 0.25rem;
@@ -217,10 +213,6 @@ pre{
     width: auto !important;
 }
 
-.container-titulo{
-    padding: 0px !Important;
-}
-
 #EspacioEncabezado{
     height: 40px!Important;
 }
@@ -229,6 +221,78 @@ pre{
     font-weight: bold !Important;
 }
 
+/*Configuración de las tablas*/
+div.row.w-100:has(div.dt-buttons) {
+    display: none;
+}
+div.dataTables_wrapper div.dataTables_filter input {
+    font-size: 12px !Important;
+    border-color: #E3E7EA !important;
+}
+.page-item {
+    font-size: 10px !Important;
+}
+.page-link {
+    color: #000 !Important;
+    font-size: 10px !Important;
+    border-color: #E3E7EA !Important;
+}
+div.dataTables_wrapper div.dataTables_length select {
+    font-size: 12px !Important;
+    border-color: #E3E7EA !important;
+}
+.page-item.active .page-link {
+    background-color: #83B1F3 !Important;
+    border-color: #E3E7EA !Important;
+}
+div.dataTables_wrapper div.dataTables_info {
+    padding-top: 0px !Important;
+}
+.table{
+    width: 100%!Important;
+    border-color: #E3E7EA !important;
+}
+table.dataTable thead>tr>th {
+    color: #000 !Important;
+    border-color: #E3E7EA !important;
+}
+table.dataTable {
+    max-width: none !important;
+    border-collapse: separate !important;
+    border-spacing: 0;
+    font-size: small !Important;
+    margin: 0px !Important;
+    width: 100% !Important;
+    background-color: white;
+}
+.encabezado-tabla{
+    background-color: #DCDAE9!Important;
+}
+thead {
+    position: sticky;
+    border-style: solid;
+    border-color: #E3E7EA !important;
+    background-color: white;
+    top:-4px;
+}
+th {
+    position: sticky;
+    border-color: #E3E7EA !important;
+    background-color: white;
+}
+
+/* Configuración de la Venta de Terreno */
+#numeroTerrenoVenta{
+    font-weight: bold!Important;
+    font-size: 4rem !Important;
+}
+#poligonoTerrenoVenta{
+    font-weight: bold!Important;
+    font-size: 1rem !Important;
+}
+#imagenPerfil{
+    font-size: 7rem !Important;
+}
 .tarjeta-container{
     display: flex;
     align-items: stretch;
@@ -252,95 +316,10 @@ pre{
     width: 75%;
 }
 
-/*Configuración de las tablas*/
-div.dataTables_wrapper div.dataTables_filter input {
-    font-size: 12px !Important;
-    border-color: #004077 !important;
-}
-
-.page-item {
-    font-size: 10px !Important;
-}
-
-.page-link {
-    color: #000 !Important;
-    font-size: 10px !Important;
-    border-color: #004077 !Important;
-}
-
-div.dataTables_wrapper div.dataTables_length select {
-    font-size: 12px !Important;
-    border-color: #004077 !important;
-}
-table.dataTable {
-    max-width: none !important;
-    border-collapse: separate !important;
-    border-spacing: 0;
-    font-size: small !Important;
-    margin: 0px !Important;
-    width: 100% !Important;
-    background-color: white;
-}
-
-table.dataTable thead>tr>th {
-    background-color: #8A99AF !Important;
-    color: #000 !Important;
-    border-color: #004077 !important;
-}
-
-.page-item.active .page-link {
-    background-color: #83B1F3 !Important;
-    border-color: #004077 !Important;
-}
-
-div.dataTables_wrapper div.dataTables_info {
-    padding-top: 0px !Important;
-}
-
-.dataTables_wrapper .dt-buttons {
-    display: none;
-}
-.table-container {
-    height: 400px;
-    overflow-y: auto;
-    overflow-x: hidden; 
-    margin-top: 10px !Important;
-}
-
-.table{
-    width: 100%!Important;
-}
-
-thead {
-    position: sticky;
-    border-style: solid;
-    top:0px;
-}
-
-th {
-  position: sticky;
-  top: 0px;
-}
-
-.encabezado-tabla{
-    background-color: #DCDAE9!Important;
-}
-
-/* Configuración de la Venta de Terreno */
-#numeroTerrenoVenta{
-    font-weight: bold!Important;
-    font-size: 4rem !Important;
-}
-#poligonoTerrenoVenta{
-    font-weight: bold!Important;
-    font-size: 1rem !Important;
-}
-#imagenPerfil{
-    font-size: 7rem !Important;
-}
-
 /* Configuración de Modales */
-.modal {
+.modal{
+    margin-top: 50px !Important;
+    margin-bottom: 10px !Important;
     z-index: 9996;
 }
 .form-group{
@@ -358,6 +337,11 @@ th {
 .select2-container {
     z-index: 9997;
 }
+.invalid-feedback{
+    display: flex;
+    text-align: justify;
+}
+
 
 /*Configuración de Icono Ver Contraseña Login*/
 .input-group-text{
@@ -399,7 +383,7 @@ th {
 }
 
 /*Configuración Inicio de Sesión*/
-.card-header {
+.header-login {
     background-color: white;
     border-bottom: 0px solid rgba(0,0,0,.125);
 }
@@ -409,6 +393,10 @@ th {
 }
 .login-box{
     max-width: 400px;
+}
+#login-logo{
+    max-width: 370px;
+    margin-bottom: 30px;
 }
 .background-login{
     background-color: #154360;
@@ -421,3 +409,41 @@ th {
 .text-align-justify{
     text-align: justify;
 }
+
+/*Configuración de animación de loading en login*/
+.animacion-loading{
+    display:none;
+}
+.loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+}
+.dot {
+    width: 10px;
+    height: 10px;
+    background-color: white;
+    border-radius: 50%;
+    margin: 0 5px;
+    animation: bounce 1.5s infinite;
+}
+.dot:nth-child(2) {
+    animation-delay: 0.5s;
+}
+.dot:nth-child(3) {
+    animation-delay: 1s;
+}
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-15px);
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+

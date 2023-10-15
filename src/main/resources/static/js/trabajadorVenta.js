@@ -1,4 +1,81 @@
 $(document).ready(function() {
+    var idVenta=$("#idVenta").val();
+     var table = $('#trabajadoresTable').DataTable({
+        ajax: '/trabajadorVenta/data/'+idVenta,
+        processing: true,
+        serverSide: true,
+        order: [[0, 'asc']],
+        dom: "<'row w-100'<'col-sm-12 mb-4'B>>" +
+             "<'row w-100'<'col-sm-6'l><'col-sm-6'f>>" +
+             "<'row w-100'<'col-sm-12 my-4'tr>>" +
+             "<'row w-100'<'col-sm-5'i><'col-sm-7'p>>",
+        lengthMenu: [[5, 25, 50, 100, -1], [5, 25, 50, 100, 'Todos']],
+        pageLength: 5,
+        columns: [
+            {
+                data: null,
+                title: "N°",
+                sortable: false,
+                searchable: false,
+                render: function (data, type, row, meta) {
+                    return meta.row + 1;
+                },
+                width: '10%'
+            },
+            { data: 'visitante.persona.nombre', title: 'Nombre', width: '35%' },
+            {
+                data: null,
+                title: 'Acciones',
+                sortable: false,
+                searchable: false,
+                width: '30%',
+                render: function (data, type, row) {
+                    
+                    var actionsHtml = '';
+                    
+                    if(hasPrivilegeVerTrabajador === true){
+                        actionsHtml = '<a type="button" class="btn btn-outline-secondary btn-sm" href="/Trabajador/' + row.venta.terreno.proyecto.idProyecto +'/'+ row.visitante.persona.idPersona + '' + '">';
+                        actionsHtml += '<i class="far fa-eye"></i></a>';
+                    }
+                    
+                    if(hasPrivilegeEliminarTrabajador === true){
+                    actionsHtml += '<button type="button" class="btn btn-outline-danger eliminarModalTrabajador-btn btn-sm" data-id="' + row.idAsignacion + '" ';
+                    actionsHtml += 'data-cod="' + row.idAsignacion + '">';
+                    actionsHtml += '<i class="far fa-trash-alt"></i></button>';
+                   }
+                    
+                    return actionsHtml || '';
+                }
+            }
+        ],
+        language: {
+            "sProcessing": "Procesando...",
+            "sLengthMenu": "Mostrar _MENU_ registros",
+            "sZeroRecords": "No se encontraron resultados",
+            "sEmptyTable": "Ningún dato disponible en esta tabla",
+            "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+            "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+            "sInfoFiltered": "", //"(filtrado de un total de _MAX_ registros)",
+            "sInfoPostFix": "",
+            "sSearch": "Buscar:",
+            "sUrl": "",
+            "sInfoThousands": ",",
+            "sLoadingRecords": "Cargando...",
+            "oPaginate": {
+                "sFirst": "Primero",
+                "sLast": "Último",
+                "sNext": "Siguiente",
+                "sPrevious": "Anterior"
+            },
+            "oAria": {
+                "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+            }
+        },
+        search: {
+            return: true
+        }
+    });
     $.validator.addMethod(
         "validarDui",
         function(value, element) {
@@ -80,14 +157,12 @@ $(document).ready(function() {
                 data: formDataArray,
                 success: function (response) {
                     $('#crearModalTrabajador').modal('hide');  // Cierra el modal
-                    mostrarMensaje(response, 'success');
+                    toastr.success(response);
                     $('.form-control').val('');
                     $.ajax({
-                        url: "/Venta/"+idVenta,
+                        url: "/TrabajadoresVenta/"+idVenta,
                         type: 'GET',
                         success: function (nuevosDatos) {
-                            var elementoActualizable = $(nuevosDatos).find('#tabla-trabajadores');
-                            $('#tabla-trabajadores').html(elementoActualizable.html());
                             var elementoActualizable2 = $(nuevosDatos).find('#formGuardarTrabajador');
                             $('#formGuardarTrabajador').html(elementoActualizable2.html());
                             $( '#trabajadores' ).select2( {
@@ -105,7 +180,7 @@ $(document).ready(function() {
                 error: function (xhr, status, error) {
                     $('#crearModalTrabajador').modal('hide'); // Cierra el modal
                     var errorMessage = xhr.responseText || 'Error al agregar el trabajador.';
-                    mostrarMensaje(errorMessage, 'danger');
+                    toastr.error(errorMessage);
                 }
             });
         }
@@ -184,13 +259,12 @@ $(document).ready(function() {
                 data: formDataArray,
                 success: function(response) {
                     $('#seleccionarModalTrabajador').modal('hide');
-                    mostrarMensaje(response, 'success');
+                    table.ajax.reload();
+                    toastr.success(response);
                     $.ajax({
-                        url: "/Venta/"+idVenta,
+                        url: "/TrabajadoresVenta/"+idVenta,
                         type: 'GET',
                         success: function (nuevosDatos) {
-                            var elementoActualizable = $(nuevosDatos).find('#tabla-trabajadores');
-                            $('#tabla-trabajadores').html(elementoActualizable.html());
                             var elementoActualizable2 = $(nuevosDatos).find('#formSeleccionarTrabajador');
                             $('#formSeleccionarTrabajador').html(elementoActualizable2.html());
                             $( '#trabajadores' ).select2( {
@@ -208,7 +282,7 @@ $(document).ready(function() {
                 error: function (xhr, status, error) {
                     $('#seleccionarModalTrabajador').modal('hide'); // Cierra el modal
                     var errorMessage = xhr.responseText || 'Error al agregar el trabajador.';
-                    mostrarMensaje(errorMessage, 'danger');
+                    toastr.error(errorMessage);
                 }
             });
         }
@@ -217,20 +291,9 @@ $(document).ready(function() {
     // Método para mostrar el modal de eliminación
     $(document).on('click', '.eliminarModalTrabajador-btn', function () {
         var idPersona = $(this).data('id');
-
         var modal = $('#confirmarEliminarModalTrabajador');
-        var tituloModal = modal.find('.modal-title');
-        var cuerpoModal = modal.find('.modal-body');
         var eliminarBtn = modal.find('#eliminarTrabajadorBtn');
-
-        // Actualizar el contenido del modal con los parámetros recibidos
-        tituloModal.text('Confirmar eliminación');
-        cuerpoModal.html('<strong>¿Estás seguro de eliminar el trabajador seleccionado?</strong><br>Ten en cuenta que se eliminarán \n\
-        los datos relacionados al trabajador');
-
-        // Actualizar el atributo href del botón de eliminación con el idCohorte
         eliminarBtn.data('id', idPersona);
-
         modal.modal('show');
     });
    
@@ -249,13 +312,11 @@ $(document).ready(function() {
             data: $('#eliminarTrabajadorForm').serialize(), // Incluir los datos del formulario en la solicitud
             success: function (response) {
                 $('#confirmarEliminarModalTrabajador').modal('hide');
-                // Recargar el DataTable
+                table.ajax.reload();
                 $.ajax({
-                    url: "/Venta/"+idVenta,
+                    url: "/TrabajadoresVenta/"+idVenta,
                     type: 'GET',
                     success: function (nuevosDatos) {
-                        var elementoActualizable = $(nuevosDatos).find('#tabla-trabajadores');
-                        $('#tabla-trabajadores').html(elementoActualizable.html());
                         var elementoActualizable2 = $(nuevosDatos).find('#formGuardarTrabajador');
                         $('#formGuardarTrabajador').html(elementoActualizable2.html());
                         var elementoActualizable2 = $(nuevosDatos).find('#formSeleccionarTrabajador');
@@ -271,12 +332,12 @@ $(document).ready(function() {
                         alert('Error al cargar la tabla.');
                     }
                 });
-               mostrarMensaje(response, 'success');
+               toastr.success(response);
             },
             error: function (xhr, status, error) {
               $('#confirmarEliminarModalTrabajador').modal('hide');
               var errorMessage = xhr.responseText || 'Error al eliminar el trabajador.';
-              mostrarMensaje(errorMessage, 'danger');
+              toastr.error(errorMessage);
             }
         });
         

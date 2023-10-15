@@ -5,8 +5,9 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Iniciar sesión</title>
+    <title>Restablecer</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="${pageContext.request.contextPath}/images/favicon-logo.ico" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/recursosOnline/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/style.css">
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/recursosOnline/css/adminlte.css">
@@ -17,8 +18,15 @@
         <div class="row col-xs-12 col-sm-12 col-md-12 d-flex align-items-center justify-content-center vh-100">
             <div class="login-box">    
                 <div class="login-logo">
-                    <b>Admin</b>LTE
+                     <img id="login-logo" src="${pageContext.request.contextPath}/images/logo.png" alt="Logo Decatur">
                 </div>
+                <div id="animacion-loading" class="animacion-loading">
+                    <div class="loader">
+                        <span class="dot"></span>
+                        <span class="dot"></span>
+                        <span class="dot"></span>
+                    </div>
+                </div>               
                 <c:if test="${not empty mensaje}">
                     <div class="alert alert-success d-flex align-items-center alert-dismissible fade show" role="alert">
                         <strong><i class="bi bi-check-circle"></i> Éxito!</strong> ${mensaje}

@@ -28,11 +28,21 @@ function togglePasswordVisibilityConfirm() {
     }
 }
 
+$.validator.addMethod(
+    "validarPassword",
+    function(value, element) {
+      return this.optional(element) || 
+              /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:,<.>])[A-Za-z\d!@#$%^&*()\-_=+{};:,<.>]{8,}$/.test(value);
+    },
+    "La contraseña debe contener al menos una mayúscula, una minúscula, un número, un carácter especial y tener un mínimo de 8 caracteres"
+);
+
 var form = $('#form-reset-password'); // Almacenar referencia al formulario
 var validator = $('#form-reset-password').validate({
     rules: {        
         password: {
-            required: true
+            required: true,
+            validarPassword: true
         },
         passwordconfirm: {
             required: true,
@@ -66,6 +76,8 @@ var validator = $('#form-reset-password').validate({
     errorElement: 'div',
     errorClass: 'invalid-feedback',
     submitHandler: function(form) {
+        history.replaceState(null, null, window.location.href);
+        $("#animacion-loading").show();
         form.trigger('submit');
     }
 });

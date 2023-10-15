@@ -1,74 +1,84 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<div id="perfil-correo-electronico">
-    <div class="subtitulo-Perfil">
-        <h3>Facturación</h3>
-    </div>
-    <div class="overflow-auto">
-        <div class="tarjeta-container">
-            <div class="tarjeta-facturacion-izquierda border p-3 rounded">
-                <h6 class="text-center font-weight-bold">Consumidor Final
-                    <span title="Editar Información" id="EditarConsumidorFinal" class="btn abrirModalConsumidorFinal-btn text-info puntero pull-right text-blue btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalConsumidorFinal" data-tipo="editar" data-id="${venta.idVenta}" data-modo="actualizar" style="cursor: pointer;">
-                        <i class="far fa-edit"></i>
-                    </span>
-                </h6>
-                <table class="table table-borderless small" id="tabla-consumidorFinal">
-                    <thead>
-                        <tr>
-                            <th scope="col" width="10%">N°</th>
-                            <th scope="col" width="90%">Nombre</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <c:if test="${empty consumidorFinal}">
-                            <tr>
-                                <td colspan="3">No hay registros</td>
-                            </tr>
-                        </c:if>
-                        <c:if test="${not empty consumidorFinal}">
-                            <c:forEach items="${consumidorFinal}" var="eElemento" varStatus="i">
-                                <tr>
-                                    <td>${i.index+1}</td>
-                                    <td>${eElemento.propietario.persona.nombre} ${eElemento.propietario.persona.apellido}</td>
-                                </tr>
-                            </c:forEach>
-                        </c:if>
-                    </tbody>
-                </table>
+<%@ include file="../venta-header.jspf"%>
+<div class="row">
+    <div class="col-12 pb-3">
+        <div class="card">
+            <div class="card-header">
+                <div class="subtitulo-page">
+                    <h3 class="mt-0 mb-0">Facturacion</h3>
+                </div>
             </div>
-            <div class="tarjeta-facturacion-derecha border p-3 rounded">
-                <h6 class="text-center font-weight-bold">Crédito Fiscal
-                    <span title="Editar Información" id="EditarCreditoFiscal" class="btn abrirModalCreditoFiscal-btn text-info puntero pull-right text-blue btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalCreditoFiscal" data-tipo="editar" data-id="${venta.idVenta}" data-modo="actualizar" style="cursor: pointer;">
-                        <i class="far fa-edit"></i>
-                    </span>
-                </h6>
-                <table class="table table-borderless small" id="tabla-creditoFiscal">
-                    <tbody>
-                        <tr>
-                            <td width="25%" class="font-weight-bold" scope="col">N° Registro:</td>
-                            <td><c:if test="${not empty venta.estado}"></c:if></td>
-                        </tr>
-                        <tr>
-                            <td class="font-weight-bold" scope="col">NIT:</td>
-                            <td><c:if test="${not empty venta.nombre}"></c:if></td>
-                        </tr>
-                        <tr>
-                            <td class="font-weight-bold" scope="col">DUI:</td>
-                            <td><c:if test="${not empty venta.nombre}"></c:if></td>
-                        </tr>
-                        <tr>
-                            <td class="font-weight-bold" scope="col">Nombre:</td>
-                            <td><c:if test="${not empty venta.fecha}"></c:if></td>
-                        </tr>
-                        <tr>
-                            <td class="font-weight-bold" scope="col">Dirección:</td>
-                            <td><c:if test="${not empty venta.precio}"></c:if></td>
-                        </tr>
-                        <tr>
-                            <td class="font-weight-bold" scope="col">Giro:</td>
-                            <td><c:if test="${not empty venta.descuento}"></c:if></td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="card-body pb-0">
+                <div id="table_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                    <div class="col-sm-12 table-responsive pt-1" style="height: 55vh; padding:4px;">
+                        <div class="tarjeta-container pb-3 h-100">
+                            <div class="tarjeta-facturacion-izquierda border p-3 rounded">
+                                <h6 class="text-center font-weight-bold">Consumidor Final
+                                    <span title="Editar Información" id="EditarConsumidorFinal" class="btn abrirModalConsumidorFinal-btn text-info puntero pull-right text-blue btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalConsumidorFinal" data-tipo="editar" data-id="${venta.idVenta}" data-modo="actualizar" style="cursor: pointer;">
+                                        <i class="far fa-edit"></i>
+                                    </span>
+                                </h6>
+                                <table class="table table-borderless small" id="tabla-consumidorFinal">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" width="10%">N°</th>
+                                            <th scope="col" width="90%">Nombre</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <c:if test="${empty consumidorFinal}">
+                                            <tr>
+                                                <td colspan="3">No hay registros</td>
+                                            </tr>
+                                        </c:if>
+                                        <c:if test="${not empty consumidorFinal}">
+                                            <c:forEach items="${consumidorFinal}" var="eElemento" varStatus="i">
+                                                <tr>
+                                                    <td>${i.index+1}</td>
+                                                    <td>${eElemento.propietario.persona.nombre} ${eElemento.propietario.persona.apellido}</td>
+                                                </tr>
+                                            </c:forEach>
+                                        </c:if>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="tarjeta-facturacion-derecha border p-3 rounded">
+                                <h6 class="text-center font-weight-bold">Crédito Fiscal
+                                    <span title="Editar Información" id="EditarCreditoFiscal" class="btn abrirModalCreditoFiscal-btn text-info puntero pull-right text-blue btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalCreditoFiscal" data-tipo="editar" data-id="${venta.idVenta}" data-modo="actualizar" style="cursor: pointer;">
+                                        <i class="far fa-edit"></i>
+                                    </span>
+                                </h6>
+                                <table class="table table-borderless small" id="tabla-creditoFiscal">
+                                    <tbody>
+                                        <tr>
+                                            <td width="25%" class="font-weight-bold" scope="col">N° Registro:</td>
+                                            <td><c:if test="${not empty venta.estado}"></c:if></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="font-weight-bold" scope="col">NIT:</td>
+                                            <td><c:if test="${not empty venta.nombre}"></c:if></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="font-weight-bold" scope="col">DUI:</td>
+                                            <td><c:if test="${not empty venta.nombre}"></c:if></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="font-weight-bold" scope="col">Nombre:</td>
+                                            <td><c:if test="${not empty venta.fecha}"></c:if></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="font-weight-bold" scope="col">Dirección:</td>
+                                            <td><c:if test="${not empty venta.precio}"></c:if></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="font-weight-bold" scope="col">Giro:</td>
+                                            <td><c:if test="${not empty venta.descuento}"></c:if></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -162,4 +172,8 @@
         </div>
     </div>
 </div>
+<%@ include file="../venta-footer.jspf"%>
+<script src="${pageContext.request.contextPath}/js/informacionVenta.js"></script>
 
+
+      

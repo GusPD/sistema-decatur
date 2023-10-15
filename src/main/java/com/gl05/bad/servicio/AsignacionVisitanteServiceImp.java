@@ -4,6 +4,7 @@ import com.gl05.bad.dao.AsignacionVisitanteDao;
 import com.gl05.bad.domain.AsignacionVisitante;
 import com.gl05.bad.domain.Visitante;
 import java.util.List;
+import javax.persistence.criteria.Predicate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
@@ -57,12 +58,23 @@ public class AsignacionVisitanteServiceImp implements AsignacionVisitanteService
             throw new IllegalArgumentException("La asignación del visitante no existe.");
         }
     }
-
+    
     @Override
     @Transactional(readOnly = true)
     public DataTablesOutput<AsignacionVisitante> listarAsignacionVisitantes(DataTablesInput input, Long idVenta) {
         Specification<AsignacionVisitante> specification = (root, query, builder) -> {
             return builder.equal(root.get("venta").get("idVenta"), idVenta);
+        };
+        return asignacionDao.findAll(input, specification);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public DataTablesOutput<AsignacionVisitante> listarTrabajadoresVenta (DataTablesInput input, Long idVenta) {
+        Specification<AsignacionVisitante> specification = (root, query, builder) -> {
+            Predicate ventaIdEqual = builder.equal(root.get("venta").get("idVenta"), idVenta);
+            Predicate rolTrabajador = builder.equal(root.get("visitante").get("rol"), "TRABAJADOR");
+            return builder.or(ventaIdEqual, rolTrabajador);
         };
         return asignacionDao.findAll(input, specification);
     }

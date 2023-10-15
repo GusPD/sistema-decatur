@@ -1,5 +1,6 @@
 package com.gl05.bad.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.sql.Blob;
 import javax.persistence.Basic;
@@ -40,6 +41,7 @@ public class Documento implements Serializable {
     @Size(max = 200)
     @Column(name = "NOMBRE")
     private String nombre;
+    @JsonIgnore
     @Lob
     @Column(name = "DOCUMENTO")
     private Blob documento;

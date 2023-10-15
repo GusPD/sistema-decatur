@@ -7,6 +7,7 @@
     <meta charset="UTF-8">
     <title>Iniciar sesión</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" href="${pageContext.request.contextPath}/images/favicon-logo.ico" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/recursosOnline/css/bootstrap.min.css">
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/style.css">
     <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/recursosOnline/css/adminlte.css">
@@ -17,7 +18,7 @@
         <div class="row col-xs-12 col-sm-12 col-md-12 d-flex align-items-center justify-content-center vh-100">
             <div class="login-box">    
                 <div class="login-logo">
-                    <b>Admin</b>LTE
+                     <img id="login-logo" src="${pageContext.request.contextPath}/images/logo.png" alt="Logo Decatur">
                 </div>
                 <!-- Mostrar mensaje de error si está presente en la sesión -->
                 <c:if test="${not empty sessionScope.errorMessage}">
@@ -40,7 +41,7 @@
                 <c:remove var="errorMessage" />
                 </c:if>
                 <div class="card card-outline card-primary">        
-                    <div class="card-header d-flex align-items-center justify-content-center">
+                    <div class="card-header header-login d-flex align-items-center justify-content-center">
                         <h3 class="card-title text-blue">Iniciar Sesión</h3>
                     </div>
                     <div class="card-body login-card-body ">
