@@ -1,6 +1,6 @@
 <%@ include file="../venta-header.jspf"%>
 <div class="row">
-    <div class="subtitulo-page"><h3 class="mt-0">Venta
+    <div class="subtitulo-page"><h3 class="mt-0">Venta 
             <sec:authorize access="hasAuthority('EDITAR_VENTA_PRIVILAGE')">
                 <span title="Editar Información" id="EditarInformacion" class="btn abrirModal-btn text-info puntero pull-right btn-sm" data-bs-toggle="modal" data-bs-target="#crearModal" data-tipo="editar" data-id="${venta.idVenta}" data-modo="actualizar" style="cursor: pointer;">
                     <i class="far fa-edit"></i>
