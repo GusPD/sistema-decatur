@@ -180,6 +180,179 @@ public class VentaController {
         return "/Terreno/MostrarVentaTerreno";
     }
     
+    @GetMapping("/InformacionVenta/{idVenta}")
+    public String mostrarInformacionVenta(Model model, Venta venta) {
+        model.addAttribute("pageTitle", "Venta");
+        Venta ventaEncontrada = ventaService.encontrar(venta.getIdVenta());
+        Terreno terrenoEncontrado = ventaEncontrada.getTerreno();
+        double prima = 0;
+        Proyecto proyecto = terrenoEncontrado.getProyecto();
+        
+        model.addAttribute("proyecto", proyecto);
+        model.addAttribute("terreno", terrenoEncontrado);
+        model.addAttribute("venta", ventaEncontrada);
+        model.addAttribute("valorPrima", prima);
+        return "/Terreno/InformacionGeneral/ventaInformacion";
+    }
+    
+    @GetMapping("/propietarioVenta/data/{idVenta}")
+    @ResponseBody
+    public DataTablesOutput<AsignacionPropietario> GetPropietarios(@Valid DataTablesInput input, @PathVariable Long idVenta) {
+        return asigPropietarioVentaService.listarPropietariosVenta(input, idVenta);
+    }
+    
+    @GetMapping("/PropietariosVenta/{idVenta}")
+    public String mostrarPropietariosVenta(Model model, Venta venta) {
+        model.addAttribute("pageTitle", "Venta");
+        Venta ventaEncontrada = ventaService.encontrar(venta.getIdVenta());
+        Terreno terrenoEncontrado = ventaEncontrada.getTerreno();
+        Proyecto proyecto = terrenoEncontrado.getProyecto();
+        
+        //Manejo de propietarios
+        List<Propietario> listaPropietarios = propietarioService.listaPropietarios();
+        List<AsignacionPropietario> listaAsignaciones = asigPropietarioVentaService.listaAsignacion();
+        List<Propietario> propietariosNoVenta = new ArrayList();
+        boolean existePropietarioAsignado = false;
+        for (var propietario : listaPropietarios) {
+            for (var asignacion : listaAsignaciones) {
+                if(Objects.equals(propietario.getIdPropietario(), asignacion.getPropietario().getIdPropietario()) && Objects.equals(asignacion.getVenta().getIdVenta(), ventaEncontrada.getIdVenta())){
+                    existePropietarioAsignado = true;
+                }
+            }
+            if(existePropietarioAsignado==false){
+                propietariosNoVenta.add(propietario);
+            }else{
+                existePropietarioAsignado = false;
+            }
+        }
+        
+        List<AsignacionPropietario> propietarios = new ArrayList();
+        for (var propietario : listaAsignaciones) {
+            if(Objects.equals(propietario.getVenta().getIdVenta(), venta.getIdVenta())){
+                propietarios.add(propietario);
+            }
+        }
+        
+        List<AsignacionPropietario> propietariosSeleccionados = new ArrayList();
+        for (var propietario : propietarios) {
+            if(Objects.equals(propietario.getEstado(), "Seleccionado")){
+                propietariosSeleccionados.add(propietario);
+            }
+        }
+        
+        model.addAttribute("consumidorFinal", propietariosSeleccionados);
+        model.addAttribute("propietariosAsignados", propietarios);
+        model.addAttribute("propietariosNoVenta", propietariosNoVenta);
+        model.addAttribute("proyecto", proyecto);
+        model.addAttribute("terreno", terrenoEncontrado);
+        model.addAttribute("venta", ventaEncontrada);
+        return "/Terreno/InformacionGeneral/ventaPropietarios";
+    }
+    
+    @GetMapping("/trabajadorVenta/data/{idVenta}")
+    @ResponseBody
+    public DataTablesOutput<AsignacionVisitante> GetTrabjadoress(@Valid DataTablesInput input, @PathVariable Long idVenta) {
+        return asigVisitanteService.listarTrabajadoresVenta(input, idVenta);
+    }
+    
+    @GetMapping("/TrabajadoresVenta/{idVenta}")
+    public String mostrarTrabajadoresVenta(Model model, Venta venta) {
+        model.addAttribute("pageTitle", "Venta");
+        Venta ventaEncontrada = ventaService.encontrar(venta.getIdVenta());
+        Terreno terrenoEncontrado = ventaEncontrada.getTerreno();
+        Proyecto proyecto = terrenoEncontrado.getProyecto();
+        
+         //Manejo de trabajadores
+        List<Visitante> listaVisitantes = visitanteService.listaVisitantes();
+        List<AsignacionVisitante> listaAsignacionesVisitante = asigVisitanteService.listaAsignacionVisitantes();
+        List<Visitante> visitantesNoVenta = new ArrayList();
+        boolean existeVisitanteAsignado = false;
+        for (var visitante : listaVisitantes) {
+            for (var asignacion : listaAsignacionesVisitante) {
+                if(Objects.equals(visitante.getIdVisitante(), asignacion.getVisitante().getIdVisitante()) && Objects.equals(asignacion.getVenta().getIdVenta(), ventaEncontrada.getIdVenta())){
+                    existeVisitanteAsignado = true;
+                }
+            }
+            if(existeVisitanteAsignado==false){
+                visitantesNoVenta.add(visitante);
+            }else{
+                existeVisitanteAsignado = false;
+            }
+        }
+        
+        List<AsignacionVisitante> trabajadores = new ArrayList();
+        for (var trabajador : listaAsignacionesVisitante) {
+            if(Objects.equals(trabajador.getVenta().getIdVenta(), venta.getIdVenta())){
+                trabajadores.add(trabajador);
+            }
+        }
+        
+        model.addAttribute("trabajadoresAsignados", trabajadores);
+        model.addAttribute("trabajadoresNoVenta", visitantesNoVenta);
+        model.addAttribute("proyecto", proyecto);
+        model.addAttribute("terreno", terrenoEncontrado);
+        model.addAttribute("venta", ventaEncontrada);
+        return "/Terreno/InformacionGeneral/ventaTrabajadores";
+    }
+    
+    @GetMapping("/documentoVenta/data/{idListDocumento}")
+    @ResponseBody
+    public DataTablesOutput<Documento> GetDocumentos(@Valid DataTablesInput input, @PathVariable Integer idListDocumento) {
+        return documentoService.listarDocumentos(input, idListDocumento);
+    }
+    
+    @GetMapping("/DocumentosVenta/{idVenta}")
+    public String mostrarDocumentoVenta(Model model, Venta venta) {
+        model.addAttribute("pageTitle", "Venta");
+        Venta ventaEncontrada = ventaService.encontrar(venta.getIdVenta());
+        Terreno terrenoEncontrado = ventaEncontrada.getTerreno();
+        Proyecto proyecto = terrenoEncontrado.getProyecto();
+        
+        //Manejo de documentos
+        List<Documento> listaDocumentos = documentoService.listarDocumentos();
+        List<Documento> documentosVenta = new ArrayList();
+        for (var documento : listaDocumentos) {
+            if(Objects.equals(documento.getIdListDocumento(), ventaEncontrada.getIdListDocumento())){
+                documentosVenta.add(documento);
+            }
+        }
+        
+        model.addAttribute("documentos", documentosVenta);
+        model.addAttribute("proyecto", proyecto);
+        model.addAttribute("terreno", terrenoEncontrado);
+        model.addAttribute("venta", ventaEncontrada);
+        return "/Terreno/InformacionGeneral/ventaDocumentos";
+    }
+    
+    @GetMapping("/FacturacionVenta/{idVenta}")
+    public String mostrarFacturacionVenta(Model model, Venta venta) {
+        model.addAttribute("pageTitle", "Venta");
+        Venta ventaEncontrada = ventaService.encontrar(venta.getIdVenta());
+        Terreno terrenoEncontrado = ventaEncontrada.getTerreno();
+        Proyecto proyecto = terrenoEncontrado.getProyecto();
+        
+        //Manejo de propietarios
+        List<AsignacionPropietario> listaAsignaciones = asigPropietarioVentaService.listaAsignacion();        
+        List<AsignacionPropietario> propietarios = new ArrayList();
+        for (var propietario : listaAsignaciones) {
+            if(Objects.equals(propietario.getVenta().getIdVenta(), venta.getIdVenta())){
+                propietarios.add(propietario);
+            }
+        }
+        List<AsignacionPropietario> propietariosSeleccionados = new ArrayList();
+        for (var propietario : propietarios) {
+            if(Objects.equals(propietario.getEstado(), "Seleccionado")){
+                propietariosSeleccionados.add(propietario);
+            }
+        }
+        
+        model.addAttribute("consumidorFinal", propietariosSeleccionados);
+        model.addAttribute("proyecto", proyecto);
+        model.addAttribute("terreno", terrenoEncontrado);
+        model.addAttribute("venta", ventaEncontrada);
+        return "/Terreno/InformacionGeneral/ventaFacturacion";
+    }
+    
     @GetMapping("/ventas/data/{idTerreno}")
     @ResponseBody
     public DataTablesOutput<Venta> GetVentas(@Valid DataTablesInput input, @PathVariable Long idTerreno) {

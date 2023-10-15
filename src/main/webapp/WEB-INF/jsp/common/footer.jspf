@@ -16,10 +16,10 @@
     <script type="text/javascript" src="${pageContext.request.contextPath}/recursosOnline/js/dataTables.fixedHeader.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/recursosOnline/js/jquery.inputmask.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/recursosOnline/js/jquery.spring-friendly.min.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/recursosOnline/js/select2.full.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/recursosOnline/js/adminlte.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/plantilla.js"></script>
-    
-    <script src="${pageContext.request.contextPath}/recursosOnline/js/select2.full.min.js"></script>
     
     <script>var csrfToken = '${_csrf.token}';</script>
     </body>

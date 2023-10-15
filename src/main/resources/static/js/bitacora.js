@@ -42,13 +42,14 @@ $(document).ready(function() {
             }
         ],
         columns: [
-            { data: 'username', width: '20%', class: 'text-center' },
+            { data: 'username', title: 'Usuario', width: '20%', class: 'text-center' },
             { 
-                data: 'evento', width: '30%', class: 'text-center'
+                data: 'evento', title: 'Evento', width: '30%', class: 'text-center'
             },
             {
                 data: 'hora',
                 width: '10%',
+                title: 'Fecha',
                 class: 'text-center',
                 render: function(data, type, row) {
                   if (type === 'display' || type === 'filter') {
@@ -61,6 +62,7 @@ $(document).ready(function() {
             },
             {
                 data: 'hora',
+                title: 'Hora',
                 width: '10%',
                 class: 'text-center',
                 render: function(data, type, row) {
@@ -78,7 +80,7 @@ $(document).ready(function() {
                 }
             },
             { 
-                data: 'ipEquipo', width: '15%', class: 'text-center'
+                data: 'ipEquipo', title: 'IP EQUIPO', width: '15%', class: 'text-center'
             }
         ],
         language: {

@@ -6,9 +6,9 @@
     <section class="content-header">
         <div class="container">
             <div class="row">
-                <div class="col-sm-12">
-                    <div class="titulo-Perfil">
-                        <div class="container container-titulo">
+                <div class="col-12">
+                    <div class="titulo-page">
+                        <div class="container">
                             <h1>Proyectos</h1>
                         </div>
                     </div>
@@ -16,60 +16,59 @@
             </div>
         </div>
     </section>
+    <!-- Main content -->
     <section class="content">
-        <!-- Main content -->
-        <section class="content pb-5">
-            <div class="container">
-                <c:if test="${not empty mensaje}">
-                    <div class="alert alert-success d-flex align-items-center alert-dismissible fade show" role="alert">
-                        <strong><i class="bi bi-check-circle"></i> Éxito!</strong> ${mensaje}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                </c:if>
-                <c:if test="${not empty error}">
-                    <div class="alert alert-danger d-flex align-items-center alert-dismissible fade show" role="alert">
-                        <strong><i class="bi bi-exclamation-triangle"></i> Error!</strong> ${error}
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                </c:if>
-                <div class="alert alert-success d-flex align-items-center alert-dismissible fade d-none" role="alert">
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    <strong><i class="bi bi-check-circle"></i> Éxito!&nbsp;</strong>
-                </div>
-                <div class="alert alert-danger d-flex align-items-center alert-dismissible fade d-none" role="alert">
-                    <strong><i class="bi bi-exclamation-triangle"></i> Error!&nbsp;</strong>
+        <div class="container">
+            <c:if test="${not empty mensaje}">
+                <div class="alert alert-success d-flex align-items-center alert-dismissible fade show" role="alert">
+                    <strong><i class="bi bi-check-circle"></i> Éxito!</strong> ${mensaje}
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
-                <div class="col-sm-12 d-flex justify-content-end">
-                    <sec:authorize access="hasAuthority('EXPORTAR_PROYECTO_PRIVILAGE')"> 
-                        <button id="export-copy" class="btn btn-sm btn-outline-secondary buttons-copy" type="button"><span>Copiar  </span><i class="fa-regular fa-copy"></i></button> 
-                        <button id="export-excel" class="btn btn-sm btn-outline-success buttons-excel ml-2" type="button"><span>Exportar </span><i class="fa-solid fa-file-csv"></i></button> 
-                        <button id="export-pdf" class="btn btn-sm btn-outline-danger buttons-pdf ml-2" type="button"><span>Exportar </span><i class="fa-regular fa-file-pdf"></i></button> 
-                    </sec:authorize>
-                    <sec:authorize access="hasAuthority('AGREGAR_PROYECTO_PRIVILAGE')"> 
-                        <button type="button" class="btn-blue btn abrirModal-btn btn-sm ml-2" data-bs-toggle="modal" data-bs-target="#crearModal" data-action="agregar">Agregar</button>
-                    </sec:authorize>
+            </c:if>
+            <c:if test="${not empty error}">
+                <div class="alert alert-danger d-flex align-items-center alert-dismissible fade show" role="alert">
+                    <strong><i class="bi bi-exclamation-triangle"></i> Error!</strong> ${error}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
-                <div>
-                    <div class="table-responsive-md">
-                        <table id="proyectoTable" class="table table-striped">
-                            <thead class="table-light">
-                                <tr>
-                                    <th class="text-center">Nombre del Proyecto</th>
-                                    <th class="text-center">Empresa</th>
-                                    <th class="text-center">Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
+            </c:if>
+            <div class="alert alert-success d-flex align-items-center alert-dismissible fade d-none" role="alert">
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <strong><i class="bi bi-check-circle"></i> Éxito!&nbsp;</strong>
+            </div>
+            <div class="alert alert-danger d-flex align-items-center alert-dismissible fade d-none" role="alert">
+                <strong><i class="bi bi-exclamation-triangle"></i> Error!&nbsp;</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title d-flex justify-content-end">
+                                <sec:authorize access="hasAuthority('EXPORTAR_PROYECTO_PRIVILAGE')"> 
+                                    <button id="export-copy" class="btn btn-sm btn-outline-secondary buttons-copy" type="button"><span>Copiar  </span><i class="fa-regular fa-copy"></i></button> 
+                                    <button id="export-excel" class="btn btn-sm btn-outline-success buttons-excel ml-2" type="button"><span>Exportar </span><i class="fa-solid fa-file-csv"></i></button> 
+                                    <button id="export-pdf" class="btn btn-sm btn-outline-danger buttons-pdf ml-2" type="button"><span>Exportar </span><i class="fa-regular fa-file-pdf"></i></button> 
+                                </sec:authorize>
+                                <sec:authorize access="hasAuthority('AGREGAR_PROYECTO_PRIVILAGE')"> 
+                                    <button type="button" class="btn-blue btn abrirModal-btn btn-sm ml-2" data-bs-toggle="modal" data-bs-target="#crearModal" data-action="agregar"><span>Agregar </span><i class="fa-solid fa-file-pen"></i></button>
+                                </sec:authorize> 
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <div id="table_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                                <div class="col-sm-12 table-responsive pt-1" style="height: 60vh; padding:4px;">
+                                <!--Sección de tabla-->
+                                    <table id="proyectoTable" class="table table-bordered table-striped dataTable dtr-inline mt-1 table-head-fixed text-nowrap"></table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div><!-- /.container-fluid -->
-        </section>
+            </div>
+        </div><!-- /.container-fluid -->
     </section>
     
-   <!-- Modal para Usuarios -->
+   <!-- Modal de agregar -->
     <div class="modal fade" id="crearModal" tabindex="-1" aria-labelledby="crearModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -116,7 +115,7 @@
                 </div>
                 <div class="modal-body">
                     <strong>¿Estás seguro de eliminar al proyecto seleccionado?</strong>
-                    <p>Ten en cuenta que se eliminarán los datos relacionados al proyecto <span id="nombre"></span>.</p>
+                    <p>Ten en cuenta que se eliminarán los datos relacionados al proyecto.</p>
                 </div>
                 <div class="modal-footer">
                   <button id="eliminarProyectoBtn" class="btn btn-outline-danger btn-sm">Eliminar</button>

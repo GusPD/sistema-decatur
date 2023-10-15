@@ -62,7 +62,7 @@ $(document).ready(function() {
                     var actionsHtml = '';
                     
                     if(hasPrivilegeVerVenta === true){
-                        actionsHtml = '<a type="button" class="btn btn-outline-secondary btn-sm" href="/Venta/' + row.idVenta + '">';
+                        actionsHtml = '<a type="button" class="btn btn-outline-secondary btn-sm" href="/InformacionVenta/' + row.idVenta + '">';
                         actionsHtml += '<i class="far fa-eye"></i></a>';
                     }
                     

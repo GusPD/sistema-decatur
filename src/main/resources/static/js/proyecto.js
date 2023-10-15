@@ -41,8 +41,8 @@ $(document).ready(function() {
             }
         ],
         columns: [
-            { data: 'nombre', width: '35%' },
-            { data: 'empresa.nombre', width: '35%' },
+            { data: 'nombre', title: 'Nombre', width: '35%' },
+            { data: 'empresa.nombre', title: 'Empresa', width: '35%' },
             {
                 data: null,
                 title: 'Acciones',
@@ -50,9 +50,6 @@ $(document).ready(function() {
                 searchable: false,
                 width: '30%',
                 render: function (data, type, row) {
-                    // Aquí puedes construir el HTML para las acciones según tus necesidades
-//                    var actionsHtml = '<a type="button" class="btn btn-outline-secondary" href="/DetalleMaestria/' + row.idMaestria + '">';
-//                    actionsHtml += '<i class="bi bi-eye"></i></a>';
                     
                     var actionsHtml = '';
                     

@@ -1,4 +1,81 @@
 $(document).ready(function() {
+    var idVenta=$("#idVenta").val();
+     var table = $('#propietariosTable').DataTable({
+        ajax: '/propietarioVenta/data/'+idVenta,
+        processing: true,
+        serverSide: true,
+        order: [[0, 'asc']],
+        dom: "<'row w-100'<'col-sm-12 mb-4'B>>" +
+             "<'row w-100'<'col-sm-6'l><'col-sm-6'f>>" +
+             "<'row w-100'<'col-sm-12 my-4'tr>>" +
+             "<'row w-100'<'col-sm-5'i><'col-sm-7'p>>",
+        lengthMenu: [[5, 25, 50, 100, -1], [5, 25, 50, 100, 'Todos']],
+        pageLength: 5,
+        columns: [
+            {
+                data: null,
+                title: "N°",
+                sortable: false,
+                searchable: false,
+                render: function (data, type, row, meta) {
+                    return meta.row + 1;
+                },
+                width: '10%'
+            },
+            { data: 'propietario.persona.nombre', title: 'Nombre', width: '35%' },
+            {
+                data: null,
+                title: 'Acciones',
+                sortable: false,
+                searchable: false,
+                width: '30%',
+                render: function (data, type, row) {
+                    
+                    var actionsHtml = '';
+                    
+                    if(hasPrivilegeVerPropietario === true){
+                        actionsHtml = '<a type="button" class="btn btn-outline-secondary btn-sm" href="/Propietario/' + row.venta.terreno.proyecto.idProyecto +'/'+ row.propietario.persona.idPersona + '' + '">';
+                        actionsHtml += '<i class="far fa-eye"></i></a>';
+                    }
+                    
+                    if(hasPrivilegeEliminarPropietario === true){
+                    actionsHtml += '<button type="button" class="btn btn-outline-danger eliminarModalPropietario-btn btn-sm" data-id="' + row.idAsignacion + '" ';
+                    actionsHtml += 'data-cod="' + row.idAsignacion + '">';
+                    actionsHtml += '<i class="far fa-trash-alt"></i></button>';
+                   }
+                    
+                    return actionsHtml || '';
+                }
+            }
+        ],
+        language: {
+            "sProcessing": "Procesando...",
+            "sLengthMenu": "Mostrar _MENU_ registros",
+            "sZeroRecords": "No se encontraron resultados",
+            "sEmptyTable": "Ningún dato disponible en esta tabla",
+            "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+            "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+            "sInfoFiltered": "", //"(filtrado de un total de _MAX_ registros)",
+            "sInfoPostFix": "",
+            "sSearch": "Buscar:",
+            "sUrl": "",
+            "sInfoThousands": ",",
+            "sLoadingRecords": "Cargando...",
+            "oPaginate": {
+                "sFirst": "Primero",
+                "sLast": "Último",
+                "sNext": "Siguiente",
+                "sPrevious": "Anterior"
+            },
+            "oAria": {
+                "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+            }
+        },
+        search: {
+            return: true
+        }
+    });
     $.validator.addMethod(
         "validarDui",
         function(value, element) {
@@ -114,14 +191,13 @@ $(document).ready(function() {
                 data: formDataArray,
                 success: function (response) {
                     $('#crearModalPropietario').modal('hide');  // Cierra el modal
-                    mostrarMensaje(response, 'success');
+                    toastr.success(response);
                     $('.form-control').val('');
                     $.ajax({
-                        url: "/Venta/"+idVenta,
+                        url: "/PropietariosVenta/"+idVenta,
                         type: 'GET',
                         success: function (nuevosDatos) {
-                            var elementoActualizable = $(nuevosDatos).find('#tabla-propietarios');
-                            $('#tabla-propietarios').html(elementoActualizable.html());
+                            table.ajax.reload();
                             var elementoActualizable2 = $(nuevosDatos).find('#formGuardarPropietario');
                             $('#formGuardarPropietario').html(elementoActualizable2.html());
                             $( '#propietarios' ).select2( {
@@ -139,7 +215,7 @@ $(document).ready(function() {
                 error: function (xhr, status, error) {
                     $('#crearModalPropietario').modal('hide'); // Cierra el modal
                     var errorMessage = xhr.responseText || 'Error al agregar el propietario.';
-                    mostrarMensaje(errorMessage, 'danger');
+                    toastr.error(errorMessage);
                 }
             });
         }
@@ -183,8 +259,6 @@ $(document).ready(function() {
             });
         } else {
             var checkboxes = document.querySelectorAll(".checkClean");
-
-            // en caso de presionar el boton de nuevo solo se abrira el modal
             tituloModal.text('Agregar Propietario');
             form.attr('action', '/AgregarPropietarioVenta');
             $('.form-control').val('');
@@ -271,13 +345,12 @@ $(document).ready(function() {
                 data: formDataArray,
                 success: function(response) {
                     $('#seleccionarModalPropietario').modal('hide');
-                    mostrarMensaje(response, 'success');
+                    toastr.success(response);
                     $.ajax({
-                        url: "/Venta/"+idVenta,
+                        url: "/PropietariosVenta/"+idVenta,
                         type: 'GET',
                         success: function (nuevosDatos) {
-                            var elementoActualizable = $(nuevosDatos).find('#tabla-propietarios');
-                            $('#tabla-propietarios').html(elementoActualizable.html());
+                            table.ajax.reload();
                             var elementoActualizable2 = $(nuevosDatos).find('#formSeleccionarPropietario');
                             $('#formSeleccionarPropietario').html(elementoActualizable2.html());
                             $( '#propietarios' ).select2( {
@@ -293,9 +366,9 @@ $(document).ready(function() {
                     });
                 },
                 error: function (xhr, status, error) {
-                    $('#seleccionarModalPropietario').modal('hide'); // Cierra el modal
+                    $('#seleccionarModalPropietario').modal('hide');
                     var errorMessage = xhr.responseText || 'Error al agregar el propietario.';
-                    mostrarMensaje(errorMessage, 'danger');
+                    toastr.error(errorMessage);
                 }
             });
         }
@@ -304,45 +377,28 @@ $(document).ready(function() {
     // Método para mostrar el modal de eliminación
     $(document).on('click', '.eliminarModalPropietario-btn', function () {
         var idPersona = $(this).data('id');
-
         var modal = $('#confirmarEliminarModalPropietario');
-        var tituloModal = modal.find('.modal-title');
-        var cuerpoModal = modal.find('.modal-body');
         var eliminarBtn = modal.find('#eliminarPropietarioBtn');
-
-        // Actualizar el contenido del modal con los parámetros recibidos
-        tituloModal.text('Confirmar eliminación');
-        cuerpoModal.html('<strong>¿Estás seguro de eliminar el propietario seleccionado?</strong><br>Ten en cuenta que se eliminarán \n\
-        los datos relacionados al propietario');
-
-        // Actualizar el atributo href del botón de eliminación con el idCohorte
         eliminarBtn.data('id', idPersona);
-
         modal.modal('show');
     });
-   
    
    //Método para enviar la solicitud de eliminar
     $(document).on('click', '#eliminarPropietarioBtn', function () {
         var idVenta = $('#idVenta').val();
         var idPersona = $(this).data('id');
-        // Actualizar la acción del formulario
         $('#eliminarPropietarioForm').attr('action', '/EliminarPropietarioVenta/' + idPersona);
-
-        // Realizar la solicitud POST al método de eliminación
         $.ajax({
             url: $('#eliminarPropietarioForm').attr('action'),
             type: 'POST',
-            data: $('#eliminarPropietarioForm').serialize(), // Incluir los datos del formulario en la solicitud
+            data: $('#eliminarPropietarioForm').serialize(),
             success: function (response) {
                 $('#confirmarEliminarModalPropietario').modal('hide');
-                // Recargar el DataTable
+                table.ajax.reload();
                 $.ajax({
-                    url: "/Venta/"+idVenta,
+                    url: "/PropietariosVenta/"+idVenta,
                     type: 'GET',
                     success: function (nuevosDatos) {
-                        var elementoActualizable = $(nuevosDatos).find('#tabla-propietarios');
-                        $('#tabla-propietarios').html(elementoActualizable.html());
                         var elementoActualizable2 = $(nuevosDatos).find('#formGuardarPropietario');
                         $('#formGuardarPropietario').html(elementoActualizable2.html());
                         var elementoActualizable2 = $(nuevosDatos).find('#formSeleccionarPropietario');
@@ -358,12 +414,12 @@ $(document).ready(function() {
                         alert('Error al cargar la tabla.');
                     }
                 });
-               mostrarMensaje(response, 'success');
+               toastr.success(response);
             },
             error: function (xhr, status, error) {
               $('#confirmarEliminarModalPropietario').modal('hide');
               var errorMessage = xhr.responseText || 'Error al eliminar el propietario.';
-              mostrarMensaje(errorMessage, 'danger');
+              toastr.error(errorMessage);
             }
         });
         

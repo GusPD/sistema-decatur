@@ -8,9 +8,9 @@
     <section class="content-header">
         <div class="container">
             <div class="row">
-                <div class="col-sm-12">
-                    <div class="titulo-Perfil">
-                        <div class="container container-titulo">
+                <div class="col-12">
+                    <div class="titulo-page">
+                        <div class="container">
                             <h1>Proyecto ${proyecto.nombre} - Trabajadores</h1>
                         </div>
                     </div>
@@ -20,55 +20,50 @@
     </section>
     <section class="content">
         <div class="container">
-            <section class="content pb-5">
-                <div>
-                    <c:if test="${not empty mensaje}">
-                        <div class="alert alert-success d-flex align-items-center alert-dismissible fade show" role="alert">
-                            <strong><i class="bi bi-check-circle"></i> Éxito!</strong> ${mensaje}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            <c:if test="${not empty mensaje}">
+                <div class="alert alert-success d-flex align-items-center alert-dismissible fade show" role="alert">
+                    <strong><i class="bi bi-check-circle"></i> Éxito!</strong> ${mensaje}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </c:if>
+            <c:if test="${not empty error}">
+                <div class="alert alert-danger d-flex align-items-center alert-dismissible fade show" role="alert">
+                    <strong><i class="bi bi-exclamation-triangle"></i> Error!</strong> ${error}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </c:if>
+            <div class="alert alert-success d-flex align-items-center alert-dismissible fade d-none" role="alert">
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <strong><i class="bi bi-check-circle"></i> Éxito!&nbsp;</strong>
+            </div>
+            <div class="alert alert-danger d-flex align-items-center alert-dismissible fade d-none" role="alert">
+                <strong><i class="bi bi-exclamation-triangle"></i> Error!&nbsp;</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="card-title d-flex justify-content-end">
+                                <sec:authorize access="hasAuthority('EXPORTAR_TRABAJADORES_PROYECTO_PRIVILAGE')"> 
+                                    <button id="export-copy" class="btn btn-sm btn-outline-secondary buttons-copy" type="button"><span>Copiar  </span><i class="fa-regular fa-copy"></i></button> 
+                                    <button id="export-excel" class="btn btn-sm btn-outline-success buttons-excel ml-2" type="button"><span>Exportar </span><i class="fa-solid fa-file-csv"></i></button> 
+                                    <button id="export-pdf" class="btn btn-sm btn-outline-danger buttons-pdf ml-2" type="button"><span>Exportar </span><i class="fa-regular fa-file-pdf"></i></button> 
+                                </sec:authorize>
+                            </h3>
                         </div>
-                    </c:if>
-                    <c:if test="${not empty error}">
-                        <div class="alert alert-danger d-flex align-items-center alert-dismissible fade show" role="alert">
-                            <strong><i class="bi bi-exclamation-triangle"></i> Error!</strong> ${error}
-                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        </div>
-                    </c:if>
-                    <div class="alert alert-success d-flex align-items-center alert-dismissible fade d-none" role="alert">
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                        <strong><i class="bi bi-check-circle"></i> Éxito!&nbsp;</strong>
-                    </div>
-                    <div class="alert alert-danger d-flex align-items-center alert-dismissible fade d-none" role="alert">
-                        <strong><i class="bi bi-exclamation-triangle"></i> Error!&nbsp;</strong>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
-                    <div class="col-sm-12 d-flex justify-content-end">
-                        <sec:authorize access="hasAuthority('EXPORTAR_TRABAJADORES_PROYECTO_PRIVILAGE')"> 
-                            <button id="export-copy" class="btn btn-sm btn-outline-secondary buttons-copy" type="button"><span>Copiar  </span><i class="fa-regular fa-copy"></i></button> 
-                            <button id="export-excel" class="btn btn-sm btn-outline-success buttons-excel" type="button"><span>Exportar </span><i class="fa-solid fa-file-csv"></i></button> 
-                            <button id="export-pdf" class="btn btn-sm btn-outline-danger buttons-pdf" type="button"><span>Exportar </span><i class="fa-regular fa-file-pdf"></i></button> 
-                        </sec:authorize>
-                    </div>
-                    <div>
-                        <div class="table-responsive-md table-container">
-                            <table id="trabajadorTable" class="table table-striped custom-fixed-header">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th class="text-center">DUI</th>
-                                        <th class="text-center">Nombre</th>
-                                        <th class="text-center">Especialidad</th>
-                                        <th class="text-center">Terrenos</th>
-                                        <th class="text-center">Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
+                        <div class="card-body">
+                            <div id="table_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                                <div class="col-sm-12 table-responsive pt-1" style="height: 60vh; padding:4px;">
+                                <!--Sección de tabla-->
+                                    <table id="trabajadorTable" class="table table-bordered table-striped dataTable dtr-inline mt-1"></table>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div><!-- /.container-fluid -->
-            </section>
-        </div>
+                </div>
+            </div>
+        </div><!-- /.container-fluid -->
     </section>
 </div>
 

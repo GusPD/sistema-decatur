@@ -86,7 +86,7 @@ $(document).ready(function() {
                     var actionsHtml = '';
                     
                     if(hasPrivilegeVerVenta === true){
-                        actionsHtml = '<a type="button" class="btn btn-outline-secondary btn-sm" href="/Venta/' + row.idTerreno + '">';
+                        actionsHtml = '<a type="button" class="btn btn-outline-secondary btn-sm" href="/InformacionVenta/' + row.idTerreno + '">';
                         actionsHtml += '<i class="far fa-eye"></i></a>';
                     }
                     
