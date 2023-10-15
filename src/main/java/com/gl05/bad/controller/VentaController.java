@@ -346,6 +346,7 @@ public class VentaController {
             }
         }
         
+        
         model.addAttribute("consumidorFinal", propietariosSeleccionados);
         model.addAttribute("proyecto", proyecto);
         model.addAttribute("terreno", terrenoEncontrado);
