@@ -154,6 +154,39 @@ public class TrabajadorController {
         return "/Trabajador/MostrarTrabajadorProyecto";
     }
     
+    @GetMapping("/InformacionTrabajador/{idPersona}")
+    public String InformacionTrabajador(Model model, Persona persona) {
+        model.addAttribute("pageTitle", "Perfil Trabajador");
+        Persona newPersona = personaService.encontrar(persona.getIdPersona());
+        Visitante newTrabajador = visitanteService.encontrarPersona(newPersona);
+        
+        model.addAttribute("trabajador", newTrabajador);
+        model.addAttribute("persona", newPersona);
+        return "/Trabajador/InformacionGeneral/trabajadorInformacion";
+    }
+    
+    @GetMapping("/DocumentosTrabajador/{idPersona}")
+    public String DocumentosTrabajador(Model model, Persona persona) {
+        model.addAttribute("pageTitle", "Perfil Trabajador");
+        Persona newPersona = personaService.encontrar(persona.getIdPersona());
+        Visitante newTrabajador = visitanteService.encontrarPersona(newPersona);
+        
+        model.addAttribute("trabajador", newTrabajador);
+        model.addAttribute("persona", newPersona);
+        return "/Trabajador/InformacionGeneral/trabajadorDocumentos";
+    }
+    
+    @GetMapping("/TerrenosTrabajador/{idPersona}")
+    public String TerrenosTrabajador(Model model, Persona persona) {
+        model.addAttribute("pageTitle", "Perfil Trabajador");
+        Persona newPersona = personaService.encontrar(persona.getIdPersona());
+        Visitante newTrabajador = visitanteService.encontrarPersona(newPersona);
+        
+        model.addAttribute("trabajador", newTrabajador);
+        model.addAttribute("persona", newPersona);
+        return "/Trabajador/InformacionGeneral/trabajadorTerrenos";
+    }
+    
     @GetMapping("/trabajadores/data")
     @ResponseBody
     public DataTablesOutput<Visitante> GetTrabajadores(@Valid DataTablesInput input) {

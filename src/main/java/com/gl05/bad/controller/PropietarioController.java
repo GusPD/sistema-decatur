@@ -238,6 +238,80 @@ public class PropietarioController {
         return "/Propietario/MostrarPropietarioProyecto";
     }
     
+    @GetMapping("/InformacionPropietario/{idPersona}")
+    public String InformacionPropietario(Model model, Persona persona) {
+        model.addAttribute("pageTitle", "Perfil Propietario");
+        Persona newPersona = personaService.encontrar(persona.getIdPersona());
+        Propietario newPropietario = propietarioService.encontrarPersona(newPersona);
+        
+        model.addAttribute("propietario", newPropietario);
+        model.addAttribute("persona", newPersona);
+        return "/Propietario/InformacionGeneral/propietarioInformacion";
+    }
+    
+    @GetMapping("/CorreosPropietario/{idPersona}")
+    public String CorreosPropietarioVenta(Model model, Persona persona) {
+        model.addAttribute("pageTitle", "Perfil Propietario");
+        Persona newPersona = personaService.encontrar(persona.getIdPersona());
+        Propietario newPropietario = propietarioService.encontrarPersona(newPersona);
+        
+        //Manejo de correos
+        List<String> tiposCorreo = listarTiposCorreos();
+        
+        model.addAttribute("tiposCorreo", tiposCorreo);
+        model.addAttribute("propietario", newPropietario);
+        model.addAttribute("persona", newPersona);
+        return "/Propietario/InformacionGeneral/propietarioCorreos";
+    }
+    
+    @GetMapping("/TelefonosPropietario/{idPersona}")
+    public String TelefonosPropietarioVenta(Model model, Persona persona) {
+        model.addAttribute("pageTitle", "Perfil Propietario");
+        Persona newPersona = personaService.encontrar(persona.getIdPersona());
+        Propietario newPropietario = propietarioService.encontrarPersona(newPersona);
+        
+        //Manejo de telefonos
+        List<String> tiposTelefono = listarTipoTelefono();    
+
+        model.addAttribute("tiposTelefonos", tiposTelefono);
+        model.addAttribute("propietario", newPropietario);
+        model.addAttribute("persona", newPersona);
+        return "/Propietario/InformacionGeneral/propietarioTelefonos";
+    }
+    
+    @GetMapping("/ReferenciasPropietario/{idPersona}")
+    public String ReferenciasPropietarioVenta(Model model, Persona persona) {
+        model.addAttribute("pageTitle", "Perfil Propietario");
+        Persona newPersona = personaService.encontrar(persona.getIdPersona());
+        Propietario newPropietario = propietarioService.encontrarPersona(newPersona);
+        
+        model.addAttribute("propietario", newPropietario);
+        model.addAttribute("persona", newPersona);
+        return "/Propietario/InformacionGeneral/propietarioReferencias";
+    }
+    
+    @GetMapping("/DocumentosPropietario/{idPersona}")
+    public String DocumentosPropietarioVenta(Model model, Persona persona) {
+        model.addAttribute("pageTitle", "Perfil Propietario");
+        Persona newPersona = personaService.encontrar(persona.getIdPersona());
+        Propietario newPropietario = propietarioService.encontrarPersona(newPersona);
+        
+        model.addAttribute("propietario", newPropietario);
+        model.addAttribute("persona", newPersona);
+        return "/Propietario/InformacionGeneral/propietarioDocumentos";
+    }
+    
+    @GetMapping("/TerrenosPropietario/{idPersona}")
+    public String TerrenosPropietarioVenta(Model model, Persona persona) {
+        model.addAttribute("pageTitle", "Perfil Propietario");
+        Persona newPersona = personaService.encontrar(persona.getIdPersona());
+        Propietario newPropietario = propietarioService.encontrarPersona(newPersona);
+        
+        model.addAttribute("propietario", newPropietario);
+        model.addAttribute("persona", newPersona);
+        return "/Propietario/InformacionGeneral/propietarioTerrenos";
+    }
+    
     @GetMapping("/propietarios/data")
     @ResponseBody
     public DataTablesOutput<Propietario> GetPropietarios(@Valid DataTablesInput input) {

@@ -62,7 +62,7 @@ $(document).ready(function() {
                     var actionsHtml = '';
                     
                     if(hasPrivilegeVerTrabajador === true){
-                        actionsHtml = '<a type="button" class="btn btn-outline-secondary btn-sm" href="/TrabajadorSistema/' + row.persona.idPersona + '">';
+                        actionsHtml = '<a type="button" class="btn btn-outline-secondary btn-sm" href="/InformacionTrabajador/' + row.persona.idPersona + '">';
                         actionsHtml += '<i class="far fa-eye"></i></a>';
                     }
                     
