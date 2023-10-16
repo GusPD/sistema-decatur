@@ -1,0 +1,94 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ include file="../common/header.jspf"%>
+<%@ include file="../common/navigationProyecto.jspf"%>
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="titulo-page">
+                        <div class="container">
+                            <h1 id="NombrePropietario">Perfil del Propietario ${persona.nombre} ${persona.apellido}</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Main content -->
+    <section class="content">
+        <div class="container">
+            <section class="content">
+                    <c:if test="${not empty mensaje}">
+                        <div class="alert alert-success d-flex align-items-center alert-dismissible fade show" role="alert">
+                            <strong><i class="bi bi-check-circle"></i> Éxito!</strong> ${mensaje}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    </c:if>
+                    <c:if test="${not empty error}">
+                        <div class="alert alert-danger d-flex align-items-center alert-dismissible fade show" role="alert">
+                            <strong><i class="bi bi-exclamation-triangle"></i> Error!</strong> ${error}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    </c:if>
+                    <div class="alert alert-success d-flex align-items-center alert-dismissible fade d-none" role="alert">
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        <strong><i class="bi bi-check-circle"></i> Éxito!&nbsp;</strong>
+                    </div>
+                    <div class="alert alert-danger d-flex align-items-center alert-dismissible fade d-none" role="alert">
+                        <strong><i class="bi bi-exclamation-triangle"></i> Error!&nbsp;</strong>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="list-group info">
+                                        <div class="border p-3 rounded bg-white">
+                                            <div class="row align-items-center mt-1 mb-1">
+                                                <i id="imagenPerfil" class="fa-solid fa-user-tie text-center"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mt-3 mb-3">
+                                <div class="col-sm-12">
+                                    <div class="list-group info">
+                                        <c:set var="urlInformacion" value="/InformacionPropietario/${persona.idPersona}" />
+                                        <c:set var="urlTelefonos" value="/TelefonosPropietario/${persona.idPersona}" />
+                                        <c:set var="urlCorreos" value="/CorreosPropietario/${persona.idPersona}" />
+                                        <c:set var="urlReferencias" value="/ReferenciasPropietario/${persona.idPersona}" />
+                                        <c:set var="urlDocumentos" value="/DocumentosPropietario/${persona.idPersona}" />
+                                        <c:set var="urlTerrenos" value="/TerrenosPropietario/${persona.idPersona}" />
+                                        <a class="tab-perfil list-group-item list-group-item-info btn-info text-center ${requestScope['javax.servlet.forward.request_uri'] == urlInformacion ? 'active' : ''}" href="/InformacionPropietario/${persona.idPersona}" type="button">
+                                            Información
+                                        </a>
+                                        <a class="tab-perfil list-group-item list-group-item-info text-center btn-info ${requestScope['javax.servlet.forward.request_uri'] == urlTelefonos ? 'active' : ''}" href="/TelefonosPropietario/${persona.idPersona}" type="button">
+                                            Telefonos
+                                        </a>
+                                        <a class="tab-perfil list-group-item list-group-item-info text-center btn-info ${requestScope['javax.servlet.forward.request_uri'] == urlCorreos ? 'active' : ''}" href="/CorreosPropietario/${persona.idPersona}" type="button">
+                                            Correos
+                                        </a>
+                                        <a class="tab-perfil list-group-item list-group-item-info text-center btn-info ${requestScope['javax.servlet.forward.request_uri'] == urlReferencias ? 'active' : ''}" href="/ReferenciasPropietario/${persona.idPersona}" type="button">
+                                            Referencias
+                                        </a>
+                                        <a class="tab-perfil list-group-item list-group-item-info text-center btn-info ${requestScope['javax.servlet.forward.request_uri'] == urlDocumentos ? 'active' : ''}" href="/DocumentosPropietario/${persona.idPersona}" type="button">
+                                            Documentos
+                                        </a>
+                                        <a class="tab-perfil list-group-item list-group-item-info text-center btn-info ${requestScope['javax.servlet.forward.request_uri'] == urlTerrenos ? 'active' : ''}" href="/TerrenosPropietario/${persona.idPersona}" type="button">
+                                            Terrenos
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-10">
+                            <div class="row pb-4" >
+                                <div class="col-12 table-responsive" style="height: 76vh;">
+                                    <div class="card">
+                                        <div class="card-body pb-0">
+                                            <div class="col-sm-12">
