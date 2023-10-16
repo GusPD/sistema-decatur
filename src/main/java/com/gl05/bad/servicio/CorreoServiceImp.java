@@ -9,6 +9,9 @@ import java.util.Properties;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
+import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -59,6 +62,15 @@ public class CorreoServiceImp implements CorreoService{
     @Transactional(readOnly = true)
     public Correo encontrarCorreo(String correo) {
         return correoDao.findByCorreo(correo);
+    }
+    
+    @Override
+    @Transactional(readOnly = true)
+    public DataTablesOutput<Correo> listarCorreos(DataTablesInput input, Long idPropietario) {
+        Specification<Correo> specification = (root, query, builder) -> {
+            return builder.equal(root.get("idPropietario"), idPropietario);
+        };        
+        return correoDao.findAll(input, specification);
     }
     
     @Override

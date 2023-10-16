@@ -91,7 +91,7 @@ $(document).ready(function() {
                     mostrarMensaje(response, 'success');
 
                     $.ajax({
-                        url: "/MostrarTrabajador/"+idPersona,
+                        url: "/InformacionTrabajador/"+idPersona,
                         type: 'GET',
                         success: function (nuevosDatos) {
                             var elementoActualizable = $(nuevosDatos).find('#tabla-informacion');
@@ -167,7 +167,7 @@ $(document).ready(function() {
         alertElement.text(mensaje).addClass('show').removeClass('d-none');
         setTimeout(function() {
           alertElement.removeClass('show').addClass('d-none');
-        }, 5000); // Ocultar el mensaje después de 3 segundos (ajusta el valor según tus necesidades)
+        }, 5000);
     }
 }); 
 

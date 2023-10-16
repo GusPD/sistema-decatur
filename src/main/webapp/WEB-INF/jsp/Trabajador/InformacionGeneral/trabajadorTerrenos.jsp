@@ -1,5 +1,4 @@
 <%@ include file="../trabajador-header.jspf"%>
-<input type="hidden" id="idPersona" value="${persona.getIdPersona()}">
 <div class="row mb-3">
     <div class="col-12">
         <div class="card">
@@ -11,6 +10,7 @@
             <div class="card-body">
                 <div id="table_wrapper" class="dataTables_wrapper dt-bootstrap4">
                     <div class="col-sm-12 table-responsive pt-1" style="height: 55vh; padding:4px;">
+                        <input type="hidden" id="idVisitante" value="${trabajador.getIdVisitante()}">
                         <table id="terrenoTable" class="table table-bordered table-striped dataTable dtr-inline mt-1"></table>
                     </div>
                 </div>

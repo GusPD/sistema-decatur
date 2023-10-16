@@ -34,6 +34,7 @@
                 <form id='formGuardarTelefono' accept-charset="UTF-8">
                     <div  class="overflow-auto">
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+                        <input type="hidden" id="idPropietario" value="${propietario.getIdPropietario()}">
                         <input type="hidden" id="idTelefono">
                         <div class="form-group">
                             <label for="tipo" class="form-label">Tipo de Teléfono:</label>

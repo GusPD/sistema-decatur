@@ -23,4 +23,6 @@ public interface AsigPropietarioVentaService {
     public DataTablesOutput<AsignacionPropietario> listarPropietarios(DataTablesInput input, Long idProyecto);
     
     public DataTablesOutput<AsignacionPropietario> listarPropietariosVenta(DataTablesInput input, Long idVenta);
+    
+    public DataTablesOutput<AsignacionPropietario> listarTerrenosPropietario(DataTablesInput input, Long idPropietario);
 }

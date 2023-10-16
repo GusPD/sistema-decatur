@@ -78,4 +78,13 @@ public class AsignacionVisitanteServiceImp implements AsignacionVisitanteService
         };
         return asignacionDao.findAll(input, specification);
     }
+    
+    @Override
+    @Transactional(readOnly = true)
+    public DataTablesOutput<AsignacionVisitante> listarTerrenosTrabajador(DataTablesInput input, Long idVisitante) {
+        Specification<AsignacionVisitante> specification = (root, query, builder) -> {
+            return builder.equal(root.get("visitante").get("idVisitante"), idVisitante);
+        };        
+        return asignacionDao.findAll(input, specification);
+    }
 }

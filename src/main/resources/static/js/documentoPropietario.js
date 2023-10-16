@@ -1,4 +1,81 @@
 $(document).ready(function() {
+    var idDocumento = $('#idDocumento').val();
+    var table = $('#documentoTable').DataTable({
+        ajax: '/documentoPropietario/data/'+idDocumento,
+        processing: true,
+        serverSide: true,
+        order: [[1, 'asc']],
+        dom: "<'row w-100'<'col-sm-12 mb-4'B>>" +
+             "<'row w-100'<'col-sm-6'l><'col-sm-6'f>>" +
+             "<'row w-100'<'col-sm-12 my-4'tr>>" +
+             "<'row w-100'<'col-sm-5'i><'col-sm-7'p>>",
+        lengthMenu: [[5, 25, 50, 100, -1], [5, 25, 50, 100, 'Todos']], // Opciones de selección para mostrar registros por página
+        pageLength: 5, // Cantidad de registros por página por defecto
+        columns: [
+            {
+                data: null,
+                title: "N°",
+                sortable: false,
+                searchable: false,
+                render: function (data, type, row, meta) {
+                    return meta.row + 1;
+                },
+                width: '10%'
+            },
+            { data: 'nombre', title: "Nombre", width: '60%' },
+            {
+                data: null,
+                title: 'Acciones',
+                sortable: false,
+                searchable: false,
+                width: '30%',
+                render: function (data, type, row) {
+                    
+                    var actionsHtml = '';
+                    
+                    if(hasPrivilegeVerDocumento === true){
+                        actionsHtml = '<a type="button" class="btn btn-outline-secondary btn-sm" href="/DocumentoPropietario/' + row.idDocumento + '">';
+                        actionsHtml += '<i class="far fa-eye"></i></a>';
+                    }
+                    
+                    if(hasPrivilegeEliminarDocumento === true){
+                        actionsHtml += '<button type="button" class="btn btn-outline-danger eliminarModalDocumento-btn btn-sm" data-id="' + row.idDocumento + '" ';
+                        actionsHtml += 'data-cod="' + row.idDocumento + '">';
+                        actionsHtml += '<i class="far fa-trash-alt"></i></button>';
+                   }
+                    
+                    return actionsHtml || '';
+                }
+            }
+        ],
+        language: {
+            "sProcessing": "Procesando...",
+            "sLengthMenu": "Mostrar _MENU_ registros",
+            "sZeroRecords": "No se encontraron resultados",
+            "sEmptyTable": "Ningún dato disponible en esta tabla",
+            "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+            "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+            "sInfoFiltered": "", //"(filtrado de un total de _MAX_ registros)",
+            "sInfoPostFix": "",
+            "sSearch": "Buscar:",
+            "sUrl": "",
+            "sInfoThousands": ",",
+            "sLoadingRecords": "Cargando...",
+            "oPaginate": {
+                "sFirst": "Primero",
+                "sLast": "Último",
+                "sNext": "Siguiente",
+                "sPrevious": "Anterior"
+            },
+            "oAria": {
+                "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+            }
+        },
+        search: {
+            return: true
+        }
+    });
     $.validator.addMethod(
         "validarDocumento",
         function(value, element) {
@@ -69,18 +146,7 @@ $(document).ready(function() {
                 success: function (response) {
                     $('#crearModalDocumento').modal('hide');  // Cierra el modal
                     mostrarMensaje(response, 'success');
-
-                    $.ajax({
-                        url: "/MostrarPropietario/"+idPersona,
-                        type: 'GET',
-                        success: function (nuevosDatos) {
-                            var elementoActualizable = $(nuevosDatos).find('#tabla-documentos');
-                            $('#tabla-documentos').html(elementoActualizable.html());
-                        },
-                        error: function () {
-                            alert('Error al cargar la tabla.');
-                        }
-                    });
+                    table.ajax.reload();
                 },
                 error: function (xhr, status, error) {
                     $('#crearModalDocumento').modal('hide'); // Cierra el modal
@@ -115,16 +181,7 @@ $(document).ready(function() {
         var idDocumento = $(this).data('id');
 
         var modal = $('#confirmarEliminarModalDocumento');
-        var tituloModal = modal.find('.modal-title');
-        var cuerpoModal = modal.find('.modal-body');
         var eliminarBtn = modal.find('#eliminarDocumentoBtn');
-
-        // Actualizar el contenido del modal con los parámetros recibidos
-        tituloModal.text('Confirmar eliminación');
-        cuerpoModal.html('<strong>¿Estás seguro de eliminar el documento seleccionado?</strong><br>Ten en cuenta que se eliminarán \n\
-        los datos relacionados al documento');
-
-        // Actualizar el atributo href del botón de eliminación con el idCohorte
         eliminarBtn.data('id', idDocumento);
 
         modal.modal('show');
@@ -145,19 +202,8 @@ $(document).ready(function() {
             data: $('#eliminarDocumentoForm').serialize(), // Incluir los datos del formulario en la solicitud
             success: function (response) {
                 $('#confirmarEliminarModalDocumento').modal('hide');
-                // Recargar el DataTable
-                $.ajax({
-                    url: "/MostrarPropietario/"+idPersona,
-                    type: 'GET',
-                    success: function (nuevosDatos) {
-                        var elementoActualizable = $(nuevosDatos).find('#tabla-documentos');
-                        $('#tabla-documentos').html(elementoActualizable.html());
-                    },
-                    error: function () {
-                        alert('Error al cargar la tabla.');
-                    }
-                });
-               mostrarMensaje(response, 'success');
+                table.ajax.reload();
+                mostrarMensaje(response, 'success');
             },
             error: function (xhr, status, error) {
               $('#confirmarEliminarModalDocumento').modal('hide');

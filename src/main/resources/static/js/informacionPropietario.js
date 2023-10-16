@@ -111,7 +111,7 @@ $(document).ready(function() {
                     mostrarMensaje(response, 'success');
 
                     $.ajax({
-                        url: "/MostrarPropietario/"+idPersona,
+                        url: "/InformacionPropietario/"+idPersona,
                         type: 'GET',
                         success: function (nuevosDatos) {
                             var elementoActualizable = $(nuevosDatos).find('#tabla-informacion');

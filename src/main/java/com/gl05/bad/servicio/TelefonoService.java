@@ -2,6 +2,8 @@ package com.gl05.bad.servicio;
 
 import com.gl05.bad.domain.Telefono;
 import java.util.List;
+import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
+import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 
 public interface TelefonoService {
   
@@ -16,4 +18,6 @@ public interface TelefonoService {
   public Telefono encontrar(Telefono telefono);
 
   public Telefono encontrarTelefono(String telefono);
+  
+  public DataTablesOutput<Telefono> listarTelefonos(DataTablesInput input, Long idPropietario);
 }

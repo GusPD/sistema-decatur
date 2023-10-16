@@ -165,6 +165,12 @@ public class TrabajadorController {
         return "/Trabajador/InformacionGeneral/trabajadorInformacion";
     }
     
+    @GetMapping("/documentosTrabajador/data/{idDocumento}")
+    @ResponseBody
+    public DataTablesOutput<Documento> GetDocumentos(@Valid DataTablesInput input, @PathVariable Integer idDocumento) {
+        return documentoService.listarDocumentos(input, idDocumento);
+    }
+    
     @GetMapping("/DocumentosTrabajador/{idPersona}")
     public String DocumentosTrabajador(Model model, Persona persona) {
         model.addAttribute("pageTitle", "Perfil Trabajador");
@@ -174,6 +180,12 @@ public class TrabajadorController {
         model.addAttribute("trabajador", newTrabajador);
         model.addAttribute("persona", newPersona);
         return "/Trabajador/InformacionGeneral/trabajadorDocumentos";
+    }
+    
+    @GetMapping("/terrenosTrabajador/data/{idVisitante}")
+    @ResponseBody
+    public DataTablesOutput<AsignacionVisitante> GetTerrenos(@Valid DataTablesInput input, @PathVariable Long idVisitante) {
+        return asigVisitanteService.listarTerrenosTrabajador(input, idVisitante);
     }
     
     @GetMapping("/TerrenosTrabajador/{idPersona}")
