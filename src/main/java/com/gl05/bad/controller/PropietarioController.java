@@ -117,7 +117,7 @@ public class PropietarioController {
         }
         
         //Manejo de referencias
-        var referencias = referenciaService.listarReferencias();
+        var referencias = referenciaService.listaReferencias();
         List<Referencia> referenciasPropietario = new ArrayList();
         for (var eReferencia: referencias) {
             if(Objects.equals(eReferencia.getIdPropietario(), newPropietario.getIdPropietario())){
@@ -191,7 +191,7 @@ public class PropietarioController {
         }
         
         //Manejo de referencias
-        var referencias = referenciaService.listarReferencias();
+        var referencias = referenciaService.listaReferencias();
         List<Referencia> referenciasPropietario = new ArrayList();
         for (var eReferencia: referencias) {
             if(Objects.equals(eReferencia.getIdPropietario(), newPropietario.getIdPropietario())){
@@ -249,6 +249,12 @@ public class PropietarioController {
         return "/Propietario/InformacionGeneral/propietarioInformacion";
     }
     
+    @GetMapping("/correoPropietario/data/{idPropietario}")
+    @ResponseBody
+    public DataTablesOutput<Correo> GetCorreos(@Valid DataTablesInput input, @PathVariable Long idPropietario) {
+        return correoService.listarCorreos(input, idPropietario);
+    }
+    
     @GetMapping("/CorreosPropietario/{idPersona}")
     public String CorreosPropietarioVenta(Model model, Persona persona) {
         model.addAttribute("pageTitle", "Perfil Propietario");
@@ -262,6 +268,12 @@ public class PropietarioController {
         model.addAttribute("propietario", newPropietario);
         model.addAttribute("persona", newPersona);
         return "/Propietario/InformacionGeneral/propietarioCorreos";
+    }
+    
+    @GetMapping("/telefonoPropietario/data/{idPropietario}")
+    @ResponseBody
+    public DataTablesOutput<Telefono> GetTelefonos(@Valid DataTablesInput input, @PathVariable Long idPropietario) {
+        return telefonoService.listarTelefonos(input, idPropietario);
     }
     
     @GetMapping("/TelefonosPropietario/{idPersona}")
@@ -279,6 +291,12 @@ public class PropietarioController {
         return "/Propietario/InformacionGeneral/propietarioTelefonos";
     }
     
+    @GetMapping("/referenciaPropietario/data/{idPropietario}")
+    @ResponseBody
+    public DataTablesOutput<Referencia> GetReferencias(@Valid DataTablesInput input, @PathVariable Long idPropietario) {
+        return referenciaService.listarReferencias(input, idPropietario);
+    }
+    
     @GetMapping("/ReferenciasPropietario/{idPersona}")
     public String ReferenciasPropietarioVenta(Model model, Persona persona) {
         model.addAttribute("pageTitle", "Perfil Propietario");
@@ -290,6 +308,12 @@ public class PropietarioController {
         return "/Propietario/InformacionGeneral/propietarioReferencias";
     }
     
+    @GetMapping("/documentoPropietario/data/{idDocumento}")
+    @ResponseBody
+    public DataTablesOutput<Documento> GetDocumentos(@Valid DataTablesInput input, @PathVariable Integer idDocumento) {
+        return documentoService.listarDocumentos(input, idDocumento);
+    }
+    
     @GetMapping("/DocumentosPropietario/{idPersona}")
     public String DocumentosPropietarioVenta(Model model, Persona persona) {
         model.addAttribute("pageTitle", "Perfil Propietario");
@@ -299,6 +323,12 @@ public class PropietarioController {
         model.addAttribute("propietario", newPropietario);
         model.addAttribute("persona", newPersona);
         return "/Propietario/InformacionGeneral/propietarioDocumentos";
+    }
+    
+    @GetMapping("/terrenosPropietario/data/{idPropietario}")
+    @ResponseBody
+    public DataTablesOutput<AsignacionPropietario> GetTerrenos(@Valid DataTablesInput input, @PathVariable Long idPropietario) {
+        return asigPropietarioService.listarTerrenosPropietario(input, idPropietario);
     }
     
     @GetMapping("/TerrenosPropietario/{idPersona}")

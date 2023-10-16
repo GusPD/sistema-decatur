@@ -9,10 +9,6 @@ import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 public interface AsignacionVisitanteService {
     
     public List<AsignacionVisitante> listaAsignacionVisitantes();
-    
-    public DataTablesOutput<AsignacionVisitante> listarAsignacionVisitantes(DataTablesInput input, Long idVenta);
-    
-    public DataTablesOutput<AsignacionVisitante> listarTrabajadoresVenta (DataTablesInput input, Long idVenta);
    
     public void agregar(AsignacionVisitante asignacion);
         
@@ -23,4 +19,10 @@ public interface AsignacionVisitanteService {
     public AsignacionVisitante encontrarVisitante(Visitante visitante);
     
     public void actualizar(AsignacionVisitante asignacion);
+    
+    public DataTablesOutput<AsignacionVisitante> listarAsignacionVisitantes(DataTablesInput input, Long idVenta);
+    
+    public DataTablesOutput<AsignacionVisitante> listarTrabajadoresVenta (DataTablesInput input, Long idVenta);
+    
+    public DataTablesOutput<AsignacionVisitante> listarTerrenosTrabajador(DataTablesInput input, Long idVisitante);
 }

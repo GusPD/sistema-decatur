@@ -37,6 +37,7 @@
                 <form id='formGuardarDocumento' accept-charset="UTF-8" enctype="multipart/form-data">
                     <div  class="overflow-auto">
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+                        <input type="hidden" id="idPropietario" value="${propietario.getIdPropietario()}">
                         <input type="hidden" id="idDocumento">
                         <div class="form-group">
                             <label for="nombre" class="form-label">Nombre:</label>

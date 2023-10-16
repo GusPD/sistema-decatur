@@ -1,5 +1,5 @@
 <%@ include file="../trabajador-header.jspf"%>
-<input type="hidden" id="idDocumento" value="${visitante.getIdDocumento()}">
+<input type="hidden" id="idDocumento" value="${trabajador.getIdDocumento()}">
 <div class="row">
     <div class="col-12">
         <div class="card">
@@ -37,6 +37,7 @@
                 <form id='formGuardarDocumento' accept-charset="UTF-8" enctype="multipart/form-data">
                     <div  class="overflow-auto">
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+                        <input type="hidden" id="idVisitante" value="${trabajador.getIdVisitante()}">
                         <input type="hidden" id="idDocumento">
                         <div class="form-group">
                             <label for="nombre" class="form-label">Nombre:</label>

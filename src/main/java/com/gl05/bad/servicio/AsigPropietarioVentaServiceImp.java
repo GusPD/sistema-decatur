@@ -3,6 +3,7 @@ package com.gl05.bad.servicio;
 import com.gl05.bad.dao.AsigPropietarioVentaDao;
 import com.gl05.bad.domain.AsignacionPropietario;
 import com.gl05.bad.domain.Propietario;
+import com.gl05.bad.domain.Terreno;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
@@ -72,6 +73,15 @@ public class AsigPropietarioVentaServiceImp implements AsigPropietarioVentaServi
         Specification<AsignacionPropietario> specification = (root, query, builder) -> {
             return builder.equal(root.get("venta").get("idVenta"), idVenta);
         };
+        return asignacionDao.findAll(input, specification);
+    }
+    
+    @Override
+    @Transactional(readOnly = true)
+    public DataTablesOutput<AsignacionPropietario> listarTerrenosPropietario(DataTablesInput input, Long idPropietario) {
+        Specification<AsignacionPropietario> specification = (root, query, builder) -> {
+            return builder.equal(root.get("propietario").get("idPropietario"), idPropietario);
+        };        
         return asignacionDao.findAll(input, specification);
     }
 }
