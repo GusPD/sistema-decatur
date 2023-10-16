@@ -4,7 +4,6 @@ import com.gl05.bad.domain.AsignacionVisitante;
 import com.gl05.bad.domain.Documento;
 import com.gl05.bad.domain.Persona;
 import com.gl05.bad.domain.Proyecto;
-import com.gl05.bad.domain.Terreno;
 import com.gl05.bad.domain.Visitante;
 import com.gl05.bad.domain.VistaTrabajadoresProyecto;
 import com.gl05.bad.servicio.AsignacionVisitanteService;
@@ -12,16 +11,12 @@ import com.gl05.bad.servicio.BitacoraServiceImp;
 import com.gl05.bad.servicio.DocumentoService;
 import com.gl05.bad.servicio.PersonaService;
 import com.gl05.bad.servicio.ProyectoService;
-import com.gl05.bad.servicio.TerrenoService;
 import com.gl05.bad.servicio.VisitanteService;
 import com.gl05.bad.servicio.VistaTrabajadoresProyectoService;
 import java.sql.Blob;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,100 +55,41 @@ public class TrabajadorController {
     private DocumentoService documentoService;
     
     @Autowired
-    private TerrenoService terrenoService;
-    
-    @Autowired
     private AsignacionVisitanteService asigVisitanteService;
     
     @Autowired
     private ProyectoService proyectoService;
     
+    //Función que redirige a la vista de los trabajadores del sistema
     @GetMapping("/TrabajadoresSistema")
     public String mostrarProyecto(Model model, Proyecto proyecto) {
         model.addAttribute("pageTitle", "Trabajadores");
         return "/Datos de Proyecto/TrabajadoresSistema";
     }
     
-    @GetMapping("/TrabajadorSistema/{idPersona}")
-    public String MostrarTrabajador(Model model, Persona persona) {
-        model.addAttribute("pageTitle", "Perfil Trabajador");
-        Persona newPersona = personaService.encontrar(persona.getIdPersona());
-        Visitante newTrabajador = visitanteService.encontrarPersona(newPersona);
-        
-        //Manejo de documentos
-        List<Documento> listaDocumentos = documentoService.listarDocumentos();
-        List<Documento> documentosTrabajador = new ArrayList();
-        for (var documento : listaDocumentos) {
-            if(documento.getIdListDocumento() == (int) newTrabajador.getIdDocumento()){
-                documentosTrabajador.add(documento);
-            }
-        }
-        
-        //Manejo de terrenos
-        List<Terreno> listaTerrenos = terrenoService.listaTerrenos();
-        List<AsignacionVisitante> listaAsignaciones = asigVisitanteService.listaAsignacionVisitantes();
-        List<Terreno> terrenosTrabajador = new ArrayList();
-        boolean existeAsignacion = false;
-        for (var terreno : listaTerrenos) {
-            for (var asignacion : listaAsignaciones) {
-                if(Objects.equals(terreno.getIdTerreno(), asignacion.getVenta().getTerreno().getIdTerreno())){
-                    existeAsignacion = true;
-                }
-            }
-            if(existeAsignacion==true){
-                terrenosTrabajador.add(terreno);
-                existeAsignacion = false;
-            }
-        }
-        
-        model.addAttribute("terrenos", terrenosTrabajador);
-        model.addAttribute("documentos", documentosTrabajador);
-        model.addAttribute("trabajador", newTrabajador);
-        model.addAttribute("persona", newPersona);
-        return "/Trabajador/MostrarTrabajadorAdministracion";
+    //Función que obtiene los trabajadores del sistema
+    @GetMapping("/trabajadores/data")
+    @ResponseBody
+    public DataTablesOutput<Visitante> GetTrabajadores(@Valid DataTablesInput input) {
+        return visitanteService.listarTrabajadores(input);
     }
     
-    @GetMapping("/Trabajador/{idProyecto}/{idPersona}")
-    public String VerTrabajadorVenta(Model model, Persona persona, Proyecto proyecto) {
-        model.addAttribute("pageTitle", "Perfil Trabajador");
-        Persona newPersona = personaService.encontrar(persona.getIdPersona());
-        Visitante newVisitante = visitanteService.encontrarPersona(newPersona);
-        Proyecto newProyecto = proyectoService.encontrar(proyecto.getIdProyecto());
-        
-        //Manejo de documentos
-        List<Documento> listaDocumentos = documentoService.listarDocumentos();
-        List<Documento> documentosTrabajador = new ArrayList();
-        for (var documento : listaDocumentos) {
-            if(documento.getIdListDocumento() == (int) newVisitante.getIdDocumento()){
-                documentosTrabajador.add(documento);
-            }
-        }
-        
-        //Manejo de terrenos
-        List<Terreno> listaTerrenos = terrenoService.listaTerrenos();
-        List<AsignacionVisitante> listaAsignaciones = asigVisitanteService.listaAsignacionVisitantes();
-        List<Terreno> terrenosTrabajador = new ArrayList();
-        boolean existeAsignacion = false;
-        for (var terreno : listaTerrenos) {
-            for (var asignacion : listaAsignaciones) {
-                if(Objects.equals(terreno.getIdTerreno(), asignacion.getVenta().getTerreno().getIdTerreno()) && Objects.equals(newVisitante.getIdVisitante(), asignacion.getVisitante().getIdVisitante()) && Objects.equals(asignacion.getVenta().getTerreno().getProyecto().getIdProyecto(),newProyecto.getIdProyecto())){
-                    existeAsignacion = true;
-                }
-            }
-            if(existeAsignacion==true){
-                terrenosTrabajador.add(terreno);
-                existeAsignacion = false;
-            }
-        }
-        
-        model.addAttribute("terrenos", terrenosTrabajador);
-        model.addAttribute("proyecto", newProyecto);
-        model.addAttribute("documentos", documentosTrabajador);
-        model.addAttribute("trabajador", newVisitante);
-        model.addAttribute("persona", newPersona);
-        return "/Trabajador/MostrarTrabajadorProyecto";
+    //Función para redirigir a la vista de los trabajadores del proyecto
+    @GetMapping("/Trabajadores/{idProyecto}")
+    public String mostrarTrabajadoresProyecto(Model model, Proyecto proyecto) {
+        model.addAttribute("pageTitle", "Trabajadores Proyecto");
+        model.addAttribute("proyecto", proyecto);
+        return "/Proyecto/TrabajadoresProyecto";
     }
     
+    //Función que obtiene los trabajadores del proyecto
+    @GetMapping("/trabajadoresProyecto/data/{idProyecto}")
+    @ResponseBody
+    public DataTablesOutput<VistaTrabajadoresProyecto> GetTrabajadoreProyecto(@Valid DataTablesInput input, @PathVariable Long idProyecto) {
+        return vistaTrabajadoresProyectoService.listarTrabajadores(input, idProyecto);
+    }
+    
+    //Función que redirige a la información del trabajador    
     @GetMapping("/InformacionTrabajador/{idPersona}")
     public String InformacionTrabajador(Model model, Persona persona) {
         model.addAttribute("pageTitle", "Perfil Trabajador");
@@ -165,12 +101,14 @@ public class TrabajadorController {
         return "/Trabajador/InformacionGeneral/trabajadorInformacion";
     }
     
+    //Función que obtiene los documentos del trabajador
     @GetMapping("/documentosTrabajador/data/{idDocumento}")
     @ResponseBody
     public DataTablesOutput<Documento> GetDocumentos(@Valid DataTablesInput input, @PathVariable Integer idDocumento) {
         return documentoService.listarDocumentos(input, idDocumento);
     }
     
+    //Función que redirige a la vista de los documentos del trabajador
     @GetMapping("/DocumentosTrabajador/{idPersona}")
     public String DocumentosTrabajador(Model model, Persona persona) {
         model.addAttribute("pageTitle", "Perfil Trabajador");
@@ -182,100 +120,7 @@ public class TrabajadorController {
         return "/Trabajador/InformacionGeneral/trabajadorDocumentos";
     }
     
-    @GetMapping("/terrenosTrabajador/data/{idVisitante}")
-    @ResponseBody
-    public DataTablesOutput<AsignacionVisitante> GetTerrenos(@Valid DataTablesInput input, @PathVariable Long idVisitante) {
-        return asigVisitanteService.listarTerrenosTrabajador(input, idVisitante);
-    }
-    
-    @GetMapping("/TerrenosTrabajador/{idPersona}")
-    public String TerrenosTrabajador(Model model, Persona persona) {
-        model.addAttribute("pageTitle", "Perfil Trabajador");
-        Persona newPersona = personaService.encontrar(persona.getIdPersona());
-        Visitante newTrabajador = visitanteService.encontrarPersona(newPersona);
-        
-        model.addAttribute("trabajador", newTrabajador);
-        model.addAttribute("persona", newPersona);
-        return "/Trabajador/InformacionGeneral/trabajadorTerrenos";
-    }
-    
-    @GetMapping("/trabajadores/data")
-    @ResponseBody
-    public DataTablesOutput<Visitante> GetTrabajadores(@Valid DataTablesInput input) {
-        return visitanteService.listarTrabajadores(input);
-    }
-    
-    @GetMapping("/trabajadoresProyecto/data/{idProyecto}")
-    @ResponseBody
-    public DataTablesOutput<VistaTrabajadoresProyecto> GetTrabajadoreProyecto(@Valid DataTablesInput input, @PathVariable Long idProyecto) {
-        return vistaTrabajadoresProyectoService.listarTrabajadores(input, idProyecto);
-    }
-
-    @PostMapping("/AgregarTrabajador")
-    public ResponseEntity AgregarTrabajador(Visitante visitante, Persona persona, HttpServletRequest request, RedirectAttributes redirectAttributes) {
-        try {
-            if(personaService.encontrarDui(persona.getDui())== null){
-                personaService.agregar(persona);
-                Persona newPersona = personaService.encontrarDui(persona.getDui());
-                visitante.setPersona(newPersona);
-                visitanteService.agregar(visitante);
-                String mensaje = "Se ha agregado un trabajador.";
-                bitacoraService.registrarAccion("Agregar trabajador");
-                return ResponseEntity.ok(mensaje);
-            }else{
-                String error = "Ya se encuentra registrado el trabajador.";
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
-            }
-        } catch (Exception e) {
-            String error = "Ocurrió un error al agregar el trabajador.";
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
-        }
-    }
-
-    @PostMapping("/EliminarTrabajador/{idPersona}")
-    public ResponseEntity EliminarTrabajador(Persona persona) {
-        try {
-             Visitante newTrabajador = visitanteService.encontrarPersona(persona);
-             visitanteService.eliminar(newTrabajador);
-             personaService.eliminar(persona);
-             String mensaje = "Se ha eliminado un trabajador correctamente.";
-             bitacoraService.registrarAccion("Eliminar trabajador");
-            return ResponseEntity.ok(mensaje);
-        } catch (Exception e) {
-            String error = "Ha ocurrido un error al eliminar el trabajador.";
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
-        }
-    }
-
-    @GetMapping("/ObtenerTrabajador/{id}")
-    public ResponseEntity<Object> ObtenerTrabajador(@PathVariable Long id) {
-        Persona persona = personaService.encontrar(id);
-        Visitante trabajador = visitanteService.encontrarPersona(persona);
-        if (trabajador != null && persona != null) {
-            Map<String, Object> entidadesMap = new HashMap<>();
-            entidadesMap.put("trabajador", trabajador);
-            entidadesMap.put("persona", persona);
-            return ResponseEntity.ok(entidadesMap);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
-    }
-
-    @PostMapping("/ActualizarTrabajador")
-    public ResponseEntity ActualizarTrabajador( Visitante visitante, Persona persona, HttpServletRequest request, RedirectAttributes redirectAttributes) {
-        try {
-            visitante.setPersona(persona);
-            visitanteService.actualizar(visitante);
-            personaService.actualizar(persona);
-            String mensaje = "Se ha actualizado el trabajador correctamente.";
-            bitacoraService.registrarAccion("Actualizar trabajador");
-            return ResponseEntity.ok(mensaje);
-        } catch (Exception e) {
-            String error = "Ha ocurrido un error al actualizar el trabajador.";
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
-        }
-    }
-    
+    //Función que agrega un documento al trabajador
     @PostMapping("/AgregarDocumentoTrabajador")
     public ResponseEntity agregarDocumentoTrabajador(HttpServletRequest request, RedirectAttributes redirectAttributes,
             @RequestParam("nombre") String nombre,
@@ -283,12 +128,9 @@ public class TrabajadorController {
             @RequestParam("idVisitante") Long idVisitante) {
         try {
             Documento newDocumento = new Documento();
-            
             byte[] fileBytes = documento.getBytes();
             Blob documentoConvertido = new javax.sql.rowset.serial.SerialBlob(fileBytes);
-            
             Visitante newVisitante = visitanteService.encontrar(idVisitante);
-            
             newDocumento.setNombre(nombre);
             newDocumento.setDocumento(documentoConvertido);
             newDocumento.setIdListDocumento(newVisitante.getIdDocumento());
@@ -302,6 +144,7 @@ public class TrabajadorController {
         }
     }
     
+    //Función que elimina un documento del trabajador
     @PostMapping("/EliminarDocumentoTrabajador/{idDocumento}")
     public ResponseEntity eliminarDocumentoTrabajador(Documento documento, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
@@ -315,6 +158,7 @@ public class TrabajadorController {
         }
     }
     
+    //Función para visualizar un documento del trabajador
     @GetMapping("/DocumentoTrabajador/{IdDocumento}")
     public ResponseEntity <byte[]> mostrarDocumentoPDFTrabajador(@PathVariable("IdDocumento") Long id) {
         Documento archivo = new Documento();
@@ -337,5 +181,93 @@ public class TrabajadorController {
             e.printStackTrace();
         }
         return ResponseEntity.notFound().build();
+    }
+    
+    //Función que obtiene los terrenos del trabajador
+    @GetMapping("/terrenosTrabajador/data/{idVisitante}")
+    @ResponseBody
+    public DataTablesOutput<AsignacionVisitante> GetTerrenos(@Valid DataTablesInput input, @PathVariable Long idVisitante) {
+        return asigVisitanteService.listarTerrenosTrabajador(input, idVisitante);
+    }
+    
+    //Función que que redirige a la vista de los terrenos del trabajador
+    @GetMapping("/TerrenosTrabajador/{idPersona}")
+    public String TerrenosTrabajador(Model model, Persona persona) {
+        model.addAttribute("pageTitle", "Perfil Trabajador");
+        Persona newPersona = personaService.encontrar(persona.getIdPersona());
+        Visitante newTrabajador = visitanteService.encontrarPersona(newPersona);
+        
+        model.addAttribute("trabajador", newTrabajador);
+        model.addAttribute("persona", newPersona);
+        return "/Trabajador/InformacionGeneral/trabajadorTerrenos";
+    }
+
+    //Función que agrega un trabajador a la base de datos
+    @PostMapping("/AgregarTrabajador")
+    public ResponseEntity AgregarTrabajador(Visitante visitante, Persona persona, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        try {
+            if(personaService.encontrarDui(persona.getDui())== null){
+                personaService.agregar(persona);
+                Persona newPersona = personaService.encontrarDui(persona.getDui());
+                visitante.setPersona(newPersona);
+                visitanteService.agregar(visitante);
+                String mensaje = "Se ha agregado un trabajador.";
+                bitacoraService.registrarAccion("Agregar trabajador");
+                return ResponseEntity.ok(mensaje);
+            }else{
+                String error = "Ya se encuentra registrado el trabajador.";
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+            }
+        } catch (Exception e) {
+            String error = "Ocurrió un error al agregar el trabajador.";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        }
+    }
+
+    //Función que elimina un trabajador de la base de datos
+    @PostMapping("/EliminarTrabajador/{idPersona}")
+    public ResponseEntity EliminarTrabajador(Persona persona) {
+        try {
+             Visitante newTrabajador = visitanteService.encontrarPersona(persona);
+             visitanteService.eliminar(newTrabajador);
+             personaService.eliminar(persona);
+             String mensaje = "Se ha eliminado un trabajador correctamente.";
+             bitacoraService.registrarAccion("Eliminar trabajador");
+            return ResponseEntity.ok(mensaje);
+        } catch (Exception e) {
+            String error = "Ha ocurrido un error al eliminar el trabajador.";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        }
+    }
+
+    //Función que obtiene un trabajador de la base de datos
+    @GetMapping("/ObtenerTrabajador/{id}")
+    public ResponseEntity<Object> ObtenerTrabajador(@PathVariable Long id) {
+        Persona persona = personaService.encontrar(id);
+        Visitante trabajador = visitanteService.encontrarPersona(persona);
+        if (trabajador != null && persona != null) {
+            Map<String, Object> entidadesMap = new HashMap<>();
+            entidadesMap.put("trabajador", trabajador);
+            entidadesMap.put("persona", persona);
+            return ResponseEntity.ok(entidadesMap);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    //Función que actualiza un trabajador de la base de datos
+    @PostMapping("/ActualizarTrabajador")
+    public ResponseEntity ActualizarTrabajador( Visitante visitante, Persona persona, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        try {
+            visitante.setPersona(persona);
+            visitanteService.actualizar(visitante);
+            personaService.actualizar(persona);
+            String mensaje = "Se ha actualizado el trabajador correctamente.";
+            bitacoraService.registrarAccion("Actualizar trabajador");
+            return ResponseEntity.ok(mensaje);
+        } catch (Exception e) {
+            String error = "Ha ocurrido un error al actualizar el trabajador.";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        }
     }
 }

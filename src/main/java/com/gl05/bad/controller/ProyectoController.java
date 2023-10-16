@@ -38,44 +38,29 @@ public class ProyectoController {
     @Autowired
     private UserService userService;
     
-    /*@GetMapping("/")
+    //Función para redirigir a la vista de proyectos
+    @GetMapping("/Proyectos")
     public String index(Model model, Authentication authentication) {
         model.addAttribute("pageTitle", "Inicio");
         if (authentication.getAuthorities().isEmpty()) {
-            // En caso de que el usuario no tenga permisos
             model.addAttribute("mensaje", "Usuario autenticado pero sin permisos");
         }
-        
         var empresas = empresaService.listaEmpresas();
-        
         Proyecto proyecto=new Proyecto();
         proyecto.setIdProyecto(0L);
-        
         model.addAttribute("empresas", empresas);
         model.addAttribute("proyecto", proyecto);
-        return "Proyecto/GestionaProyecto";
-    }*/
+        return "Proyecto/GestionarProyecto";
+    }
     
+    //Función para obtener los proyectos de la base de datos
     @GetMapping("/proyectos/data")
     @ResponseBody
     public DataTablesOutput<Proyecto> GetProyectos(@Valid DataTablesInput input) {
         return proyectoService.listarProyectos(input);
     }
-    
-    @GetMapping("/Propietarios/{idProyecto}")
-    public String mostrarPropietariosProyecto(Model model, Proyecto proyecto) {
-        model.addAttribute("pageTitle", "Propietarios Proyecto");
-        model.addAttribute("proyecto", proyecto);
-        return "/Proyecto/PropietariosProyecto";
-    }
-    
-    @GetMapping("/Trabajadores/{idProyecto}")
-    public String mostrarTrabajadoresProyecto(Model model, Proyecto proyecto) {
-        model.addAttribute("pageTitle", "Trabajadores Proyecto");
-        model.addAttribute("proyecto", proyecto);
-        return "/Proyecto/TrabajadoresProyecto";
-    }
 
+    //Función para agregar proyectos a la base de datos
     @PostMapping("/AgregarProyecto")
     public ResponseEntity AgregarProyecto(Proyecto proyecto, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
@@ -92,6 +77,7 @@ public class ProyectoController {
         }
     }
 
+    //Función para eliminar proyectos de la base de datos
     @PostMapping("/EliminarProyecto/{idProyecto}")
     public ResponseEntity EliminarProyecto(Proyecto proyecto) {
         try {
@@ -111,6 +97,7 @@ public class ProyectoController {
         }
     }
 
+    //Función para obtener un proyecto de la base de datos
     @GetMapping("/ObtenerProyecto/{id}")
     public ResponseEntity<Proyecto> ObtenerProyecto(@PathVariable Long id) {
         Proyecto proyecto = proyectoService.encontrar(id);
@@ -121,6 +108,7 @@ public class ProyectoController {
         }
     }
 
+    //Función para actualizar un proyecto de la base de datos
     @PostMapping("/ActualizarProyecto")
     public ResponseEntity ActualizarProyecto(Proyecto proyecto, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {

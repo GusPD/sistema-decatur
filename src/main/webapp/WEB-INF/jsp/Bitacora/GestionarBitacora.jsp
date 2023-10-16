@@ -1,9 +1,7 @@
 <%@ include file="../common/header.jspf"%>
 <%@ include file="../common/navigationAdministracion.jspf"%>
-
-<!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
+    <!-- Título de la página -->
     <section class="content-header">
         <div class="container">
             <div class="row">
@@ -22,6 +20,7 @@
             <div class="row">
                 <div class="col-12">
                     <div class="card">
+                        <!-- Funciones con los datos -->
                         <div class="card-header">
                             <h3 class="card-title d-flex justify-content-end">
                                 <sec:authorize access="hasAuthority('EXPORTAR_BITACORA_PRIVILAGE')"> 
@@ -31,10 +30,10 @@
                                 </sec:authorize>
                             </h3>
                         </div>
+                        <!-- Datos -->
                         <div class="card-body">
                             <div id="table_wrapper" class="dataTables_wrapper dt-bootstrap4">
                                 <div class="col-sm-12 table-responsive pt-1" style="height: 60vh; padding:4px;">
-                                <!--Sección de tabla-->
                                     <table id="bitacoraTable" class="table table-bordered table-striped dataTable dtr-inline mt-1"></table>
                                 </div>
                             </div>
@@ -42,8 +41,12 @@
                     </div>
                 </div>
             </div>
-        </div><!-- /.container-fluid -->
+        </div>
     </section>
+</div>
+    
+<!-- Script de la página -->
 <%@ include file="../common/footer.jspf"%>
+
 <script src="${pageContext.request.contextPath}/js/bitacora.js"></script>
 

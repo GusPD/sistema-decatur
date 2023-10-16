@@ -3,6 +3,7 @@
     <div class="col-12">
         <div class="card">
             <div class="card-header">
+                <!-- Subtitulo de la página y funciones de los datos -->
                 <div class="subtitulo-page">
                     <h3 class="mt-0 mb-0">Trabajadores
                         <sec:authorize access="hasAuthority('SELECCIONAR_TRABAJADOR_PRIVILAGE')">
@@ -18,10 +19,10 @@
                     </h3>
                 </div>
             </div>
+            <!-- Datos -->
             <div class="card-body">
                 <div id="table_wrapper" class="dataTables_wrapper dt-bootstrap4">
                     <div class="col-sm-12 table-responsive pt-1" style="height: 55vh; padding:4px;">
-                    <!--Sección de tabla-->
                         <table id="trabajadoresTable" class="table table-bordered table-striped dataTable dtr-inline mt-1"></table>
                     </div>
                 </div>
@@ -71,6 +72,7 @@
         </div>
     </div>
 </div>
+<!-- Modal de seleccionar -->
 <div class="modal fade" id="seleccionarModalTrabajador" tabindex="-1" aria-labelledby="crearModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -126,6 +128,7 @@
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 </form>
 
+<!-- Script de la página -->
 <sec:authorize access="hasAuthority('VER_TRABAJADOR_PRIVILAGE')" var="hasPrivilegeVerTrabajador"></sec:authorize>
 <script>var hasPrivilegeVerTrabajador = ${hasPrivilegeVerTrabajador};</script>
 
@@ -133,6 +136,7 @@
 <script>var hasPrivilegeEliminarTrabajador = ${hasPrivilegeEliminarTrabajador};</script>
 
 <%@ include file="../venta-footer.jspf"%>
+
 <script src="${pageContext.request.contextPath}/js/trabajadorVenta.js"></script>
 
 

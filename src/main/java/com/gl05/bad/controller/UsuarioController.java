@@ -43,7 +43,7 @@ public class UsuarioController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    //Obtener los usuarios y mostrarlos en tablas
+    //Función que redirige a la vista de los usuarios
     @GetMapping("/Usuarios")
     public String mostrarUsuarios(Model model) {
         model.addAttribute("pageTitle", "Usuarios");
@@ -58,16 +58,17 @@ public class UsuarioController {
         model.addAttribute("usuarios", elemento);
         model.addAttribute("roles", elementoRol);
         model.addAttribute("usuario", new Usuario());
-
         return "/Usuarios/GestionarUsuarios";
     }
     
+    //Función que obtiene los usuarios de la base de datos
     @GetMapping("/usuarios/data")
     @ResponseBody
     public DataTablesOutput<Usuario> getUsuarios(@Valid DataTablesInput input) {
         return userService.listarUsuarios(input);
     }
 
+    //Función que agrega un usuario de la base de datos
     @PostMapping("/AgregarUsuario")
     public ResponseEntity AgregarUsuario(Usuario usuario, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
@@ -84,6 +85,7 @@ public class UsuarioController {
         }
     }
 
+    //Función que elimina un usuario de la base de datos
     @PostMapping("/EliminarUsuario/{idUsuario}")
     public ResponseEntity EliminarUsuario(Usuario usuario) {
         try {
@@ -97,6 +99,7 @@ public class UsuarioController {
         }
     }
 
+    //Función que obtiene un usuario de la base de datos
     @GetMapping("/ObtenerUsuario/{id}")
     public ResponseEntity<Usuario> obtenerUsuario(@PathVariable Long id) {
         Usuario usuario = userService.encontrar(id);
@@ -107,17 +110,16 @@ public class UsuarioController {
         }
     }
 
+    //Función que actualiza un usuario de la base de datos
     @PostMapping("/ActualizarUsuario")
     public ResponseEntity ActualizarUsuario(Usuario usuario, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             String password = usuario.getPassword();
 
             if (password != null && !password.isEmpty()) {
-                // Se proporcionó una nueva contraseña, realizar validación y encriptación
                 String encryptedPassword = passwordEncoder.encode(password);
                 usuario.setPassword(encryptedPassword);
             } else {
-                // No se proporcionó una nueva contraseña, mantener la existente en la base de datos
                 Usuario existingUsuario = userService.encontrar(usuario.getIdUsuario());
                 usuario.setPassword(existingUsuario.getPassword());
             }

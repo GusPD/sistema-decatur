@@ -3,14 +3,17 @@
     <div class="col-12 pb-3">
         <div class="card">
             <div class="card-header">
+                <!-- Subtitulo de la página -->
                 <div class="subtitulo-page">
                     <h3 class="mt-0 mb-0">Facturacion</h3>
                 </div>
             </div>
+            <!-- Datos -->
             <div class="card-body pb-0">
                 <div id="table_wrapper" class="dataTables_wrapper dt-bootstrap4">
                     <div class="col-sm-12 table-responsive pt-1" style="height: 55vh; padding:4px;">
                         <div class="tarjeta-container pb-3 h-100">
+                            <!-- Columna izquierda -->
                             <div class="tarjeta-facturacion-izquierda border p-3 rounded">
                                 <h6 class="text-center font-weight-bold">Consumidor Final
                                     <span title="Editar Información" id="EditarConsumidorFinal" class="btn abrirModalConsumidorFinal-btn text-info puntero pull-right text-blue btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalConsumidorFinal" data-tipo="editar" data-id="${venta.idVenta}" data-modo="actualizar" style="cursor: pointer;">
@@ -41,6 +44,7 @@
                                     </tbody>
                                 </table>
                             </div>
+                            <!-- Columna derecha -->
                             <div class="tarjeta-facturacion-derecha border p-3 rounded">
                                 <h6 class="text-center font-weight-bold">Crédito Fiscal
                                     <span title="Editar Información" id="EditarCreditoFiscal" class="btn abrirModalCreditoFiscal-btn text-info puntero pull-right text-blue btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalCreditoFiscal" data-tipo="editar" data-id="${venta.idVenta}" data-modo="actualizar" style="cursor: pointer;">
@@ -83,6 +87,7 @@
         </div>
     </div>
 </div>
+<!-- Modal de agregar factura consumidor final -->
 <div class="modal fade" id="crearModalConsumidorFinal" tabindex="-1" aria-labelledby="crearModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -123,6 +128,7 @@
         </div>
     </div>
 </div>
+<!-- Modal de agregar crédito fiscal -->
 <div class="modal fade" id="crearModalCreditoFiscal" tabindex="-1" aria-labelledby="crearModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -172,7 +178,10 @@
         </div>
     </div>
 </div>
+
+<!-- Script de la página -->
 <%@ include file="../venta-footer.jspf"%>
+
 <script src="${pageContext.request.contextPath}/js/informacionVenta.js"></script>
 
 

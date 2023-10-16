@@ -4,6 +4,7 @@
     <div class="col-12">
         <div class="card">
             <div class="card-header">
+                <!-- Subtitulo de la página y funciones de los datos -->
                 <div class="subtitulo-page">
                     <h3 class="m-0">Referencias
                         <sec:authorize access="hasAuthority('AGREGAR_REFERENCIA_PROPIETARIO_PRIVILAGE')">
@@ -12,6 +13,7 @@
                     </h3>
                 </div>
             </div>
+            <!-- Datos -->
             <div class="card-body">
                 <div id="table_wrapper" class="dataTables_wrapper dt-bootstrap4">
                     <div class="col-sm-12 table-responsive pt-1" style="height: 55vh; padding:4px;">
@@ -81,15 +83,16 @@
         </div>
     </div>
 </div>
-
 <form id="eliminarReferenciaForm" method="post" action="/EliminarReferencia/{idReferencia}">
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 </form> 
 
+<!-- Script de la página -->
 <sec:authorize access="hasAuthority('ELIMINAR_REFERENCIA_PROPIETARIO_PRIVILAGE')" var="hasPrivilegeEliminarReferencia"></sec:authorize>
 <script>var hasPrivilegeEliminarReferencia = ${hasPrivilegeEliminarReferencia};</script>
 
 <%@ include file="../propietario-footer.jspf"%>
+
 <script src="${pageContext.request.contextPath}/js/referenciaPropietario.js"></script>
 
 

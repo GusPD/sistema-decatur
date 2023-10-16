@@ -58,7 +58,7 @@ $(document).ready(function() {
                     var actionsHtml = '';
                     
                     if(hasPrivilegeVerPropietario === true){
-                        actionsHtml = '<a type="button" class="btn btn-outline-secondary btn-sm" href="/InformacionPropietario/' + row.persona.idPersona + '">';
+                        actionsHtml = '<a type="button" class="btn btn-outline-secondary btn-sm" href="/InformacionPropietario/0/' + row.persona.idPersona + '">';
                         actionsHtml += '<i class="far fa-eye"></i></a>';
                     }
                     
