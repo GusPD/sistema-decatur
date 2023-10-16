@@ -4,6 +4,7 @@
     <div class="col-12">
         <div class="card">
             <div class="card-header">
+                <!-- Subtitulo de la página y funciones de los datos-->
                 <div class="subtitulo-page">
                     <h3 class="m-0">Correos Eléctronicos
                         <sec:authorize access="hasAuthority('AGREGAR_CORREO_PROPIETARIO_PRIVILAGE')">
@@ -12,10 +13,10 @@
                     </h3>
                 </div>
             </div>
+            <!-- Datos -->
             <div class="card-body">
                 <div id="table_wrapper" class="dataTables_wrapper dt-bootstrap4">
                     <div class="col-sm-12 table-responsive pt-1" style="height: 55vh; padding:4px;">
-                    <!--Sección de tabla-->
                         <table id="correoTable" class="table table-bordered table-striped dataTable dtr-inline mt-1"></table>
                     </div>
                 </div>
@@ -83,10 +84,12 @@
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 </form>   
 
+<!-- Script de la página -->
 <sec:authorize access="hasAuthority('ELIMINAR_CORREO_PROPIETARIO_PRIVILAGE')" var="hasPrivilegeEliminarCorreo"></sec:authorize>
 <script>var hasPrivilegeEliminarCorreo = ${hasPrivilegeEliminarCorreo};</script>
 
 <%@ include file="../propietario-footer.jspf"%>
+
 <script src="${pageContext.request.contextPath}/js/correoPropietario.js"></script>
 
 

@@ -7,8 +7,10 @@
                     </div>
                 </div>
             </section>
-        </div><!-- /.container-->
+        </div>
     </section>
 </div>
+
+<!-- Script de la página -->
 <%@ include file="../common/footer.jspf"%>
 

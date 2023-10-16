@@ -47,16 +47,14 @@ public class IndexController {
     @Autowired
     private PasswordEncoder passwordEncoder;
     
+    //Función para redirigir a la vista de inicio
     @GetMapping("/")
     public String index(Model model, Authentication authentication) {
         model.addAttribute("pageTitle", "Inicio");
         if (authentication.getAuthorities().isEmpty()) {
-            // En caso de que el usuario no tenga permisos
             model.addAttribute("mensaje", "Usuario autenticado pero sin permisos");
         }
-        
-        var empresas = empresaService.listaEmpresas();
-        
+        var empresas = empresaService.listaEmpresas();    
         Proyecto proyecto=new Proyecto();
         proyecto.setIdProyecto(0L);
         model.addAttribute("empresas", empresas);
@@ -64,33 +62,32 @@ public class IndexController {
         return "welcome";
     }
     
+    //Función para obtener el menú del usuario
     @GetMapping("/ObtenerUsuarioMenu")
     public ResponseEntity<Map<String, Object>> obtenerUsuarioMenu(Authentication authentication, HttpSession session) {
-        // Obtener el nombre del usuario autenticado
         String username = authentication.getName();
-
-        // Crear el mapa para almacenar los datos a devolver en el response
         Map<String, Object> responseMap = new HashMap<>();
         responseMap.put("username", username);
-
-        // Devolver el mapa como respuesta
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(responseMap);
     }
     
+    //Función para redirigir a la vista de acceso denegado
     @GetMapping("/accesoDenegado")
     public String acceso(Model model) {
         model.addAttribute("pageTitle", "Acceso Denegado");
         return "accesodenegado";
     }
     
+    //Función para redirigir a la vista de solicitud de restablecimiento de contraseña
     @GetMapping("/password/reset")
     public String pageResetPassword(Model model) {
         model.addAttribute("pageTitle", "Restablecer Constraseña");
         return "solicitud-reset-password";
     }
     
+    //Función para enviar la solicitud de restablecimiento de contraseña
     @PostMapping("/RestablecerPassword")
     public ResponseEntity RestablecerPassword(@RequestParam("username") String username, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
@@ -122,6 +119,7 @@ public class IndexController {
         }
     }
     
+    //Función para redirigir a la vista de restablecer contraseña
     @GetMapping("/reset-password")
     public String Restablecer(Model model, @RequestParam("token") String token) {
         model.addAttribute("pageTitle", "Restablecer Constraseña");
@@ -144,6 +142,7 @@ public class IndexController {
         return "reset-password";
     }
     
+    //Función para el restablecimiento de la contraseña
     @PostMapping("/reset-password-new")
     public String RestablecerNuevaContraseña(Model model, @RequestParam("token") String token, @RequestParam("password") String password) {
         try {

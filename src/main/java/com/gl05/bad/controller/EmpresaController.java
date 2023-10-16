@@ -34,18 +34,21 @@ public class EmpresaController {
     @Autowired
     private UserService userService;
     
-    @GetMapping("/GestionarEmpresa")
+    //Función para redigir a la vista de empresas
+    @GetMapping("/Empresas")
     public String mostrarProyecto(Model model) {
         model.addAttribute("pageTitle", "Empresas");
         return "/Empresa/GestionarEmpresa";
     }
     
+    //Función para obtener las empresas de la base de datos
     @GetMapping("/empresas/data")
     @ResponseBody
     public DataTablesOutput<Empresa> GetEmpresas(@Valid DataTablesInput input) {
         return empresaService.listarEmpresas(input);
     }
 
+    //Función para agregar una empresa en la base de datos
     @PostMapping("/AgregarEmpresa")
     public ResponseEntity AgregarEmpresa(Empresa empresa, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
@@ -62,6 +65,7 @@ public class EmpresaController {
         }
     }
 
+    //Función para eliminar una empresa de la base de datos
     @PostMapping("/EliminarEmpresa/{idEmpresa}")
     public ResponseEntity EliminarEmpresa(Empresa empresa) {
         try {
@@ -81,6 +85,7 @@ public class EmpresaController {
         }
     }
 
+    //Función para obtener una empresa de la base de datos
     @GetMapping("/ObtenerEmpresa/{id}")
     public ResponseEntity<Empresa> ObtenerEmpresa(@PathVariable Long id) {
         Empresa empresa = empresaService.encontrar(id);
@@ -91,6 +96,7 @@ public class EmpresaController {
         }
     }
 
+    //Función para actualizar una empresa de la base de datos
     @PostMapping("/ActualizarEmpresa")
     public ResponseEntity ActualizarEmpresa(Empresa empresa, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {

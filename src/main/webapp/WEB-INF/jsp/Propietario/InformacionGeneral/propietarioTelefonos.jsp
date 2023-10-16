@@ -4,6 +4,7 @@
     <div class="col-12">
         <div class="card">
             <div class="card-header">
+                <!-- Subtitulo de la página -->
                 <div class="subtitulo-page">
                     <h3 class="m-0">Teléfonos
                         <sec:authorize access="hasAuthority('AGREGAR_TELEFONO_PROPIETARIO_PRIVILAGE')">
@@ -12,6 +13,7 @@
                     </h3>
                 </div>
             </div>
+            <!-- Datos -->
             <div class="card-body">
                 <div id="table_wrapper" class="dataTables_wrapper dt-bootstrap4">
                     <div class="col-sm-12 table-responsive pt-1" style="height: 55vh; padding:4px;">
@@ -82,10 +84,12 @@
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 </form> 
 
+<!-- Script de la página -->
 <sec:authorize access="hasAuthority('ELIMINAR_TELEFONO_PROPIETARIO_PRIVILAGE')" var="hasPrivilegeEliminarTelefono"></sec:authorize>
 <script>var hasPrivilegeEliminarTelefono = ${hasPrivilegeEliminarTelefono};</script>
 
 <%@ include file="../propietario-footer.jspf"%>
+
 <script src="${pageContext.request.contextPath}/js/telefonoPropietario.js"></script>
 
 

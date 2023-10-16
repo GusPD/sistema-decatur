@@ -1,4 +1,4 @@
-//Funcionalidad de ver o no la contraseña
+//Función de ver o no la contraseña
 function togglePasswordVisibilityNew() {
     var passwordInput = document.getElementById("password");
     var eyeIcon = document.getElementById("icono-ver");
@@ -28,6 +28,7 @@ function togglePasswordVisibilityConfirm() {
     }
 }
 
+//Función para validad el formulario de restablecer contraseña
 $.validator.addMethod(
     "validarPassword",
     function(value, element) {
@@ -36,7 +37,6 @@ $.validator.addMethod(
     },
     "La contraseña debe contener al menos una mayúscula, una minúscula, un número, un carácter especial y tener un mínimo de 8 caracteres"
 );
-
 var form = $('#form-reset-password'); // Almacenar referencia al formulario
 var validator = $('#form-reset-password').validate({
     rules: {        

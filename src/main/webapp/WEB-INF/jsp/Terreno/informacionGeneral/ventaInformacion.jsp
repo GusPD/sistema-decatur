@@ -1,5 +1,6 @@
 <%@ include file="../venta-header.jspf"%>
 <div class="row">
+    <!-- Subtitulo de la página y funciones de los datos -->
     <div class="subtitulo-page"><h3 class="mt-0">Venta
             <sec:authorize access="hasAuthority('EDITAR_VENTA_PRIVILAGE')">
                 <span title="Editar Información" id="EditarInformacion" class="btn abrirModal-btn text-info puntero pull-right btn-sm" data-bs-toggle="modal" data-bs-target="#crearModal" data-tipo="editar" data-id="${venta.idVenta}" data-modo="actualizar" style="cursor: pointer;">
@@ -8,6 +9,7 @@
             </sec:authorize>
         </h3>
     </div>
+    <!-- Datos -->
     <div class="tarjeta-container">
         <table class="table small table-bordered m-0" id="tabla-informacion">
             <tbody>
@@ -42,6 +44,7 @@
             </tbody>
         </table>
     </div>
+    <!-- Subtitulo de la página y funciones de los datos -->
     <div class="subtitulo-page mt-4"><h3>Financiamiento
             <sec:authorize access="hasAuthority('EDITAR_INFORMACION_FINANCIAMIENTO_PRIVILAGE')">
                 <span title="Editar Información" id="EditarInformacion" class="btn abrirModal-btn text-info puntero pull-right btn-sm" data-bs-toggle="modal" data-bs-target="#crearModal" data-tipo="editar" data-id="${venta.idVenta}" data-modo="actualizar" style="cursor: pointer;">
@@ -50,6 +53,7 @@
             </sec:authorize>
         </h3>
     </div>
+    <!-- Datos -->
     <div class="tarjeta-container">
         <div class="tarjeta-venta-izquierda border p-3 rounded">
             <table class="table small table-borderless" id="tabla-informacion-financiamiento">
@@ -124,6 +128,7 @@
             </table>
         </div>
     </div>
+    <!-- Subtitulo de la página y funciones de los datos -->
     <div class="subtitulo-page mt-4"><h3>Mantenimiento
             <sec:authorize access="hasAuthority('EDITAR_INFORMACION_MANTENIMIENTO_PRIVILAGE')">
                 <span title="Editar Información" id="EditarInformacion" class="btn abrirModal-btn text-info puntero pull-right btn-sm" data-bs-toggle="modal" data-bs-target="#crearModal" data-tipo="editar" data-id="${venta.idVenta}" data-modo="actualizar" style="cursor: pointer;">
@@ -132,6 +137,7 @@
             </sec:authorize>
         </h3>
     </div>
+    <!-- Datos -->
     <div class="tarjeta-container mb-3">
         <div class="tarjeta-venta-izquierda border p-3 rounded">
             <table class="table small table-borderless" id="tabla-informacion-mantenimiento">
@@ -192,6 +198,7 @@
         </div>
     </div>
 </div>
+<!-- Modal de editar -->
 <div class="modal fade" id="crearModal" tabindex="-1" aria-labelledby="crearModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -240,7 +247,8 @@
             </div>
         </div>
     </div>
-</div>
+</div>           
+<!-- Modal de editar mantenimiento -->
 <div class="modal fade" id="crearModalFinanciamiento" tabindex="-1" aria-labelledby="crearModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -283,6 +291,7 @@
         </div>
     </div>
 </div>
+<!-- Modal de editar financimiento -->
 <div class="modal fade" id="crearModalMantenimiento" tabindex="-1" aria-labelledby="crearModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -313,7 +322,10 @@
         </div>
     </div>
 </div>
+        
+<!-- Script de la página -->
 <%@ include file="../venta-footer.jspf"%>
+
 <script src="${pageContext.request.contextPath}/js/informacionVenta.js"></script>
 
 

@@ -1,3 +1,4 @@
+//Función para mostrar los mensajes de error
 function mostrarMensaje(mensaje, tipo) {
     var alertElement = $('.alert-' + tipo);
     alertElement.text(mensaje).addClass('show').removeClass('d-none');
@@ -6,6 +7,7 @@ function mostrarMensaje(mensaje, tipo) {
     }, 5000);
 }
 
+//Función para validar el formulario de la solicitud
 var formReset = $('#form-reset-password');
 var validator = $('#form-reset-password').validate({
     rules: {
@@ -46,6 +48,7 @@ var validator = $('#form-reset-password').validate({
                 $("#username").val("");
             },
             error: function (xhr, status, error) {
+                $("#animacion-loading").hide();
                 var errorMessage = xhr.responseText || 'Error al enviar la solicitud para restablecer la contraseña.';
                 mostrarMensaje(errorMessage, 'danger');
             }

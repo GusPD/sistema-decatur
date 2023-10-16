@@ -38,6 +38,7 @@ public class TerrenoController {
     @Autowired
     private ProyectoService proyectoService;
     
+    //Función que redirige a la vista de los terrenos del proyecto
     @GetMapping("/Terrenos/{idProyecto}")
     public String mostrarTerrenoProyecto(Model model, Proyecto proyecto) {
         model.addAttribute("pageTitle", "Terrenos");
@@ -48,12 +49,14 @@ public class TerrenoController {
         return "/Proyecto/TerrenosProyecto";
     }
     
+    //Función que obtiene los terrenos del proyecto
     @GetMapping("/terrenos/data/{idProyecto}")
     @ResponseBody
     public DataTablesOutput<VistaTerreno> GetTerrenos(@Valid DataTablesInput input, @PathVariable Long idProyecto) {
         return vistaTerrenoService.listarTerrenos(input, idProyecto);
     }
 
+    //Función que agrega un terreno a la base de datos
     @PostMapping("/AgregarTerreno/{idProyecto}")
     public ResponseEntity AgregarTerreno(@PathVariable("idProyecto") Long idProyecto,Terreno terreno, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
@@ -70,9 +73,7 @@ public class TerrenoController {
                 }
             }
             if(existeTerreno){
-                //Obtener el proyecto por ID
                 Proyecto proyecto = proyectoService.encontrar(idProyecto);
-                // Asignar el proyecto al terreno
                 terreno.setProyecto(proyecto);
                 terreno.setPoligono(valorPoligono);
                 terreno.setSeccion(valorSeccion);
@@ -90,6 +91,7 @@ public class TerrenoController {
         }
     }
 
+    //Función que elimina un terreno de la base de datos
     @PostMapping("/EliminarTerreno/{idTerreno}")
     public ResponseEntity EliminarTerreno(Terreno terreno) {
         try {
@@ -103,6 +105,7 @@ public class TerrenoController {
         }
     }
 
+    //Función que obtiene un terreno de la base de datos
     @GetMapping("/ObtenerTerreno/{id}")
     public ResponseEntity<Terreno> ObtenerTerreno(@PathVariable Long id) {
         Terreno terreno = terrenoService.encontrar(id);
@@ -113,12 +116,11 @@ public class TerrenoController {
         }
     }
 
+    //Función que actualiza un terreno de la base de datos
     @PostMapping("/ActualizarTerreno/{idProyecto}")
     public ResponseEntity ActualizarTerreno(@PathVariable("idProyecto") Long idProyecto, Terreno terreno, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
-            //Obtener el proyecto por ID
             Proyecto proyecto = proyectoService.encontrar(idProyecto);
-            // Asignar el proyecto al terreno
             terreno.setProyecto(proyecto);
             terreno.setPoligono(terreno.getPoligono().toUpperCase());
             terreno.setSeccion(terreno.getSeccion().toLowerCase());

@@ -17,13 +17,14 @@ public class BitacoraController {
     @Autowired
     private BitacoraServiceImp bitacoraService;
 
-    //Obtener los usuarios y mostrarlos en tablas
+    //Función que redirige a la vista de la bitacora
     @GetMapping("/Bitacora")
     public String mostrarUsuarios(Model model) {
         model.addAttribute("pageTitle", "Bitácora");
         return "/Bitacora/GestionarBitacora";
     }
     
+    //Función que obtiene la registros de la bistacora de la base de datos
     @GetMapping("/bitacora/data")
     @ResponseBody
     public DataTablesOutput<Bitacora> getBitacora(@Valid DataTablesInput input) {

@@ -35,27 +35,26 @@ public class RolesController {
     @Autowired
     private RolDao rolDao;
 
-    //Obtener los roles y mostrarlos en tablas
+    //Función que redirige a la vista de los roles
     @GetMapping("/Roles")
     public String mostrarRoles(Model model) {
         model.addAttribute("pageTitle", "Roles");
-
         var elemento = rolesService.listaRoles();
-        model.addAttribute("Roles", elemento);
-
         var elementoPermiso = permisosService.listaPermisos();
+        
+        model.addAttribute("Roles", elemento);
         model.addAttribute("Permisos", elementoPermiso);
-        //model.addAttribute("rol", new Roles());
-
         return "/Roles/GestionarRoles";
     }
     
+    //Función que obtiene los roles de la base de datos
     @GetMapping("/roles/data")
     @ResponseBody
     public DataTablesOutput<Rol> getRoles(@Valid DataTablesInput input) {
         return rolesService.listarRoles(input);
     }
 
+    //Función que agrea un rol en la base de datos
     @PostMapping("/AgregarRol")
     public ResponseEntity AgregarRol(Rol rol, HttpServletRequest request, RedirectAttributes redirectAttributes) {
          
@@ -70,6 +69,7 @@ public class RolesController {
         }
     }
 
+    //Función que elimina un rol de la base de datos
     @PostMapping("/EliminarRol/{idRol}")
     public ResponseEntity EliminarRol(Rol rol, RedirectAttributes redirectAttributes) {
         try {
@@ -83,6 +83,7 @@ public class RolesController {
         }
     }
 
+    //Función que obtiene un rol de la base de datos
     @GetMapping("/ObtenerRol/{id}")
     public ResponseEntity<Rol> obtenerRol(@PathVariable Long id) {
         Rol rol = rolesService.encontrar(id);
@@ -93,6 +94,7 @@ public class RolesController {
         }
     }
     
+    //Fucción que actualiza un rol de la base de datos
     @PostMapping("/ActualizarRol")
     public ResponseEntity ActualizarRol(Rol rol, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {

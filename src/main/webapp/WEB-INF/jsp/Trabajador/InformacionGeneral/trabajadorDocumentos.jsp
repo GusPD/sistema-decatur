@@ -4,6 +4,7 @@
     <div class="col-12">
         <div class="card">
             <div class="card-header">
+                <!-- Subtitulo de la página y funciones de los datos -->
                 <div class="subtitulo-page">
                     <h3 class="m-0">Documentos
                         <sec:authorize access="hasAuthority('AGREGAR_DOCUMENTO_TRABAJADOR_PRIVILAGE')"> 
@@ -14,10 +15,10 @@
                     </h3>
                 </div>
             </div>
+            <!-- Datos -->
             <div class="card-body">
                 <div id="table_wrapper" class="dataTables_wrapper dt-bootstrap4">
                     <div class="col-sm-12 table-responsive pt-1" style="height: 55vh; padding:4px;">
-                    <!--Sección de tabla-->
                         <table id="documentoTable" class="table table-bordered table-striped dataTable dtr-inline mt-1"></table>
                     </div>
                 </div>
@@ -80,6 +81,7 @@
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 </form>
 
+<!-- Script de la página -->
 <sec:authorize access="hasAuthority('VER_DOCUMENTO_TRABAJADOR_PRIVILAGE')" var="hasPrivilegeVerDocumento"></sec:authorize>
 <script>var hasPrivilegeVerDocumento = ${hasPrivilegeVerDocumento};</script>    
 
@@ -87,6 +89,7 @@
 <script>var hasPrivilegeEliminarDocumento = ${hasPrivilegeEliminarDocumento};</script>
 
 <%@ include file="../trabajador-footer.jspf"%>
+
 <script src="${pageContext.request.contextPath}/js/documentoTrabajador.js"></script>
 
 

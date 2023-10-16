@@ -1,8 +1,7 @@
-<%@ include file="common/header.jspf"%>
-<%@ include file="common/navigationAdministracion.jspf"%>
-<!-- Content Wrapper. Contains page content -->
+<%@ include file="../common/header.jspf"%>
+<%@ include file="../common/navigationAdministracion.jspf"%>
 <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
+    <!-- Título de la página -->
     <section class="content-header">
         <div class="container">
             <div class="row">
@@ -18,29 +17,10 @@
     </section>
     <section class="content">
         <div class="container">
-            <c:if test="${not empty mensaje}">
-                <div class="alert alert-success d-flex align-items-center alert-dismissible fade show" role="alert">
-                    <strong><i class="bi bi-check-circle"></i> Éxito!</strong> ${mensaje}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            </c:if>
-            <c:if test="${not empty error}">
-                <div class="alert alert-danger d-flex align-items-center alert-dismissible fade show" role="alert">
-                    <strong><i class="bi bi-exclamation-triangle"></i> Error!</strong> ${error}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            </c:if>
-            <div class="alert alert-success d-flex align-items-center alert-dismissible fade d-none" role="alert">
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                <strong><i class="bi bi-check-circle"></i> Éxito!&nbsp;</strong>
-            </div>
-            <div class="alert alert-danger d-flex align-items-center alert-dismissible fade d-none" role="alert">
-                <strong><i class="bi bi-exclamation-triangle"></i> Error!&nbsp;</strong>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
             <div class="row">
                 <div class="col-12">
                     <div class="card">
+                        <!-- Funciones de los datos -->
                         <div class="card-header">
                             <h3 class="card-title d-flex justify-content-end">
                                 <sec:authorize access="hasAuthority('EXPORTAR_PROYECTO_PRIVILAGE')"> 
@@ -53,10 +33,10 @@
                                 </sec:authorize> 
                             </h3>
                         </div>
+                        <!-- Datos -->
                         <div class="card-body">
                             <div id="table_wrapper" class="dataTables_wrapper dt-bootstrap4">
                                 <div class="col-sm-12 table-responsive pt-1" style="height: 60vh; padding: 4px;">
-                                <!--Sección de tabla-->
                                     <table id="proyectoTable" class="table table-bordered table-striped dataTable dtr-inline mt-1"></table>
                                 </div>
                             </div>
@@ -64,7 +44,7 @@
                     </div>
                 </div>
             </div>
-        </div><!-- /.container-fluid -->
+        </div>
     </section>
    <!-- Modal de agregar -->
     <div class="modal fade" id="crearModal" tabindex="-1" aria-labelledby="crearModalLabel" aria-hidden="true">
@@ -124,9 +104,9 @@
     <form id="eliminarProyectoForm" method="post" action="/EliminarProyecto/{idProyecto}">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
     </form>                    
-    <!-- /.Modal de eliminar -->
 </div>
 
+<!-- Script de la página -->
 <sec:authorize access="hasAuthority('VER_PROYECTO_PRIVILAGE')" var="hasPrivilegeVerProyecto"></sec:authorize>
 <script>var hasPrivilegeVerProyecto = ${hasPrivilegeVerProyecto};</script>    
         
@@ -136,6 +116,6 @@
 <sec:authorize access="hasAuthority('ELIMINAR_PROYECTO_PRIVILAGE')" var="hasPrivilegeEliminarProyecto"></sec:authorize>
 <script>var hasPrivilegeEliminarProyecto = ${hasPrivilegeEliminarProyecto};</script>
 
-<%@ include file="common/footer.jspf"%>
+<%@ include file="../common/footer.jspf"%>
 
 <script src="${pageContext.request.contextPath}/js/proyecto.js"></script>

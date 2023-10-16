@@ -1,5 +1,6 @@
 <%@ include file="../propietario-header.jspf"%>
 <div class="row pb-3">
+    <!-- Subtitulo de la página y funciones de los datos -->
     <div class="subtitulo-page"><h3 class="mt-0">Información General
             <sec:authorize access="hasAuthority('EDITAR_PROPIETARIO_PRIVILAGE')">
                 <span title="Editar Información" id="EditarInformacion" class="btn abrirModal-btn text-info puntero pull-right btn-sm" data-bs-toggle="modal" data-bs-target="#crearModal" data-tipo="editar" data-id="${persona.idPersona}" data-modo="actualizar" style="cursor: pointer;">
@@ -8,6 +9,7 @@
             </sec:authorize>
         </h3>
     </div>
+    <!-- Datos -->
     <div class="tarjeta-container">
         <table class="table small table-bordered m-0" id="tabla-informacion">
             <tbody>
@@ -43,6 +45,7 @@
         </table>
     </div>
 </div>
+<!-- Modal de editar -->
 <div class="modal fade" id="crearModal" tabindex="-1" aria-labelledby="crearModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -95,7 +98,10 @@
         </div>
     </div>
 </div>
+                        
+<!-- Script de la página -->
 <%@ include file="../propietario-footer.jspf"%>
+
 <script src="${pageContext.request.contextPath}/js/informacionPropietario.js"></script>
 
 
