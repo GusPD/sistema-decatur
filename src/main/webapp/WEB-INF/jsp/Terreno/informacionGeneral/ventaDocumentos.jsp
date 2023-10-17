@@ -1,5 +1,4 @@
 <%@ include file="../venta-header.jspf"%>
-<input type="hidden" id="idList" value="${venta.getIdListDocumento()}">
 <div class="row">
     <div class="col-12">
         <div class="card">
@@ -39,6 +38,7 @@
                     <div  class="overflow-auto">
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                         <input type="hidden" id="idVenta" value="${venta.getIdVenta()}">
+                        <input type="hidden" id="idList" value="${venta.getIdListDocumento()}">
                         <input type="hidden" id="idDocumento">
                         <div class="form-group">
                             <label for="nombre" class="form-label">Nombre:</label>

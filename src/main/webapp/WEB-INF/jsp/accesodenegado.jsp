@@ -4,8 +4,10 @@
     <head>
         <title>Acceso Denegado</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="icon" href="${pageContext.request.contextPath}/images/favicon-logo.ico" type="image/x-icon">
-        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/recursosOnline/css/all.min.css">
+        <link rel="icon" href="${pageContext.request.contextPath}/images/favicon-logo.ico" type="image/x-icon"/>
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/recursosOnline/css/bootstrap.min.css"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/style.css"/>
     </head>
     <body>
         <!-- Contenido del sitio -->
@@ -13,10 +15,10 @@
             <section class="content pb-5">
                 <div class="container">
                     <br>
-                    <h1 style="color: #333; font-size: 28px; text-align: center;">Acceso Denegado</h1>
-                    <i class="fas fa-exclamation-triangle" style="color: #f00; font-size: 48px; text-align: center; display: block; margin: 20px auto;"></i>
-                    <p style="color: #555555; font-size: 16px; text-align: center;">Lo siento, no tienes permiso para acceder a esta página.</p>                
-                    <a href="/" style="color: #007bff; text-decoration: none; font-size: 16px; text-align: center; display: block; margin-top: 20px;">Regresar a la página de inicio</a>
+                    <h1 class="text-dark font-small d-flex justify-content-center align-items-center">Acceso Denegado</h1>
+                    <i class="fa-solid fa-triangle-exclamation text-danger d-flex justify-content-center align-items-center display-4 mb-3 mt-3"></i>
+                    <p class="text-secondary d-flex justify-content-center align-items-center">Lo siento, no tienes permiso para acceder a esta página.</p>                
+                    <a href="/" class="text-primary text-decoration-none d-flex justify-content-center align-items-center">Regresar a la página de inicio</a>
                     <br>
                 </div>
             </section>

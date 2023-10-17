@@ -39,6 +39,12 @@ public class VentaServiceImp implements VentaService{
     public Venta encontrar(Long idVenta) {
         return ventaDao.findById(idVenta).orElse(null);
     }
+    
+    @Override
+    @Transactional(readOnly = true)
+    public Venta encontrarDocumento(Integer idDocumento) {
+        return ventaDao.findByIdListDocumento(idDocumento);
+    }
 
     @Override
     @Transactional

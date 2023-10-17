@@ -20,16 +20,14 @@ setTimeout(function() {
         errorMessageContainer.style.display = "none";
     }
 }, 5000);
-
 setTimeout(function() {
     var successMessageContainer = document.getElementById("successMessageContainer");
     if (successMessageContainer) {
         successMessageContainer.style.display = "none";
     }
 }, 5000);
-
-
-var form = $('#form-login'); // Almacenar referencia al formulario
+//Formulario de login
+var form = $('#form-login');
 var validator = $('#form-login').validate({
     rules: {
         username: {

@@ -6,7 +6,6 @@ function mostrarMensaje(mensaje, tipo) {
       alertElement.removeClass('show').addClass('d-none');
     }, 5000);
 }
-
 //Función para validar el formulario de la solicitud
 var formReset = $('#form-reset-password');
 var validator = $('#form-reset-password').validate({

@@ -1,4 +1,5 @@
 $(document).ready(function() { 
+    //Tabla
     var idProyecto = $('#proyectoId').data('id');
     var table = $('#terrenoTable').DataTable({
         ajax: {
@@ -12,32 +13,32 @@ $(document).ready(function() {
              "<'row w-100'<'col-sm-6'l><'col-sm-6'f>>" +
              "<'row w-100'<'col-sm-12 my-4'tr>>" +
              "<'row w-100'<'col-sm-5'i><'col-sm-7'p>>",
-        lengthMenu: [[5, 25, 50, 100, -1], [5, 25, 50, 100, 'Todos']], // Opciones de selección para mostrar registros por página
-        pageLength: 5, // Cantidad de registros por página por defecto
+        lengthMenu: [[5, 25, 50, 100, -1], [5, 25, 50, 100, 'Todos']],
+        pageLength: 5,
         buttons: [
             {
                 extend: 'copy',
                 text: 'Copiar',
                 exportOptions: {
-                  columns: [0, 1, 2, 3] // Índices de las columnas que se copiarán
+                  columns: [0, 1, 2, 3]
                 }
             },
             {
                 extend: 'excel',
                 text: 'Exportar a Excel',
-                title: 'Ventas Activas del proyecto', // Título del reporte en Excel
-                filename: 'Ventas Activas ' + getCurrentDateTime(), // Nombre del archivo Excel
+                title: 'Ventas Activas del proyecto',
+                filename: 'Ventas Activas ' + getCurrentDateTime(),
                 exportOptions: {
-                  columns: [0, 1, 2, 3] // Índices de las columnas que se exportarán
+                  columns: [0, 1, 2, 3]
                 }
             },
             {
                 extend: 'pdf',
                 text: 'Exportar a PDF',
-                title: 'Ventas Activas del proyecto', // Título del reporte en PDF
-                filename: 'Ventas Activas ' + getCurrentDateTime(), // Nombre del archivo PDF
+                title: 'Ventas Activas del proyecto',
+                filename: 'Ventas Activas ' + getCurrentDateTime(),
                 exportOptions: {
-                  columns: [0, 1, 2, 3] // Índices de las columnas que se exportarán
+                  columns: [0, 1, 2, 3]
                 },
                 customize: function (doc) {
                   doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split('');
@@ -79,17 +80,11 @@ $(document).ready(function() {
                 searchable: false,
                 width: '20%',
                 render: function (data, type, row) {
-                    // Aquí puedes construir el HTML para las acciones según tus necesidades
-//                    var actionsHtml = '<a type="button" class="btn btn-outline-secondary" href="/DetalleMaestria/' + row.idMaestria + '">';
-//                    actionsHtml += '<i class="bi bi-eye"></i></a>';
-                    
                     var actionsHtml = '';
-                    
                     if(hasPrivilegeVerVenta === true){
                         actionsHtml = '<a type="button" class="btn btn-outline-secondary btn-sm" href="/InformacionVenta/' + row.idTerreno + '">';
                         actionsHtml += '<i class="far fa-eye"></i></a>';
                     }
-                    
                     return actionsHtml || '';
                 }
             }
@@ -101,7 +96,7 @@ $(document).ready(function() {
             "sEmptyTable": "Ningún dato disponible en esta tabla",
             "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
             "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
-            "sInfoFiltered": "",//(filtrado de un total de _MAX_ registros)
+            "sInfoFiltered": "//(filtrado de un total de _MAX_ registros)",
             "sInfoPostFix": "",
             "sSearch": "Buscar:",
             "sUrl": "",
@@ -142,27 +137,8 @@ $(document).ready(function() {
     });
     $('#export-copy').on('click', function() {
         table.button('.buttons-copy').trigger();
-    });
-    
-    // Obtén la referencia al DataTable
-    var table = $('#terrenoTable').DataTable();
-
-    // Agrega un evento al filtro de búsqueda
-    $('#terrenoTable_filter input').on('keyup', function () {
-        // Obtén el valor del filtro de búsqueda
-        var searchTerm = $(this).val().trim();
-
-        // Verifica si el valor no está vacío
-        if (searchTerm !== '') {
-            // Aplica el filtro personalizado en la columna "Lote"
-            table.column[0,1].search('^' + searchTerm + '$', true, false).draw();
-        } else {
-            // Si el valor está vacío, muestra todos los registros
-            table.column[0,1].search('').draw();
-        }
-    });
-    
-    // Función para obtener la fecha y hora actual en formato deseado
+    });    
+    //Función para obtener la fecha y hora actual en formato deseado
     function getCurrentDateTime() {
         var date = new Date();
         var year = date.getFullYear();
@@ -171,7 +147,6 @@ $(document).ready(function() {
         var hours = String(date.getHours()).padStart(2, '0');
         var minutes = String(date.getMinutes()).padStart(2, '0');
         var seconds = String(date.getSeconds()).padStart(2, '0');
-
         return year + month + day + '_' + hours + minutes + seconds;
     }   
 }); 

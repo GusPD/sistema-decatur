@@ -376,7 +376,6 @@ public class VentaController {
         Venta ventaEncontrada = ventaService.encontrar(venta.getIdVenta());
         Terreno terrenoEncontrado = ventaEncontrada.getTerreno();
         Proyecto proyecto = terrenoEncontrado.getProyecto();
-        
         List<Documento> listaDocumentos = documentoService.listarDocumentos();
         List<Documento> documentosVenta = new ArrayList();
         for (var documento : listaDocumentos) {
@@ -384,7 +383,6 @@ public class VentaController {
                 documentosVenta.add(documento);
             }
         }
-        
         model.addAttribute("documentos", documentosVenta);
         model.addAttribute("proyecto", proyecto);
         model.addAttribute("terreno", terrenoEncontrado);
@@ -515,19 +513,22 @@ public class VentaController {
     @PostMapping("/EliminarVenta/{idVenta}")
     public ResponseEntity EliminarVenta(Venta venta) {
         try {
-            ventaService.eliminar(venta);
+            Venta newVenta = ventaService.encontrar(venta.getIdVenta());
+            ventaService.eliminar(newVenta);
             List<Venta> listadoVentas = ventaService.listaVentas();
             List<Venta> listadoVentasTerreno = new ArrayList();
             if(!listadoVentas.isEmpty()){
                 for (Venta valorVenta : listadoVentas){
-                    if(valorVenta.getTerreno().getIdTerreno().equals(venta.getTerreno().getIdTerreno())){
+                    if(valorVenta.getTerreno().getIdTerreno().equals(newVenta.getTerreno().getIdTerreno())){
                         listadoVentasTerreno.add(valorVenta);
                     }
                 }
             }
-            Venta ultimaVenta= listadoVentasTerreno.get(listadoVentasTerreno.size() - 1);
-            if (ultimaVenta != null) {
-                ultimaVenta.setEstado("Activo");
+            if(!listadoVentasTerreno.isEmpty()){
+                Venta ultimaVenta= listadoVentasTerreno.get(listadoVentasTerreno.size() - 1);
+                if (ultimaVenta != null) {
+                    ultimaVenta.setEstado("Activo");
+                }
             }
             String mensaje = "Se ha eliminado una venta correctamente.";
             bitacoraService.registrarAccion("Eliminar venta");

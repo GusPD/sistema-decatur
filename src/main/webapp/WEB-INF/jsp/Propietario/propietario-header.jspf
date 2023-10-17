@@ -45,28 +45,30 @@
                             <div class="row mt-3 mb-3">
                                 <div class="col-sm-12">
                                     <div class="list-group info">
-                                        <c:set var="urlInformacion" value="/InformacionPropietario/${persona.idPersona}" />
-                                        <c:set var="urlTelefonos" value="/TelefonosPropietario/${persona.idPersona}" />
-                                        <c:set var="urlCorreos" value="/CorreosPropietario/${persona.idPersona}" />
-                                        <c:set var="urlReferencias" value="/ReferenciasPropietario/${persona.idPersona}" />
-                                        <c:set var="urlDocumentos" value="/DocumentosPropietario/${persona.idPersona}" />
-                                        <c:set var="urlTerrenos" value="/TerrenosPropietario/${persona.idPersona}" />
-                                        <a class="tab-perfil list-group-item list-group-item-info btn-info text-center ${requestScope['javax.servlet.forward.request_uri'] == urlInformacion ? 'active' : ''}" href="/InformacionPropietario/${persona.idPersona}" type="button">
+                                        <c:set var="proyectoId" value="0" />
+                                        <c:if test="${not empty proyecto}"><c:set var="proyectoId" value="${proyecto.idProyecto}" /></c:if>
+                                        <c:set var="urlInformacion" value="/InformacionPropietario/${proyectoId}/${persona.idPersona}" />
+                                        <c:set var="urlTelefonos" value="/TelefonosPropietario/${proyectoId}/${persona.idPersona}" />
+                                        <c:set var="urlCorreos" value="/CorreosPropietario/${proyectoId}/${persona.idPersona}" />
+                                        <c:set var="urlReferencias" value="/ReferenciasPropietario/${proyectoId}/${persona.idPersona}" />
+                                        <c:set var="urlDocumentos" value="/DocumentosPropietario/${proyectoId}/${persona.idPersona}" />
+                                        <c:set var="urlTerrenos" value="/TerrenosPropietario/${proyectoId}/${persona.idPersona}" />
+                                        <a class="tab-perfil list-group-item list-group-item-info btn-info text-center ${requestScope['javax.servlet.forward.request_uri'] == urlInformacion ? 'active' : ''}" href="/InformacionPropietario/${proyectoId}/${persona.idPersona}" type="button">
                                             Información
                                         </a>
-                                        <a class="tab-perfil list-group-item list-group-item-info text-center btn-info ${requestScope['javax.servlet.forward.request_uri'] == urlTelefonos ? 'active' : ''}" href="/TelefonosPropietario/${persona.idPersona}" type="button">
+                                        <a class="tab-perfil list-group-item list-group-item-info text-center btn-info ${requestScope['javax.servlet.forward.request_uri'] == urlTelefonos ? 'active' : ''}" href="/TelefonosPropietario/${proyectoId}/${persona.idPersona}" type="button">
                                             Telefonos
                                         </a>
-                                        <a class="tab-perfil list-group-item list-group-item-info text-center btn-info ${requestScope['javax.servlet.forward.request_uri'] == urlCorreos ? 'active' : ''}" href="/CorreosPropietario/${persona.idPersona}" type="button">
+                                        <a class="tab-perfil list-group-item list-group-item-info text-center btn-info ${requestScope['javax.servlet.forward.request_uri'] == urlCorreos ? 'active' : ''}" href="/CorreosPropietario/${proyectoId}/${persona.idPersona}" type="button">
                                             Correos
                                         </a>
-                                        <a class="tab-perfil list-group-item list-group-item-info text-center btn-info ${requestScope['javax.servlet.forward.request_uri'] == urlReferencias ? 'active' : ''}" href="/ReferenciasPropietario/${persona.idPersona}" type="button">
+                                        <a class="tab-perfil list-group-item list-group-item-info text-center btn-info ${requestScope['javax.servlet.forward.request_uri'] == urlReferencias ? 'active' : ''}" href="/ReferenciasPropietario/${proyectoId}/${persona.idPersona}" type="button">
                                             Referencias
                                         </a>
-                                        <a class="tab-perfil list-group-item list-group-item-info text-center btn-info ${requestScope['javax.servlet.forward.request_uri'] == urlDocumentos ? 'active' : ''}" href="/DocumentosPropietario/${persona.idPersona}" type="button">
+                                        <a class="tab-perfil list-group-item list-group-item-info text-center btn-info ${requestScope['javax.servlet.forward.request_uri'] == urlDocumentos ? 'active' : ''}" href="/DocumentosPropietario/${proyectoId}/${persona.idPersona}" type="button">
                                             Documentos
                                         </a>
-                                        <a class="tab-perfil list-group-item list-group-item-info text-center btn-info ${requestScope['javax.servlet.forward.request_uri'] == urlTerrenos ? 'active' : ''}" href="/TerrenosPropietario/${persona.idPersona}" type="button">
+                                        <a class="tab-perfil list-group-item list-group-item-info text-center btn-info ${requestScope['javax.servlet.forward.request_uri'] == urlTerrenos ? 'active' : ''}" href="/TerrenosPropietario/${proyectoId}/${persona.idPersona}" type="button">
                                             Terrenos
                                         </a>
                                     </div>
