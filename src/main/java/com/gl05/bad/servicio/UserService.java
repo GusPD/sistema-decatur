@@ -1,9 +1,11 @@
 package com.gl05.bad.servicio;
 
+import com.gl05.bad.domain.Proyecto;
 import com.gl05.bad.domain.Usuario;
 import java.util.List;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
+import org.springframework.security.core.Authentication;
 
 public interface UserService {
     

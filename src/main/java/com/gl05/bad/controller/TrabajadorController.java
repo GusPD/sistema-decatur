@@ -4,6 +4,7 @@ import com.gl05.bad.domain.AsignacionVisitante;
 import com.gl05.bad.domain.Documento;
 import com.gl05.bad.domain.Persona;
 import com.gl05.bad.domain.Proyecto;
+import com.gl05.bad.domain.Usuario;
 import com.gl05.bad.domain.Visitante;
 import com.gl05.bad.domain.VistaTrabajadoresProyecto;
 import com.gl05.bad.servicio.AsignacionVisitanteService;
@@ -11,12 +12,14 @@ import com.gl05.bad.servicio.BitacoraServiceImp;
 import com.gl05.bad.servicio.DocumentoService;
 import com.gl05.bad.servicio.PersonaService;
 import com.gl05.bad.servicio.ProyectoService;
+import com.gl05.bad.servicio.UserService;
 import com.gl05.bad.servicio.VisitanteService;
 import com.gl05.bad.servicio.VistaTrabajadoresProyectoService;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +29,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -60,6 +64,9 @@ public class TrabajadorController {
     @Autowired
     private ProyectoService proyectoService;
     
+    @Autowired
+    private UserService usuarioService;
+    
     //Función que redirige a la vista de los trabajadores del sistema
     @GetMapping("/TrabajadoresSistema")
     public String mostrarProyecto(Model model, Proyecto proyecto) {
@@ -90,12 +97,20 @@ public class TrabajadorController {
     }
     
     //Función que redirige a la información del trabajador    
-    @GetMapping("/InformacionTrabajador/{idPersona}")
-    public String InformacionTrabajador(Model model, Persona persona) {
+    @GetMapping("/InformacionTrabajador/{idProyecto}/{idPersona}")
+    public String InformacionTrabajador(Model model, Persona persona, Proyecto proyecto, Authentication authentication) {
         model.addAttribute("pageTitle", "Perfil Trabajador");
         Persona newPersona = personaService.encontrar(persona.getIdPersona());
         Visitante newTrabajador = visitanteService.encontrarPersona(newPersona);
-        
+        Proyecto newProyecto = proyectoService.encontrar(proyecto.getIdProyecto());
+        String username = authentication.getName();
+        Usuario usuario = usuarioService.encontrarUsername(username);
+        System.out.println("Nuevo proyecto: " + newProyecto);
+        Set<Proyecto> proyectosPropietario =  usuario.getProyectos();
+        if (!proyectosPropietario.contains(newProyecto) && newProyecto!=null) {
+            return "accesodenegado";
+        }
+        model.addAttribute("proyecto", newProyecto);
         model.addAttribute("trabajador", newTrabajador);
         model.addAttribute("persona", newPersona);
         return "/Trabajador/InformacionGeneral/trabajadorInformacion";
@@ -109,12 +124,20 @@ public class TrabajadorController {
     }
     
     //Función que redirige a la vista de los documentos del trabajador
-    @GetMapping("/DocumentosTrabajador/{idPersona}")
-    public String DocumentosTrabajador(Model model, Persona persona) {
+    @GetMapping("/DocumentosTrabajador/{idProyecto}/{idPersona}")
+    public String DocumentosTrabajador(Model model, Persona persona, Proyecto proyecto, Authentication authentication) {
         model.addAttribute("pageTitle", "Perfil Trabajador");
         Persona newPersona = personaService.encontrar(persona.getIdPersona());
         Visitante newTrabajador = visitanteService.encontrarPersona(newPersona);
-        
+        Proyecto newProyecto = proyectoService.encontrar(proyecto.getIdProyecto());
+        String username = authentication.getName();
+        Usuario usuario = usuarioService.encontrarUsername(username);
+        System.out.println("Nuevo proyecto: " + newProyecto);
+        Set<Proyecto> proyectosPropietario =  usuario.getProyectos();
+        if (!proyectosPropietario.contains(newProyecto) && newProyecto!=null) {
+            return "accesodenegado";
+        }
+        model.addAttribute("proyecto", newProyecto);
         model.addAttribute("trabajador", newTrabajador);
         model.addAttribute("persona", newPersona);
         return "/Trabajador/InformacionGeneral/trabajadorDocumentos";
@@ -191,12 +214,20 @@ public class TrabajadorController {
     }
     
     //Función que que redirige a la vista de los terrenos del trabajador
-    @GetMapping("/TerrenosTrabajador/{idPersona}")
-    public String TerrenosTrabajador(Model model, Persona persona) {
+    @GetMapping("/TerrenosTrabajador/{idProyecto}/{idPersona}")
+    public String TerrenosTrabajador(Model model, Persona persona, Proyecto proyecto, Authentication authentication) {
         model.addAttribute("pageTitle", "Perfil Trabajador");
         Persona newPersona = personaService.encontrar(persona.getIdPersona());
         Visitante newTrabajador = visitanteService.encontrarPersona(newPersona);
-        
+        Proyecto newProyecto = proyectoService.encontrar(proyecto.getIdProyecto());
+        String username = authentication.getName();
+        Usuario usuario = usuarioService.encontrarUsername(username);
+        System.out.println("Nuevo proyecto: " + newProyecto);
+        Set<Proyecto> proyectosPropietario =  usuario.getProyectos();
+        if (!proyectosPropietario.contains(newProyecto) && newProyecto!=null) {
+            return "accesodenegado";
+        }
+        model.addAttribute("proyecto", newProyecto);
         model.addAttribute("trabajador", newTrabajador);
         model.addAttribute("persona", newPersona);
         return "/Trabajador/InformacionGeneral/trabajadorTerrenos";

@@ -43,6 +43,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -141,13 +142,21 @@ public class PropietarioController {
     }
     
     //Función que redirige a la vista de los correos del propietario
-    @GetMapping("/CorreosPropietario/{idPersona}")
-    public String CorreosPropietarioVenta(Model model, Persona persona) {
+    @GetMapping("/CorreosPropietario/{idProyecto}/{idPersona}")
+    public String CorreosPropietarioVenta(Model model, Persona persona, Proyecto proyecto, Authentication authentication) {
         model.addAttribute("pageTitle", "Perfil Propietario");
         Persona newPersona = personaService.encontrar(persona.getIdPersona());
         Propietario newPropietario = propietarioService.encontrarPersona(newPersona);
         List<String> tiposCorreo = listarTiposCorreos();
-        
+        Proyecto newProyecto = proyectoService.encontrar(proyecto.getIdProyecto());
+        String username = authentication.getName();
+        Usuario usuario = usuarioService.encontrarUsername(username);
+        System.out.println("Nuevo proyecto: " + newProyecto);
+        Set<Proyecto> proyectosPropietario =  usuario.getProyectos();
+        if (!proyectosPropietario.contains(newProyecto) && newProyecto!=null) {
+            return "accesodenegado";
+        }
+        model.addAttribute("proyecto", newProyecto);
         model.addAttribute("tiposCorreo", tiposCorreo);
         model.addAttribute("propietario", newPropietario);
         model.addAttribute("persona", newPersona);
@@ -202,13 +211,21 @@ public class PropietarioController {
     }
     
     //Función que redirige a la vista de los telefonos del propietario
-    @GetMapping("/TelefonosPropietario/{idPersona}")
-    public String TelefonosPropietarioVenta(Model model, Persona persona) {
+    @GetMapping("/TelefonosPropietario/{idProyecto}/{idPersona}")
+    public String TelefonosPropietarioVenta(Model model, Persona persona, Proyecto proyecto, Authentication authentication) {
         model.addAttribute("pageTitle", "Perfil Propietario");
         Persona newPersona = personaService.encontrar(persona.getIdPersona());
         Propietario newPropietario = propietarioService.encontrarPersona(newPersona);
         List<String> tiposTelefono = listarTipoTelefono();    
-
+        Proyecto newProyecto = proyectoService.encontrar(proyecto.getIdProyecto());
+        String username = authentication.getName();
+        Usuario usuario = usuarioService.encontrarUsername(username);
+        System.out.println("Nuevo proyecto: " + newProyecto);
+        Set<Proyecto> proyectosPropietario =  usuario.getProyectos();
+        if (!proyectosPropietario.contains(newProyecto) && newProyecto!=null) {
+            return "accesodenegado";
+        }
+        model.addAttribute("proyecto", newProyecto);
         model.addAttribute("tiposTelefonos", tiposTelefono);
         model.addAttribute("propietario", newPropietario);
         model.addAttribute("persona", newPersona);
@@ -263,12 +280,20 @@ public class PropietarioController {
     }
     
     //Función que redirige a la vista de las referencias del propietario
-    @GetMapping("/ReferenciasPropietario/{idPersona}")
-    public String ReferenciasPropietarioVenta(Model model, Persona persona) {
+    @GetMapping("/ReferenciasPropietario/{idProyecto}/{idPersona}")
+    public String ReferenciasPropietarioVenta(Model model, Persona persona, Proyecto proyecto, Authentication authentication) {
         model.addAttribute("pageTitle", "Perfil Propietario");
         Persona newPersona = personaService.encontrar(persona.getIdPersona());
         Propietario newPropietario = propietarioService.encontrarPersona(newPersona);
-        
+        Proyecto newProyecto = proyectoService.encontrar(proyecto.getIdProyecto());
+        String username = authentication.getName();
+        Usuario usuario = usuarioService.encontrarUsername(username);
+        System.out.println("Nuevo proyecto: " + newProyecto);
+        Set<Proyecto> proyectosPropietario =  usuario.getProyectos();
+        if (!proyectosPropietario.contains(newProyecto) && newProyecto!=null) {
+            return "accesodenegado";
+        }
+        model.addAttribute("proyecto", newProyecto);
         model.addAttribute("propietario", newPropietario);
         model.addAttribute("persona", newPersona);
         return "/Propietario/InformacionGeneral/propietarioReferencias";
@@ -321,12 +346,20 @@ public class PropietarioController {
     }
     
     //Función que redirige a la vista de los documentos del propietario
-    @GetMapping("/DocumentosPropietario/{idPersona}")
-    public String DocumentosPropietarioVenta(Model model, Persona persona) {
+    @GetMapping("/DocumentosPropietario/{idProyecto}/{idPersona}")
+    public String DocumentosPropietarioVenta(Model model, Persona persona, Proyecto proyecto, Authentication authentication) {
         model.addAttribute("pageTitle", "Perfil Propietario");
         Persona newPersona = personaService.encontrar(persona.getIdPersona());
         Propietario newPropietario = propietarioService.encontrarPersona(newPersona);
-        
+        Proyecto newProyecto = proyectoService.encontrar(proyecto.getIdProyecto());
+        String username = authentication.getName();
+        Usuario usuario = usuarioService.encontrarUsername(username);
+        System.out.println("Nuevo proyecto: " + newProyecto);
+        Set<Proyecto> proyectosPropietario =  usuario.getProyectos();
+        if (!proyectosPropietario.contains(newProyecto) && newProyecto!=null) {
+            return "accesodenegado";
+        }
+        model.addAttribute("proyecto", newProyecto);
         model.addAttribute("propietario", newPropietario);
         model.addAttribute("persona", newPersona);
         return "/Propietario/InformacionGeneral/propietarioDocumentos";
@@ -374,12 +407,11 @@ public class PropietarioController {
     }
     
     //Función para ver el documento de un propietario
-    @GetMapping("/DocumentoPropietario/{IdDocumento}")
-    public ResponseEntity <byte[]> mostrarDocumentoPDFPropietario(@PathVariable("IdDocumento") Long id) {
+    @GetMapping("/DocumentoPropietario/{idDocumento}")
+    public ResponseEntity <byte[]> mostrarDocumentoPDFPropietario(@PathVariable("idDocumento") Long id, Authentication authentication) {
         Documento archivo = new Documento();
         archivo.setIdDocumento(id);
         Documento archivoExistente = documentoService.encontrar(archivo);
-
         Blob pdfBlob = archivoExistente.getDocumento();
         byte[] pdfBytes;
 
@@ -406,12 +438,20 @@ public class PropietarioController {
     }
     
     //Función que redirige a la vista de los terrenos del propietario
-    @GetMapping("/TerrenosPropietario/{idPersona}")
-    public String TerrenosPropietarioVenta(Model model, Persona persona) {
+    @GetMapping("/TerrenosPropietario/{idProyecto}/{idPersona}")
+    public String TerrenosPropietarioVenta(Model model, Persona persona, Proyecto proyecto, Authentication authentication) {
         model.addAttribute("pageTitle", "Perfil Propietario");
         Persona newPersona = personaService.encontrar(persona.getIdPersona());
         Propietario newPropietario = propietarioService.encontrarPersona(newPersona);
-        
+        Proyecto newProyecto = proyectoService.encontrar(proyecto.getIdProyecto());
+        String username = authentication.getName();
+        Usuario usuario = usuarioService.encontrarUsername(username);
+        System.out.println("Nuevo proyecto: " + newProyecto);
+        Set<Proyecto> proyectosPropietario =  usuario.getProyectos();
+        if (!proyectosPropietario.contains(newProyecto) && newProyecto!=null) {
+            return "accesodenegado";
+        }
+        model.addAttribute("proyecto", newProyecto);
         model.addAttribute("propietario", newPropietario);
         model.addAttribute("persona", newPersona);
         return "/Propietario/InformacionGeneral/propietarioTerrenos";

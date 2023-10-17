@@ -1,5 +1,5 @@
 $(document).ready(function() { 
-    //Cargar dataTable
+    //Tabla
     var table = $('#bitacoraTable').DataTable({
         ajax: '/bitacora/data',
         processing: true,
@@ -9,32 +9,32 @@ $(document).ready(function() {
              "<'row w-100'<'col-sm-6'l><'col-sm-6'f>>" +
              "<'row w-100'<'col-sm-12 my-4'tr>>" +
              "<'row w-100'<'col-sm-5'i><'col-sm-7'p>>",
-        lengthMenu: [[5, 25, 50, 100, -1], [5, 25, 50, 100, 'Todos']], // Opciones de selección para mostrar registros por página
-        pageLength: 5, // Cantidad de registros por página por defecto
+        lengthMenu: [[5, 25, 50, 100, -1], [5, 25, 50, 100, 'Todos']],
+        pageLength: 5,
         buttons: [
             {
                 extend: 'copy',
                 text: 'Copiar',
                 exportOptions: {
-                  columns: [0, 1, 2, 3, 4] // Índices de las columnas que se copiarán
+                  columns: [0, 1, 2, 3, 4]
                 }
             },
             {
                 extend: 'excel',
                 text: 'Exportar a Excel',
-                title: 'Registro de cambios en el sistema', // Título del reporte en Excel
-                filename: 'Bitacora ' + getCurrentDateTime(), // Nombre del archivo Excel
+                title: 'Registro de cambios en el sistema',
+                filename: 'Bitacora ' + getCurrentDateTime(),
                 exportOptions: {
-                  columns: [0, 1, 2, 3, 4] // Índices de las columnas que se exportarán
+                  columns: [0, 1, 2, 3, 4]
                 }
             },
             {
                 extend: 'pdf',
                 text: 'Exportar a PDF',
-                title: 'Registro de cambios en el sistema', // Título del reporte en PDF
-                filename: 'Bitacora ' + getCurrentDateTime(), // Nombre del archivo PDF
+                title: 'Registro de cambios en el sistema',
+                filename: 'Bitacora ' + getCurrentDateTime(),
                 exportOptions: {
-                  columns: [0, 1, 2, 3, 4] // Índices de las columnas que se exportarán
+                  columns: [0, 1, 2, 3, 4]
                 },
                 customize: function (doc) {
                   doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split('');
@@ -54,7 +54,7 @@ $(document).ready(function() {
                 render: function(data, type, row) {
                   if (type === 'display' || type === 'filter') {
                     var date = new Date(data);
-                    var formattedDate = date.toLocaleDateString(); // Formatea la fecha como 'dd/mm/yyyy'
+                    var formattedDate = date.toLocaleDateString();
                     return formattedDate;
                   }
                   return data;
@@ -138,7 +138,6 @@ $(document).ready(function() {
         var hours = String(date.getHours()).padStart(2, '0');
         var minutes = String(date.getMinutes()).padStart(2, '0');
         var seconds = String(date.getSeconds()).padStart(2, '0');
-
         return year + month + day + '_' + hours + minutes + seconds;
     }
 });

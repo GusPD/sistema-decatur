@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    
+    //Método que permite calcular el monto si se digita el precio
     document.getElementById("precio").addEventListener("input", function() {
         const precio = parseFloat(document.getElementById('precio').value);
         const descuento = parseFloat(document.getElementById('descuento').value);
@@ -18,7 +18,7 @@ $(document).ready(function() {
             document.getElementById('monto').value = '0.00';
         }
     });
-    
+    //Método que permite calcular el monto si se digita el descuento
     document.getElementById("descuento").addEventListener("input", function() {
         const precio = parseFloat(document.getElementById('precio').value);
         const descuento = parseFloat(document.getElementById('descuento').value);
@@ -37,7 +37,7 @@ $(document).ready(function() {
             document.getElementById('monto').value = '0.00';
         }
     });
-    
+    //Método que permite calcular la cuota Ki si se digita el plazo
     document.getElementById("plazo").addEventListener("input", function() {
         const tasa = parseFloat(document.getElementById('tasa').value);
         const plazo = parseFloat(document.getElementById('plazo').value);
@@ -49,7 +49,7 @@ $(document).ready(function() {
             document.getElementById('cuotaKi').value = "0.00";
         }
     });
-    
+    //Método que permite calcular la cuota Ki si se digita la tasa
     document.getElementById("tasa").addEventListener("input", function() {
         const tasa = parseFloat(document.getElementById('tasa').value);
         const plazo = parseFloat(document.getElementById('plazo').value);
@@ -61,13 +61,13 @@ $(document).ready(function() {
             document.getElementById('cuotaKi').value = "0.00";
         }
     });
-    
+    //Método que calcula la cuota Ki
     function calcularCuotaKi(tasa, nper, va) {
         tasa = (tasa / 100)/12;
         const cuota = (va * tasa) / (1 - Math.pow(1 + tasa, -nper));
         return cuota;
     }
-    
+    //Formulario de editar
     $.validator.addMethod(
         "validarPrecio",
         function(value, element) {
@@ -131,9 +131,8 @@ $(document).ready(function() {
         },
         "Ingrese un número válido"
     );
-     var formGuardar = $('#formGuardar'); // Almacenar referencia al formulario
-     var validator = $('#formGuardar').validate({
-         
+    var formGuardar = $('#formGuardar');
+    var validator = $('#formGuardar').validate({
         rules: {
            nombre: {
                required: true,
@@ -185,7 +184,6 @@ $(document).ready(function() {
                maxlength: 9
            }
         },
-        
         messages:{
             nombre: {
                 required: 'Este campo es requerido'
@@ -215,63 +213,51 @@ $(document).ready(function() {
                 required: 'Este campo es requerido'
             }        
         },
-        
         highlight: function(element) {
             $(element).addClass('is-invalid');
         },
-        
         unhighlight: function(element) {
             $(element).removeClass('is-invalid');
         },
-        
         errorPlacement: function(error, element) {
             if (element.attr("name") === "nombre" || element.attr("name") === "fecha" || element.attr("name") === "precio" || element.attr("name") === "descuento" || element.attr("name") === "monto" || element.attr("name") === "plazo" || element.attr("name") === "tasa" || element.attr("name") === "cuotaKi" || element.attr("name") === "cuotaMantenimiento" || element.attr("name") === "multaFinanciamiento" || element.attr("name") === "multaMantenimiento") {
                 error.insertAfter(element);
             }        
         },
-         
         errorElement: 'div',
         errorClass: 'invalid-feedback',
-        
         submitHandler: function(form) {
-               event.preventDefault();//detiene el evento del envio del form
-
+            event.preventDefault();
             const fechaInputValue = $('#fecha').val();
             const fechaInput = new Date(fechaInputValue);
             function addLeadingZero(number) {
-              return number < 10 ? `0${number}` : number;
+                return number < 10 ? `0${number}` : number;
             }
             const day = addLeadingZero(fechaInput.getDate());
             const month = addLeadingZero(fechaInput.getMonth() + 1);
             const year = fechaInput.getFullYear();
             const formattedDate = `${day}/${month}/${year}`;
-            
-            var idVenta = $('#idVenta').val();//tomo la id
+            var idVenta = $('#idVenta').val();
             var estado = $('#estado').val();
             var idTerreno = $('#idTerreno').val();
-            var formDataArray = formGuardar.serializeArray();//tomo los datos del array
+            var formDataArray = formGuardar.serializeArray();
             var fechaIndex = formDataArray.findIndex(item => item.name === 'fecha');
             formDataArray[fechaIndex].value = formattedDate;
-            console.log(formDataArray);
-            var url;//valido el tipo de url si editar o crear
+            var url;
             if (idVenta) {
                 url = '/ActualizarVenta/'+idTerreno;
-                //meto la id en el campo de envio
                 formDataArray.push({name: 'idVenta', value: idVenta},{name: 'estado', value: estado});
             } else {
                 url = '/AgregarVenta/'+idTerreno;
                 formDataArray.push({name: 'estado', value: estado});
             }
-
-            //realizo el guardado mediante ajax
             $.ajax({
                 url: url,
                 type: 'POST',
                 data: formDataArray,
                 success: function (response) {
-                    $('#crearModal').modal('hide');  // Cierra el modal
-                    mostrarMensaje(response, 'success');
-                    
+                    $('#crearModal').modal('hide');
+                    toastr.success(response);
                     $.ajax({
                         url: "/Venta/"+idVenta,
                         type: 'GET',
@@ -287,76 +273,54 @@ $(document).ready(function() {
                     });
                 },
                 error: function (xhr, status, error) {
-                    $('#crearModal').modal('hide'); // Cierra el modal
+                    $('#crearModal').modal('hide');
                     var errorMessage = xhr.responseText || 'Error al actualizar la venta.';
-                    mostrarMensaje(errorMessage, 'danger');
+                    toastr.error(errorMessage);
                 }
             });
         }
     });
-
-    // metodo para mostrar el modal segun sea si editar o nuevo registro
-        $(document).on('click', '#EditarInformacion', function () {
-            var idVenta = $(this).data('id');
-            var idTerreno = $("#idTerreno").val();
-            var modal = $('#crearModal');
-            var tituloModal = modal.find('.modal-title');
-            var form = modal.find('form');
-            var btnSumit = document.getElementById('btnSumit');
-            validator.resetForm();  // Restablecer la validación
-            formGuardar.find('.is-invalid').removeClass('is-invalid');
-
-            if (idVenta) {
-                tituloModal.text('Editar Venta');//titulo del modal
-                
-                $.ajax({//utilizo ajax para obtener los datos
-                    url: '/ObtenerVenta/' + idVenta,
-                    type: 'GET',
-                    success: function (response) {
-                       
-                        var checkboxes = document.querySelectorAll(".checkClean");
-
-                        for (var i = 0; i < checkboxes.length; i++) {
-                            checkboxes[i].checked = false;
-                        }
-                        $('#nombre').val(response.nombre);
-                        $('#fecha').val(response.fecha);
-                        $('#precio').val(response.precio);
-                        $('#descuento').val(response.descuento);
-                        $('#monto').val(response.monto);
-                        $('#plazo').val(response.plazo);
-                        $('#tasa').val(response.tasa);
-                        $('#cuotaKi').val(response.cuotaKi);
-                        $('#cuotaMantenimiento').val(response.cuotaMantenimiento);
-                        $('#multaMantenimiento').val(response.multaMantenimiento);
-                        $('#multaFinanciamiento').val(response.multaFinanciamiento);
-                        $('#idListDocumento').val(response.idListDocumento);
-                        $('#estado').val(response.estado);
-                        $('#terreno').val(response.terreno.idTerreno);
-                        $('#idVenta').val(response.idVenta);
-
-                    },
-                    error: function () {
-                        alert('Error al obtener los datos de la venta.');
-                    }
-                });
-            } else {
-                var checkboxes = document.querySelectorAll(".checkClean");
-                
-                // en caso de presionar el boton de nuevo solo se abrira el modal
-                tituloModal.text('Agregar Venta');
-                form.attr('action', '/AgregarVenta/'+idTerreno);
-                $('.form-control').val('');
-            }
-            modal.modal('show');
+    // Método para mostrar el modal segun sea si editar o nuevo registro
+    $(document).on('click', '#EditarInformacion', function () {
+        var idVenta = $(this).data('id');
+        var idTerreno = $("#idTerreno").val();
+        var modal = $('#crearModal');
+        var tituloModal = modal.find('.modal-title');
+        var form = modal.find('form');
+        validator.resetForm();
+        formGuardar.find('.is-invalid').removeClass('is-invalid');
+        if (idVenta) {
+            tituloModal.text('Editar Venta');
+            $.ajax({
+                url: '/ObtenerVenta/' + idVenta,
+                type: 'GET',
+                success: function (response) {
+                    $('#nombre').val(response.nombre);
+                    $('#fecha').val(response.fecha);
+                    $('#precio').val(response.precio);
+                    $('#descuento').val(response.descuento);
+                    $('#monto').val(response.monto);
+                    $('#plazo').val(response.plazo);
+                    $('#tasa').val(response.tasa);
+                    $('#cuotaKi').val(response.cuotaKi);
+                    $('#cuotaMantenimiento').val(response.cuotaMantenimiento);
+                    $('#multaMantenimiento').val(response.multaMantenimiento);
+                    $('#multaFinanciamiento').val(response.multaFinanciamiento);
+                    $('#idListDocumento').val(response.idListDocumento);
+                    $('#estado').val(response.estado);
+                    $('#terreno').val(response.terreno.idTerreno);
+                    $('#idVenta').val(response.idVenta);
+                },
+                error: function () {
+                    alert('Error al obtener los datos de la venta.');
+                }
+            });
+        } else {
+            tituloModal.text('Agregar Venta');
+            form.attr('action', '/AgregarVenta/'+idTerreno);
+            $('.form-control').val('');
+        }
+        modal.modal('show');
     });
-    
-    function mostrarMensaje(mensaje, tipo) {
-        var alertElement = $('.alert-' + tipo);
-        alertElement.text(mensaje).addClass('show').removeClass('d-none');
-        setTimeout(function() {
-          alertElement.removeClass('show').addClass('d-none');
-        }, 5000); // Ocultar el mensaje después de 3 segundos (ajusta el valor según tus necesidades)
-    }
 }); 
 

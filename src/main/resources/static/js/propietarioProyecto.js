@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    //Tabla
     var idProyecto = $('#proyectoId').data('id');
     var table = $('#propietarioTable').DataTable({
         ajax: {
@@ -12,32 +13,32 @@ $(document).ready(function() {
              "<'row w-100'<'col-sm-6'l><'col-sm-6'f>>" +
              "<'row w-100'<'col-sm-12 my-4'tr>>" +
              "<'row w-100'<'col-sm-5'i><'col-sm-7'p>>",
-        lengthMenu: [[5, 25, 50, 100, -1], [5, 25, 50, 100, 'Todos']], // Opciones de selección para mostrar registros por página
-        pageLength: 5, // Cantidad de registros por página por defecto
+        lengthMenu: [[5, 25, 50, 100, -1], [5, 25, 50, 100, 'Todos']],
+        pageLength: 5,
         buttons: [
             {
                 extend: 'copy',
                 text: 'Copiar',
                 exportOptions: {
-                  columns: [0, 1, 2, 3, 4] // Índices de las columnas que se copiarán
+                  columns: [0, 1, 2, 3, 4]
                 }
             },
             {
                 extend: 'excel',
                 text: 'Exportar a Excel',
-                title: 'Propietarios del proyecto', // Título del reporte en Excel
-                filename: 'Propietarios ' + getCurrentDateTime(), // Nombre del archivo Excel
+                title: 'Propietarios del proyecto',
+                filename: 'Propietarios ' + getCurrentDateTime(),
                 exportOptions: {
-                  columns: [0, 1, 2, 3, 4] // Índices de las columnas que se exportarán
+                  columns: [0, 1, 2, 3, 4]
                 }
             },
             {
                 extend: 'pdf',
                 text: 'Exportar a PDF',
-                title: 'Propietarios del proyecto', // Título del reporte en PDF
-                filename: 'Propietarios ' + getCurrentDateTime(), // Nombre del archivo PDF
+                title: 'Propietarios del proyecto',
+                filename: 'Propietarios ' + getCurrentDateTime(),
                 exportOptions: {
-                  columns: [0, 1, 2, 3, 4] // Índices de las columnas que se exportarán
+                  columns: [0, 1, 2, 3, 4]
                 },
                 customize: function (doc) {
                   doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split('');
@@ -57,14 +58,11 @@ $(document).ready(function() {
                 searchable: false,
                 width: '10%',
                 render: function (data, type, row) {
-                    
                     var actionsHtml = '';
-                    
                     if(hasPrivilegeVerPropietarioProyecto === true){
-                        actionsHtml = '<a type="button" class="btn btn-outline-secondary btn-sm" href="/Propietario/'+ row.idProyecto + '/' + row.idPersona + '">';
+                        actionsHtml = '<a type="button" class="btn btn-outline-secondary btn-sm" href="/InformacionPropietario/'+ row.idProyecto + '/' + row.idPersona + '">';
                         actionsHtml += '<i class="far fa-eye"></i></a>';
                     }
-                    
                     return actionsHtml || '';
                 }
             }
@@ -76,7 +74,7 @@ $(document).ready(function() {
             "sEmptyTable": "Ningún dato disponible en esta tabla",
             "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
             "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
-            "sInfoFiltered": "",//(filtrado de un total de _MAX_ registros)
+            "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
             "sInfoPostFix": "",
             "sSearch": "Buscar:",
             "sUrl": "",
@@ -118,7 +116,6 @@ $(document).ready(function() {
     $('#export-copy').on('click', function() {
         table.button('.buttons-copy').trigger();
     });
-    
     // Función para obtener la fecha y hora actual en formato deseado
     function getCurrentDateTime() {
         var date = new Date();
@@ -128,7 +125,6 @@ $(document).ready(function() {
         var hours = String(date.getHours()).padStart(2, '0');
         var minutes = String(date.getMinutes()).padStart(2, '0');
         var seconds = String(date.getSeconds()).padStart(2, '0');
-
         return year + month + day + '_' + hours + minutes + seconds;
     }
 }); 

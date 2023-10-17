@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    //Tabla
     var idVenta=$("#idVenta").val();
      var table = $('#trabajadoresTable').DataTable({
         ajax: '/trabajadorVenta/data/'+idVenta,
@@ -30,20 +31,16 @@ $(document).ready(function() {
                 searchable: false,
                 width: '30%',
                 render: function (data, type, row) {
-                    
                     var actionsHtml = '';
-                    
                     if(hasPrivilegeVerTrabajador === true){
-                        actionsHtml = '<a type="button" class="btn btn-outline-secondary btn-sm" href="/Trabajador/' + row.venta.terreno.proyecto.idProyecto +'/'+ row.visitante.persona.idPersona + '' + '">';
+                        actionsHtml = '<a type="button" class="btn btn-outline-secondary btn-sm" href="/InformacionTrabajador/' + row.venta.terreno.proyecto.idProyecto +'/'+ row.visitante.persona.idPersona + '' + '">';
                         actionsHtml += '<i class="far fa-eye"></i></a>';
                     }
-                    
                     if(hasPrivilegeEliminarTrabajador === true){
-                    actionsHtml += '<button type="button" class="btn btn-outline-danger eliminarModalTrabajador-btn btn-sm" data-id="' + row.idAsignacion + '" ';
-                    actionsHtml += 'data-cod="' + row.idAsignacion + '">';
-                    actionsHtml += '<i class="far fa-trash-alt"></i></button>';
-                   }
-                    
+                        actionsHtml += '<button type="button" class="btn btn-outline-danger eliminarModalTrabajador-btn btn-sm" data-id="' + row.idAsignacion + '" ';
+                        actionsHtml += 'data-cod="' + row.idAsignacion + '">';
+                        actionsHtml += '<i class="far fa-trash-alt"></i></button>';
+                    }
                     return actionsHtml || '';
                 }
             }
@@ -55,7 +52,7 @@ $(document).ready(function() {
             "sEmptyTable": "Ningún dato disponible en esta tabla",
             "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
             "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
-            "sInfoFiltered": "", //"(filtrado de un total de _MAX_ registros)",
+            "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
             "sInfoPostFix": "",
             "sSearch": "Buscar:",
             "sUrl": "",
@@ -76,6 +73,7 @@ $(document).ready(function() {
             return: true
         }
     });
+    //Formulario de agregar
     $.validator.addMethod(
         "validarDui",
         function(value, element) {
@@ -83,30 +81,27 @@ $(document).ready(function() {
         },
         "Ingrese un número válido, verifique que deben de ser nueve dígitos"
     );
-    
-    var formGuardar = $('#formGuardarTrabajador'); // Almacenar referencia al formulario
+    var formGuardar = $('#formGuardarTrabajador');
     var validator = $('#formGuardarTrabajador').validate({
-         
         rules: {
-           dui: {
-               required: true,
-               validarDui: true,
-               maxlength: 9
-           },
-           nombre: {
-               required: true,
-               maxlength: 200
-           },
-           apellido: {
-               required: true,
-               maxlength: 200
-           },
-           empleador: {
-               required: true,
-               maxlength: 200
-           }         
+            dui: {
+                required: true,
+                validarDui: true,
+                maxlength: 9
+            },
+            nombre: {
+                required: true,
+                maxlength: 200
+            },
+            apellido: {
+                required: true,
+                maxlength: 200
+            },
+            empleador: {
+                required: true,
+                maxlength: 200
+            }         
         },
-        
         messages:{
             dui:{
                 required: 'Este campo es requerido'
@@ -121,42 +116,31 @@ $(document).ready(function() {
                 required: 'Este campo es requerido'
             }  
         },
-        
         highlight: function(element) {
             $(element).addClass('is-invalid');
         },
-        
         unhighlight: function(element) {
             $(element).removeClass('is-invalid');
         },
-        
         errorPlacement: function(error, element) {
             if (element.attr("name") === "dui" || element.attr("name") === "nombre" || element.attr("name") === "apellido" || element.attr("name") === "empleador") {
                 error.insertAfter(element);
             }        
         },
-         
         errorElement: 'div',
         errorClass: 'invalid-feedback',
-        
         submitHandler: function(form) {
-               event.preventDefault();//detiene el evento del envio del form 
-            var idVenta = $('#idVenta').val();//tomo la id
-            var idDocumento = $('#idDocumento').val();
-            var idTrabajador = $('#idVisitante').val();
-            var formDataArray = formGuardar.serializeArray();//tomo los datos del array
-
-            console.log(formDataArray);
+            event.preventDefault(); 
+            var idVenta = $('#idVenta').val();
+            var formDataArray = formGuardar.serializeArray();
             var url = '/AgregarTrabajadorVenta';
             formDataArray.push({name: 'idVenta', value: idVenta}, {name: 'rol', value: "TRABAJADOR"});
-            
-            //realizo el guardado mediante ajax
             $.ajax({
                 url: url,
                 type: 'POST',
                 data: formDataArray,
                 success: function (response) {
-                    $('#crearModalTrabajador').modal('hide');  // Cierra el modal
+                    $('#crearModalTrabajador').modal('hide');
                     toastr.success(response);
                     $('.form-control').val('');
                     $.ajax({
@@ -178,14 +162,14 @@ $(document).ready(function() {
                     });
                 },
                 error: function (xhr, status, error) {
-                    $('#crearModalTrabajador').modal('hide'); // Cierra el modal
+                    $('#crearModalTrabajador').modal('hide');
                     var errorMessage = xhr.responseText || 'Error al agregar el trabajador.';
                     toastr.error(errorMessage);
                 }
             });
         }
     });
-    
+    //Formulario de seleccionar
     $('#seleccionarModalTrabajador').on('shown.bs.modal', function () {
         var select2Elements = $(this).find('.select2');
         select2Elements.each(function () {
@@ -201,22 +185,18 @@ $(document).ready(function() {
             });
         });
     });
-    
-    var formSeleccionarGuardar = $('#formSeleccionarTrabajador'); // Almacenar referencia al formulario
+    var formSeleccionarGuardar = $('#formSeleccionarTrabajador');
     var validator = $('#formSeleccionarTrabajador').validate({
-        
         rules: {
            trabajadores:{
                required: true
            }          
         },
-        
         messages:{
             trabajadores:{
                 required: 'Este campo es requerido'
             }        
         },
-        
         highlight: function(element) {
             $(element).addClass('is-invalid');
             var select2ChoiceElement = document.querySelector('.select2-selection__choice');
@@ -225,7 +205,6 @@ $(document).ready(function() {
                 $('#trabajadores').addClass('is-invalid');
             }
         },
-        
         unhighlight: function(element) {
             $(element).removeClass('is-invalid');
             var select2ChoiceElement = document.querySelector('.select2-selection__choice');
@@ -234,25 +213,19 @@ $(document).ready(function() {
                 $('#trabajadores').removeClass('is-invalid');
             }
         },
-        
         errorPlacement: function(error, element) {
             if (element.attr("name") !== "trabajadores") {
                 error.insertAfter(element);
             }        
         },
-         
         errorElement: 'div',
         errorClass: 'invalid-feedback',
-        
         submitHandler: function(form) {
             event.preventDefault();
-            var formDataArray = formSeleccionarGuardar.serializeArray();//tomo los datos del array
+            var formDataArray = formSeleccionarGuardar.serializeArray();
             var idVenta = $('#idVenta').val();
             var url = '/SeleccionarTrabajadoresVenta';
             formDataArray.push({name: 'idVenta', value: idVenta});
-            
-            console.log(formDataArray);
-            
             $.ajax({
                 type: "POST",
                 url: url,
@@ -280,14 +253,13 @@ $(document).ready(function() {
                     });
                 },
                 error: function (xhr, status, error) {
-                    $('#seleccionarModalTrabajador').modal('hide'); // Cierra el modal
+                    $('#seleccionarModalTrabajador').modal('hide');
                     var errorMessage = xhr.responseText || 'Error al agregar el trabajador.';
                     toastr.error(errorMessage);
                 }
             });
         }
     });
-    
     // Método para mostrar el modal de eliminación
     $(document).on('click', '.eliminarModalTrabajador-btn', function () {
         var idPersona = $(this).data('id');
@@ -296,23 +268,19 @@ $(document).ready(function() {
         eliminarBtn.data('id', idPersona);
         modal.modal('show');
     });
-   
-   
-   //Método para enviar la solicitud de eliminar
+    //Método para enviar la solicitud de eliminar
     $(document).on('click', '#eliminarTrabajadorBtn', function () {
         var idVenta = $('#idVenta').val();
         var idPersona = $(this).data('id');
-        // Actualizar la acción del formulario
         $('#eliminarTrabajadorForm').attr('action', '/EliminarTrabajadorVenta/' + idPersona);
-
-        // Realizar la solicitud POST al método de eliminación
         $.ajax({
             url: $('#eliminarTrabajadorForm').attr('action'),
             type: 'POST',
-            data: $('#eliminarTrabajadorForm').serialize(), // Incluir los datos del formulario en la solicitud
+            data: $('#eliminarTrabajadorForm').serialize(),
             success: function (response) {
                 $('#confirmarEliminarModalTrabajador').modal('hide');
                 table.ajax.reload();
+                toastr.success(response);
                 $.ajax({
                     url: "/TrabajadoresVenta/"+idVenta,
                     type: 'GET',
@@ -332,7 +300,6 @@ $(document).ready(function() {
                         alert('Error al cargar la tabla.');
                     }
                 });
-               toastr.success(response);
             },
             error: function (xhr, status, error) {
               $('#confirmarEliminarModalTrabajador').modal('hide');
@@ -342,22 +309,14 @@ $(document).ready(function() {
         });
         
     });
-    
-    function mostrarMensaje(mensaje, tipo) {
-        var alertElement = $('.alert-' + tipo);
-        alertElement.text(mensaje).addClass('show').removeClass('d-none');
-        setTimeout(function() {
-          alertElement.removeClass('show').addClass('d-none');
-        }, 5000); // Ocultar el mensaje después de 3 segundos (ajusta el valor según tus necesidades)
-    }
-    
+    //Función para inicializar la libreria de select2
     $( '#trabajadores' ).select2( {
         theme: "bootstrap-5",
         width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
         placeholder: $( this ).data( 'placeholder' ),
         closeOnSelect: false,
     } );
-    
+    //Función para inicializar la libreria de select2
     $( '#multiple-select-field' ).select2( {
         theme: "bootstrap-5",
         width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',

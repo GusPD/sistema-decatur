@@ -17,5 +17,7 @@ public interface VentaService {
     
     public Venta encontrar(Long idVenta);
     
+    public Venta encontrarDocumento(Integer idDocumento);
+    
     public void actualizar(Venta venta);
 }

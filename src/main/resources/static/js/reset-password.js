@@ -2,7 +2,6 @@
 function togglePasswordVisibilityNew() {
     var passwordInput = document.getElementById("password");
     var eyeIcon = document.getElementById("icono-ver");
-
     if (passwordInput.type === "password") {
         passwordInput.type = "text";
         eyeIcon.classList.remove("fa-eye");
@@ -16,7 +15,6 @@ function togglePasswordVisibilityNew() {
 function togglePasswordVisibilityConfirm() {
     var passwordInput = document.getElementById("passwordconfirm");
     var eyeIcon = document.getElementById("icono-ver-confirm");
-
     if (passwordInput.type === "password") {
         passwordInput.type = "text";
         eyeIcon.classList.remove("fa-eye");
@@ -27,8 +25,7 @@ function togglePasswordVisibilityConfirm() {
         eyeIcon.classList.add("fa-eye");
     }
 }
-
-//Función para validad el formulario de restablecer contraseña
+//Formulario de restablecer
 $.validator.addMethod(
     "validarPassword",
     function(value, element) {
@@ -37,7 +34,7 @@ $.validator.addMethod(
     },
     "La contraseña debe contener al menos una mayúscula, una minúscula, un número, un carácter especial y tener un mínimo de 8 caracteres"
 );
-var form = $('#form-reset-password'); // Almacenar referencia al formulario
+var form = $('#form-reset-password');
 var validator = $('#form-reset-password').validate({
     rules: {        
         password: {
