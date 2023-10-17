@@ -8,6 +8,7 @@ import com.gl05.bad.domain.Proyecto;
 import com.gl05.bad.domain.Propietario;
 import com.gl05.bad.domain.Referencia;
 import com.gl05.bad.domain.Telefono;
+import com.gl05.bad.domain.Usuario;
 import com.gl05.bad.domain.VistaPropietariosProyecto;
 import com.gl05.bad.servicio.AsigPropietarioVentaService;
 import com.gl05.bad.servicio.BitacoraServiceImp;
@@ -18,6 +19,7 @@ import com.gl05.bad.servicio.PropietarioService;
 import com.gl05.bad.servicio.ProyectoService;
 import com.gl05.bad.servicio.ReferenciaService;
 import com.gl05.bad.servicio.TelefonoService;
+import com.gl05.bad.servicio.UserService;
 import com.gl05.bad.servicio.VistaPropietariosProyectoService;
 import java.sql.Blob;
 import java.sql.SQLException;
@@ -25,6 +27,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +37,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -77,6 +81,9 @@ public class PropietarioController {
     @Autowired
     private AsigPropietarioVentaService asigPropietarioService;
     
+    @Autowired
+    private UserService usuarioService;
+    
     //Función que redirige a la visa de los propietarios del sistema
     @GetMapping("/PropietariosSistema")
     public String mostrarProyecto(Model model, Proyecto proyecto) {
@@ -108,12 +115,18 @@ public class PropietarioController {
     
     //Función que redirige a la información del propietario    
     @GetMapping("/InformacionPropietario/{idProyecto}/{idPersona}")
-    public String InformacionPropietario(Model model, Persona persona, Proyecto proyecto) {
+    public String InformacionPropietario(Model model, Persona persona, Proyecto proyecto, Authentication authentication) {
         model.addAttribute("pageTitle", "Perfil Propietario");
         Persona newPersona = personaService.encontrar(persona.getIdPersona());
         Propietario newPropietario = propietarioService.encontrarPersona(newPersona);
         Proyecto newProyecto = proyectoService.encontrar(proyecto.getIdProyecto());
-        
+        String username = authentication.getName();
+        Usuario usuario = usuarioService.encontrarUsername(username);
+        System.out.println("Nuevo proyecto: " + newProyecto);
+        Set<Proyecto> proyectosPropietario =  usuario.getProyectos();
+        if (!proyectosPropietario.contains(newProyecto) && newProyecto!=null) {
+            return "accesodenegado";
+        }
         model.addAttribute("proyecto", newProyecto);
         model.addAttribute("propietario", newPropietario);
         model.addAttribute("persona", newPersona);

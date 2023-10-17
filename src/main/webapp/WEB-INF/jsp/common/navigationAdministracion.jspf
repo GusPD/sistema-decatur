@@ -1,4 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <%@ page import="java.time.LocalDateTime" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
 <!-- Navbar Administracion -->
@@ -84,38 +86,61 @@
                 </sec:authorize>
                 <sec:authorize access="hasAuthority('GESTIONAR_PROPIETARIOS_SISTEMA_PRIVILAGE') or hasAuthority('GESTIONAR_TRABAJADORES_SISTEMA_PRIVILAGE')">
                     <c:set var="urlPropietario" value="" />
-                    <c:choose>
-                        <c:when test="${param.url eq 'InformacionPropietario'}">
-                            <c:set var="urlPropietario" value="/InformacionPropietario/0/${persona.idPersona}" />
-                        </c:when>
-                        <c:when test="${param.url eq 'CorreosPropietario'}">
-                            <c:set var="urlPropietario" value="/CorreosPropietario/0/${persona.idPersona}" />
-                        </c:when>
-                        <c:when test="${param.url eq 'TelefonosPropietario'}">
-                            <c:set var="urlPropietario" value="/TelefonosPropietario/0/${persona.idPersona}" />
-                        </c:when>
-                        <c:when test="${param.url eq 'DocumentosPropietario'}">
-                            <c:set var="urlPropietario" value="/DocumentosPropietario/0/${persona.idPersona}" />
-                        </c:when>
-                        <c:when test="${param.url eq 'ReferenciasPropietario'}">
-                            <c:set var="urlPropietario" value="/ReferenciasPropietario/0/${persona.idPersona}" />
-                        </c:when>
-                        <c:when test="${param.url eq 'TerrenosPropietario'}">
-                            <c:set var="urlPropietario" value="/TerrenosPropietario/0/${persona.idPersona}" />
-                        </c:when>
-                    </c:choose>
-                    <c:set var="urlInformacionTrabajador" value="/InformacionTrabajador/0/${persona.idPersona}" />
-                    <c:set var="urlDocumentosTrabajador" value="/DocumentosTrabajador/0/${persona.idPersona}" />
-                    <c:set var="urlTerrenosTrabajador" value="/TerrenosTrabajador/0/${persona.idPersona}" />
-                    <li class="nav-item ${requestScope['javax.servlet.forward.request_uri'] == '/PropietariosSistema' || requestScope['javax.servlet.forward.request_uri'] == '/TrabajadoresSistema' || requestScope['javax.servlet.forward.request_uri'] == urlPropietario || requestScope['javax.servlet.forward.request_uri'] == urlTrabajador ? 'menu-open' : ''}">
-                        <a href="#" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == '/PropietariosSistema' || requestScope['javax.servlet.forward.request_uri'] == '/TrabajadoresSistema' || requestScope['javax.servlet.forward.request_uri'] == urlPropietario || requestScope['javax.servlet.forward.request_uri'] == urlTrabajador ? 'active' : ''}">
+                    <c:set var="urlActual" value="/PropietariosSistema" />
+                    <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
+                        <c:set var="urlPropietario" value="/PropietariosSistema" />
+                    </c:if>
+                    <c:set var="urlActual" value="/InformacionPropietario/0/${persona.idPersona}" />
+                    <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
+                        <c:set var="urlPropietario" value="/InformacionPropietario/0/${persona.idPersona}" />
+                    </c:if>
+                    <c:set var="urlActual" value="/CorreosPropietario/0/${persona.idPersona}" />
+                    <c:if test="${pageContext.request.requestURI.endsWith('/CorreosPropietario')}">
+                        <c:set var="urlPropietario" value="/CorreosPropietario/0/${persona.idPersona}" />
+                    </c:if>
+                    <c:set var="urlActual" value="/TelefonosPropietario/0/${persona.idPersona}" />
+                    <c:if test="${pageContext.request.requestURI.endsWith('/TelefonosPropietario')}">
+                        <c:set var="urlPropietario" value="/TelefonosPropietario/0/${persona.idPersona}" />
+                    </c:if>
+                    <c:set var="urlActual" value="/DocumentosPropietario/0/${persona.idPersona}" />
+                    <c:if test="${pageContext.request.requestURI.endsWith('/DocumentosPropietario')}">
+                        <c:set var="urlPropietario" value="/DocumentosPropietario/0/${persona.idPersona}" />
+                    </c:if>
+                    <c:set var="urlActual" value="/ReferenciasPropietario/0/${persona.idPersona}" />
+                    <c:if test="${pageContext.request.requestURI.endsWith('/ReferenciasPropietario')}">
+                        <c:set var="urlPropietario" value="/ReferenciasPropietario/0/${persona.idPersona}" />
+                    </c:if>
+                    <c:set var="urlActual" value="/TerrenosPropietario/0/${persona.idPersona}" />
+                    <c:if test="${pageContext.request.requestURI.endsWith('/TerrenosPropietario')}">
+                        <c:set var="urlPropietario" value="/TerrenosPropietario/0/${persona.idPersona}" />
+                    </c:if>
+                    
+                    <c:set var="urlTrabajador" value="" />
+                    <c:set var="urlActual" value="/TrabajadoresSistema" />
+                    <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
+                        <c:set var="urlTrabajador" value="/TrabajadoresSistema" />
+                    </c:if>
+                    <c:set var="urlActual" value="/InformacionTrabajador/0/${persona.idPersona}" />
+                    <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
+                        <c:set var="urlTrabajador" value="/InformacionPropietario/0/${persona.idPersona}" />
+                    </c:if>
+                    <c:set var="urlActual" value="/DocumentosTrabajador/0/${persona.idPersona}" />
+                    <c:if test="${pageContext.request.requestURI.endsWith('/DocumentosPropietario')}">
+                        <c:set var="urlTrabajador" value="/DocumentosTrabajador/0/${persona.idPersona}" />
+                    </c:if>
+                    <c:set var="urlActual" value="/TerrenosTrabajador/0/${persona.idPersona}" />
+                    <c:if test="${pageContext.request.requestURI.endsWith('/TerrenosPropietario')}">
+                        <c:set var="urlTrabajador" value="/TerrenosTrabajador/0/${persona.idPersona}" />
+                    </c:if>
+                    <li class="nav-item ${requestScope['javax.servlet.forward.request_uri'] == urlPropietario || requestScope['javax.servlet.forward.request_uri'] == urlTrabajador ? 'menu-open' : ''}">
+                        <a href="#" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlPropietario || requestScope['javax.servlet.forward.request_uri'] == urlTrabajador ? 'active' : ''}">
                             <i class="nav-icon fas fa-server"></i>
                             <p>Datos de Proyectos<i class="right fas fa-angle-left"></i></p>
                         </a>
                         <ul class="nav nav-treeview">
                             <sec:authorize access="hasAuthority('GESTIONAR_PROPIETARIOS_SISTEMA_PRIVILAGE')">
                             <li class="nav-item">
-                                <a href="/PropietariosSistema" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == '/PropietariosSistema' || requestScope['javax.servlet.forward.request_uri'] == urlPropietario ? 'active' : ''}">
+                                <a href="/PropietariosSistema" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlPropietario ? 'active' : ''}">
                                     <i class="fa-solid fa-user-tie nav-icon text-blue"></i>
                                     <p>Propietarios</p>
                                 </a>
@@ -123,7 +148,7 @@
                             </sec:authorize>
                             <sec:authorize access="hasAuthority('GESTIONAR_TRABAJADORES_SISTEMA_PRIVILAGE')">
                                 <li class="nav-item">
-                                    <a href="/TrabajadoresSistema"class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == '/TrabajadoresSistema' || requestScope['javax.servlet.forward.request_uri'] == urlTrabajador? 'active' : ''}">
+                                    <a href="/TrabajadoresSistema"class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlTrabajador? 'active' : ''}">
                                         <i class="fa-solid fa-users nav-icon text-blue"></i>
                                         <p>Trabajadores</p>
                                     </a>
