@@ -61,6 +61,10 @@ $(document).ready(function() {
             var idDocumento = $('#idDocumento').val();
             var idTrabajador = $('#idVisitante').val();
             var formDataArray = formGuardar.serializeArray();
+            var idProyecto = $("#idProyecto").val();
+            if(idProyecto===""){
+                idProyecto=0;
+            }
             var url;
             if (idPersona) {
                 url = '/ActualizarTrabajador';
@@ -77,7 +81,7 @@ $(document).ready(function() {
                     $('#crearModal').modal('hide');
                     toastr.success(response);
                     $.ajax({
-                        url: "/InformacionTrabajador/"+idPersona,
+                        url: "/InformacionTrabajador/"+idProyecto+"/"+idPersona,
                         type: 'GET',
                         success: function (nuevosDatos) {
                             var elementoActualizable = $(nuevosDatos).find('#tabla-informacion');

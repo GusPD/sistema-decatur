@@ -80,7 +80,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="monto" class="form-label">Monto: </label>
-                                <input type="text" class="form-control" id="monto" name="monto" maxlength="10" placeholder="0.00" disabled>
+                                <input type="text" class="form-control" id="monto" name="monto" maxlength="10" placeholder="0.00" readonly>
                             </div>
                         </div>
                         <div class="modal-footer">

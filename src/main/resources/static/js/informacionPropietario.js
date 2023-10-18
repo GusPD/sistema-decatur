@@ -79,9 +79,14 @@ $(document).ready(function() {
         submitHandler: function(form) {
             event.preventDefault();
             var idPersona = $('#idPersona').val();
+            var idProyecto = $('#idProyecto').val();
             var idDocumento = $('#idDocumento').val();
             var idPropietario = $('#idPropietario').val();
             var formDataArray = formGuardar.serializeArray();
+            var idProyecto = $("#idProyecto").val();
+            if(idProyecto===""){
+                idProyecto=0;
+            }
             var url;
             if (idPersona) {
                 url = '/ActualizarPropietario';
@@ -97,7 +102,7 @@ $(document).ready(function() {
                     $('#crearModal').modal('hide');
                     toastr.success(response);
                     $.ajax({
-                        url: "/InformacionPropietario/"+idPersona,
+                        url: "/InformacionPropietario/"+idProyecto+"/"+idPersona,
                         type: 'GET',
                         success: function (nuevosDatos) {
                             var elementoActualizable = $(nuevosDatos).find('#tabla-informacion');

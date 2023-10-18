@@ -259,7 +259,7 @@ $(document).ready(function() {
                     $('#crearModal').modal('hide');
                     toastr.success(response);
                     $.ajax({
-                        url: "/Venta/"+idVenta,
+                        url: "/InformacionVenta/"+idVenta,
                         type: 'GET',
                         success: function (nuevosDatos) {
                             var elementoActualizable = $(nuevosDatos).find('#tabla-informacion');
