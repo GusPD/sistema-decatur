@@ -129,7 +129,6 @@ $(document).ready(function () {
         var hours = String(date.getHours()).padStart(2, '0');
         var minutes = String(date.getMinutes()).padStart(2, '0');
         var seconds = String(date.getSeconds()).padStart(2, '0');
-
         return year + month + day + '_' + hours + minutes + seconds;
     }
     //Formulario de agregar

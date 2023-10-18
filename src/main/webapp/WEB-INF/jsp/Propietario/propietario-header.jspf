@@ -9,6 +9,7 @@
         <%@ include file="../common/navigationAdministracion.jspf"%>
     </c:otherwise>
 </c:choose>
+<div id="idProyecto" class="hidden" value="${proyecto.idProyecto}"></div>
 <div class="content-wrapper">
     <!-- Título de la página -->
     <section class="content-header">
