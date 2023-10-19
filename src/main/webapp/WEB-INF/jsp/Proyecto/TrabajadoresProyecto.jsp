@@ -24,7 +24,7 @@
                         <!-- Funciones de los datos -->
                         <div class="card-header">
                             <h3 class="card-title d-flex justify-content-end">
-                                <sec:authorize access="hasAuthority('EXPORTAR_TRABAJADORES_PROYECTO_PRIVILAGE')"> 
+                                <sec:authorize access="hasAuthority('EXPORTAR_TRABAJADOR_PRIVILAGE')"> 
                                     <button id="export-copy" class="btn btn-sm btn-outline-secondary buttons-copy" type="button"><span>Copiar  </span><i class="fa-regular fa-copy"></i></button> 
                                     <button id="export-excel" class="btn btn-sm btn-outline-success buttons-excel ml-2" type="button"><span>Exportar </span><i class="fa-solid fa-file-csv"></i></button> 
                                     <button id="export-pdf" class="btn btn-sm btn-outline-danger buttons-pdf ml-2" type="button"><span>Exportar </span><i class="fa-regular fa-file-pdf"></i></button> 

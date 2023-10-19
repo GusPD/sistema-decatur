@@ -97,7 +97,7 @@
                         </ul>
                     </li>
                 </sec:authorize>
-                <sec:authorize access="hasAuthority('GESTIONAR_TERRENO_PRIVILAGE') or hasAuthority('GESTIONAR_VENTAS_ACTIVAS_PRIVILAGE') or hasAuthority('GESTIONAR_PROPIETARIOS_PROYECTO_PRIVILAGE') or hasAuthority('GESTIONAR_TRABAJADORES_PROYECTO_PRIVILAGE')">
+                <sec:authorize access="hasAuthority('GESTIONAR_TERRENO_PRIVILAGE') or hasAuthority('GESTIONAR_VENTA_PRIVILAGE') or hasAuthority('GESTIONAR_PROPIETARIO_PRIVILAGE') or hasAuthority('GESTIONAR_TRABAJADOR_PRIVILAGE')">
                     <c:set var="urlVentasActivas" value="/VentasActivas/${proyecto.idProyecto}" />
                     
                     <c:set var="urlTerreno" value="" />
@@ -183,7 +183,7 @@
                             <p>Administración<i class="right fas fa-angle-left"></i></p>
                         </a>
                         <ul class="nav nav-treeview">
-                            <sec:authorize access="hasAuthority('GESTIONAR_VENTAS_ACTIVAS_PRIVILAGE')">
+                            <sec:authorize access="hasAuthority('GESTIONAR_VENTA_PRIVILAGE')">
                             <li class="nav-item">
                                 <a href="/VentasActivas/${proyecto.idProyecto}" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlVentasActivas ? 'active' : ''}">
                                     <i class="fa-solid fa-file-signature nav-icon text-blue"></i>
@@ -199,7 +199,7 @@
                                 </a>
                             </li>
                             </sec:authorize>
-                            <sec:authorize access="hasAuthority('GESTIONAR_PROPIETARIOS_PROYECTO_PRIVILAGE')">
+                            <sec:authorize access="hasAuthority('GESTIONAR_PROPIETARIO_PRIVILAGE')">
                             <li class="nav-item">
                                 <a href="/Propietarios/${proyecto.idProyecto}" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlPropietario ? 'active' : ''}">
                                     <i class="fa-solid fa-user-tie nav-icon text-blue"></i>
@@ -207,7 +207,7 @@
                                 </a>
                             </li>
                             </sec:authorize>
-                            <sec:authorize access="hasAuthority('GESTIONAR_TRABAJADORES_PROYECTO_PRIVILAGE')">
+                            <sec:authorize access="hasAuthority('GESTIONAR_TRABAJADOR_PRIVILAGE')">
                             <li class="nav-item">
                                 <a href="/Trabajadores/${proyecto.idProyecto}" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlTrabajador ? 'active' : ''}">
                                     <i class="fa-solid fa-users nav-icon text-blue"></i>

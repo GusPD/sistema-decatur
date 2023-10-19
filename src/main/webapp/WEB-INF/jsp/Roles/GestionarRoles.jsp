@@ -67,16 +67,16 @@
                                 <label for="permisos" class="form-label mb-0">Permisos: </label>
                                 <div id="permisos-error" class="error-message mt-0 mb-1"></div>
                                 <div class="table-responsive">
-                                    <table class="table table-flush-spacing small">
+                                    <table class="table table-flush-spacing" style="font-size: 13px">
                                         <tbody>
                                             <tr>
-                                                <td class="w-75">
+                                                <td class="w-65">
                                                     <div class="mt-1 mb-0 p-0 d-flex align-items-center">
                                                         Administrador
                                                     </div>
                                                 </td>
-                                                <td colspan="5">
-                                                    <div class="form-check m-0 ml-5 pl-25 d-flex align-items-center">
+                                                <td colspan="7">
+                                                    <div class="form-check d-flex align-items-center" style="margin-left: 3.5%;">
                                                         <input class="form-check-input mt-1 mb-0 p-0" type="checkbox" id="selectAll">
                                                         <label class="form-check-label mt-1 mb-0 p-0" for="selectAll">
                                                             Seleccionar Todos
@@ -85,24 +85,29 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td class="w-75">
-                                                    <div class="d-flex align-items-center">
-                                                        Permisos
+                                                <td class="w-65">
+                                                    <div class="font-weight-bold">
+                                                        Datos
                                                     </div>
                                                 </td>
                                                 <td class="w-5">
                                                     <div class="d-flex justify-content-center">
-                                                        Ver
+                                                        Mostrar
                                                     </div>
                                                 </td>
                                                 <td class="w-5">
                                                     <div class="d-flex justify-content-center">
-                                                        Editar
+                                                        Seleccionar
                                                     </div>
                                                 </td>
                                                 <td class="w-5">
                                                     <div class="d-flex justify-content-center">
-                                                        Crear
+                                                        Agregar
+                                                    </div>
+                                                </td>
+                                                <td class="w-5">
+                                                    <div class="d-flex justify-content-center">
+                                                        Actualizar
                                                     </div>
                                                 </td>
                                                 <td class="w-5">
@@ -115,69 +120,1197 @@
                                                         Exportar
                                                     </div>
                                                 </td>
-                                            </tr>
-                                            <tr>
-                                                <td class="w-75">
-                                                    <div class="mt-1 mb-0 p-0 d-flex align-items-center">
-                                                        Usuario
+                                                <td class="w-5">
+                                                    <div class="d-flex justify-content-center">
+                                                        Gestionar
                                                     </div>
                                                 </td>
+                                            </tr>
+                                            <c:set var="nombrePermisoLista" value="Proyecto"/>
+                                            <c:set var="permisoEvaluado1" value="${'VER_PROYECTO'}"/>
+                                            <c:set var="permisoEvaluado2" value="${'SELECCIONAR_PROYECTO'}"/>
+                                            <c:set var="permisoEvaluado3" value="${'AGREGAR_PROYECTO'}"/>
+                                            <c:set var="permisoEvaluado4" value="${'EDITAR_PROYECTO'}"/>
+                                            <c:set var="permisoEvaluado5" value="${'ELIMINAR_PROYECTO'}"/>
+                                            <c:set var="permisoEvaluado6" value="${'GESTIONAR_PROYECTO'}"/>
+                                            <c:set var="permisoEvaluado7" value="${'EXPORTAR_PROYECTO'}"/>
+                                            <tr>
+                                                <td class="w-70">
+                                                    <div class="mt-1 mb-0 p-0 d-flex align-items-center">
+                                                        <c:out value="${nombrePermisoLista}"/>
+                                                    </div>
+                                                </td>
+                                                <c:set var="permisoEncontrado" value="0" />
                                                 <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
-                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, 'USUARIO')}">
-                                                        <c:choose>
-                                                            <c:when test="${fn:containsIgnoreCase(elementoPermiso.nombre, 'GESTIONAR')}">
-                                                                <c:set var="existe" value="1" />
-                                                                <td class="w-5">
-                                                                    <div class="d-flex justify-content-center">
-                                                                        <div class="form-check">
-                                                                            <input class="form-check-input" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
-                                                                        </div>
-                                                                    </div>
-                                                                </td>
-                                                            </c:when>
-                                                            <c:when test="${fn:containsIgnoreCase(elementoPermiso.nombre, 'EDITAR')}">
-                                                                <c:set var="existe" value="1" />
-                                                                <td class="w-5">
-                                                                    <div class="d-flex justify-content-center">
-                                                                        <div class="form-check">
-                                                                            <input class="form-check-input" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
-                                                                        </div>
-                                                                    </div>
-                                                                </td>
-                                                            </c:when>
-                                                            <c:when test="${fn:containsIgnoreCase(elementoPermiso.nombre, 'AGREGAR')}">
-                                                                <c:set var="existe" value="1" />
-                                                                <td class="w-5">
-                                                                    <div class="d-flex justify-content-center">
-                                                                        <div class="form-check">
-                                                                            <input class="form-check-input" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
-                                                                        </div>
-                                                                    </div>
-                                                                </td>
-                                                            </c:when>
-                                                            <c:when test="${fn:containsIgnoreCase(elementoPermiso.nombre, 'ELIMINAR')}">
-                                                                <c:set var="existe" value="1" />
-                                                                <td class="w-5">
-                                                                    <div class="d-flex justify-content-center">
-                                                                        <div class="form-check">
-                                                                            <input class="form-check-input" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
-                                                                        </div>
-                                                                    </div>
-                                                                </td>
-                                                            </c:when>
-                                                            <c:when test="${fn:containsIgnoreCase(elementoPermiso.nombre, 'EXPORTAR')}">
-                                                                <c:set var="existe" value="1" />
-                                                                <td class="w-5">
-                                                                    <div class="d-flex justify-content-center">
-                                                                        <div class="form-check">
-                                                                            <input class="form-check-input" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
-                                                                        </div>
-                                                                    </div>
-                                                                </td>
-                                                            </c:when>
-                                                        </c:choose>
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado1)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
                                                     </c:if>
                                                 </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado2)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado3)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado4)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado5)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center checkClean">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado6)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado7)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                            </tr>
+                                            <c:set var="nombrePermisoLista" value="Empresa"/>
+                                            <c:set var="permisoEvaluado1" value="${'VER_EMPRESA'}"/>
+                                            <c:set var="permisoEvaluado2" value="${'SELECCIONAR_EMPRESA'}"/>
+                                            <c:set var="permisoEvaluado3" value="${'AGREGAR_EMPRESA'}"/>
+                                            <c:set var="permisoEvaluado4" value="${'EDITAR_EMPRESA'}"/>
+                                            <c:set var="permisoEvaluado5" value="${'ELIMINAR_EMPRESA'}"/>
+                                            <c:set var="permisoEvaluado6" value="${'GESTIONAR_EMPRESA'}"/>
+                                            <c:set var="permisoEvaluado7" value="${'EXPORTAR_EMPRESA'}"/>
+                                            <tr>
+                                                <td class="w-70">
+                                                    <div class="mt-1 mb-0 p-0 d-flex align-items-center">
+                                                        <c:out value="${nombrePermisoLista}"/>
+                                                    </div>
+                                                </td>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado1)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado2)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado3)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado4)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado5)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center checkClean">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado6)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado7)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                            </tr>
+                                            <c:set var="nombrePermisoLista" value="Terreno"/>
+                                            <c:set var="permisoEvaluado1" value="${'VER_TERRENO'}"/>
+                                            <c:set var="permisoEvaluado2" value="${'SELECCIONAR_TERRENO'}"/>
+                                            <c:set var="permisoEvaluado3" value="${'AGREGAR_TERRENO'}"/>
+                                            <c:set var="permisoEvaluado4" value="${'EDITAR_TERRENO'}"/>
+                                            <c:set var="permisoEvaluado5" value="${'ELIMINAR_TERRENO'}"/>
+                                            <c:set var="permisoEvaluado6" value="${'GESTIONAR_TERRENO'}"/>
+                                            <c:set var="permisoEvaluado7" value="${'EXPORTAR_TERRENO'}"/>
+                                            <tr>
+                                                <td class="w-70">
+                                                    <div class="mt-1 mb-0 p-0 d-flex align-items-center">
+                                                        <c:out value="${nombrePermisoLista}"/>
+                                                    </div>
+                                                </td>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado1)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado2)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado3)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado4)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado5)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center checkClean">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado6)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado7)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                            </tr>
+                                            <c:set var="nombrePermisoLista" value="Venta"/>
+                                            <c:set var="permisoEvaluado1" value="${'VER_VENTA'}"/>
+                                            <c:set var="permisoEvaluado2" value="${'SELECCIONAR_VENTA'}"/>
+                                            <c:set var="permisoEvaluado3" value="${'AGREGAR_VENTA'}"/>
+                                            <c:set var="permisoEvaluado4" value="${'EDITAR_VENTA'}"/>
+                                            <c:set var="permisoEvaluado5" value="${'ELIMINAR_VENTA'}"/>
+                                            <c:set var="permisoEvaluado6" value="${'GESTIONAR_VENTA'}"/>
+                                            <c:set var="permisoEvaluado7" value="${'EXPORTAR_VENTA'}"/>
+                                            <tr>
+                                                <td class="w-70">
+                                                    <div class="mt-1 mb-0 p-0 d-flex align-items-center">
+                                                        <c:out value="${nombrePermisoLista}"/>
+                                                    </div>
+                                                </td>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado1)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado2)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado3)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado4)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado5)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center checkClean">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado6)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado7)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                            </tr>
+                                            <c:set var="nombrePermisoLista" value="Propietario"/>
+                                            <c:set var="permisoEvaluado1" value="${'VER_PROPIETARIO'}"/>
+                                            <c:set var="permisoEvaluado2" value="${'SELECCIONAR_PROPIETARIO'}"/>
+                                            <c:set var="permisoEvaluado3" value="${'AGREGAR_PROPIETARIO'}"/>
+                                            <c:set var="permisoEvaluado4" value="${'EDITAR_PROPIETARIO'}"/>
+                                            <c:set var="permisoEvaluado5" value="${'ELIMINAR_PROPIETARIO'}"/>
+                                            <c:set var="permisoEvaluado6" value="${'GESTIONAR_PROPIETARIO'}"/>
+                                            <c:set var="permisoEvaluado7" value="${'EXPORTAR_PROPIETARIO'}"/>
+                                            <tr>
+                                                <td class="w-70">
+                                                    <div class="mt-1 mb-0 p-0 d-flex align-items-center">
+                                                        <c:out value="${nombrePermisoLista}"/>
+                                                    </div>
+                                                </td>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado1)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado2)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado3)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado4)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado5)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center checkClean">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado6)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado7)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                            </tr>
+                                            <c:set var="nombrePermisoLista" value="Trabajador"/>
+                                            <c:set var="permisoEvaluado1" value="${'VER_TRABAJADOR'}"/>
+                                            <c:set var="permisoEvaluado2" value="${'SELECCIONAR_TRABAJADOR'}"/>
+                                            <c:set var="permisoEvaluado3" value="${'AGREGAR_TRABAJADOR'}"/>
+                                            <c:set var="permisoEvaluado4" value="${'EDITAR_TRABAJADOR'}"/>
+                                            <c:set var="permisoEvaluado5" value="${'ELIMINAR_TRABAJADOR'}"/>
+                                            <c:set var="permisoEvaluado6" value="${'GESTIONAR_TRABAJADOR'}"/>
+                                            <c:set var="permisoEvaluado7" value="${'EXPORTAR_TRABAJADOR'}"/>
+                                            <tr>
+                                                <td class="w-70">
+                                                    <div class="mt-1 mb-0 p-0 d-flex align-items-center">
+                                                        <c:out value="${nombrePermisoLista}"/>
+                                                    </div>
+                                                </td>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado1)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado2)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado3)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado4)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado5)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center checkClean">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado6)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado7)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                            </tr>
+                                            <tr><td colspan="8"></td><tr>
+                                            <tr>
+                                                <td>
+                                                    <div class="font-weight-bold">
+                                                        Seguridad
+                                                    </div>
+                                                </td>
+                                                <td class="w-5">
+                                                    <div class="d-flex justify-content-center">
+                                                        Mostrar
+                                                    </div>
+                                                </td>
+                                                <td class="w-5">
+                                                    <div class="d-flex justify-content-center">
+                                                        Seleccionar
+                                                    </div>
+                                                </td>
+                                                <td class="w-5">
+                                                    <div class="d-flex justify-content-center">
+                                                        Agregar
+                                                    </div>
+                                                </td>
+                                                <td class="w-5">
+                                                    <div class="d-flex justify-content-center">
+                                                        Actualizar
+                                                    </div>
+                                                </td>
+                                                <td class="w-5">
+                                                    <div class="d-flex justify-content-center">
+                                                        Eliminar
+                                                    </div>
+                                                </td>
+                                                <td class="w-5">
+                                                    <div class="d-flex justify-content-center">
+                                                        Exportar
+                                                    </div>
+                                                </td>
+                                                <td class="w-5">
+                                                    <div class="d-flex justify-content-center">
+                                                        Gestionar
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <c:set var="nombrePermisoLista" value="Usuario"/>
+                                            <c:set var="permisoEvaluado1" value="${'VER_USUARIO'}"/>
+                                            <c:set var="permisoEvaluado2" value="${'SELECCIONAR_USUARIO'}"/>
+                                            <c:set var="permisoEvaluado3" value="${'AGREGAR_USUARIO'}"/>
+                                            <c:set var="permisoEvaluado4" value="${'EDITAR_USUARIO'}"/>
+                                            <c:set var="permisoEvaluado5" value="${'ELIMINAR_USUARIO'}"/>
+                                            <c:set var="permisoEvaluado6" value="${'GESTIONAR_USUARIO'}"/>
+                                            <c:set var="permisoEvaluado7" value="${'EXPORTAR_USUARIO'}"/>
+                                            <tr>
+                                                <td class="w-70">
+                                                    <div class="mt-1 mb-0 p-0 d-flex align-items-center">
+                                                        <c:out value="${nombrePermisoLista}"/>
+                                                    </div>
+                                                </td>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado1)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado2)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado3)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado4)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado5)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center checkClean">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado6)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado7)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                            </tr>
+                                            <c:set var="nombrePermisoLista" value="Rol"/>
+                                            <c:set var="permisoEvaluado1" value="${'VER_ROL'}"/>
+                                            <c:set var="permisoEvaluado2" value="${'SELECCIONAR_ROL'}"/>
+                                            <c:set var="permisoEvaluado3" value="${'AGREGAR_ROL'}"/>
+                                            <c:set var="permisoEvaluado4" value="${'EDITAR_ROL'}"/>
+                                            <c:set var="permisoEvaluado5" value="${'ELIMINAR_ROL'}"/>
+                                            <c:set var="permisoEvaluado6" value="${'GESTIONAR_ROL'}"/>
+                                            <c:set var="permisoEvaluado7" value="${'EXPORTAR_ROL'}"/>
+                                            <tr>
+                                                <td class="w-70">
+                                                    <div class="mt-1 mb-0 p-0 d-flex align-items-center">
+                                                        <c:out value="${nombrePermisoLista}"/>
+                                                    </div>
+                                                </td>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado1)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado2)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado3)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado4)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado5)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center checkClean">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado6)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado7)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                            </tr>
+                                            <c:set var="nombrePermisoLista" value="Bitácora"/>
+                                            <c:set var="permisoEvaluado1" value="${'VER_BITACORA'}"/>
+                                            <c:set var="permisoEvaluado2" value="${'SELECCIONAR_BITACORA'}"/>
+                                            <c:set var="permisoEvaluado3" value="${'AGREGAR_BITACORA'}"/>
+                                            <c:set var="permisoEvaluado4" value="${'EDITAR_BITACORA'}"/>
+                                            <c:set var="permisoEvaluado5" value="${'ELIMINAR_BITACORA'}"/>
+                                            <c:set var="permisoEvaluado6" value="${'GESTIONAR_BITACORA'}"/>
+                                            <c:set var="permisoEvaluado7" value="${'EXPORTAR_BITACORA'}"/>
+                                            <tr>
+                                                <td class="w-70">
+                                                    <div class="mt-1 mb-0 p-0 d-flex align-items-center">
+                                                        <c:out value="${nombrePermisoLista}"/>
+                                                    </div>
+                                                </td>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado1)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado2)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado3)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado4)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado5)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center checkClean">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado6)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
+                                                <c:set var="permisoEncontrado" value="0" />
+                                                <c:forEach items="${Permisos}" var="elementoPermiso" varStatus="status">
+                                                    <c:if test="${fn:containsIgnoreCase(elementoPermiso.nombre, permisoEvaluado7)}">
+                                                        <td class="w-5">
+                                                            <div class="d-flex justify-content-center">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input checkClean" type="checkbox" id="permiso${elementoPermiso.idPermiso}" name="permisos[]" value="${elementoPermiso.idPermiso}">
+                                                                </div>
+                                                            </div>
+                                                        </td>
+                                                        <c:set var="permisoEncontrado" value="1" />
+                                                    </c:if>
+                                                </c:forEach>
+                                                <c:if test="${permisoEncontrado==0}">
+                                                    <td class="w-5"><div class="d-flex justify-content-center"><div class="form-check"></div></div></td>
+                                                </c:if>
                                             </tr>
                                         </tbody>
                                     </table>
