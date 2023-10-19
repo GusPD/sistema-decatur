@@ -84,7 +84,7 @@
                         </ul>
                     </li>
                 </sec:authorize>
-                <sec:authorize access="hasAuthority('GESTIONAR_PROPIETARIOS_SISTEMA_PRIVILAGE') or hasAuthority('GESTIONAR_TRABAJADORES_SISTEMA_PRIVILAGE')">
+                <sec:authorize access="hasAuthority('GESTIONAR_DATOS_PROYECTO_PRIVILAGE')">
                     <c:set var="urlPropietario" value="" />
                     <c:set var="urlActual" value="/PropietariosSistema" />
                     <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
@@ -138,7 +138,7 @@
                             <p>Datos de Proyectos<i class="right fas fa-angle-left"></i></p>
                         </a>
                         <ul class="nav nav-treeview">
-                            <sec:authorize access="hasAuthority('GESTIONAR_PROPIETARIOS_SISTEMA_PRIVILAGE')">
+                            <sec:authorize access="hasAuthority('GESTIONAR_PROPIETARIO_PRIVILAGE')">
                             <li class="nav-item">
                                 <a href="/PropietariosSistema" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlPropietario ? 'active' : ''}">
                                     <i class="fa-solid fa-user-tie nav-icon text-blue"></i>
@@ -146,7 +146,7 @@
                                 </a>
                             </li>
                             </sec:authorize>
-                            <sec:authorize access="hasAuthority('GESTIONAR_TRABAJADORES_SISTEMA_PRIVILAGE')">
+                            <sec:authorize access="hasAuthority('GESTIONAR_TRABAJADOR_PRIVILAGE')">
                                 <li class="nav-item">
                                     <a href="/TrabajadoresSistema"class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlTrabajador ? 'active' : ''}">
                                         <i class="fa-solid fa-users nav-icon text-blue"></i>

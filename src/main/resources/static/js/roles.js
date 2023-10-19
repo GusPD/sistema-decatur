@@ -221,6 +221,7 @@ $(document).ready(function () {
                 url: '/ObtenerRol/' + idRol,
                 type: 'GET',
                 success: function (response) {
+                    $('#selectAll').prop('checked', false);
                     var checkboxes = document.querySelectorAll(".checkClean");
                     for (var i = 0; i < checkboxes.length; i++) {
                         checkboxes[i].checked = false;
@@ -241,6 +242,7 @@ $(document).ready(function () {
                 }
             });
         } else {
+            $('#selectAll').prop('checked', false);
             var checkboxes = document.querySelectorAll(".checkClean");
             for (var i = 0; i < checkboxes.length; i++) {
                 checkboxes[i].checked = false;
@@ -280,6 +282,11 @@ $(document).ready(function () {
                 toastr.error(errorMessage);
             }
         });
-     });
+    });
+    //Método para seleccionar los permisos
+    $(document).on('click', '#selectAll', function() {
+        var isChecked = $(this).is(':checked');
+        $('.checkClean').prop('checked', isChecked);
+    });
 });
 
