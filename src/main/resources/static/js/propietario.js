@@ -19,7 +19,7 @@ $(document).ready(function() {
                 extend: 'copy',
                 text: 'Copiar',
                 exportOptions: {
-                  columns: [0, 1, 2]
+                  columns: [0, 1, 2, 3]
                 }
             },
             {
@@ -28,7 +28,7 @@ $(document).ready(function() {
                 title: 'Propietarios del sistema',
                 filename: 'Propietarios ' + getCurrentDateTime(),
                 exportOptions: {
-                  columns: [0, 1, 2]
+                  columns: [0, 1, 2, 3]
                 }
             },
             {
@@ -37,7 +37,7 @@ $(document).ready(function() {
                 title: 'Propietarios del sistema',
                 filename: 'Propietarios ' + getCurrentDateTime(),
                 exportOptions: {
-                  columns: [0, 1, 2]
+                  columns: [0, 1, 2, 3]
                 },
                 customize: function (doc) {
                   doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split('');
@@ -45,9 +45,19 @@ $(document).ready(function() {
             }
         ],
         columns: [
-            { data: 'persona.dui', width: '20%' },
-            { data: 'persona.nombre', width: '30%' },
-            { data: 'persona.apellido', width: '30%' },
+            {
+                data: null,
+                title: "N°",
+                sortable: false,
+                searchable: false,
+                render: function (data, type, row, meta) {
+                    return meta.row + 1;
+                },
+                width: '7%'
+            },
+            { data: 'persona.dui', title:'DUI', width: '13%' },
+            { data: 'persona.nombre', title:'Nombre', width: '30%' },
+            { data: 'persona.apellido', title:'Apellido', width: '30%' },
             {
                 data: null,
                 title: 'Acciones',
@@ -81,7 +91,7 @@ $(document).ready(function() {
             "sEmptyTable": "Ningún dato disponible en esta tabla",
             "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
             "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
-            "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+            "sInfoFiltered": "",
             "sInfoPostFix": "",
             "sSearch": "Buscar:",
             "sUrl": "",

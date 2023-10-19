@@ -42,16 +42,17 @@ $(document).ready(function () {
             }
         ],
         columns: [
-            {data: 'nombre', width: '25%'},
             {
-                data: 'permisos',
-                width: '50%',
-                render: function (data) {
-                    var nombresPermisos = data.map(function (permiso) {
-                        return permiso.nombre;
-                    });
-                    return nombresPermisos.join(', ');
-                }},
+                data: null,
+                title: "N°",
+                sortable: false,
+                searchable: false,
+                render: function (data, type, row, meta) {
+                    return meta.row + 1;
+                },
+                width: '10%'
+            },
+            {data: 'nombre', title:'Nombre', width: '65%'},
             {
                 data: null,
                 title: 'Acciones',
@@ -81,7 +82,7 @@ $(document).ready(function () {
             "sEmptyTable": "Ningún dato disponible en esta tabla",
             "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
             "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
-            "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+            "sInfoFiltered": "",
             "sInfoPostFix": "",
             "sSearch": "Buscar:",
             "sUrl": "",

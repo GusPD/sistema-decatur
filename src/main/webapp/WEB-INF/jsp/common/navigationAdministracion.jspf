@@ -157,7 +157,7 @@
                         </ul>
                     </li>
                 </sec:authorize>
-                <sec:authorize access="hasAuthority('GESTIONAR_USUARIO_PRIVILAGE') or hasAuthority('GESTIONAR_ROL_PRIVILAGE') or hasAuthority('BITACORA_PRIVILAGE')">
+                <sec:authorize access="hasAuthority('GESTIONAR_USUARIO_PRIVILAGE') or hasAuthority('GESTIONAR_ROL_PRIVILAGE') or hasAuthority('GESTIONAR_BITACORA_PRIVILAGE')">
                     <li class="nav-item ${requestScope['javax.servlet.forward.request_uri'] == '/Usuarios' || requestScope['javax.servlet.forward.request_uri'] == '/Roles' || requestScope['javax.servlet.forward.request_uri'] == '/Bitacora' ? 'menu-open' : ''}">
                         <a href="#" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == '/Usuarios' || requestScope['javax.servlet.forward.request_uri'] == '/Roles' || requestScope['javax.servlet.forward.request_uri'] == '/Bitacora' ? 'active' : ''}">
                             <i class="nav-icon fas fa-unlock"></i>
@@ -180,7 +180,7 @@
                                     </a>
                                 </li>
                             </sec:authorize>
-                            <sec:authorize access="hasAuthority('BITACORA_PRIVILAGE')">
+                            <sec:authorize access="hasAuthority('GESTIONAR_BITACORA_PRIVILAGE')">
                                 <li class="nav-item">
                                     <a href="/Bitacora"class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == '/Bitacora' ? 'active' : ''}">
                                         <i class="fas fa-book nav-icon fas text-blue"></i>

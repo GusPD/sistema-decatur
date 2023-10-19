@@ -86,9 +86,9 @@
                                     <option value="1" >Bloqueado</option>
                                 </select>
                             </div>
-                            <div id="roles-error" name="roles-error" class="error-message"></div>
                             <div class="form-group">
-                                <label for="roles" class="form-label">Seleccione los roles: </label>
+                                <label for="roles" class="form-label mb-0">Seleccione los roles: </label>
+                                <div id="roles-error" name="roles-error" class="error-message mt-0 mb-1"></div>
                                 <c:forEach items="${roles}" var="elementoRol" varStatus="status" >
                                     <div>
                                         <li>
@@ -98,9 +98,9 @@
                                     </div>
                                 </c:forEach>
                             </div>
-                            <div id="proyectos-error" name="proyectos-error" class="error-message"></div>
                             <div class="form-group">
                                 <label for="proyectos" class="form-label">Seleccione los proyectos: </label>
+                                <div id="proyectos-error" name="proyectos-error" class="error-message mt-0 mb-1"></div>
                                 <c:forEach items="${proyectos}" var="elementoProyecto" varStatus="status" >
                                     <div>
                                         <li>
@@ -110,9 +110,9 @@
                                     </div>
                                 </c:forEach>
                             </div>
-                            <div id="empresas-error" name="empresas-error" class="error-message"></div>
                             <div class="form-group">
                                 <label for="empresas" class="form-label">Seleccione las empresas: </label>
+                                <div id="empresas-error" name="empresas-error" class="error-message mt-0 mb-1"></div>
                                 <c:forEach items="${empresas}" var="elementoEmpresa" varStatus="status" >
                                     <div>
                                         <li>
@@ -124,7 +124,7 @@
                             </div>
                         </div>
                         <div class="modal-footer">
-                            <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
+                            <button type="submit" class="btn btn-outline-success btn-sm btn-submit">Guardar</button>
                             <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal">Cancelar</button>
                         </div>
                     </form>

@@ -16,7 +16,7 @@ $(document).ready(function() {
                 extend: 'copy',
                 text: 'Copiar',
                 exportOptions: {
-                  columns: [0]
+                  columns: [0, 1]
                 }
             },
             {
@@ -25,7 +25,7 @@ $(document).ready(function() {
                 title: 'Proyectos del sistema',
                 filename: 'Proyectos ' + getCurrentDateTime(),
                 exportOptions: {
-                  columns: [0]
+                  columns: [0, 1]
                 }
             },
             {
@@ -34,7 +34,7 @@ $(document).ready(function() {
                 title: 'Proyectos del sistema',
                 filename: 'Proyectos ' + getCurrentDateTime(),
                 exportOptions: {
-                  columns: [0]
+                  columns: [0, 1]
                 },
                 customize: function (doc) {
                   doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split('');
@@ -42,13 +42,23 @@ $(document).ready(function() {
             }
         ],
         columns: [
-            { data: 'nombre', width: '35%' },
+            {
+                data: null,
+                title: "N°",
+                sortable: false,
+                searchable: false,
+                render: function (data, type, row, meta) {
+                    return meta.row + 1;
+                },
+                width: '10%'
+            },
+            { data: 'nombre', title:'Nombre', width: '70%' },
             {
                 data: null,
                 title: 'Acciones',
                 sortable: false,
                 searchable: false,
-                width: '30%',
+                width: '20%',
                 render: function (data, type, row) {
                     var actionsHtml = '';
                     if(hasPrivilegeVerEmpresa === true){
@@ -76,7 +86,7 @@ $(document).ready(function() {
             "sEmptyTable": "Ningún dato disponible en esta tabla",
             "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
             "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
-            "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+            "sInfoFiltered": "",
             "sInfoPostFix": "",
             "sSearch": "Buscar:",
             "sUrl": "",

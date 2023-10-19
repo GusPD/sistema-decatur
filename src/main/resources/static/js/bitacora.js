@@ -16,7 +16,7 @@ $(document).ready(function() {
                 extend: 'copy',
                 text: 'Copiar',
                 exportOptions: {
-                  columns: [0, 1, 2, 3, 4]
+                  columns: [0, 1, 2, 3, 4, 5]
                 }
             },
             {
@@ -25,7 +25,7 @@ $(document).ready(function() {
                 title: 'Registro de cambios en el sistema',
                 filename: 'Bitacora ' + getCurrentDateTime(),
                 exportOptions: {
-                  columns: [0, 1, 2, 3, 4]
+                  columns: [0, 1, 2, 3, 4, 5]
                 }
             },
             {
@@ -34,7 +34,7 @@ $(document).ready(function() {
                 title: 'Registro de cambios en el sistema',
                 filename: 'Bitacora ' + getCurrentDateTime(),
                 exportOptions: {
-                  columns: [0, 1, 2, 3, 4]
+                  columns: [0, 1, 2, 3, 4, 5]
                 },
                 customize: function (doc) {
                   doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split('');
@@ -42,6 +42,16 @@ $(document).ready(function() {
             }
         ],
         columns: [
+            {
+                data: null,
+                title: "N°",
+                sortable: false,
+                searchable: false,
+                render: function (data, type, row, meta) {
+                    return meta.row + 1;
+                },
+                width: '10%'
+            },
             { data: 'username', title: 'Usuario', width: '20%', class: 'text-center' },
             { 
                 data: 'evento', title: 'Evento', width: '30%', class: 'text-center'
@@ -80,7 +90,7 @@ $(document).ready(function() {
                 }
             },
             { 
-                data: 'ipEquipo', title: 'IP EQUIPO', width: '15%', class: 'text-center'
+                data: 'ipEquipo', title: 'IP Equipo', width: '15%', class: 'text-center'
             }
         ],
         language: {
