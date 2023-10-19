@@ -16,7 +16,7 @@ $(document).ready(function() {
                 extend: 'copy',
                 text: 'Copiar',
                 exportOptions: {
-                  columns: [0, 1, 2, 3]
+                  columns: [0, 1, 2, 3, 4, 5]
                 }
             },
             {
@@ -25,7 +25,7 @@ $(document).ready(function() {
                 title: 'Usuarios del sistema',
                 filename: 'Usuarios ' + getCurrentDateTime(),
                 exportOptions: {
-                  columns: [0, 1, 2, 3]
+                  columns: [0, 1, 2, 3, 4, 5]
                 }
             },
             {
@@ -34,7 +34,7 @@ $(document).ready(function() {
                 title: 'Usuarios del sistema',
                 filename: 'Usuarios ' + getCurrentDateTime(),
                 exportOptions: {
-                  columns: [0, 1, 2, 3]
+                  columns: [0, 1, 2, 3, 4, 5]
                 },
                 customize: function (doc) {
                   doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split('');
@@ -42,26 +42,73 @@ $(document).ready(function() {
             }
         ],
         columns: [
-            { data: 'username', width: '20%' },
-            { data: 'email', width: '20%' },
-            { data: 'habilitado',
+            {
+                data: null,
+                title: "N°",
+                sortable: false,
+                searchable: false,
+                render: function (data, type, row, meta) {
+                    return meta.row + 1;
+                },
+                width: '5%'
+            },
+            { data: 'username', title: 'Usuario', width: '20%' },
+            {
+                data: 'proyectos',
+                title: 'Proyectos',
+                width: '20%',
+                sortable: false,
+                searchable: false,
+                render: function(data, type, row) {
+                    var proyectosHtml = '';
+                    if (Array.isArray(data)) {
+                        data.forEach(function(proyecto, index) {
+                            proyectosHtml += proyecto.nombre;
+                            if (index < data.length - 1) {
+                                proyectosHtml += '<br>';
+                            }
+                        });
+                    }
+                    return proyectosHtml;
+                }
+            },
+            {
+                data: 'empresas',
+                title: 'Empresas',
+                width: '20%',
+                sortable: false,
+                searchable: false,
+                render: function(data, type, row) {
+                    var empresasHtml = '';
+                    if (Array.isArray(data)) {
+                        data.forEach(function(empresa, index) {
+                            empresasHtml += empresa.nombre;
+                            if (index < data.length - 1) {
+                                empresasHtml += '<br>';
+                            }
+                        });
+                    }
+                    return empresasHtml;
+                }
+            },
+            { data: 'habilitado', title: 'Habilitado',
                 render: function(data, type, row) {
                     var estado = (data === true) ? 'Si' : 'No';
                     return estado;
-                }, width: '20%'
+                }, width: '10%'
             },
-            { data: 'bloqueado',
+            { data: 'bloqueado', title: 'Bloqueado',
                 render: function(data, type, row) {
                     var estado = (data === 0) ? 'No' : 'Si';
                     return estado;
-                }, width: '20%'
+                }, width: '10%'
             },
             {
                 data: null,
                 title: 'Acciones',
                 sortable: false,
                 searchable: false,
-                width: '20%',
+                width: '15%',
                 render: function (data, type, row) {
                     var actionsHtml = '';
                     if(hasPrivilegeEditarUsuario === true){
@@ -85,7 +132,7 @@ $(document).ready(function() {
             "sEmptyTable": "Ningún dato disponible en esta tabla",
             "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
             "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
-            "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+            "sInfoFiltered": "",
             "sInfoPostFix": "",
             "sSearch": "Buscar:",
             "sUrl": "",
@@ -136,20 +183,17 @@ $(document).ready(function() {
         return year + month + day + '_' + hours + minutes + seconds;
     }
     //Formulario de agregar
-    $.validator.addMethod(
-    "validarPassword",
-    function(value, element) {
-      return this.optional(element) || 
-              /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:,<.>])[A-Za-z\d!@#$%^&*()\-_=+{};:,<.>]{8,}$/.test(value);
-    },
-    "La contraseña debe contener al menos una mayúscula, una minúscula, un número, un carácter especial y tener un mínimo de 8 caracteres"
+    $.validator.addMethod("validarPassword",
+        function(value, element) {
+            return this.optional(element) || 
+                    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:,<.>])[A-Za-z\d!@#$%^&*()\-_=+{};:,<.>]{8,}$/.test(value);
+        },
+        "La contraseña debe contener al menos una mayúscula, una minúscula, un número, un carácter especial y tener un mínimo de 8 caracteres"
     );
-    
-    $.validator.addMethod(
-    "validarCorreo",
-    function(value, element) {
-        return this.optional(element) || /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value);
-    },
+    $.validator.addMethod("validarCorreo", 
+        function(value, element) {
+            return this.optional(element) || /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value);
+        },
         "Ingresa una dirección de correo electrónico válida"
     );
     var formGuardar = $('#formGuardar');
@@ -210,11 +254,14 @@ $(document).ready(function() {
             if (element.attr("name") === "username" || element.attr("name") === "email" || element.attr("name") === "password") {
                 error.insertAfter(element);
             }
-           
-            if (element.attr("name") === "roles[]" || element.attr("name") === "proyectos[]" || element.attr("name") === "empresas[]") {
-                error.appendTo(element);
-            } else {
-                error.insertAfter(element);
+            if (element.attr("name") === "roles[]") {
+                error.appendTo("#roles-error");
+            }
+            if (element.attr("name") === "empresas[]") {
+                error.appendTo("#empresas-error");
+            }
+            if (element.attr("name") === "proyectos[]") {
+                error.appendTo("#proyectos-error");
             }
         },
         errorElement: 'div',
