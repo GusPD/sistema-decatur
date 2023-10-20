@@ -11,10 +11,10 @@
             <!-- Datos -->
             <div class="card-body pb-0">
                 <div id="table_wrapper" class="dataTables_wrapper dt-bootstrap4">
-                    <div class="col-sm-12 table-responsive pt-1" style="height: 55vh; padding:4px;">
-                        <div class="tarjeta-container pb-3 h-100">
+                    <div class="col-sm-12 d-flex aling-items-center justify-content-center pt-1" style="height: 55vh; padding:4px;">
+                        <div class="row col-md-12 pb-3 h-100">
                             <!-- Columna izquierda -->
-                            <div class="tarjeta-facturacion-izquierda border p-3 rounded">
+                            <div class="col-md-6 border p-3 rounded">
                                 <h6 class="text-center font-weight-bold">Consumidor Final
                                     <span title="Editar Información" id="EditarConsumidorFinal" class="btn abrirModalConsumidorFinal-btn text-info puntero pull-right text-blue btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalConsumidorFinal" data-tipo="editar" data-id="${venta.idVenta}" data-modo="actualizar" style="cursor: pointer;">
                                         <i class="far fa-edit"></i>
@@ -45,11 +45,16 @@
                                 </table>
                             </div>
                             <!-- Columna derecha -->
-                            <div class="tarjeta-facturacion-derecha border p-3 rounded">
+                            <div id="columna-derecha" class="col-md-6 border p-3 ml-1 rounded">
                                 <h6 class="text-center font-weight-bold">Crédito Fiscal
                                     <span title="Editar Información" id="EditarCreditoFiscal" class="btn abrirModalCreditoFiscal-btn text-info puntero pull-right text-blue btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalCreditoFiscal" data-tipo="editar" data-id="${facturacion.idFacturacion}" data-modo="actualizar" style="cursor: pointer;">
                                         <i class="far fa-edit"></i>
                                     </span>
+                                    <c:if test="${not empty facturacion}">
+                                        <span title="Eliminar Información" id="EliminarCreditoFiscal" class="btn eliominarModalCreditoFiscal-btn text-info puntero pull-right text-blue btn-sm" data-bs-toggle="modal" data-bs-target="#eliminarModalCreditoFiscal" data-tipo="eliminar" data-id="${facturacion.idFacturacion}" data-modo="eliminar" style="cursor: pointer;">
+                                            <i class="far fa-trash-alt"></i>
+                                        </span>
+                                    </c:if>
                                 </h6>
                                 <table class="table table-borderless small" id="tabla-creditoFiscal">
                                     <tbody>
@@ -189,7 +194,29 @@
         </div>
     </div>
 </div>
-
+<!-- Modal de eliminar crédito fiscal -->
+<div class="modal fade" id="confirmarEliminarModal" tabindex="-1" aria-labelledby="confirmarEliminarLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmarEliminarLabel">Confirmar eliminación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <strong>¿Estás seguro de eliminar la información?</strong>
+                <p>Ten en cuenta que se eliminará la información de la facturación del crédito fiscal de la venta.</p>
+            </div>
+            <div class="modal-footer">
+              <button id="eliminarFacturacionBtn" class="btn btn-outline-danger btn-sm">Eliminar</button>
+              <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<form id="eliminarFacturacionForm" method="post" action="/EliminarFacturacionVenta/{idFacturacion}">
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+</form> 
+                        
 <!-- Script de la página -->
 <%@ include file="../venta-footer.jspf"%>
 

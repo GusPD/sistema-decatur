@@ -509,20 +509,8 @@ public class VentaController {
     public ResponseEntity SeleccionarPropietariosFacturacionVenta(@RequestParam("idVenta") Long idVenta, @RequestParam("estado") String estado, @RequestParam("propietarios") List<Long> propietarios, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             Venta venta= ventaService.encontrar(idVenta);
-            String valorContrario="";
+            String mensaje="";
             int contador=0;
-            if("Seleccionado".equals(estado)){
-                valorContrario="No Seleccionado";
-            }else{
-                valorContrario="Seleccionado";
-            }
-            List<AsignacionPropietario> asignacionesVenta = asigPropietarioVentaService.listaAsignacion();
-            for (var asignacion : asignacionesVenta) {
-                if(Objects.equals(asignacion.getVenta().getIdVenta(), venta.getIdVenta())){
-                    asignacion.setEstado(valorContrario);
-                    asigPropietarioVentaService.actualizar(asignacion);
-                }
-            } 
             for (var idpropietario : propietarios) {
                 Propietario propietario = propietarioService.encontrar(idpropietario);
                 AsignacionPropietario newAsignacionVenta = asigPropietarioVentaService.encontrarPropietario(propietario);
@@ -531,12 +519,19 @@ public class VentaController {
                     asigPropietarioVentaService.actualizar(newAsignacionVenta);
                     contador++;
                 }
-            }            
-            String mensaje = "Se ha selecionado un propietario para la factura de consumidor final de la venta.";
-            if(contador>1){
-                mensaje = "Se ha selecionado los propietarios para la factura de consumidor final de la venta.";
             }
-            bitacoraService.registrarAccion("Agregar información para la facturación de consumidor final venta");
+            if("Seleccionado".equals(estado)){
+                mensaje = "Se ha selecionado un propietario para la factura de consumidor final de la venta.";
+                if(contador>1){
+                    mensaje = "Se ha selecionado los propietarios para la factura de consumidor final de la venta.";
+                }
+            }else{
+                 mensaje = "Se ha deselecionado un propietario para la factura de consumidor final de la venta.";
+                if(contador>1){
+                    mensaje = "Se han deselecionado los propietarios para la factura de consumidor final de la venta.";
+                }
+            }
+            bitacoraService.registrarAccion("Agregar facturación consumidor final de la venta.");
             return ResponseEntity.ok(mensaje);
         } catch (Exception e) {
             String error = "Ocurrió un error al seleccionar el propietario para la factura de consumidor final de la venta.";
@@ -552,7 +547,7 @@ public class VentaController {
             facturacion.setVenta(newVenta);
             facturacionService.agregar(facturacion);
             String mensaje = "Se ha agregado la información para la facturación de crédito fiscal en la venta.";
-            bitacoraService.registrarAccion("Agregar la información para la facturación de crédito fiscal de la venta");
+            bitacoraService.registrarAccion("Agregar facturación crédito fiscal de la venta.");
             return ResponseEntity.ok(mensaje);
         } catch (Exception e) {
             String error = "Ocurrió un error al agregar la información para la facturación de crédito fiscal en la venta.";
@@ -568,7 +563,7 @@ public class VentaController {
             facturacion.setVenta(newVenta);
             facturacionService.actualizar(facturacion);
             String mensaje = "Se ha actualizado la información para la facturación de crédito fiscal en la venta.";
-            bitacoraService.registrarAccion("Agregar información para la facturación de crédito fiscal de la venta");
+            bitacoraService.registrarAccion("Actualizar facturación crédito fiscal de la venta.");
             return ResponseEntity.ok(mensaje);
         } catch (Exception e) {
             String error = "Ocurrió un error al agregar la información para la facturación de crédito fiscal en la venta.";
@@ -590,12 +585,13 @@ public class VentaController {
     }
     
     //Función que elimina la facturación de crédito fiscal de la base de datos
-    @PostMapping("/EliminarFacturacion/{idFacturacion}")
-    public ResponseEntity EliminarFacturacion(Facturacion facturacion) {
+    @PostMapping("/EliminarFacturacionVenta/{idFacturacion}")
+    public ResponseEntity EliminarFacturacion(@PathVariable Long idFacturacion) {
         try {
-             facturacionService.eliminar(facturacion);
-             String mensaje = "Se ha eliminado la facturación de crédito fiscal correctamente.";
-             bitacoraService.registrarAccion("Eliminar facturación de crédito fiscal de la venta");
+            Facturacion facturacion = facturacionService.encontrar(idFacturacion);
+            facturacionService.eliminar(facturacion);
+            String mensaje = "Se ha eliminado la facturación de crédito fiscal correctamente.";
+            bitacoraService.registrarAccion("Eliminar facturación de crédito fiscal de la venta");
             return ResponseEntity.ok(mensaje);
         } catch (Exception e) {
             String error = "Ha ocurrido un error al eliminar la facturación de crédito fiscal.";
