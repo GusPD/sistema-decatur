@@ -3,6 +3,7 @@ package com.gl05.bad.controller;
 import com.gl05.bad.domain.AsignacionPropietario;
 import com.gl05.bad.domain.AsignacionVisitante;
 import com.gl05.bad.domain.Documento;
+import com.gl05.bad.domain.Facturacion;
 import com.gl05.bad.domain.Persona;
 import com.gl05.bad.domain.Propietario;
 import com.gl05.bad.domain.Proyecto;
@@ -14,6 +15,7 @@ import com.gl05.bad.servicio.AsigPropietarioVentaService;
 import com.gl05.bad.servicio.AsignacionVisitanteService;
 import com.gl05.bad.servicio.BitacoraServiceImp;
 import com.gl05.bad.servicio.DocumentoService;
+import com.gl05.bad.servicio.FacturacionService;
 import com.gl05.bad.servicio.PersonaService;
 import com.gl05.bad.servicio.PropietarioService;
 import com.gl05.bad.servicio.ProyectoService;
@@ -24,7 +26,9 @@ import com.gl05.bad.servicio.VistaVentasActivaService;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -80,6 +84,9 @@ public class VentaController {
     
     @Autowired
     private ProyectoService proyectoService;
+    
+    @Autowired
+    private FacturacionService facturacionService;
     
     //Función que redirige a la vista de las ventas del terreno
     @GetMapping("/Ventas/{idTerreno}")
@@ -190,7 +197,7 @@ public class VentaController {
     
     //Función para agregar un propietario a la venta
     @PostMapping("/AgregarPropietarioVenta")
-    public ResponseEntity AgregarPropietarioVenta(@RequestParam("idVenta") Long idVenta, @RequestParam("estadoP") String estado,  @RequestParam("nombreP") String nombre, Propietario propietario, Persona persona, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public ResponseEntity AgregarPropietarioVenta(@RequestParam("idVenta") Long idVenta,  @RequestParam("nombreP") String nombre, Propietario propietario, Persona persona, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             if(personaService.encontrarDui(persona.getDui())== null){
                 persona.setNombre(nombre);
@@ -202,7 +209,7 @@ public class VentaController {
                 AsignacionPropietario newAsignacionVenta = new AsignacionPropietario();
                 newAsignacionVenta.setPropietario(propietario);
                 newAsignacionVenta.setVenta(venta);
-                newAsignacionVenta.setEstado(estado);
+                newAsignacionVenta.setEstado("No Seleccionado");
                 asigPropietarioVentaService.agregar(newAsignacionVenta);
                 String mensaje = "Se ha agregado un propietario a la venta.";
                 bitacoraService.registrarAccion("Agregar propietario venta");
@@ -219,18 +226,23 @@ public class VentaController {
     
     //Función para seleccionar un propietario de otra venta a la venta    
     @PostMapping("/SeleccionarPropietariosVenta")
-    public ResponseEntity SeleccionarPropietariosVenta(@RequestParam("idVenta") Long idVenta, @RequestParam("estadoS") String estado, @RequestParam("propietarios") List<Long> propietarios, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public ResponseEntity SeleccionarPropietariosVenta(@RequestParam("idVenta") Long idVenta, @RequestParam("propietarios") List<Long> propietarios, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             Venta venta= ventaService.encontrar(idVenta);
+            int contar=0;
             for (var idpropietario : propietarios) {
                 Propietario propietario = propietarioService.encontrar(idpropietario);
                 AsignacionPropietario newAsignacionVenta = new AsignacionPropietario();
                 newAsignacionVenta.setPropietario(propietario);
                 newAsignacionVenta.setVenta(venta);
-                newAsignacionVenta.setEstado(estado);
+                newAsignacionVenta.setEstado("No Seleccionado");
                 asigPropietarioVentaService.agregar(newAsignacionVenta);
-            }            
+                contar++;
+            }
             String mensaje = "Se ha agregado un propietario a la venta.";
+            if(contar>1){
+                mensaje = "Se han agregado los propietarios a la venta.";
+            }            
             bitacoraService.registrarAccion("Agregar propietario venta");
             return ResponseEntity.ok(mensaje);
         } catch (Exception e) {
@@ -331,6 +343,7 @@ public class VentaController {
     @PostMapping("/SeleccionarTrabajadoresVenta")
     public ResponseEntity SeleccionarTrabajadoresVenta(@RequestParam("idVenta") Long idVenta, @RequestParam("trabajadores") List<Long> trabajadores, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
+            int contar=0;
             Venta venta= ventaService.encontrar(idVenta);
             for (var idtrabajador : trabajadores) {
                 Visitante visitante = visitanteService.encontrar(idtrabajador);
@@ -338,8 +351,12 @@ public class VentaController {
                 newAsignacionVenta.setVisitante(visitante);
                 newAsignacionVenta.setVenta(venta);
                 asigVisitanteService.agregar(newAsignacionVenta);
+                contar++;
             }            
             String mensaje = "Se ha agregado un trabajador a la venta.";
+            if(contar>1){
+                mensaje = "Se han agregado los trabajadores a la venta.";
+            }
             bitacoraService.registrarAccion("Agregar trabajador venta");
             return ResponseEntity.ok(mensaje);
         } catch (Exception e) {
@@ -463,6 +480,7 @@ public class VentaController {
         Venta ventaEncontrada = ventaService.encontrar(venta.getIdVenta());
         Terreno terrenoEncontrado = ventaEncontrada.getTerreno();
         Proyecto proyecto = terrenoEncontrado.getProyecto();
+        Facturacion newFacturacion = facturacionService.encontrarVenta(ventaEncontrada);
         
         List<AsignacionPropietario> listaAsignaciones = asigPropietarioVentaService.listaAsignacion();        
         List<AsignacionPropietario> propietarios = new ArrayList();
@@ -477,12 +495,112 @@ public class VentaController {
                 propietariosSeleccionados.add(propietario);
             }
         }
-        
+        model.addAttribute("facturacion", newFacturacion);
+        model.addAttribute("propietariosAsignados", propietarios);
         model.addAttribute("consumidorFinal", propietariosSeleccionados);
         model.addAttribute("proyecto", proyecto);
         model.addAttribute("terreno", terrenoEncontrado);
         model.addAttribute("venta", ventaEncontrada);
         return "/Terreno/InformacionGeneral/ventaFacturacion";
+    }
+    
+    //Función para seleccionar los propietarios que apareceran en la factura de consumidor final de la venta    
+    @PostMapping("/SeleccionarPropietariosFactuacionVenta")
+    public ResponseEntity SeleccionarPropietariosFacturacionVenta(@RequestParam("idVenta") Long idVenta, @RequestParam("estado") String estado, @RequestParam("propietarios") List<Long> propietarios, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        try {
+            Venta venta= ventaService.encontrar(idVenta);
+            String valorContrario="";
+            int contador=0;
+            if("Seleccionado".equals(estado)){
+                valorContrario="No Seleccionado";
+            }else{
+                valorContrario="Seleccionado";
+            }
+            List<AsignacionPropietario> asignacionesVenta = asigPropietarioVentaService.listaAsignacion();
+            for (var asignacion : asignacionesVenta) {
+                if(Objects.equals(asignacion.getVenta().getIdVenta(), venta.getIdVenta())){
+                    asignacion.setEstado(valorContrario);
+                    asigPropietarioVentaService.actualizar(asignacion);
+                }
+            } 
+            for (var idpropietario : propietarios) {
+                Propietario propietario = propietarioService.encontrar(idpropietario);
+                AsignacionPropietario newAsignacionVenta = asigPropietarioVentaService.encontrarPropietario(propietario);
+                if(Objects.equals(newAsignacionVenta.getVenta().getIdVenta(), venta.getIdVenta())){
+                    newAsignacionVenta.setEstado(estado);
+                    asigPropietarioVentaService.actualizar(newAsignacionVenta);
+                    contador++;
+                }
+            }            
+            String mensaje = "Se ha selecionado un propietario para la factura de consumidor final de la venta.";
+            if(contador>1){
+                mensaje = "Se ha selecionado los propietarios para la factura de consumidor final de la venta.";
+            }
+            bitacoraService.registrarAccion("Agregar información para la facturación de consumidor final venta");
+            return ResponseEntity.ok(mensaje);
+        } catch (Exception e) {
+            String error = "Ocurrió un error al seleccionar el propietario para la factura de consumidor final de la venta.";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        }
+    }
+    
+    //Función para agregar la información de la facturación del crédito fiscal a la venta
+    @PostMapping("/AgregarFacturacionVenta")
+    public ResponseEntity AgregarFacturacionVenta(@RequestParam("idVenta") Long idVenta, Facturacion facturacion, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        try {
+            Venta newVenta = ventaService.encontrar(idVenta);
+            facturacion.setVenta(newVenta);
+            facturacionService.agregar(facturacion);
+            String mensaje = "Se ha agregado la información para la facturación de crédito fiscal en la venta.";
+            bitacoraService.registrarAccion("Agregar la información para la facturación de crédito fiscal de la venta");
+            return ResponseEntity.ok(mensaje);
+        } catch (Exception e) {
+            String error = "Ocurrió un error al agregar la información para la facturación de crédito fiscal en la venta.";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        }
+    }
+    
+    //Función para agregar la información de la facturación del crédito fiscal a la venta
+    @PostMapping("/ActualizarFacturacionVenta")
+    public ResponseEntity ActualizarFacturacionVenta(@RequestParam("idVenta") Long idVenta, Facturacion facturacion, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        try {
+            Venta newVenta = ventaService.encontrar(idVenta);
+            facturacion.setVenta(newVenta);
+            facturacionService.actualizar(facturacion);
+            String mensaje = "Se ha actualizado la información para la facturación de crédito fiscal en la venta.";
+            bitacoraService.registrarAccion("Agregar información para la facturación de crédito fiscal de la venta");
+            return ResponseEntity.ok(mensaje);
+        } catch (Exception e) {
+            String error = "Ocurrió un error al agregar la información para la facturación de crédito fiscal en la venta.";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        }
+    }
+    
+    //Función que obtiene la facturación de crédito fiscal en la base de datos
+    @GetMapping("/ObtenerFacturacion/{id}")
+    public ResponseEntity<Object> ObtenerFacturacion(@PathVariable Long id) {
+        Facturacion facturacion = facturacionService.encontrar(id);
+        if (facturacion != null) {
+            Map<String, Object> entidadesMap = new HashMap<>();
+            entidadesMap.put("facturacion", facturacion);
+            return ResponseEntity.ok(entidadesMap);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    
+    //Función que elimina la facturación de crédito fiscal de la base de datos
+    @PostMapping("/EliminarFacturacion/{idFacturacion}")
+    public ResponseEntity EliminarFacturacion(Facturacion facturacion) {
+        try {
+             facturacionService.eliminar(facturacion);
+             String mensaje = "Se ha eliminado la facturación de crédito fiscal correctamente.";
+             bitacoraService.registrarAccion("Eliminar facturación de crédito fiscal de la venta");
+            return ResponseEntity.ok(mensaje);
+        } catch (Exception e) {
+            String error = "Ha ocurrido un error al eliminar la facturación de crédito fiscal.";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        }
     }
 
     //Función que agrega un venta a la base de datos

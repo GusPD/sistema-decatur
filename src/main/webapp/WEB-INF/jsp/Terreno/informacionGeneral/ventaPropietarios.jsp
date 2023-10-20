@@ -75,14 +75,6 @@
                             <label for="direccionTrabajo" class="form-label">Dirección de Trabajo: </label>
                             <input type="text" class="form-control" id="direccionTrabajo" name="direccionTrabajo" placeholder="Ingrese la dirección del trabajo" required>
                         </div>
-                        <div class="form-group">
-                            <label for="estadoP" class="form-label">Impresión Comprobante: </label>
-                            <select class="form-control" id="estadoP" name="estadoP" required>
-                                <option value="">Seleccione el estado</option>
-                                <option value="Seleccionado">Seleccionado</option>
-                                <option value="No seleccionado">No seleccionado</option>
-                            </select>
-                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
@@ -115,14 +107,6 @@
                                 </c:if>
                             </select>
                             <div id="span-propietarios-error" class="mensaje-error d-none" style=""><span>Este campo es requerido</span></div>
-                        </div>
-                        <div class="form-group">
-                            <label for="estadoS" class="form-label">Impresión Comprobante: </label>
-                            <select class="form-control" id="estadoS" name="estadoS" required>
-                                <option value="">Seleccione el estado</option>
-                                <option value="Seleccionado">Seleccionado</option>
-                                <option value="No seleccionado">No seleccionado</option>
-                            </select>
                         </div>
                     </div>
                     <div class="modal-footer">

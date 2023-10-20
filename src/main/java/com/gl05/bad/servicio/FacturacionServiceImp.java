@@ -2,6 +2,7 @@ package com.gl05.bad.servicio;
 
 import com.gl05.bad.dao.FacturacionDao;
 import com.gl05.bad.domain.Facturacion;
+import com.gl05.bad.domain.Venta;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,6 +36,12 @@ public class FacturacionServiceImp implements FacturacionService{
     @Transactional(readOnly = true)
     public Facturacion encontrar(Long idFacturacion) {
         return facturacionDao.findById(idFacturacion).orElse(null);
+    }
+    
+    @Override
+    @Transactional(readOnly = true)
+    public Facturacion encontrarVenta(Venta venta) {
+        return facturacionDao.findByVenta(venta);
     }
 
     @Override
