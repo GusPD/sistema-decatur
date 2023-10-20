@@ -134,26 +134,25 @@ $(document).ready(function () {
     }
     //Formulario de agregar
     $.validator.addMethod( "validarnombre", function (value, element) {
-        return this.optional(element) || /^ROLE_[A-Z_]+$/.test(value);
+        return this.optional(element) || /^[A-Z_]+$/.test(value);
     },
-        "El valor debe comenzar con 'ROLE_' y contener solo letras mayúsculas y guiones bajos después"
+        "El valor debe contener solo letras mayúsculas y guiones bajos después"
     );
     var formGuardar = $('#formGuardar');
     var validator = $('#formGuardar').validate({
         rules: {
             nombre:{
-              required: true,
-              validarnombre: true
+                required: true,
+                validarnombre: true
             },
             "permisos[]":{
-             required: true,
-             minlength: 1
+                required: true,
+                minlength: 1
             }
         },
         messages:{
             nombre:{
-                required: 'Este campo es requerido',
-                validarnombre: 'El valor debe comenzar con  ROLE_ y contener solo letras mayúsculas y guiones bajos después'
+                required: 'Este campo es requerido'
             },
             "permisos[]":{
                 required: "Selecciona al menos un permiso"

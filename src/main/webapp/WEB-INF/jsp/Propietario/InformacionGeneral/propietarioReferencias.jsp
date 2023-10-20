@@ -8,7 +8,9 @@
                 <div class="subtitulo-page">
                     <h3 class="m-0">Referencias
                         <sec:authorize access="hasAuthority('AGREGAR_REFERENCIA_PROPIETARIO_PRIVILAGE')">
-                            <button type="button" id="AgregarReferencia" class="btn-blue btn abrirModal-btn pull-right btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalReferencia" data-action="agregar">Agregar</button>
+                            <span id="AgregarReferencia" class="btn abrirModal-btn text-info puntero pull-right btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalReferencia" data-action="agregar" style="cursor: pointer;">
+                                <i class="fas fa-user-plus"></i>
+                            </span>
                         </sec:authorize>
                     </h3>
                 </div>

@@ -11,14 +11,16 @@
             <!-- Datos -->
             <div class="card-body pb-0">
                 <div id="table_wrapper" class="dataTables_wrapper dt-bootstrap4">
-                    <div class="col-sm-12 d-flex aling-items-center justify-content-center pt-1" style="height: 55vh; padding:4px;">
+                    <div class="col-sm-12 d-flex aling-items-center justify-content-center pt-1 page-scroll" style="height: 55vh; padding:4px;">
                         <div class="row col-md-12 pb-3 h-100">
                             <!-- Columna izquierda -->
                             <div class="col-md-6 border p-3 rounded">
                                 <h6 class="text-center font-weight-bold">Consumidor Final
-                                    <span title="Editar Información" id="EditarConsumidorFinal" class="btn abrirModalConsumidorFinal-btn text-info puntero pull-right text-blue btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalConsumidorFinal" data-tipo="editar" data-id="${venta.idVenta}" data-modo="actualizar" style="cursor: pointer;">
-                                        <i class="far fa-edit"></i>
-                                    </span>
+                                    <sec:authorize access="hasAuthority('EDITAR_FACTURACION_PRIVILAGE')">
+                                        <span title="Editar Información" id="EditarConsumidorFinal" class="btn abrirModalConsumidorFinal-btn text-info puntero pull-right text-blue btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalConsumidorFinal" data-tipo="editar" data-id="${venta.idVenta}" data-modo="actualizar" style="cursor: pointer;">
+                                            <i class="far fa-edit"></i>
+                                        </span>
+                                    </sec:authorize>
                                 </h6>
                                 <table class="table table-borderless small" id="tabla-consumidorFinal">
                                     <thead>
@@ -45,16 +47,18 @@
                                 </table>
                             </div>
                             <!-- Columna derecha -->
-                            <div id="columna-derecha" class="col-md-6 border p-3 ml-1 rounded">
+                            <div class="col-md-6 border p-3 ml-1 rounded columna-derecha">
                                 <h6 class="text-center font-weight-bold">Crédito Fiscal
-                                    <span title="Editar Información" id="EditarCreditoFiscal" class="btn abrirModalCreditoFiscal-btn text-info puntero pull-right text-blue btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalCreditoFiscal" data-tipo="editar" data-id="${facturacion.idFacturacion}" data-modo="actualizar" style="cursor: pointer;">
-                                        <i class="far fa-edit"></i>
-                                    </span>
-                                    <c:if test="${not empty facturacion}">
-                                        <span title="Eliminar Información" id="EliminarCreditoFiscal" class="btn eliominarModalCreditoFiscal-btn text-info puntero pull-right text-blue btn-sm" data-bs-toggle="modal" data-bs-target="#eliminarModalCreditoFiscal" data-tipo="eliminar" data-id="${facturacion.idFacturacion}" data-modo="eliminar" style="cursor: pointer;">
-                                            <i class="far fa-trash-alt"></i>
+                                    <sec:authorize access="hasAuthority('EDITAR_FACTURACION_PRIVILAGE')">
+                                        <span title="Editar Información" id="EditarCreditoFiscal" class="btn abrirModalCreditoFiscal-btn text-info puntero pull-right text-blue btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalCreditoFiscal" data-tipo="editar" data-id="${facturacion.idFacturacion}" data-modo="actualizar" style="cursor: pointer;">
+                                            <i class="far fa-edit"></i>
                                         </span>
-                                    </c:if>
+                                        <c:if test="${not empty facturacion}">
+                                            <span title="Eliminar Información" id="EliminarCreditoFiscal" class="btn eliominarModalCreditoFiscal-btn text-info puntero pull-right text-blue btn-sm" data-bs-toggle="modal" data-bs-target="#eliminarModalCreditoFiscal" data-tipo="eliminar" data-id="${facturacion.idFacturacion}" data-modo="eliminar" style="cursor: pointer;">
+                                                <i class="far fa-trash-alt"></i>
+                                            </span>
+                                        </c:if>
+                                    </sec:authorize>
                                 </h6>
                                 <table class="table table-borderless small" id="tabla-creditoFiscal">
                                     <tbody>

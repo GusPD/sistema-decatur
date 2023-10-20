@@ -55,6 +55,12 @@
     <div class="sidebar">
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                <li class="nav-item">  
+                    <a href="#" class="nav-link" style="background-color: #E3E7EA;">
+                        <i class="fa-solid fa-globe nav-icon text-blue"></i>
+                        <p>&nbsp;Proyecto ${proyecto.nombre}</p>
+                    </a>
+                </li>
                 <sec:authorize access="hasAuthority('NOTIFICAR_PRIVILAGE')">
                     <li class="nav-item">  
                         <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#notificacionModal">

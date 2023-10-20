@@ -8,7 +8,9 @@
                 <div class="subtitulo-page">
                     <h3 class="m-0">Correos Eléctronicos
                         <sec:authorize access="hasAuthority('AGREGAR_CORREO_PROPIETARIO_PRIVILAGE')">
-                            <button type="button" id="AgregarCorreo" class="btn-blue btn abrirModal-btn pull-right btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalCorreo" data-action="agregar">Agregar</button>
+                            <span id="AgregarCorreo" class="btn abrirModal-btn text-info puntero pull-right btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalCorreo" data-action="agregar" style="cursor: pointer;">
+                                <i class="fa-solid fa-envelope"></i>
+                            </span>
                         </sec:authorize>
                     </h3>
                 </div>

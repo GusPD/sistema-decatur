@@ -9,7 +9,7 @@
                 <div class="col-12">
                     <div class="titulo-page">
                         <div class="container">
-                            <h1>Trabajadores del Sistema</h1>
+                            <h1>Trabajadores de Proyectos en el Sistema</h1>
                         </div>
                     </div>
                 </div>
