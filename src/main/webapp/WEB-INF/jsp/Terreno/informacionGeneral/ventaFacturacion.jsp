@@ -5,7 +5,7 @@
             <div class="card-header">
                 <!-- Subtitulo de la página -->
                 <div class="subtitulo-page">
-                    <h3 class="mt-0 mb-0">Facturacion</h3>
+                    <h3 class="mt-0 mb-0">Facturación</h3>
                 </div>
             </div>
             <!-- Datos -->
@@ -47,7 +47,7 @@
                             <!-- Columna derecha -->
                             <div class="tarjeta-facturacion-derecha border p-3 rounded">
                                 <h6 class="text-center font-weight-bold">Crédito Fiscal
-                                    <span title="Editar Información" id="EditarCreditoFiscal" class="btn abrirModalCreditoFiscal-btn text-info puntero pull-right text-blue btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalCreditoFiscal" data-tipo="editar" data-id="${venta.idVenta}" data-modo="actualizar" style="cursor: pointer;">
+                                    <span title="Editar Información" id="EditarCreditoFiscal" class="btn abrirModalCreditoFiscal-btn text-info puntero pull-right text-blue btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalCreditoFiscal" data-tipo="editar" data-id="${facturacion.idFacturacion}" data-modo="actualizar" style="cursor: pointer;">
                                         <i class="far fa-edit"></i>
                                     </span>
                                 </h6>
@@ -55,27 +55,31 @@
                                     <tbody>
                                         <tr>
                                             <td width="25%" class="font-weight-bold" scope="col">N° Registro:</td>
-                                            <td><c:if test="${not empty venta.estado}"></c:if></td>
+                                            <td><c:if test="${not empty facturacion.registro}">${facturacion.registro}</c:if></td>
                                         </tr>
-                                        <tr>
-                                            <td class="font-weight-bold" scope="col">NIT:</td>
-                                            <td><c:if test="${not empty venta.nombre}"></c:if></td>
-                                        </tr>
-                                        <tr>
-                                            <td class="font-weight-bold" scope="col">DUI:</td>
-                                            <td><c:if test="${not empty venta.nombre}"></c:if></td>
-                                        </tr>
+                                        <c:if test="${not empty facturacion.nit}">
+                                            <tr>
+                                                <td class="font-weight-bold" scope="col">NIT:</td>
+                                                <td><c:if test="${not empty facturacion.nit}">${facturacion.nit}</c:if></td>
+                                            </tr>
+                                        </c:if>
+                                        <c:if test="${not empty facturacion.dui}">
+                                            <tr>
+                                                <td class="font-weight-bold" scope="col">DUI:</td>
+                                                <td><c:if test="${not empty facturacion.dui}">${facturacion.dui}</c:if></td>
+                                            </tr>
+                                        </c:if>
                                         <tr>
                                             <td class="font-weight-bold" scope="col">Nombre:</td>
-                                            <td><c:if test="${not empty venta.fecha}"></c:if></td>
+                                            <td><c:if test="${not empty facturacion.nombre}">${facturacion.nombre}</c:if></td>
                                         </tr>
                                         <tr>
                                             <td class="font-weight-bold" scope="col">Dirección:</td>
-                                            <td><c:if test="${not empty venta.precio}"></c:if></td>
+                                            <td><c:if test="${not empty facturacion.direccion}">${facturacion.direccion}</c:if></td>
                                         </tr>
                                         <tr>
                                             <td class="font-weight-bold" scope="col">Giro:</td>
-                                            <td><c:if test="${not empty venta.descuento}"></c:if></td>
+                                            <td><c:if test="${not empty facturacion.giro}">${facturacion.giro}</c:if></td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -112,7 +116,7 @@
                         </div>
                         <div class="form-group">
                             <label for="estadoS" class="form-label">Impresión Comprobante: </label>
-                            <select class="form-control" id="estadoS" name="estadoS" required>
+                            <select class="form-control" id="estado" name="estado" required>
                                 <option value="">Seleccione el estado</option>
                                 <option value="Seleccionado">Seleccionado</option>
                                 <option value="No seleccionado">No seleccionado</option>
@@ -137,36 +141,43 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id='formGuardar' accept-charset="UTF-8">
+                <form id="formGuardar" accept-charset="UTF-8" method="post" action="/AgregarFacturacionVenta">
                     <div  class="overflow-auto">
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                         <input type="hidden" id="idVenta" value="${venta.getIdVenta()}">
                         <input type="hidden" id="idTerreno" value="${terreno.getIdTerreno()}">
-                        <input type="hidden" id="estado" value="Activo">
-                        <input type="hidden" id="idListDocumento">
+                        <input type="hidden" id="idFacturacion" value="${facturacion.getIdFacturacion()}">
                         <div class="form-group">
-                            <label for="nombre" class="form-label">N° Registro: </label>
-                            <input type="text" class="form-control" id="nombre" name="nombre" maxlength="200" placeholder="Ingrese el nombre de la venta" required>
+                            <label for="registro" class="form-label">N° Registro: </label>
+                            <input type="text" class="form-control" id="registro" name="registro" maxlength="12" placeholder="Ingrese el registro" required>
                         </div>
                         <div class="form-group">
-                            <label for="fecha" class="form-label">NIT: </label>
-                            <input type="date" class="form-control" id="fecha" name="fecha" maxlength="10" placeholder="Ingrese la fecha de la venta">
+                            <label for="fiscal" class="form-label">Personería Jurídica: </label>
+                            <select class="form-control" id="fiscal" name="fiscal" required>
+                                <option value="">Seleccione una opción</option>
+                                <option value="0">Persona</option>
+                                <option value="1">Empresa</option>
+                            </select>
                         </div>
-                        <div class="form-group">
+                        <div id="input-nit" class="form-group" style="display:none;">
+                            <label for="nit" class="form-label">NIT: </label>
+                            <input type="text" class="form-control" id="nit" name="nit" maxlength="14" placeholder="Ingrese el NIT">
+                        </div>
+                        <div id="input-dui" class="form-group" style="display:none;">
                             <label for="" class="form-label">DUI: </label>
-                            <input type="text" class="form-control" id="precio" name="precio" maxlength="9" placeholder="Ingrese el precio de la venta">
+                            <input type="dui" class="form-control" id="dui" name="dui" maxlength="9" placeholder="Ingrese el DUI">
                         </div>
                         <div class="form-group">
-                            <label for="descuento" class="form-label">Nombre: </label>
-                            <input type="text" class="form-control" id="descuento" name="descuento" maxlength="9" placeholder="Ingrese el descuento de la venta">
+                            <label for="nombre" class="form-label">Nombre: </label>
+                            <input type="text" class="form-control" id="nombre" name="nombre" maxlength="200" placeholder="Ingrese el nombre" required>
                         </div>
                         <div class="form-group">
-                            <label for="prima" class="form-label">Dirección: </label>
-                            <input type="text" class="form-control" id="prima" name="prima" placeholder="0.00" data-prima="${valorPrima}" readonly>
+                            <label for="direccion" class="form-label">Dirección: </label>
+                            <input type="text" class="form-control" id="direccion" name="direccion" maxlength="300" placeholder="Ingrese la dirección" required>
                         </div>
                         <div class="form-group">
-                            <label for="monto" class="form-label">Giro: </label>
-                            <input type="text" class="form-control" id="monto" name="monto" placeholder="0.00" readonly>
+                            <label for="giro" class="form-label">Giro: </label>
+                            <input type="text" class="form-control" id="giro" name="giro" maxlength="200" placeholder="Ingrese el giro" required>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -182,7 +193,7 @@
 <!-- Script de la página -->
 <%@ include file="../venta-footer.jspf"%>
 
-<script src="${pageContext.request.contextPath}/js/informacionVenta.js"></script>
+<script src="${pageContext.request.contextPath}/js/facturacionVenta.js"></script>
 
 
       

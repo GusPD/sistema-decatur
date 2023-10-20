@@ -64,7 +64,8 @@
                         </div>
                         <div class="form-group">
                             <label for="empresa" class="form-label">Empresa: </label> 
-                            <select class="form-select" id="empresa" name="empresa" placeholder="Seleccione una empresa" required>
+                            <select class="form-control" id="empresa" name="empresa" placeholder="Seleccione una empresa" required>
+                                <option value="">Seleccione una opción</option>
                                 <c:if test="${not empty empresas}">
                                     <c:forEach items="${empresas}" var="eEmpresa">
                                         <option value="${eEmpresa.idEmpresa}">${eEmpresa.nombre}</option>

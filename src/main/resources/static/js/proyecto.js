@@ -63,7 +63,7 @@ $(document).ready(function() {
                 render: function (data, type, row) {
                     var actionsHtml = '';
                     if(hasPrivilegeVerProyecto === true){
-                        actionsHtml = '<a type="button" class="btn btn-outline-secondary btn-sm" href="/Terrenos/' + row.idProyecto + '">';
+                        actionsHtml = '<a type="button" class="btn btn-outline-secondary btn-sm" href="/VentasActivas/' + row.idProyecto + '">';
                         actionsHtml += '<i class="far fa-eye"></i></a>';
                     }
                     if(hasPrivilegeEditarProyecto === true){

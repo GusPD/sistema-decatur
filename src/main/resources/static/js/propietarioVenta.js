@@ -112,9 +112,6 @@ $(document).ready(function() {
             direccionTrabajo:{
                 required: true,
                 maxlength: 300
-            },
-            estadoP:{
-                required: true
             } 
         },
         messages:{
@@ -137,9 +134,6 @@ $(document).ready(function() {
                 required: 'Este campo es requerido'
             },
             direccionTrabajo:{
-                required: 'Este campo es requerido'
-            },
-            estadoP:{
                 required: 'Este campo es requerido'
             } 
         },
@@ -265,16 +259,10 @@ $(document).ready(function() {
         rules: {
             propietarios:{
                 required: true
-            },
-            estadoS:{
-                required: true
-            } 
+            }
         },
         messages:{
             propietarios:{
-                required: 'Este campo es requerido'
-            },
-            estadoS:{
                 required: 'Este campo es requerido'
             }
         },
@@ -294,10 +282,7 @@ $(document).ready(function() {
                 $('#propietarios').removeClass('is-invalid');
             }
         },
-        errorPlacement: function(error, element) {
-            if (element.attr("name") === "estadoS") {
-                error.insertAfter(element);
-            }      
+        errorPlacement: function(error, element) {    
         },
         errorElement: 'div',
         errorClass: 'invalid-feedback',
