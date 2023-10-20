@@ -104,7 +104,6 @@ $(document).ready(function() {
                 formDataArray.push({name: 'idFacturacion', value: idFacturacion}, {name: 'idVenta', value: idVenta});
                 formDataArray = formDataArray.filter(item => item.name !== 'fiscal');
             }
-            console.log(formDataArray);
             $.ajax({
                 url: url,
                 type: 'POST',
@@ -118,8 +117,13 @@ $(document).ready(function() {
                         success: function (nuevosDatos) {
                             var elementoActualizable1 = $(nuevosDatos).find('#tabla-creditoFiscal');
                             $('#tabla-creditoFiscal').html(elementoActualizable1.html());
-                            var elementoActualizable2 = $(nuevosDatos).find('#formGuardar');
-                            $('#formGuardar').html(elementoActualizable2.html());
+                            $('.form-control').val("");
+                            var nitField = document.getElementById("input-nit");
+                            var duiField = document.getElementById("input-dui");
+                            nitField.style.display = "none";
+                            duiField.style.display = "none";
+                            var elementoActualizable3 = $(nuevosDatos).find('#columna-derecha');
+                            $('#columna-derecha').html(elementoActualizable3.html());
                         },
                         error: function () {
                             alert('Error al cargar la tabla.');
@@ -154,7 +158,7 @@ $(document).ready(function() {
         }
     });
     // Método para mostrar el modal segun sea si editar o nuevo registro
-    $(document).on('click', '.abrirModalCreditoFiscal-btn', function () {
+    $(document).on('click', '#EditarCreditoFiscal', function () {
         var idFacturacion = $(this).data('id');
         var modal = $('#crearModalCreditoFiscal');
         var form = modal.find('form');
@@ -294,6 +298,54 @@ $(document).ready(function() {
             });
         }
     });
+    // Método para mostrar el modal de eliminación
+    $(document).on('click', '#EliminarCreditoFiscal', function () {
+        var idFacturacion = $(this).data('id');
+        var modal = $('#confirmarEliminarModal');
+        var eliminarBtn = modal.find('#eliminarFacturacionBtn');
+        eliminarBtn.data('id', idFacturacion);
+        modal.modal('show');
+    });
+    //Método para enviar la solicitud de eliminar
+    $(document).on('click', '#eliminarFacturacionBtn', function () {
+        var idFacturacion = $(this).data('id');
+        var idVenta = $('#idVenta').val();
+        $('#eliminarFacturacionForm').attr('action', '/EliminarFacturacionVenta/' + idFacturacion);
+        $.ajax({
+            url: $('#eliminarFacturacionForm').attr('action'),
+            type: 'POST',
+            data: $('#eliminarFacturacionForm').serialize(),
+            success: function (response) {
+                $('#confirmarEliminarModal').modal('hide');
+                toastr.success(response);
+                $.ajax({
+                    url: "/FacturacionVenta/"+idVenta,
+                    type: 'GET',
+                    success: function (nuevosDatos) {
+                        var elementoActualizable1 = $(nuevosDatos).find('#tabla-creditoFiscal');
+                        $('#tabla-creditoFiscal').html(elementoActualizable1.html());
+                        $('.form-control').val("");
+                        var nitField = document.getElementById("input-nit");
+                        var duiField = document.getElementById("input-dui");
+                        nitField.style.display = "none";
+                        duiField.style.display = "none";
+                        var elementoActualizable3 = $(nuevosDatos).find('#columna-derecha');
+                        $('#columna-derecha').html(elementoActualizable3.html());
+                    },
+                    error: function () {
+                        alert('Error al cargar la tabla.');
+                    }
+                });
+            },
+            error: function (xhr, status, error) {
+                $('#confirmarEliminarModal').modal('hide');
+                var errorMessage = xhr.responseText || 'Error al eliminar la facturación del crédito fiscal de la venta.';
+                toastr.error(errorMessage);
+            }
+        });
+    });
+    //Método para enviar la solicitud de eliminar
+ 
     //Función para definir el uso de la libreria selec2
     $( '#propietarios' ).select2( {
         theme: "bootstrap-5",

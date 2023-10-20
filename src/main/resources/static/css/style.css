@@ -293,19 +293,6 @@ th {
 #imagenPerfil{
     font-size: 7rem !Important;
 }
-.tarjeta-container{
-    display: flex;
-    align-items: stretch;
-}
-
-.tarjeta-facturacion-izquierda{
-    width: 48%;
-}
-
-.tarjeta-facturacion-derecha{
-    margin-left:2%;
-    width: 50%;
-}
 
 .tarjeta-venta-izquierda{
     width: 25%;
@@ -318,7 +305,7 @@ th {
 
 /* Configuración de Modales */
 .modal{
-    margin-top: 50px !Important;
+    margin-top: 60px !Important;
     margin-bottom: 10px !Important;
     z-index: 9996;
 }
@@ -443,6 +430,24 @@ th {
     }
     to {
         opacity: 0;
+    }
+}
+
+@media (max-width: 768px) {
+    /*Configuración de páginas*/
+    .titulo-page {
+        text-align: center !Important;
+    }
+    /*Configuración de las tablas*/
+    div.dataTables_wrapper div.dataTables_info {
+        margin-bottom: 10px;
+    }
+    div.dataTables_wrapper div.dataTables_length label {
+        margin-bottom: 10px;
+    }
+    /*Configuración de la facturación*/
+    #columna-derecha{
+        margin-top: 10px;
     }
 }
 
