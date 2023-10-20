@@ -8,7 +8,9 @@
                 <div class="subtitulo-page">
                     <h3 class="m-0">Teléfonos
                         <sec:authorize access="hasAuthority('AGREGAR_TELEFONO_PROPIETARIO_PRIVILAGE')">
-                            <button type="button" id="AgregarTelefono" class="btn-blue btn abrirModal-btn pull-right btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalTelefono" data-action="agregar">Agregar</button>
+                            <span id="AgregarTelefono" class="btn abrirModal-btn text-info puntero pull-right btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalTelefono" data-action="agregar" style="cursor: pointer;">
+                                <i class="fa-solid fa-phone"></i>
+                            </span>
                         </sec:authorize>
                     </h3>
                 </div>

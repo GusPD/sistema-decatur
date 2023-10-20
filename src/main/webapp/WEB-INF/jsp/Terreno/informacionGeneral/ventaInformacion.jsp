@@ -47,15 +47,15 @@
     <!-- Subtitulo de la página y funciones de los datos -->
     <div class="subtitulo-page mt-4"><h3>Financiamiento
             <sec:authorize access="hasAuthority('EDITAR_INFORMACION_FINANCIAMIENTO_PRIVILAGE')">
-                <span title="Editar Información" id="EditarInformacion" class="btn abrirModal-btn text-info puntero pull-right btn-sm" data-bs-toggle="modal" data-bs-target="#crearModal" data-tipo="editar" data-id="${venta.idVenta}" data-modo="actualizar" style="cursor: pointer;">
+                <span title="Editar Información" id="EditarInformacionFinanciamiento" class="btn abrirModal-btn text-info puntero pull-right btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalFinanciamiento" data-tipo="editar" data-id="${venta.idVenta}" data-modo="actualizar" style="cursor: pointer;">
                     <i class="far fa-edit"></i>
                 </span>
             </sec:authorize>
         </h3>
     </div>
     <!-- Datos -->
-    <div class="tarjeta-container">
-        <div class="tarjeta-venta-izquierda border p-3 rounded">
+    <div class="tarjeta-container d-flex">
+        <div class="col-md-4 border p-3 rounded">
             <table class="table small table-borderless" id="tabla-informacion-financiamiento">
                 <tbody>
                     <tr>
@@ -85,16 +85,13 @@
                 </tbody>
             </table>
         </div>
-        <div class="tarjeta-venta-derecha border p-3 rounded">
+        <div class="col-md-8 border p-3 rounded table-responsive columna-derecha">
             <h6>Financiamientos Anteriores</h6>
             <table class="table table-bordered custom-fixed-header small" id="tabla-financiamientos">
                 <thead>
                     <tr class="encabezado-tabla">
                         <th scope="col">N°</th>
                         <th scope="col">Fecha Aplicación</th>
-                        <th scope="col">Monto</th>
-                        <th scope="col">Plazo</th>
-                        <th scope="col">Tasa</th>
                         <th scope="col">Cuota</th>
                         <th scope="col">Multa</th>
                         <th scope="col">Opciones</th>
@@ -113,9 +110,6 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
                                 <td>
                                     <sec:authorize access="hasAuthority('ELIMINAR_INFORMACION_FINANCIAMIENTO_PRIVILAGE')">
                                     <button type="button" class="btn btn-outline-danger eliminarModalFinanciamiento-btn btn-sm" data-id="${eAsignacion.idFinanciamiento}" 'data-cod="${eAsignacion.idFinanciamiento}"><i class="far fa-trash-alt"></i></button>
@@ -131,15 +125,15 @@
     <!-- Subtitulo de la página y funciones de los datos -->
     <div class="subtitulo-page mt-4"><h3>Mantenimiento
             <sec:authorize access="hasAuthority('EDITAR_INFORMACION_MANTENIMIENTO_PRIVILAGE')">
-                <span title="Editar Información" id="EditarInformacion" class="btn abrirModal-btn text-info puntero pull-right btn-sm" data-bs-toggle="modal" data-bs-target="#crearModal" data-tipo="editar" data-id="${venta.idVenta}" data-modo="actualizar" style="cursor: pointer;">
+                <span title="Editar Información" id="EditarInformacionMantenimiento" class="btn abrirModal-btn text-info puntero pull-right btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalMantenimiento" data-tipo="editar" data-id="${venta.idVenta}" data-modo="actualizar" style="cursor: pointer;">
                     <i class="far fa-edit"></i>
                 </span>
             </sec:authorize>
         </h3>
     </div>
     <!-- Datos -->
-    <div class="tarjeta-container mb-3">
-        <div class="tarjeta-venta-izquierda border p-3 rounded">
+    <div class="tarjeta-container d-flex mb-3">
+        <div class="col-md-4 border p-3 rounded">
             <table class="table small table-borderless" id="tabla-informacion-mantenimiento">
                 <tbody>
                     <tr>
@@ -157,7 +151,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="tarjeta-venta-derecha border p-3 rounded">
+        <div class="col-md-8 border p-3 rounded table-responsive columna-derecha">
             <h6>Mantenimientos Anteriores</h6>
             <table class="table table-bordered custom-fixed-header small" id="tabla-mantenimientos">
                 <thead>
@@ -213,7 +207,7 @@
                         <input type="hidden" id="idVenta" value="${venta.getIdVenta()}">
                         <input type="hidden" id="idTerreno" value="${terreno.getIdTerreno()}">
                         <input type="hidden" id="estado" value="Activo">
-                        <input type="hidden" id="idListDocumento">
+                        <input type="hidden" id="idListDocumento" value="${venta.getIdListDocumento()}">
                         <div class="form-group">
                             <label for="nombre" class="form-label">Nombre: </label>
                             <input type="text" class="form-control" id="nombre" name="nombre" maxlength="200" placeholder="Ingrese el nombre de la venta" required>
@@ -231,10 +225,6 @@
                             <input type="text" class="form-control" id="descuento" name="descuento" maxlength="9" placeholder="Ingrese el descuento de la venta">
                         </div>
                         <div class="form-group">
-                            <label for="prima" class="form-label">Prima: </label>
-                            <input type="text" class="form-control" id="prima" name="prima" placeholder="0.00" data-prima="${valorPrima}" readonly>
-                        </div>
-                        <div class="form-group">
                             <label for="monto" class="form-label">Monto: </label>
                             <input type="text" class="form-control" id="monto" name="monto" placeholder="0.00" readonly>
                         </div>
@@ -248,7 +238,7 @@
         </div>
     </div>
 </div>           
-<!-- Modal de editar mantenimiento -->
+<!-- Modal de editar financiamiento -->
 <div class="modal fade" id="crearModalFinanciamiento" tabindex="-1" aria-labelledby="crearModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -257,13 +247,25 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id='formGuardar' accept-charset="UTF-8">
+                <form id='formGuardarFinanciamiento' accept-charset="UTF-8">
                     <div  class="overflow-auto">
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                         <input type="hidden" id="idFinanciamiento" value="">
                         <div class="form-group">
-                            <label for="monto" class="form-label">Monto: </label>
-                            <input type="text" class="form-control" id="monto" name="monto" placeholder="0.00" readonly>
+                            <label for="montoF" class="form-label">Monto: </label>
+                            <input type="text" class="form-control" id="montoF" name="montoF" placeholder="0.00" value="${venta.getMonto()}" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="prima" class="form-label">Prima: </label>
+                            <input type="text" class="form-control" id="prima" name="prima" placeholder="0.00" value="${valorPrima}" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="financiamiento" class="form-label">Financiamiento: </label>
+                            <input type="text" class="form-control" id="financiamiento" name="financiamiento" placeholder="0.00"  value="${venta.getMonto() - valorPrima}" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="fecha" class="form-label">Fecha Aplicación: </label>
+                            <input type="date" class="form-control" id="fechaAplicacionF" name="fechaAplicacionF" maxlength="10" placeholder="Ingrese la fecha de aplicación">
                         </div>
                         <div class="form-group">
                             <label for="plazo" class="form-label">Plazo: </label>
@@ -291,7 +293,7 @@
         </div>
     </div>
 </div>
-<!-- Modal de editar financimiento -->
+<!-- Modal de editar mantenimiento -->
 <div class="modal fade" id="crearModalMantenimiento" tabindex="-1" aria-labelledby="crearModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -300,7 +302,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form id='formGuardar' accept-charset="UTF-8">
+                <form id='formGuardarMantenimiento' accept-charset="UTF-8">
                     <div  class="overflow-auto">
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                         <input type="hidden" id="idMantenimiento" value="">

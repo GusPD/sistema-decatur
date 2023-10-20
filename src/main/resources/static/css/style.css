@@ -291,21 +291,19 @@ th {
     font-size: 1rem !Important;
 }
 #imagenPerfil{
-    font-size: 7rem !Important;
+    font-size: 6.5rem !Important;
+    justify-content: center;
+    display: flex;
 }
-
-.tarjeta-venta-izquierda{
-    width: 25%;
-}
-
-.tarjeta-venta-derecha{
-    margin-left: 2%;
-    width: 75%;
+.tab-perfil{
+    font-size: 1em;
+    justify-content: center;
+    display: flex;
 }
 
 /* Configuración de Modales */
 .modal{
-    margin-top: 60px !Important;
+    margin-top: 55px !Important;
     margin-bottom: 10px !Important;
     z-index: 9996;
 }
@@ -436,7 +434,10 @@ th {
 @media (max-width: 768px) {
     /*Configuración de páginas*/
     .titulo-page {
-        text-align: center !Important;
+        text-align: center !important;
+    }
+    .page-scroll{
+        height: auto !important;
     }
     /*Configuración de las tablas*/
     div.dataTables_wrapper div.dataTables_info {
@@ -445,9 +446,14 @@ th {
     div.dataTables_wrapper div.dataTables_length label {
         margin-bottom: 10px;
     }
+    
     /*Configuración de la facturación*/
-    #columna-derecha{
+    .columna-derecha{
         margin-top: 10px;
+    }
+    /*Configuración de terreno*/
+    .tarjeta-container{
+        display: block !important;
     }
 }
 

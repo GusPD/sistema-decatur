@@ -3,16 +3,14 @@ $(document).ready(function() {
     document.getElementById("precio").addEventListener("input", function() {
         const precio = parseFloat(document.getElementById('precio').value);
         const descuento = parseFloat(document.getElementById('descuento').value);
-        const primaElement = document.getElementById('prima');
-        const prima = parseFloat(primaElement.getAttribute('data-prima'));
         if (!isNaN(precio) && !isNaN(descuento)) {
-            const monto = precio - descuento - prima;
+            const monto = precio - descuento;
             document.getElementById('monto').value = monto.toFixed(2);
         } else if(!isNaN(precio)){
-            const monto = precio - prima;
+            const monto = precio;
             document.getElementById('monto').value = monto.toFixed(2);
         }else if(!isNaN(descuento)){
-            const monto = 0 - (descuento + prima);
+            const monto = 0 - descuento;
             document.getElementById('monto').value = monto.toFixed(2);
         }else{
             document.getElementById('monto').value = '0.00';
@@ -22,16 +20,14 @@ $(document).ready(function() {
     document.getElementById("descuento").addEventListener("input", function() {
         const precio = parseFloat(document.getElementById('precio').value);
         const descuento = parseFloat(document.getElementById('descuento').value);
-        const primaElement = document.getElementById('prima');
-        const prima = parseFloat(primaElement.getAttribute('data-prima'));
         if (!isNaN(precio) && !isNaN(descuento)) {
-            const monto = precio - descuento - prima;
+            const monto = precio - descuento;
             document.getElementById('monto').value = monto.toFixed(2);
         } else if(!isNaN(precio)){
-            const monto = precio - prima;
+            const monto = precio;
             document.getElementById('monto').value = monto.toFixed(2);
         }else if(!isNaN(descuento)){
-            const monto = 0 - (descuento + prima);
+            const monto = 0 - descuento;
             document.getElementById('monto').value = monto.toFixed(2);
         }else{
             document.getElementById('monto').value = '0.00';
@@ -41,7 +37,7 @@ $(document).ready(function() {
     document.getElementById("plazo").addEventListener("input", function() {
         const tasa = parseFloat(document.getElementById('tasa').value);
         const plazo = parseFloat(document.getElementById('plazo').value);
-        const monto = parseFloat(document.getElementById('monto').value);
+        const monto = parseFloat(document.getElementById('montoF').value);
         if (!isNaN(tasa) && !isNaN(plazo) && !isNaN(monto) ){
             const valorCuota = calcularCuotaKi(tasa, plazo, monto);
             document.getElementById('cuotaKi').value = valorCuota.toFixed(2);
@@ -53,7 +49,7 @@ $(document).ready(function() {
     document.getElementById("tasa").addEventListener("input", function() {
         const tasa = parseFloat(document.getElementById('tasa').value);
         const plazo = parseFloat(document.getElementById('plazo').value);
-        const monto = parseFloat(document.getElementById('monto').value);
+        const monto = parseFloat(document.getElementById('montoF').value);
         if (!isNaN(tasa) && !isNaN(plazo) && !isNaN(monto) ){
             const valorCuota = calcularCuotaKi(tasa, plazo, monto);
             document.getElementById('cuotaKi').value = valorCuota.toFixed(2);
@@ -238,6 +234,7 @@ $(document).ready(function() {
             const year = fechaInput.getFullYear();
             const formattedDate = `${day}/${month}/${year}`;
             var idVenta = $('#idVenta').val();
+            var idListDocumento = $('#idListDocumento').val();
             var estado = $('#estado').val();
             var idTerreno = $('#idTerreno').val();
             var formDataArray = formGuardar.serializeArray();
@@ -246,7 +243,7 @@ $(document).ready(function() {
             var url;
             if (idVenta) {
                 url = '/ActualizarVenta/'+idTerreno;
-                formDataArray.push({name: 'idVenta', value: idVenta},{name: 'estado', value: estado});
+                formDataArray.push({name: 'idVenta', value: idVenta},{name: 'estado', value: estado},{name: 'idListDocumento', value: idListDocumento});
             } else {
                 url = '/AgregarVenta/'+idTerreno;
                 formDataArray.push({name: 'estado', value: estado});
@@ -266,6 +263,8 @@ $(document).ready(function() {
                             $('#tabla-informacion').html(elementoActualizable.html());
                             var elementoActualizable2 = $(nuevosDatos).find('#NombreVenta');
                             $('#NombreVenta').html(elementoActualizable2.html());
+                            var elementoActualizable3 = $(nuevosDatos).find('#formGuardarFinanciamiento');
+                            $('#formGuardarFinanciamiento').html(elementoActualizable3.html());
                         },
                         error: function () {
                             alert('Error al cargar la tabla.');
@@ -275,6 +274,134 @@ $(document).ready(function() {
                 error: function (xhr, status, error) {
                     $('#crearModal').modal('hide');
                     var errorMessage = xhr.responseText || 'Error al actualizar la venta.';
+                    toastr.error(errorMessage);
+                }
+            });
+        }
+    });
+    var formGuardarFinanciamiento = $('#formGuardarFinanciamiento');
+    var validatorFinanciamiento = $('#formGuardarFinanciamiento').validate({
+        rules: {
+            montoF: {
+                required: true
+            },
+            prima: {
+                required: true
+            },
+            financiamiento: {
+                required: true
+            },
+            fechaAplicacion: {
+               required: true,
+               maxlength: 10
+            },
+            plazo:{
+                required: true,
+                validarPlazo: true,
+                maxlength: 3
+            },
+            tasa: {
+                required: true,
+                validarTasa: true,
+                maxlength: 6
+            },
+            cuotaKi:{
+                validarMonto: true
+            },
+            multaFinanciamiento: {
+                required: true,
+                validarMultaFinanciamiento: true,
+                maxlength: 9
+            }
+        },
+        messages:{
+            montoF: {
+                required: 'Este campo es requerido'
+            },
+            prima: {
+                required: 'Este campo es requerido'
+            },
+            financiamiento: {
+                required: 'Este campo es requerido'
+            },
+            fechaAplicacion:{
+                required: 'Este campo es requerido'
+            },
+            plazo:{
+                required: 'Este campo es requerido'
+            },
+            tasa: {
+                required: 'Este campo es requerido'
+            },
+            multaFinanciamiento: {
+                required: 'Este campo es requerido'
+            }        
+        },
+        highlight: function(element) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function(element) {
+            $(element).removeClass('is-invalid');
+        },
+        errorPlacement: function(error, element) {
+            if (element.attr("name") === "montoF" || element.attr("name") === "prima" || element.attr("name") === "financiamiento" || element.attr("name") === "fechaAplicacion" || element.attr("name") === "plazo" || element.attr("name") === "tasa" || element.attr("name") === "cuotaKi" || element.attr("name") === "multaFinanciamiento") {
+                error.insertAfter(element);
+            }        
+        },
+        errorElement: 'div',
+        errorClass: 'invalid-feedback',
+        submitHandler: function(form) {
+            event.preventDefault();
+            const fechaInputValue = $('#fechaAplicacionF').val();
+            const fechaInput = new Date(fechaInputValue);
+            function addLeadingZero(number) {
+                return number < 10 ? `0${number}` : number;
+            }
+            const day = addLeadingZero(fechaInput.getDate());
+            const month = addLeadingZero(fechaInput.getMonth() + 1);
+            const year = fechaInput.getFullYear();
+            const formattedDate = `${day}/${month}/${year}`;
+            var idVenta = $('#idVenta').val();
+            var monto = $('#financiamiento').val();
+            var cuota = $('#cuotaKi').val();
+            var multa = $('#multaFinanciamiento').val();
+            var formDataArray = formGuardarFinanciamiento.serializeArray();
+            var url = '/AgregarFinanciamientoVenta';
+            formDataArray.push({name: 'idVenta', value: idVenta},{name: 'fechaAplicacion', value: formattedDate},{name: 'monto', value: monto},{name: 'cuota', value: cuota},{name: 'multa', value: multa},{name: 'idAsignacion', value: ''});
+            formDataArray = formDataArray.filter(item => item.name !== 'montoF');
+            formDataArray = formDataArray.filter(item => item.name !== 'financiamiento');
+            formDataArray = formDataArray.filter(item => item.name !== 'fechaAplicacionF');
+            formDataArray = formDataArray.filter(item => item.name !== 'cuotaKi');
+            formDataArray = formDataArray.filter(item => item.name !== 'multaFinanciamiento');
+            console.log(formDataArray);
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: formDataArray,
+                success: function (response) {
+                    $('#crearModalFinanciamiento').modal('hide');
+                    toastr.success(response);
+                    $.ajax({
+                        url: "/InformacionVenta/"+idVenta,
+                        type: 'GET',
+                        success: function (nuevosDatos) {
+                            var elementoActualizable = $(nuevosDatos).find('#tabla-informacion');
+                            $('#tabla-informacion').html(elementoActualizable.html());
+                            var elementoActualizable2 = $(nuevosDatos).find('#NombreVenta');
+                            $('#NombreVenta').html(elementoActualizable2.html());
+                            var elementoActualizable3 = $(nuevosDatos).find('#formGuardarFinanciamiento');
+                            $('#formGuardarFinanciamiento').html(elementoActualizable3.html());
+                            var elementoActualizable4 = $(nuevosDatos).find('#tabla-financiamientos');
+                            $('#tabla-financiamientos').html(elementoActualizable4.html());
+                        },
+                        error: function () {
+                            alert('Error al cargar la tabla.');
+                        }
+                    });
+                },
+                error: function (xhr, status, error) {
+                    $('#crearModal').modal('hide');
+                    var errorMessage = xhr.responseText || 'Error al actualizar la información del financiamiento.';
                     toastr.error(errorMessage);
                 }
             });

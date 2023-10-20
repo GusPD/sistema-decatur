@@ -11,11 +11,13 @@ import com.gl05.bad.domain.Terreno;
 import com.gl05.bad.domain.Venta;
 import com.gl05.bad.domain.Visitante;
 import com.gl05.bad.domain.VistaVentasActiva;
+import com.gl05.bad.domain.InformacionFinanciamiento;
 import com.gl05.bad.servicio.AsigPropietarioVentaService;
 import com.gl05.bad.servicio.AsignacionVisitanteService;
 import com.gl05.bad.servicio.BitacoraServiceImp;
 import com.gl05.bad.servicio.DocumentoService;
 import com.gl05.bad.servicio.FacturacionService;
+import com.gl05.bad.servicio.InformacionFinanciamientoService;
 import com.gl05.bad.servicio.PersonaService;
 import com.gl05.bad.servicio.PropietarioService;
 import com.gl05.bad.servicio.ProyectoService;
@@ -88,6 +90,9 @@ public class VentaController {
     @Autowired
     private FacturacionService facturacionService;
     
+    @Autowired
+    private InformacionFinanciamientoService financiamientoService;
+    
     //Función que redirige a la vista de las ventas del terreno
     @GetMapping("/Ventas/{idTerreno}")
     public String mostrarVentas(Model model, Terreno terreno) {
@@ -138,6 +143,30 @@ public class VentaController {
         model.addAttribute("venta", ventaEncontrada);
         model.addAttribute("valorPrima", prima);
         return "/Terreno/InformacionGeneral/ventaInformacion";
+    }
+    
+    //Función que agrega la información de financiamiento una venta de la base de datos
+    @PostMapping("/AgregarFinanciamientoVenta")
+    public ResponseEntity AgregarFinanciamientoVenta(@RequestParam("idVenta") Long idVenta, InformacionFinanciamiento financiamiento, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        try {
+            Venta venta = ventaService.encontrar(idVenta);
+            if(financiamiento.getIdAsignacion()==null){
+                financiamiento.setVenta(venta);
+                financiamientoService.agregar(financiamiento);
+                String mensaje = "Se ha agregado el financiamiento correctamente.";
+                bitacoraService.registrarAccion("Agregar información financiamiento venta");
+                return ResponseEntity.ok(mensaje);
+            }else{
+                financiamiento.setVenta(venta);
+                financiamientoService.actualizar(financiamiento);
+                String mensaje = "Se ha actualizado el financiamiento correctamente.";
+                bitacoraService.registrarAccion("Actualizar información financiamiento venta");
+                return ResponseEntity.ok(mensaje);
+            }
+        } catch (Exception e) {
+            String error = "Ha ocurrido un error al agregar el financiamiento de la venta.";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        }
     }
     
     //Función que obtiene los propietarios de la venta

@@ -9,7 +9,7 @@
                 <div class="col-12">
                     <div class="titulo-page">
                         <div class="container">
-                            <h1>Proyecto ${proyecto.nombre} - Propietarios</h1>
+                            <h1>Propietarios</h1>
                         </div>
                     </div>
                 </div>
