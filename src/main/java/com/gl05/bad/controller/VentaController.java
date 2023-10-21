@@ -12,12 +12,14 @@ import com.gl05.bad.domain.Venta;
 import com.gl05.bad.domain.Visitante;
 import com.gl05.bad.domain.VistaVentasActiva;
 import com.gl05.bad.domain.InformacionFinanciamiento;
+import com.gl05.bad.domain.InformacionMantenimiento;
 import com.gl05.bad.servicio.AsigPropietarioVentaService;
 import com.gl05.bad.servicio.AsignacionVisitanteService;
 import com.gl05.bad.servicio.BitacoraServiceImp;
 import com.gl05.bad.servicio.DocumentoService;
 import com.gl05.bad.servicio.FacturacionService;
 import com.gl05.bad.servicio.InformacionFinanciamientoService;
+import com.gl05.bad.servicio.InformacionMantenimientoService;
 import com.gl05.bad.servicio.PersonaService;
 import com.gl05.bad.servicio.PropietarioService;
 import com.gl05.bad.servicio.ProyectoService;
@@ -28,6 +30,7 @@ import com.gl05.bad.servicio.VistaVentasActivaService;
 import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -93,6 +96,9 @@ public class VentaController {
     @Autowired
     private InformacionFinanciamientoService financiamientoService;
     
+    @Autowired
+    private InformacionMantenimientoService mantenimientoService;
+    
     //Función que redirige a la vista de las ventas del terreno
     @GetMapping("/Ventas/{idTerreno}")
     public String mostrarVentas(Model model, Terreno terreno) {
@@ -135,9 +141,24 @@ public class VentaController {
         model.addAttribute("pageTitle", "Venta");
         Venta ventaEncontrada = ventaService.encontrar(venta.getIdVenta());
         Terreno terrenoEncontrado = ventaEncontrada.getTerreno();
-        double prima = 0;
         Proyecto proyecto = terrenoEncontrado.getProyecto();
+        List<InformacionFinanciamiento> financiamientos = financiamientoService.encontrarVenta(venta);
+        InformacionFinanciamiento financiamiento = null;
+        if(!financiamientos.isEmpty()){
+            financiamiento = financiamientos.get(0);
+        }
+        List<InformacionMantenimiento> mantenimientos = mantenimientoService.encontrarVenta(venta);
+        InformacionMantenimiento mantenimiento = null;
+        if(!mantenimientos.isEmpty()){
+            mantenimiento = mantenimientos.get(0);
+        }
         
+        double prima = 0;
+        
+        model.addAttribute("financiamiento", financiamiento);
+        model.addAttribute("financiamientos", financiamientos);
+        model.addAttribute("mantenimiento", mantenimiento);
+        model.addAttribute("mantenimientos", mantenimientos);
         model.addAttribute("proyecto", proyecto);
         model.addAttribute("terreno", terrenoEncontrado);
         model.addAttribute("venta", ventaEncontrada);
@@ -150,21 +171,83 @@ public class VentaController {
     public ResponseEntity AgregarFinanciamientoVenta(@RequestParam("idVenta") Long idVenta, InformacionFinanciamiento financiamiento, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             Venta venta = ventaService.encontrar(idVenta);
-            if(financiamiento.getIdAsignacion()==null){
-                financiamiento.setVenta(venta);
-                financiamientoService.agregar(financiamiento);
-                String mensaje = "Se ha agregado el financiamiento correctamente.";
-                bitacoraService.registrarAccion("Agregar información financiamiento venta");
-                return ResponseEntity.ok(mensaje);
-            }else{
-                financiamiento.setVenta(venta);
-                financiamientoService.actualizar(financiamiento);
-                String mensaje = "Se ha actualizado el financiamiento correctamente.";
-                bitacoraService.registrarAccion("Actualizar información financiamiento venta");
-                return ResponseEntity.ok(mensaje);
-            }
+            financiamiento.setVenta(venta);
+            financiamientoService.agregar(financiamiento);
+            String mensaje = "Se ha agregado el financiamiento a la venta correctamente.";
+            bitacoraService.registrarAccion("Agregar información financiamiento de  la venta");
+            return ResponseEntity.ok(mensaje);
         } catch (Exception e) {
             String error = "Ha ocurrido un error al agregar el financiamiento de la venta.";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        }
+    }
+    
+    //Función que obtiene la información del financiamiento de la venta en la base de datos
+    @GetMapping("/ObtenerFinanciamientoVenta/{id}")
+    public ResponseEntity<Object> ObtenerFinanciamiento(@PathVariable Long id) {
+        InformacionFinanciamiento financiamiento = financiamientoService.encontrar(id);
+        if (financiamiento != null) {
+            Map<String, Object> entidadesMap = new HashMap<>();
+            entidadesMap.put("financiamiento", financiamiento);
+            return ResponseEntity.ok(entidadesMap);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    
+    //Función que elimina la información de financiamiento de una venta de la base de datos
+    @PostMapping("/EliminarFinanciamientoVenta/{idAsignacion}")
+    public ResponseEntity EliminarFinanciamientoVenta(InformacionFinanciamiento financiamiento) {
+        try {
+            financiamientoService.eliminar(financiamiento);
+            String mensaje = "Se ha eliminado la información del financiamiento de la venta correctamente.";
+            bitacoraService.registrarAccion("Eliminar información del financiamiento de la venta");
+            return ResponseEntity.ok(mensaje);
+        } catch (Exception e) {
+            String error = "Ha ocurrido un error al eliminar la información del financiamiento de la venta.";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        }
+    }
+    
+    //Función que agrega la información de mantenimiento una venta de la base de datos
+    @PostMapping("/AgregarMantenimientoVenta")
+    public ResponseEntity AgregarMantenimientoVenta(@RequestParam("idVenta") Long idVenta, InformacionMantenimiento mantenimiento, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        try {
+            Venta venta = ventaService.encontrar(idVenta);
+            mantenimiento.setVenta(venta);
+            mantenimientoService.agregar(mantenimiento);
+            String mensaje = "Se ha agregado el mantenimiento a la venta correctamente.";
+            bitacoraService.registrarAccion("Agregar información mantenimiento de la venta");
+            return ResponseEntity.ok(mensaje);
+        } catch (Exception e) {
+            String error = "Ha ocurrido un error al agregar el mantenimiento de la venta.";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        }
+    }
+    
+    //Función que obtiene la información del mantenimiento de la venta en la base de datos
+    @GetMapping("/ObtenerMantenimientoVenta/{id}")
+    public ResponseEntity<Object> ObtenerMantenimiento(@PathVariable Long id) {
+        InformacionMantenimiento mantenimiento = mantenimientoService.encontrar(id);
+        if (mantenimiento != null) {
+            Map<String, Object> entidadesMap = new HashMap<>();
+            entidadesMap.put("mantenimiento", mantenimiento);
+            return ResponseEntity.ok(entidadesMap);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+    
+    //Función que elimina la información de mantenimiento de una venta de la base de datos
+    @PostMapping("/EliminarMantenimientoVenta/{idAsignacion}")
+    public ResponseEntity EliminarMantenimientoVenta(InformacionMantenimiento mantenimiento) {
+        try {
+            mantenimientoService.eliminar(mantenimiento);
+            String mensaje = "Se ha eliminado la información del mantenimiento de la venta correctamente.";
+            bitacoraService.registrarAccion("Eliminar información del mantenimiento de la venta");
+            return ResponseEntity.ok(mensaje);
+        } catch (Exception e) {
+            String error = "Ha ocurrido un error al eliminar la información del mantenimiento de la venta.";
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
     }

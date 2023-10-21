@@ -260,14 +260,15 @@ $(document).ready(function() {
         errorClass: 'invalid-feedback',
         submitHandler: function(form) {
             event.preventDefault();
-            const fechaInputValue = $('#fecha').val();
+            const fechaInputValue = $('#fechaAplicacionF').val();
             const fechaInput = new Date(fechaInputValue);
+            const fechaLocal = new Date(fechaInput.getTime() + fechaInput.getTimezoneOffset() * 60000);
             function addLeadingZero(number) {
-              return number < 10 ? `0${number}` : number;
+                return number < 10 ? `0${number}` : number;
             }
-            const day = addLeadingZero(fechaInput.getDate());
-            const month = addLeadingZero(fechaInput.getMonth() + 1);
-            const year = fechaInput.getFullYear();
+            const day = addLeadingZero(fechaLocal.getDate());
+            const month = addLeadingZero(fechaLocal.getMonth() + 1);
+            const year = fechaLocal.getFullYear();
             const formattedDate = `${day}/${month}/${year}`;
             var idVenta = $('#idVenta').val();
             var estado = $('#estado').val();

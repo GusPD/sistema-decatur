@@ -1,12 +1,16 @@
 <%@ include file="../venta-header.jspf"%>
-<div class="row">
+<div id="page-informacion" class="row">
+    <input type="hidden" id="fechaAplicacionFinanciamiento" value="${financiamiento.getFechaAplicacion()}">
+    <input type="hidden" id="fechaAplicacionMantenimiento" value="${mantenimiento.getFechaAplicacion()}">
     <!-- Subtitulo de la página y funciones de los datos -->
     <div class="subtitulo-page"><h3 class="mt-0">Venta
-            <sec:authorize access="hasAuthority('EDITAR_VENTA_PRIVILAGE')">
-                <span title="Editar Información" id="EditarInformacion" class="btn abrirModal-btn text-info puntero pull-right btn-sm" data-bs-toggle="modal" data-bs-target="#crearModal" data-tipo="editar" data-id="${venta.idVenta}" data-modo="actualizar" style="cursor: pointer;">
-                    <i class="far fa-edit"></i>
-                </span>
-            </sec:authorize>
+            <c:if test="${empty financiamientos and empty mantenimientos}">
+                <sec:authorize access="hasAuthority('EDITAR_VENTA_PRIVILAGE')">
+                    <span title="Editar Información" id="EditarInformacion" class="btn abrirModal-btn text-info puntero pull-right btn-sm" data-bs-toggle="modal" data-bs-target="#crearModal" data-tipo="editar" data-id="${venta.idVenta}" data-modo="actualizar" style="cursor: pointer;">
+                        <i class="far fa-edit"></i>
+                    </span>
+                </sec:authorize>
+            </c:if>
         </h3>
     </div>
     <!-- Datos -->
@@ -34,12 +38,12 @@
                     <td><c:if test="${not empty venta.descuento}">$ <c:out value="${String.format('%.2f', venta.descuento)}"/></c:if></td>
                 </tr>
                 <tr>
-                    <td class="encabezado-tabla font-weight-bold">Prima</td>
-                    <td><c:if test="${not empty valorPrima}">$ <c:out value="${String.format('%.2f', valorPrima)}"/></c:if></td>
-                </tr>
-                <tr>
                     <td class="encabezado-tabla font-weight-bold">Monto</td>
                     <td><c:if test="${not empty venta.monto}">$ <c:out value="${String.format('%.2f', venta.monto)}"/></c:if></td>
+                </tr>
+                <tr>
+                    <td class="encabezado-tabla font-weight-bold">Prima</td>
+                    <td><c:if test="${not empty valorPrima}">$ <c:out value="${String.format('%.2f', valorPrima)}"/></c:if></td>
                 </tr>
             </tbody>
         </table>
@@ -60,32 +64,32 @@
                 <tbody>
                     <tr>
                         <td class="font-weight-bold" width="10%">Fecha Aplicación</td>
-                        <td><c:if test="${not empty venta}"><fmt:formatDate value="" pattern="dd/MM/yyyy" /></c:if></td>
+                        <td id="fecha-aplicacion-financiamiento"><c:if test="${not empty financiamiento.fechaAplicacion}"><fmt:formatDate value="${financiamiento.fechaAplicacion}" pattern="dd/MM/yyyy" /></c:if></td>
                     </tr>
                     <tr>
                         <td class="font-weight-bold">Monto</td>
-                        <td><c:if test="${not empty venta}">$ <c:out value=""/></c:if></td>
+                        <td id="monto-financiamiento"><c:if test="${not empty financiamiento.monto}">$ <c:out value="${String.format('%.2f',financiamiento.monto)}"/></c:if></td>
                     </tr>
                     <tr>
                         <td class="font-weight-bold">Plazo</td>
-                        <td><c:if test="${not empty venta}"></c:if></td>
+                        <td id="plazo-financiamiento"><c:if test="${not empty financiamiento.plazo}">${financiamiento.plazo}</c:if></td>
                     </tr>
                     <tr>
                         <td class="font-weight-bold">Tasa</td>
-                        <td><c:if test="${not empty venta}"><c:out value=""/> %</c:if></td>
+                        <td id="tasa-financiamiento"><c:if test="${not empty financiamiento.tasa}"><c:out value="${String.format('%.2f',financiamiento.tasa)}"/> %</c:if></td>
                     </tr>
                     <tr>
                         <td class="font-weight-bold">Cuota</td>
-                        <td><c:if test="${not empty venta}">$ <c:out value=""/></c:if></td>
+                        <td id="cuota-financiamiento"><c:if test="${not empty financiamiento.cuota}">$ <c:out value="${String.format('%.2f',financiamiento.cuota)}"/></c:if></td>
                     </tr>
                     <tr>
                         <td class="font-weight-bold">Multa</td>
-                        <td><c:if test="${not empty venta}">$ <c:out value=""/></c:if></td>
+                        <td id="multa-financiamiento"><c:if test="${not empty financiamiento.multa}">$ <c:out value="${String.format('%.2f',financiamiento.multa)}"/></c:if></td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <div class="col-md-8 border p-3 rounded table-responsive columna-derecha">
+        <div class="col-md-8 border p-3 rounded table-responsive columna-derecha page-scroll" style="height: 30vh;">
             <h6>Financiamientos Anteriores</h6>
             <table class="table table-bordered custom-fixed-header small" id="tabla-financiamientos">
                 <thead>
@@ -100,20 +104,23 @@
                 <tbody>
                     <c:if test="${empty financiamientos}">
                         <tr>
-                            <td colspan="8">No hay registros</td>
+                            <td colspan="5">No hay registros</td>
                         </tr>
                     </c:if>
                     <c:if test="${not empty financiamientos}">
                         <c:forEach items="${financiamientos}" var="eAsignacion" varStatus="numeroAsignacion">
                             <tr>
                                 <td>${numeroAsignacion.index+1}</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <td><fmt:formatDate value="${eAsignacion.fechaAplicacion}" pattern="dd/MM/yyyy" /></td>
+                                <td>$ <c:out value="${String.format('%.2f', eAsignacion.cuota)}"/></td>
+                                <td>$ <c:out value="${String.format('%.2f', eAsignacion.multa)}"/></td>
                                 <td>
                                     <sec:authorize access="hasAuthority('ELIMINAR_INFORMACION_FINANCIAMIENTO_PRIVILAGE')">
-                                    <button type="button" class="btn btn-outline-danger eliminarModalFinanciamiento-btn btn-sm" data-id="${eAsignacion.idFinanciamiento}" 'data-cod="${eAsignacion.idFinanciamiento}"><i class="far fa-trash-alt"></i></button>
                                     </sec:authorize>
+                                    <button type="button" class="btn btn-outline-secondary mostrarFinanciamiento-btn btn-sm" data-id="${eAsignacion.idAsignacion}" 'data-cod="${eAsignacion.idAsignacion}"><i class="far fa-eye"></i></button>
+                                    <c:if test="${numeroAsignacion.index < 1}">
+                                        <button type="button" class="btn btn-outline-danger eliminarModalFinanciamiento-btn btn-sm" data-id="${eAsignacion.idAsignacion}" 'data-cod="${eAsignacion.idAsignacion}"><i class="far fa-trash-alt"></i></button>
+                                    </c:if>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -125,7 +132,7 @@
     <!-- Subtitulo de la página y funciones de los datos -->
     <div class="subtitulo-page mt-4"><h3>Mantenimiento
             <sec:authorize access="hasAuthority('EDITAR_INFORMACION_MANTENIMIENTO_PRIVILAGE')">
-                <span title="Editar Información" id="EditarInformacionMantenimiento" class="btn abrirModal-btn text-info puntero pull-right btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalMantenimiento" data-tipo="editar" data-id="${venta.idVenta}" data-modo="actualizar" style="cursor: pointer;">
+                <span title="Editar Información" id="EditarInformacionMantenimiento" class="btn abrirModal-btn text-info puntero pull-right btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalMantenimiento" data-tipo="editar" data-id="${mantenimiento.idAsignacion}" data-modo="actualizar" style="cursor: pointer;">
                     <i class="far fa-edit"></i>
                 </span>
             </sec:authorize>
@@ -138,20 +145,20 @@
                 <tbody>
                     <tr>
                         <td class="font-weight-bold" width="10%">Fecha Aplicación</td>
-                        <td><c:if test="${not empty venta}"><fmt:formatDate value="" pattern="dd/MM/yyyy" /></c:if></td>
+                        <td id="fecha-aplicacion-mantenimiento"><c:if test="${not empty mantenimiento.fechaAplicacion}"><fmt:formatDate value="${mantenimiento.fechaAplicacion}" pattern="dd/MM/yyyy" /></c:if></td>
                     </tr>
                     <tr>
                         <td class="font-weight-bold">Cuota</td>
-                        <td><c:if test="${not empty venta}">$ <c:out value=""/></c:if></td>
+                        <td id="cuota-mantenimiento"><c:if test="${not empty mantenimiento.cuota}">$ <c:out value="${String.format('%.2f',mantenimiento.cuota)}"/></c:if></td>
                     </tr>
                     <tr>
                         <td class="font-weight-bold">Multa</td>
-                        <td><c:if test="${not empty venta}">$ <c:out value=""/></c:if></td>
+                        <td id="multa-mantenimiento"><c:if test="${not empty mantenimiento.multa}">$ <c:out value="${String.format('%.2f',mantenimiento.multa)}"/></c:if></td>
                     </tr>
                 </tbody>
             </table>
         </div>
-        <div class="col-md-8 border p-3 rounded table-responsive columna-derecha">
+        <div class="col-md-8 border p-3 rounded table-responsive columna-derecha page-scroll" style="height: 20vh;">
             <h6>Mantenimientos Anteriores</h6>
             <table class="table table-bordered custom-fixed-header small" id="tabla-mantenimientos">
                 <thead>
@@ -164,25 +171,25 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <c:if test="${empty matenimientos}">
+                    <c:if test="${empty mantenimientos}">
                         <tr>
                             <td colspan="5">No hay registros</td>
                         </tr>
                     </c:if>
-                    <c:if test="${not empty matenimientos}">
-                        <c:forEach items="${matenimientos}" var="eAsignacion" varStatus="numeroAsignacion">
+                    <c:if test="${not empty mantenimientos}">
+                        <c:forEach items="${mantenimientos}" var="eAsignacion" varStatus="numeroAsignacion">
                             <tr>
                                 <td>${numeroAsignacion.index+1}</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
+                                <td><fmt:formatDate value="${eAsignacion.fechaAplicacion}" pattern="dd/MM/yyyy" /></td>
+                                <td>$ <c:out value="${String.format('%.2f', eAsignacion.cuota)}"/></td>
+                                <td>$ <c:out value="${String.format('%.2f', eAsignacion.multa)}"/></td>
                                 <td>
                                     <sec:authorize access="hasAuthority('ELIMINAR_INFORMACION_FINANCIAMIENTO_PRIVILAGE')">
-                                    <button type="button" class="btn btn-outline-danger eliminarModalMantenimiento-btn btn-sm" data-id="${eAsignacion.idMantenimiento}" 'data-cod="${eAsignacion.idMantenimiento}"><i class="far fa-trash-alt"></i></button>
                                     </sec:authorize>
+                                    <button type="button" class="btn btn-outline-secondary mostrarMantenimiento-btn btn-sm" data-id="${eAsignacion.idAsignacion}" 'data-cod="${eAsignacion.idAsignacion}"><i class="far fa-eye"></i></button>
+                                    <c:if test="${numeroAsignacion.index < 1}">
+                                        <button type="button" class="btn btn-outline-danger eliminarModalMantenimiento-btn btn-sm" data-id="${eAsignacion.idAsignacion}" 'data-cod="${eAsignacion.idAsignacion}"><i class="far fa-trash-alt"></i></button>
+                                    </c:if>
                                 </td>
                             </tr>
                         </c:forEach>
@@ -276,7 +283,7 @@
                             <input type="text" class="form-control" id="tasa" name="tasa" maxlength="6" placeholder="Ingrese la tasa del financiamiento">
                         </div>
                         <div class="form-group">
-                            <label for="cuotaKi" class="form-label">Cuota KI: </label>
+                            <label for="cuotaKi" class="form-label">Cuota Financiamiento: </label>
                             <input type="text" class="form-control" id="cuotaKi" name="cuotaKi" placeholder="0.00" readonly>
                         </div>
                         <div class="form-group">
@@ -307,6 +314,10 @@
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                         <input type="hidden" id="idMantenimiento" value="">
                         <div class="form-group">
+                            <label for="fecha" class="form-label">Fecha Aplicación: </label>
+                            <input type="date" class="form-control" id="fechaAplicacionM" name="fechaAplicacionM" maxlength="10" placeholder="Ingrese la fecha de aplicación">
+                        </div>
+                        <div class="form-group">
                             <label for="cuotaMantenimiento" class="form-label">Cuota Mantenimiento: </label>
                             <input type="text" class="form-control" id="cuotaMantenimiento" name="cuotaMantenimiento" maxlength="9" placeholder="Ingrese la cuota de mantenimiento">
                         </div>
@@ -323,7 +334,51 @@
             </div>
         </div>
     </div>
+</div>              
+<!-- Modal de eliminar financiamiento -->
+<div class="modal fade" id="confirmarEliminarModalFinanciamiento" tabindex="-1" aria-labelledby="confirmarEliminarLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmarEliminarLabel">Confirmar eliminación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <strong>¿Estás seguro de eliminar la información?</strong>
+                <p>Ten en cuenta que se eliminará la información del financiamiento de la venta.</p>
+            </div>
+            <div class="modal-footer">
+              <button id="eliminarFinanciamientoBtn" class="btn btn-outline-danger btn-sm">Eliminar</button>
+              <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
 </div>
+<form id="eliminarFinanciamientoForm" method="post" action="/EliminarFinanciamientoVenta/{idAsignacion}">
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+</form>
+<!-- Modal de eliminar mantenimiento -->
+<div class="modal fade" id="confirmarEliminarModalMantenimiento" tabindex="-1" aria-labelledby="confirmarEliminarLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirmarEliminarLabel">Confirmar eliminación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <strong>¿Estás seguro de eliminar la información?</strong>
+                <p>Ten en cuenta que se eliminará la información del mantenimiento de la venta.</p>
+            </div>
+            <div class="modal-footer">
+              <button id="eliminarMantenimientoBtn" class="btn btn-outline-danger btn-sm">Eliminar</button>
+              <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<form id="eliminarMantenimientoForm" method="post" action="/EliminarMantenimientoVenta/{idAsignacion}">
+    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+</form>
         
 <!-- Script de la página -->
 <%@ include file="../venta-footer.jspf"%>
