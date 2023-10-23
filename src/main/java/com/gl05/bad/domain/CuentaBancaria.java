@@ -24,9 +24,10 @@ import lombok.Data;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "CuentaBancaria.findAll", query = "SELECT c FROM CuentaBancaria c"),
-    @NamedQuery(name = "CuentaBancaria.findByIdCuentaBancaria", query = "SELECT c FROM CuentaBancaria c WHERE c.idCuentaBancaria = :idCuentaBancaria"),
+    @NamedQuery(name = "CuentaBancaria.findByIdCuenta", query = "SELECT c FROM CuentaBancaria c WHERE c.idCuenta = :idCuenta"),
     @NamedQuery(name = "CuentaBancaria.findByNombre", query = "SELECT c FROM CuentaBancaria c WHERE c.nombre = :nombre"),
     @NamedQuery(name = "CuentaBancaria.findByTitular", query = "SELECT c FROM CuentaBancaria c WHERE c.titular = :titular"),
+    @NamedQuery(name = "CuentaBancaria.findByBanco", query = "SELECT c FROM CuentaBancaria c WHERE c.banco = :banco"),
     @NamedQuery(name = "CuentaBancaria.findByTipo", query = "SELECT c FROM CuentaBancaria c WHERE c.tipo = :tipo"),
     @NamedQuery(name = "CuentaBancaria.findByCuenta", query = "SELECT c FROM CuentaBancaria c WHERE c.cuenta = :cuenta")})
 public class CuentaBancaria implements Serializable {
@@ -38,13 +39,16 @@ public class CuentaBancaria implements Serializable {
     @Column(name = "ID_CUENTA_BANCARIA")
     @SequenceGenerator(name = "S_CUENTA_BANCARIA", sequenceName = "S_CUENTA_BANCARIA", allocationSize = 1)
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "S_CUENTA_BANCARIA")
-    private Integer idCuentaBancaria;
+    private Long idCuenta;
     @Size(max = 200)
     @Column(name = "NOMBRE")
     private String nombre;
     @Size(max = 200)
     @Column(name = "TITULAR")
     private String titular;
+    @Size(max = 200)
+    @Column(name = "BANCO")
+    private String banco;
     @Size(max = 20)
     @Column(name = "TIPO")
     private String tipo;
@@ -58,7 +62,7 @@ public class CuentaBancaria implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (idCuentaBancaria != null ? idCuentaBancaria.hashCode() : 0);
+        hash += (idCuenta != null ? idCuenta.hashCode() : 0);
         return hash;
     }
 
@@ -68,7 +72,7 @@ public class CuentaBancaria implements Serializable {
             return false;
         }
         CuentaBancaria other = (CuentaBancaria) object;
-        if ((this.idCuentaBancaria == null && other.idCuentaBancaria != null) || (this.idCuentaBancaria != null && !this.idCuentaBancaria.equals(other.idCuentaBancaria))) {
+        if ((this.idCuenta == null && other.idCuenta != null) || (this.idCuenta != null && !this.idCuenta.equals(other.idCuenta))) {
             return false;
         }
         return true;
@@ -76,7 +80,7 @@ public class CuentaBancaria implements Serializable {
 
     @Override
     public String toString() {
-        return "com.gl05.bad.domain.CuentaBancaria[ idCuentaBancaria=" + idCuentaBancaria + " ]";
+        return "com.gl05.bad.domain.CuentaBancaria[ idCuenta=" + idCuenta + " ]";
     }
     
 }

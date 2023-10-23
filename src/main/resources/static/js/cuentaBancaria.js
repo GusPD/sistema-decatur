@@ -1,7 +1,8 @@
 $(document).ready(function() {
     //Tabla
-    var table = $('#empresaTable').DataTable({
-        ajax: '/empresas/data',
+    var idProyecto = $('#proyectoId').data('id');
+    var table = $('#cuentaTable').DataTable({
+        ajax: '/cuentas/data/'+idProyecto,
         processing: true,
         serverSide: true,
         order: [[0, 'asc']],
@@ -16,25 +17,25 @@ $(document).ready(function() {
                 extend: 'copy',
                 text: 'Copiar',
                 exportOptions: {
-                  columns: [0, 1]
+                  columns: [0, 1, 2, 3, 4, 5]
                 }
             },
             {
                 extend: 'excel',
                 text: 'Exportar a Excel',
-                title: 'Empresas del sistema',
-                filename: 'Empresas ' + getCurrentDateTime(),
+                title: 'Cuentas bancarias del proyecto',
+                filename: 'Cuentas Bancarias ' + getCurrentDateTime(),
                 exportOptions: {
-                  columns: [0, 1]
+                  columns: [0, 1, 2, 3, 4, 5]
                 }
             },
             {
                 extend: 'pdf',
                 text: 'Exportar a PDF',
-                title: 'Empresas del sistema',
-                filename: 'Empresas ' + getCurrentDateTime(),
+                title: 'Cuentas bancarias del proyecto',
+                filename: 'Cuentas Bancarias ' + getCurrentDateTime(),
                 exportOptions: {
-                  columns: [0, 1]
+                  columns: [0, 1, 2, 3, 4, 5]
                 },
                 customize: function (doc) {
                   doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split('');
@@ -50,29 +51,29 @@ $(document).ready(function() {
                 render: function (data, type, row, meta) {
                     return meta.row + 1;
                 },
-                width: '10%'
+                width: '8%'
             },
-            { data: 'nombre', title:'Nombre', width: '70%' },
+            { data: 'nombre', title:'Nombre', width: '%19' },
+            { data: 'titular', title:'Titular', width: '19%' },
+            { data: 'banco', title:'Banco', width: '19%' },
+            { data: 'tipo', title:'Tipo', width: '11%' },
+            { data: 'cuenta', title:'Número', width: '11%' },
             {
                 data: null,
                 title: 'Acciones',
                 sortable: false,
                 searchable: false,
-                width: '20%',
+                width: '16%',
                 render: function (data, type, row) {
                     var actionsHtml = '';
-                    if(hasPrivilegeVerEmpresa === true){
-                        actionsHtml = '<a type="button" class="btn btn-outline-secondary btn-sm" href="/Empresa/' + row.idEmpresa + '">';
-                        actionsHtml += '<i class="far fa-eye"></i></a>';
-                    }
-                    if(hasPrivilegeEditarEmpresa === true){
+                    if(hasPrivilegeEditarCuenta === true){
                         actionsHtml += '<button type="button" class="btn btn-outline-primary abrirModal-btn btn-sm" data-bs-toggle="modal" ';
-                        actionsHtml += 'data-bs-target="#crearModal" data-tipo="editar" data-id="' + row.idEmpresa + '" data-modo="actualizar">';
+                        actionsHtml += 'data-bs-target="#crearModal" data-tipo="editar" data-id="' + row.idCuenta + '" data-modo="actualizar">';
                         actionsHtml += '<i class="far fa-edit"></i></button>';
                     }
-                    if(hasPrivilegeEliminarEmpresa === true){
-                        actionsHtml += '<button type="button" class="btn btn-outline-danger eliminarModal-btn btn-sm" data-id="' + row.idEmpresa + '" ';
-                        actionsHtml += 'data-cod="' + row.idEmpresa + '">';
+                    if(hasPrivilegeEliminarCuenta === true){
+                        actionsHtml += '<button type="button" class="btn btn-outline-danger eliminarModal-btn btn-sm" data-id="' + row.idCuenta + '" ';
+                        actionsHtml += 'data-cod="' + row.idCuenta + '">';
                         actionsHtml += '<i class="far fa-trash-alt"></i></button>';
                     }
                     return actionsHtml || '';
@@ -142,12 +143,36 @@ $(document).ready(function() {
         rules: {
             nombre: {
                 required: true
-            }     
+            },
+            titular: {
+                required: true
+            },
+            banco: {
+                required: true
+            },
+            tipo: {
+                required: true
+            },
+            cuenta: {
+                required: true
+            } 
         },
         messages:{
             nombre:{
                 required: 'Este campo es requerido'
-            }      
+            },
+            titular:{
+                required: 'Este campo es requerido'
+            },
+            banco:{
+                required: 'Este campo es requerido'
+            },
+            tipo:{
+                required: 'Este campo es requerido'
+            },
+            cuenta:{
+                required: 'Este campo es requerido'
+            }
         },
         highlight: function(element) {
             $(element).addClass('is-invalid');
@@ -156,7 +181,7 @@ $(document).ready(function() {
             $(element).removeClass('is-invalid');
         },
         errorPlacement: function(error, element) {
-            if (element.attr("name") === "nombre" ) {
+            if (element.attr("name") === "nombre" || element.attr("name") === "titular" || element.attr("name") === "banco" || element.attr("name") === "tipo" || element.attr("name") === "cuenta") {
                 error.insertAfter(element);
             }        
         },
@@ -164,14 +189,16 @@ $(document).ready(function() {
         errorClass: 'invalid-feedback',
         submitHandler: function(form) {
             event.preventDefault();
-            var idEmpresa = $('#idEmpresa').val();
+            var idCuenta = $('#idCuenta').val();
+            var idProyecto = $('#proyectoId').data('id');
             var formDataArray = formGuardar.serializeArray();
             var url;
-            if (idEmpresa) {
-                url = '/ActualizarEmpresa';
-                formDataArray.push({name: 'idEmpresa', value: idEmpresa});
+            if (idCuenta) {
+                url = '/ActualizarCuenta';
+                formDataArray.push({name: 'idCuenta', value: idCuenta}, {name: 'idProyecto', value: idProyecto});
             } else {
-                url = '/AgregarEmpresa';
+                url = '/AgregarCuenta';
+                formDataArray.push({name: 'idProyecto', value: idProyecto});
             }
             $.ajax({
                 url: url,
@@ -179,13 +206,13 @@ $(document).ready(function() {
                 data: formDataArray,
                 success: function (response) {
                     $('#crearModal').modal('hide');
-                    var table = $('#empresaTable').DataTable();
+                    var table = $('#cuentaTable').DataTable();
                     table.ajax.reload(null, false);
                     toastr.success(response);
                 },
                 error: function (xhr, status, error) {
                     $('#crearModal').modal('hide');
-                    var errorMessage = xhr.responseText || 'Error al actualizar la empresa.';
+                    var errorMessage = xhr.responseText || 'Error al actualizar la cuenta bancaria.';
                     toastr.error(errorMessage);
                 }
             });
@@ -193,50 +220,53 @@ $(document).ready(function() {
     });
     // Método para mostrar el modal segun sea si editar o nuevo registro
     $(document).on('click', '.abrirModal-btn', function () {
-        var idEmpresa = $(this).data('id');
+        var idCuenta = $(this).data('id');
         var modal = $('#crearModal');
         var tituloModal = modal.find('.modal-title');
         var form = modal.find('form');
         validator.resetForm();
         formGuardar.find('.is-invalid').removeClass('is-invalid');
-        if (idEmpresa) {
-            tituloModal.text('Editar Empresa');
+        if (idCuenta) {
+            tituloModal.text('Editar Cuenta Bancaria');
             $.ajax({
-                url: '/ObtenerEmpresa/' + idEmpresa,
+                url: '/ObtenerCuenta/' + idCuenta,
                 type: 'GET',
                 success: function (response) {
                     $('#nombre').val(response.nombre);
-                    $('#idEmpresa').val(response.idEmpresa);
+                    $('#titular').val(response.titular);
+                    $('#banco').val(response.banco);
+                    $('#tipo').val(response.tipo);
+                    $('#cuenta').val(response.cuenta);
+                    $('#idCuenta').val(response.idCuenta);
 
                 },
                 error: function () {
-                    alert('Error al obtener los datos de la empresa.');
+                    alert('Error al obtener los datos de la cuenta bancaria.');
                 }
             });
         } else {
-            tituloModal.text('Agregar Empresa');
-            form.attr('action', '/AgregarEmpresa');
-            $('#nombre').val('');
-            $('#idEmpresa').val('');
+            tituloModal.text('Agregar Cuenta Bancaria');
+            form.attr('action', '/AgregarCuenta');
+            $('.form-control').val('');
         }
         modal.modal('show');
     });
     // Método para mostrar el modal de eliminación
     $(document).on('click', '.eliminarModal-btn', function () {
-        var idEmpresa = $(this).data('id');
+        var idCuenta = $(this).data('id');
         var modal = $('#confirmarEliminarModal');
-        var eliminarBtn = modal.find('#eliminarEmpresaBtn');
-        eliminarBtn.data('id', idEmpresa);
+        var eliminarBtn = modal.find('#eliminarCuentaBtn');
+        eliminarBtn.data('id', idCuenta);
         modal.modal('show');
     });
     //Método para enviar la solicitud de eliminar
-    $(document).on('click', '#eliminarEmpresaBtn', function () {
-        var idEmpresa = $(this).data('id');
-        $('#eliminarEmpresaForm').attr('action', '/EliminarEmpresa/' + idEmpresa);
+    $(document).on('click', '#eliminarCuentaBtn', function () {
+        var idCuenta = $(this).data('id');
+        $('#eliminarCuentaForm').attr('action', '/EliminarCuenta/' + idCuenta);
         $.ajax({
-            url: $('#eliminarEmpresaForm').attr('action'),
+            url: $('#eliminarCuentaForm').attr('action'),
             type: 'POST',
-            data: $('#eliminarEmpresaForm').serialize(),
+            data: $('#eliminarCuentaForm').serialize(),
             success: function (response) {
                 $('#confirmarEliminarModal').modal('hide');
                 table.ajax.reload();
@@ -244,7 +274,7 @@ $(document).ready(function() {
             },
             error: function (xhr, status, error) {
                 $('#confirmarEliminarModal').modal('hide');
-                var errorMessage = xhr.responseText || 'Error al eliminar la empresa.';
+                var errorMessage = xhr.responseText || 'Error al eliminar la cuenta.';
                 toastr.error(errorMessage);
             }
         });

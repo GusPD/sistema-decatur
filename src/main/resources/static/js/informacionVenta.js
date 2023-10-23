@@ -270,7 +270,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     formDataArray.push({name: 'idVenta', value: idVenta},{name: 'estado', value: estado},{name: 'idListDocumento', value: idListDocumento});
                 } else {
                     url = '/AgregarVenta/'+idTerreno;
-                    formDataArray.push({name: 'estado', value: estado});
+                    formDataArray.push({name: 'estado', value: estado},{name: 'idListDocumento', value: idListDocumento});
                 }
                 $.ajax({
                     url: url,
@@ -550,7 +550,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         $('#cuotaMantenimiento').val(response.cuotaMantenimiento);
                         $('#multaMantenimiento').val(response.multaMantenimiento);
                         $('#multaFinanciamiento').val(response.multaFinanciamiento);
-                        $('#idListDocumento').val(response.idListDocumento);
                         $('#estado').val(response.estado);
                         $('#terreno').val(response.terreno.idTerreno);
                         $('#idVenta').val(response.idVenta);

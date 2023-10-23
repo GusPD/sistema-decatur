@@ -260,7 +260,7 @@ $(document).ready(function() {
         errorClass: 'invalid-feedback',
         submitHandler: function(form) {
             event.preventDefault();
-            const fechaInputValue = $('#fechaAplicacionF').val();
+            const fechaInputValue = $('#fecha').val();
             const fechaInput = new Date(fechaInputValue);
             const fechaLocal = new Date(fechaInput.getTime() + fechaInput.getTimezoneOffset() * 60000);
             function addLeadingZero(number) {
@@ -274,15 +274,14 @@ $(document).ready(function() {
             var estado = $('#estado').val();
             var idTerreno = $('#idTerreno').val();
             var formDataArray = formGuardar.serializeArray();
-            var fechaIndex = formDataArray.findIndex(item => item.name === 'fecha');
-            formDataArray[fechaIndex].value = formattedDate;
+            formDataArray = formDataArray.filter(item => item.name !== 'fecha');
             var url;
             if (idVenta) {
                 url = '/ActualizarVenta/'+idTerreno;
-                formDataArray.push({name: 'idVenta', value: idVenta},{name: 'estado', value: estado});
+                formDataArray.push({name: 'idVenta', value: idVenta},{name: 'estado', value: estado},{name: 'fecha', value: formattedDate});
             } else {
                 url = '/AgregarVenta/'+idTerreno;
-                formDataArray.push({name: 'estado', value: estado});
+                formDataArray.push({name: 'estado', value: estado},{name: 'fecha', value: formattedDate});
             }
             $.ajax({
                 url: url,

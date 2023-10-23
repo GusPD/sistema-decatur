@@ -4,7 +4,7 @@
     <input type="hidden" id="fechaAplicacionMantenimiento" value="${mantenimiento.getFechaAplicacion()}">
     <!-- Subtitulo de la página y funciones de los datos -->
     <div class="subtitulo-page"><h3 class="mt-0">Venta
-            <c:if test="${empty financiamientos and empty mantenimientos}">
+            <c:if test="${empty financiamientos}">
                 <sec:authorize access="hasAuthority('EDITAR_VENTA_PRIVILAGE')">
                     <span title="Editar Información" id="EditarInformacion" class="btn abrirModal-btn text-info puntero pull-right btn-sm" data-bs-toggle="modal" data-bs-target="#crearModal" data-tipo="editar" data-id="${venta.idVenta}" data-modo="actualizar" style="cursor: pointer;">
                         <i class="far fa-edit"></i>

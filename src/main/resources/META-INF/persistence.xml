@@ -23,27 +23,27 @@
     <class>com.gl05.bad.Persona</class>
     <class>com.gl05.bad.Propietario</class>
     <class>com.gl05.bad.Permiso</class>
-    <class>com.gl05.bad.domain.Venta</class>
-    <class>com.gl05.bad.domain.Pago</class>
-    <class>com.gl05.bad.domain.Documento</class>
-    <class>com.gl05.bad.domain.CuotaAmortizacion</class>
-    <class>com.gl05.bad.domain.Persona</class>
-    <class>com.gl05.bad.domain.Correo</class>
+    <class>com.gl05.bad.domain.CuotaFinanciamiento</class>
+    <class>com.gl05.bad.domain.Referencia</class>
+    <class>com.gl05.bad.domain.Visita</class>
+    <class>com.gl05.bad.domain.Propietario</class>
     <class>com.gl05.bad.domain.Usuario</class>
     <class>com.gl05.bad.domain.Bitacora</class>
-    <class>com.gl05.bad.domain.Propietario</class>
-    <class>com.gl05.bad.domain.Telefono</class>
-    <class>com.gl05.bad.domain.Visitante</class>
     <class>com.gl05.bad.domain.Rol</class>
-    <class>com.gl05.bad.domain.Permiso</class>
-    <class>com.gl05.bad.domain.Referencia</class>
-    <class>com.gl05.bad.domain.CuotaMantenimiento</class>
-    <class>com.gl05.bad.domain.AsignacionPropietario</class>
-    <class>com.gl05.bad.domain.CuentaBancaria</class>
-    <class>com.gl05.bad.domain.Visita</class>
-    <class>com.gl05.bad.domain.CuotaFinanciamiento</class>
     <class>com.gl05.bad.domain.Proyecto</class>
+    <class>com.gl05.bad.domain.Correo</class>
+    <class>com.gl05.bad.domain.Permiso</class>
+    <class>com.gl05.bad.domain.Telefono</class>
+    <class>com.gl05.bad.domain.CuentaBancaria</class>
+    <class>com.gl05.bad.domain.Venta</class>
+    <class>com.gl05.bad.domain.AsignacionPropietario</class>
+    <class>com.gl05.bad.domain.Persona</class>
+    <class>com.gl05.bad.domain.Documento</class>
+    <class>com.gl05.bad.domain.CuotaMantenimiento</class>
     <class>com.gl05.bad.domain.Terreno</class>
+    <class>com.gl05.bad.domain.CuotaAmortizacion</class>
+    <class>com.gl05.bad.domain.Pago</class>
+    <class>com.gl05.bad.domain.Visitante</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@localhost:1521:XE"/>
