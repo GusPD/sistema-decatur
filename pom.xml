@@ -8,7 +8,7 @@
         <version>2.6.3-SNAPSHOT</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.gl05.bad</groupId>
+    <groupId>com.</groupId>
     <artifactId>SistemaDecatur</artifactId>
     <version>1.0</version>
     <packaging>war</packaging>

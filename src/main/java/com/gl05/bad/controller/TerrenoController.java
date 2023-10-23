@@ -100,7 +100,7 @@ public class TerrenoController {
              bitacoraService.registrarAccion("Eliminar terreno");
             return ResponseEntity.ok(mensaje);
         } catch (Exception e) {
-            String error = "Ha ocurrido un error al eliminar el terreno";
+            String error = "Ha ocurrido un error al eliminar el terreno.";
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
     }

@@ -24,7 +24,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 @Data
 @Entity
-@Table(name = "INFO_MANTENIMIENTO")
+@Table(name = "INFO_FINANCIAMIENTO")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "InformacionFinanciamiento.findAll", query = "SELECT i FROM InformacionFinanciamiento i"),
@@ -57,7 +57,7 @@ public class InformacionFinanciamiento implements Serializable {
     private BigDecimal tasa;
     @Column(name = "CUOTA_KI")
     private BigDecimal cuota;
-    @Column(name = "MULTA")
+    @Column(name = "MULTA_FINANCIAMIENTO")
     private BigDecimal multa;
     @ManyToOne
     @JoinColumn(name = "ID_VENTA", referencedColumnName = "ID_VENTA")

@@ -2,6 +2,7 @@ package com.gl05.bad.servicio;
 
 import com.gl05.bad.dao.InformacionFinanciamientoDao;
 import com.gl05.bad.domain.InformacionFinanciamiento;
+import com.gl05.bad.domain.Venta;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,6 +36,12 @@ public class InformacionFinanciamientoServiceImp implements InformacionFinanciam
     @Transactional(readOnly = true)
     public InformacionFinanciamiento encontrar(Long idInformacionFinanciamiento) {
         return informacionFinanciamientoDao.findById(idInformacionFinanciamiento).orElse(null);
+    }
+    
+    @Override
+    @Transactional(readOnly = true)
+    public List<InformacionFinanciamiento> encontrarVenta(Venta venta) {
+        return informacionFinanciamientoDao.findByVenta(venta);
     }
 
     @Override

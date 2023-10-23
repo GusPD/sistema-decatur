@@ -46,9 +46,9 @@ public class InformacionMantenimiento implements Serializable {
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date fechaAplicacion;
-    @Column(name = "CUOTA")
+    @Column(name = "CUOTA_MANTENIMIENTO")
     private BigDecimal cuota;
-    @Column(name = "MULTA")
+    @Column(name = "MULTA_MANTENIMIENTO")
     private BigDecimal multa;
     @ManyToOne
     @JoinColumn(name = "ID_VENTA", referencedColumnName = "ID_VENTA")

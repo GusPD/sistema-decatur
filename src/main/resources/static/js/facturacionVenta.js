@@ -343,9 +343,7 @@ $(document).ready(function() {
                 toastr.error(errorMessage);
             }
         });
-    });
-    //Método para enviar la solicitud de eliminar
- 
+    }); 
     //Función para definir el uso de la libreria selec2
     $( '#propietarios' ).select2( {
         theme: "bootstrap-5",

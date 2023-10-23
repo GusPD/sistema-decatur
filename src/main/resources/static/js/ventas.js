@@ -262,26 +262,26 @@ $(document).ready(function() {
             event.preventDefault();
             const fechaInputValue = $('#fecha').val();
             const fechaInput = new Date(fechaInputValue);
+            const fechaLocal = new Date(fechaInput.getTime() + fechaInput.getTimezoneOffset() * 60000);
             function addLeadingZero(number) {
-              return number < 10 ? `0${number}` : number;
+                return number < 10 ? `0${number}` : number;
             }
-            const day = addLeadingZero(fechaInput.getDate());
-            const month = addLeadingZero(fechaInput.getMonth() + 1);
-            const year = fechaInput.getFullYear();
+            const day = addLeadingZero(fechaLocal.getDate());
+            const month = addLeadingZero(fechaLocal.getMonth() + 1);
+            const year = fechaLocal.getFullYear();
             const formattedDate = `${day}/${month}/${year}`;
             var idVenta = $('#idVenta').val();
             var estado = $('#estado').val();
             var idTerreno = $('#idTerreno').val();
             var formDataArray = formGuardar.serializeArray();
-            var fechaIndex = formDataArray.findIndex(item => item.name === 'fecha');
-            formDataArray[fechaIndex].value = formattedDate;
+            formDataArray = formDataArray.filter(item => item.name !== 'fecha');
             var url;
             if (idVenta) {
                 url = '/ActualizarVenta/'+idTerreno;
-                formDataArray.push({name: 'idVenta', value: idVenta},{name: 'estado', value: estado});
+                formDataArray.push({name: 'idVenta', value: idVenta},{name: 'estado', value: estado},{name: 'fecha', value: formattedDate});
             } else {
                 url = '/AgregarVenta/'+idTerreno;
-                formDataArray.push({name: 'estado', value: estado});
+                formDataArray.push({name: 'estado', value: estado},{name: 'fecha', value: formattedDate});
             }
             $.ajax({
                 url: url,
