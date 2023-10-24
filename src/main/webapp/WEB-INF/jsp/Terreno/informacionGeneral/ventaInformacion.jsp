@@ -1,7 +1,7 @@
 <%@ include file="../venta-header.jspf"%>
 <div id="page-informacion" class="row">
-    <input type="hidden" id="fechaAplicacionFinanciamiento" value="${financiamiento.getFechaAplicacion()}">
-    <input type="hidden" id="fechaAplicacionMantenimiento" value="${mantenimiento.getFechaAplicacion()}">
+    <input type="hidden" id="fechaAplicacionFinanciamiento" value="<c:choose><c:when test="${empty financiamiento}">${venta.fecha}</c:when><c:otherwise>${financiamiento.fechaAplicacion}</c:otherwise></c:choose>">
+    <input type="hidden" id="fechaAplicacionMantenimiento" value="<c:choose><c:when test="${empty mantenimiento}">${venta.fecha}</c:when><c:otherwise>${mantenimiento.fechaAplicacion}</c:otherwise></c:choose>">
     <!-- Subtitulo de la página y funciones de los datos -->
     <div class="subtitulo-page"><h3 class="mt-0">Venta
             <c:if test="${empty financiamientos}">
@@ -89,7 +89,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="col-md-8 border p-3 rounded table-responsive columna-derecha page-scroll" style="height: 30vh;">
+        <div class="col-md-8 border p-3 rounded table-responsive columna-derecha page-scroll" style="height: 50vh;">
             <h6>Financiamientos Anteriores</h6>
             <table class="table table-bordered custom-fixed-header small" id="tabla-financiamientos">
                 <thead>
@@ -158,7 +158,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="col-md-8 border p-3 rounded table-responsive columna-derecha page-scroll" style="height: 20vh;">
+        <div class="col-md-8 border p-3 rounded table-responsive columna-derecha page-scroll" style="height: 45vh;">
             <h6>Mantenimientos Anteriores</h6>
             <table class="table table-bordered custom-fixed-header small" id="tabla-mantenimientos">
                 <thead>
