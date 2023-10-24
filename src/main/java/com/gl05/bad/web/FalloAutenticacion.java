@@ -51,12 +51,12 @@ public class FalloAutenticacion implements AuthenticationFailureHandler {
         
         ConfiguracionCorreo configuracionCorreo = configuracionCorreoService.obtenerConfiguracionCorreo();
 
-        if (username.equals(usuario.getUsername()) && usuario.getBloqueado() == 1 && usuario.isHabilitado() == false) {
+        if (username.equals(usuario.getUsername()) && usuario.isBloqueado() == true && usuario.isHabilitado() == false) {
            errorMessage = "Usuario Bloqueado e Inhabilitado! , Contacte al administrador del sistema para realizar las acciones pertinentes";
            HttpSession session = request.getSession();
            session.setAttribute("errorMessage", errorMessage);
            response.sendRedirect(request.getContextPath() + "/login");            
-        } else if (username.equals(usuario.getUsername()) && usuario.getBloqueado() == 1 ) {
+        } else if (username.equals(usuario.getUsername()) && usuario.isBloqueado() == true ) {
             //Cuando el usuario esta bloqueado por los 3 intentos
             errorMessage = "Usuario Bloqueado! , Contacte al administrador del sistema para realizar las acciones pertinentes";
             HttpSession session = request.getSession();
@@ -67,7 +67,7 @@ public class FalloAutenticacion implements AuthenticationFailureHandler {
             HttpSession session = request.getSession();
             session.setAttribute("errorMessage", errorMessage);
             response.sendRedirect(request.getContextPath() + "/login");       
-         } else if (username.equals(usuario.getUsername()) || usuario.getBloqueado() == 0) {
+         } else if (username.equals(usuario.getUsername()) || usuario.isBloqueado() == false) {
             //Incrementamos el contador de intentos fallidos
             int intentos = usuario.getIntentos() + 1;
             usuario.setIntentos(intentos);
@@ -75,7 +75,7 @@ public class FalloAutenticacion implements AuthenticationFailureHandler {
 
             //Verificar si el usuario ha sido bloqueado
             if (intentos >= 3) {
-                usuario.setBloqueado(1);
+                usuario.setBloqueado(true);
                 usuarioDao.save(usuario);
                 // Enviar correo electrónico al administrador 
                 String usuarioEmail = usuario.getEmail();

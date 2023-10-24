@@ -11,7 +11,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -37,13 +36,11 @@ import org.springframework.format.annotation.DateTimeFormat;
     @NamedQuery(name = "Visita.findByObservaciones", query = "SELECT v FROM Visita v WHERE v.observaciones = :observaciones")})
 public class Visita implements Serializable {
 
-    private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
     @Column(name = "ID_VISITA")
-    @SequenceGenerator(name = "S_VISITA", sequenceName = "S_VISITA", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "S_VISITA")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idVisita;
     @Column(name = "CANTIDAD_ADULTOS")
     private BigInteger cantidadAdultos;

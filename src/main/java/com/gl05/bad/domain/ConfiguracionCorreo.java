@@ -9,7 +9,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -33,13 +32,11 @@ import lombok.Data;
     @NamedQuery(name = "ConfiguracionCorreo.findByStar_tls", query = "SELECT c FROM ConfiguracionCorreo c WHERE c.start_tls = :start_tls")})
 public class ConfiguracionCorreo implements Serializable {
 
-    private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
     @Column(name = "ID_CONFIGURACION")
-    @SequenceGenerator(name = "S_CONFIGURACION_CORREO", sequenceName = "S_CONFIGURACION_CORREO", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "S_CONFIGURACION_CORREO")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idConfiguracion;
     @Size(max = 100)
     @Column(name = "NAME")

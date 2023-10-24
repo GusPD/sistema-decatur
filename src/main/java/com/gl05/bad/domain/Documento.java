@@ -13,7 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -30,13 +29,11 @@ import lombok.Data;
     @NamedQuery(name = "Documento.findByNombre", query = "SELECT d FROM Documento d WHERE d.nombre = :nombre")})
 public class Documento implements Serializable {
 
-    private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
     @Column(name = "ID_DOCUMENTO")
-    @SequenceGenerator(name = "S_DOCUMENTO", sequenceName = "S_DOCUMENTO", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "S_DOCUMENTO")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idDocumento;
     @Size(max = 200)
     @Column(name = "NOMBRE")

@@ -14,7 +14,6 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -31,13 +30,11 @@ import lombok.Data;
     @NamedQuery(name = "Proyecto.findByNombre", query = "SELECT p FROM Proyecto p WHERE p.nombre = :nombre")})
 public class Proyecto implements Serializable {
 
-    private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
     @Column(name = "ID_PROYECTO")
-    @SequenceGenerator(name = "S_PROYECTO", sequenceName = "S_PROYECTO", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "S_PROYECTO")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idProyecto;
     @Size(max = 200)
     @Column(name = "NOMBRE")

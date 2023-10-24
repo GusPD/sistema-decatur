@@ -10,7 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -30,13 +29,11 @@ import lombok.Data;
     @NamedQuery(name = "Referencia.findByCorreo", query = "SELECT r FROM Referencia r WHERE r.correo = :correo")})
 public class Referencia implements Serializable {
 
-    private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
     @Column(name = "ID_REFERENCIA")
-    @SequenceGenerator(name = "S_REFERENCIA", sequenceName = "S_REFERENCIA", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "S_REFERENCIA")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idReferencia;
     @Size(max = 200)
     @Column(name = "NOMBRE")

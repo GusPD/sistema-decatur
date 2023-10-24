@@ -14,7 +14,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -39,13 +38,11 @@ import org.springframework.format.annotation.DateTimeFormat;
     @NamedQuery(name = "CuotaAmortizacion.findBySaldo", query = "SELECT c FROM CuotaAmortizacion c WHERE c.saldo = :saldo")})
 public class CuotaAmortizacion implements Serializable {
 
-    private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
     @Column(name = "ID_CUOTA_AMORTIZACION")
-    @SequenceGenerator(name = "S_CUOTA_AMORTIZACION", sequenceName = "S_CUOTA_AMORTIZACION", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "S_CUOTA_AMORTIZACION")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idCuotaAmortizacion;
     @Column(name = "FECHA_CUOTA")
     @Temporal(TemporalType.TIMESTAMP)

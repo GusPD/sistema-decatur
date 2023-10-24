@@ -11,7 +11,6 @@ import lombok.Data;
 @Entity
 @Table(name = "VISTA_VENTAS_ACTIVA")
 public class VistaVentasActiva implements Serializable{
-    private static final long serialVersionUID = 1L;
     
     @Id
     @Column(name = "ID_VENTA")

@@ -9,7 +9,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -28,13 +27,11 @@ import lombok.Data;
     @NamedQuery(name = "Persona.findByApellido", query = "SELECT p FROM Persona p WHERE p.apellido = :apellido")})
 public class Persona implements Serializable {
 
-    private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
     @Column(name = "ID_PERSONA")
-    @SequenceGenerator(name = "S_PERSONA", sequenceName = "S_PERSONA", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "S_PERSONA")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idPersona;
     @Column(name = "DUI")
     private String dui;

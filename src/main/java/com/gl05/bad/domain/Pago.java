@@ -3,6 +3,7 @@ package com.gl05.bad.domain;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.LocalDateTime;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -14,7 +15,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -31,7 +31,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 @NamedQueries({
     @NamedQuery(name = "Pago.findAll", query = "SELECT p FROM Pago p"),
     @NamedQuery(name = "Pago.findByIdPago", query = "SELECT p FROM Pago p WHERE p.idPago = :idPago"),
+    @NamedQuery(name = "Pago.findByFechaRegistro", query = "SELECT p FROM Pago p WHERE p.fechaRegistro = :fechaRegistro"),
     @NamedQuery(name = "Pago.findByFecha", query = "SELECT p FROM Pago p WHERE p.fecha = :fecha"),
+    @NamedQuery(name = "Pago.findByEstado", query = "SELECT p FROM Pago p WHERE p.estado = :estado"),
+    @NamedQuery(name = "Pago.findByComprobante", query = "SELECT p FROM Pago p WHERE p.comprobante = :comprobante"),
     @NamedQuery(name = "Pago.findByRecibo", query = "SELECT p FROM Pago p WHERE p.recibo = :recibo"),
     @NamedQuery(name = "Pago.findByTipo", query = "SELECT p FROM Pago p WHERE p.tipo = :tipo"),
     @NamedQuery(name = "Pago.findByMonto", query = "SELECT p FROM Pago p WHERE p.monto = :monto"),
@@ -40,20 +43,25 @@ import org.springframework.format.annotation.DateTimeFormat;
     @NamedQuery(name = "Pago.findByObservaciones", query = "SELECT p FROM Pago p WHERE p.observaciones = :observaciones")})
 public class Pago implements Serializable {
 
-    private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
     @Column(name = "ID_PAGO")
-    @SequenceGenerator(name = "S_PAGO", sequenceName = "S_PAGO", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "S_PAGO")
-    private Integer idPago;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long idPago;
+    @Column(name = "FECHA_REGISTRO")
+    private LocalDateTime fechaRegistro;
     @Column(name = "FECHA")
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date fecha;
     @Column(name = "RECIBO")
     private BigInteger recibo;
+    @Column(name = "ESTADO")
+    private BigInteger estado;
+    @Size(max = 20)
+    @Column(name = "COMPROBANTE")
+    private String comprobante;
     @Size(max = 20)
     @Column(name = "TIPO")
     private String tipo;
