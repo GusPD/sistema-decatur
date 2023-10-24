@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', function() {
             function(value, element) {
                 var fechaIngresada = new Date(value);
                 var fechaFinanciamiento = new Date($("#fechaAplicacionFinanciamiento").val());
-                return fechaIngresada > fechaFinanciamiento;
+                return fechaIngresada >= fechaFinanciamiento;
             }, 
             "La fecha debe ser mayor que la fecha anterior."
         );
@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', function() {
             function(value, element) {
                 var fechaIngresada = new Date(value);
                 var fechaMantenimiento = new Date($("#fechaAplicacionMantenimiento").val());
-                return fechaIngresada > fechaMantenimiento;
+                return fechaIngresada >= fechaMantenimiento;
             }, 
             "La fecha debe ser mayor que la fecha anterior."
         );
@@ -439,7 +439,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 cuotaMantenimiento:{
                     required: true,
-                    validarCuotaMantenimiento: true,
                     maxlength: 9
                 },
                 multaMantenimiento: {
