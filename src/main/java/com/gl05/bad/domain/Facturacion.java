@@ -11,7 +11,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -33,13 +32,11 @@ import lombok.Data;
     @NamedQuery(name = "Facturacion.findByGiro", query = "SELECT f FROM Facturacion f WHERE f.giro = :giro")})
 public class Facturacion implements Serializable {
 
-    private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
     @Column(name = "ID_FACTURACION")
-    @SequenceGenerator(name = "S_FACTURACION", sequenceName = "S_FACTURACION", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "S_FACTURACION")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idFacturacion;
     @Size(max = 200)
     @Column(name = "NOMBRE")

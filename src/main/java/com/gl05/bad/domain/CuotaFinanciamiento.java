@@ -3,6 +3,7 @@ package com.gl05.bad.domain;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.LocalDateTime;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -14,7 +15,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -30,6 +30,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 @NamedQueries({
     @NamedQuery(name = "CuotaFinanciamiento.findAll", query = "SELECT c FROM CuotaFinanciamiento c"),
     @NamedQuery(name = "CuotaFinanciamiento.findByIdCuotaFinanciamiento", query = "SELECT c FROM CuotaFinanciamiento c WHERE c.idCuotaFinanciamiento = :idCuotaFinanciamiento"),
+    @NamedQuery(name = "CuotaFinanciamiento.findByFechaRegistro", query = "SELECT c FROM CuotaFinanciamiento c WHERE c.fechaRegistro = :fechaRegistro"),
     @NamedQuery(name = "CuotaFinanciamiento.findByFechaCuota", query = "SELECT c FROM CuotaFinanciamiento c WHERE c.fechaCuota = :fechaCuota"),
     @NamedQuery(name = "CuotaFinanciamiento.findByDiasInteresCorriente", query = "SELECT c FROM CuotaFinanciamiento c WHERE c.diasInteresCorriente = :diasInteresCorriente"),
     @NamedQuery(name = "CuotaFinanciamiento.findByInteresCorriente", query = "SELECT c FROM CuotaFinanciamiento c WHERE c.interesCorriente = :interesCorriente"),
@@ -46,14 +47,14 @@ import org.springframework.format.annotation.DateTimeFormat;
     @NamedQuery(name = "CuotaFinanciamiento.findBySaldo", query = "SELECT c FROM CuotaFinanciamiento c WHERE c.saldo = :saldo")})
 public class CuotaFinanciamiento implements Serializable {
 
-    private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
     @Column(name = "ID_CUOTA_FINANCIAMIENTO")
-    @SequenceGenerator(name = "S_CUOTA_FINANCIAMIENTO", sequenceName = "S_CUOTA_FINANCIAMIENTO", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "S_CUOTA_FINANCIAMIENTO")
-    private Integer idCuotaFinanciamiento;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long idCuotaFinanciamiento;
+    @Column(name = "FECHA_REGISTRO")
+    private LocalDateTime fechaRegistro;
     @Column(name = "FECHA_CUOTA")
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(pattern = "dd/MM/yyyy")
@@ -87,9 +88,6 @@ public class CuotaFinanciamiento implements Serializable {
     @JoinColumn(name = "ID_PAGO", referencedColumnName = "ID_PAGO")
     @ManyToOne
     private Pago pago;
-    @JoinColumn(name = "ID_VENTA", referencedColumnName = "ID_VENTA")
-    @ManyToOne
-    private Venta venta;
 
     @Override
     public int hashCode() {

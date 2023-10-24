@@ -11,7 +11,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -33,13 +32,11 @@ import lombok.Data;
     @NamedQuery(name = "Propietario.findByDireccionTrabajo", query = "SELECT p FROM Propietario p WHERE p.direccionTrabajo = :direccionTrabajo")})
 public class Propietario implements Serializable {
 
-    private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
     @Column(name = "ID_PROPIETARIO")
-    @SequenceGenerator(name = "S_PROPIETARIO", sequenceName = "S_PROPIETARIO", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "S_PROPIETARIO")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idPropietario;
     @JoinColumn(name = "ID_PERSONA", referencedColumnName = "ID_PERSONA")
     @OneToOne

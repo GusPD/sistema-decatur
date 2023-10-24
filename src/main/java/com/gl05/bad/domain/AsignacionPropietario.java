@@ -11,7 +11,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -27,13 +26,11 @@ import lombok.Data;
     @NamedQuery(name = "AsignacionPropietario.findByEstado", query = "SELECT a FROM AsignacionPropietario a WHERE a.estado = :estado")})
 public class AsignacionPropietario implements Serializable {
 
-    private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
     @Column(name = "ID_ASIG_PROPIETARIO")
-    @SequenceGenerator(name = "S_ASIGNACION_PROPIETARIO", sequenceName = "S_ASIGNACION_PROPIETARIO", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "S_ASIGNACION_PROPIETARIO")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idAsignacion;
     @JoinColumn(name = "ID_PROPIETARIO", referencedColumnName = "ID_PROPIETARIO")
     @ManyToOne

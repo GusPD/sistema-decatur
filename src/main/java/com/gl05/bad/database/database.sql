@@ -611,6 +611,7 @@ create table CUOTA_FINANCIAMIENTO
 (
    ID_CUOTA_FINANCIAMIENTO NUMBER(6)            not null,
    ID_PAGO              NUMBER(6),
+   FECHA_REGISTRO       DATE DEFAULT SYSDATE,
    FECHA_CUOTA          DATE,
    DIAS_INTERES_CORRIENTE NUMBER,
    INTERES_CORRIENTE    NUMBER(6,2),
@@ -642,6 +643,7 @@ create table CUOTA_MANTENIMIENTO
 (
    ID_CUOTA_MANTENIMIENTO NUMBER(20)            not null,
    ID_PAGO              NUMBER(9),
+   FECHA_REGISTRO       DATE DEFAULT SYSDATE,
    FECHA_CUOTA          DATE,
    CUOTA                NUMBER(9,2),
    SALDO_CUOTA          NUMBER(9,2),
@@ -773,8 +775,10 @@ create table PAGO
    ID_PAGO              NUMBER(6)            not null,
    ID_CUENTA_BANCARIA   NUMBER(6),
    ID_VENTA             NUMBER(6),
+   FECHA_REGISTRO       DATE DEFAULT SYSDATE,
    FECHA                DATE,
    RECIBO               NUMBER,
+   ESTADO               NUMBER, 
    COMPROBANTE          VARCHAR2(50),
    TIPO                 VARCHAR2(20),
    MONTO                NUMBER(6,2),

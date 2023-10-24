@@ -10,7 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -28,13 +27,11 @@ import lombok.Data;
     @NamedQuery(name = "Telefono.findByTelefono", query = "SELECT t FROM Telefono t WHERE t.telefono = :telefono")})
 public class Telefono implements Serializable {
 
-    private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
     @Column(name = "ID_TELEFONO")
-    @SequenceGenerator(name = "S_TELEFONO", sequenceName = "S_TELEFONO", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "S_TELEFONO")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idTelefono;
     @Size(max = 20)
     @Column(name = "TIPO")

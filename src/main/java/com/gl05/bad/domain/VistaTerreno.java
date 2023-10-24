@@ -11,7 +11,6 @@ import lombok.Data;
 @Entity
 @Table(name = "VISTA_TERRENO")
 public class VistaTerreno implements Serializable{
-    private static final long serialVersionUID = 1L;
     
     @Id
     @Column(name = "ID_TERRENO")

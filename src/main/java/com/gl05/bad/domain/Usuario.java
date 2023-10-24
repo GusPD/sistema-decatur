@@ -15,7 +15,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -37,13 +36,11 @@ import lombok.Data;
     @NamedQuery(name = "Usuario.findByHabilitado", query = "SELECT u FROM Usuario u WHERE u.habilitado = :habilitado")})
 public class Usuario implements Serializable {
 
-    private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
     @Column(name = "ID_USUARIO")
-    @SequenceGenerator(name = "S_USUARIO", sequenceName = "S_USUARIO", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "S_USUARIO")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idUsuario;
     
     @Size(max = 50)
@@ -62,7 +59,7 @@ public class Usuario implements Serializable {
     private int intentos;
     
     @Column(name = "BLOQUEADO")
-    private int bloqueado;
+    private boolean bloqueado;
     
     @Column(name = "HABILITADO")
     private boolean habilitado;

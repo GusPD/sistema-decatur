@@ -13,7 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -37,13 +36,11 @@ import org.springframework.format.annotation.DateTimeFormat;
     @NamedQuery(name = "Venta.findByEstado", query = "SELECT v FROM Venta v WHERE v.estado = :estado")})
 public class Venta implements Serializable {
 
-    private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
     @Column(name = "ID_VENTA")
-    @SequenceGenerator(name = "S_VENTA", sequenceName = "S_VENTA", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "S_VENTA")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idVenta;
     @JoinColumn(name = "NOMBRE")
     private String nombre;

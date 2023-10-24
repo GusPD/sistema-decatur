@@ -30,7 +30,7 @@ public class UsuarioService implements UserDetailsService {
         if (usuario == null) {
             throw new UsernameNotFoundException("Usuario no encontrado");
         }
-        if (usuario.getBloqueado() == 1) {
+        if (usuario.isBloqueado() == true) {
             throw new LockedException("La cuenta está bloqueada");
         }
         return new org.springframework.security.core.userdetails.User(

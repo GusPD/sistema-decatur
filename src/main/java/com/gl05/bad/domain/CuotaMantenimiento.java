@@ -2,7 +2,7 @@ package com.gl05.bad.domain;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.math.BigInteger;
+import java.time.LocalDateTime;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -14,7 +14,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -31,50 +30,51 @@ import org.springframework.format.annotation.DateTimeFormat;
 @NamedQueries({
     @NamedQuery(name = "CuotaMantenimiento.findAll", query = "SELECT c FROM CuotaMantenimiento c"),
     @NamedQuery(name = "CuotaMantenimiento.findByIdCuotaMantenimiento", query = "SELECT c FROM CuotaMantenimiento c WHERE c.idCuotaMantenimiento = :idCuotaMantenimiento"),
+    @NamedQuery(name = "CuotaMantenimiento.findByFechaRegistro", query = "SELECT c FROM CuotaMantenimiento c WHERE c.fechaRegistro = :fechaRegistro"),
     @NamedQuery(name = "CuotaMantenimiento.findByFechaCuota", query = "SELECT c FROM CuotaMantenimiento c WHERE c.fechaCuota = :fechaCuota"),
-    @NamedQuery(name = "CuotaMantenimiento.findByMonto", query = "SELECT c FROM CuotaMantenimiento c WHERE c.monto = :monto"),
+    @NamedQuery(name = "CuotaMantenimiento.findByCuota", query = "SELECT c FROM CuotaMantenimiento c WHERE c.cuota = :cuota"),
+    @NamedQuery(name = "CuotaMantenimiento.findBySaldoCuota", query = "SELECT c FROM CuotaMantenimiento c WHERE c.saldoCuota = :saldoCuota"),
     @NamedQuery(name = "CuotaMantenimiento.findByFechaRecargo", query = "SELECT c FROM CuotaMantenimiento c WHERE c.fechaRecargo = :fechaRecargo"),
     @NamedQuery(name = "CuotaMantenimiento.findByRecargo", query = "SELECT c FROM CuotaMantenimiento c WHERE c.recargo = :recargo"),
-    @NamedQuery(name = "CuotaMantenimiento.findByConceptoDescuentoM", query = "SELECT c FROM CuotaMantenimiento c WHERE c.conceptoDescuento = :conceptoDescuento"),
+    @NamedQuery(name = "CuotaMantenimiento.findBySaldoRecargo", query = "SELECT c FROM CuotaMantenimiento c WHERE c.saldoRecargo = :saldoRecargo"),
     @NamedQuery(name = "CuotaMantenimiento.findByDescuento", query = "SELECT c FROM CuotaMantenimiento c WHERE c.descuento = :descuento"),
     @NamedQuery(name = "CuotaMantenimiento.findByEstadoMantenimiento", query = "SELECT c FROM CuotaMantenimiento c WHERE c.estadoMantenimiento = :estadoMantenimiento"),
     @NamedQuery(name = "CuotaMantenimiento.findByEstadoRecargo", query = "SELECT c FROM CuotaMantenimiento c WHERE c.estadoRecargo = :estadoRecargo")})
 public class CuotaMantenimiento implements Serializable {
 
-    private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @NotNull
     @Column(name = "ID_CUOTA_MANTENIMIENTO")
-    @SequenceGenerator(name = "S_CUOTA_MANTENIMIENTO", sequenceName = "S_CUOTA_MANTENIMIENTO", allocationSize = 1)
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "S_CUOTA_MANTENIMIENTO")
-    private Integer idCuotaMantenimiento;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long idCuotaMantenimiento;
+    @Column(name = "FECHA_REGISTRO")
+    private LocalDateTime fechaRegistro;
     @Column(name = "FECHA_CUOTA")
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date fechaCuota;
-    @Column(name = "MONTO")
-    private BigDecimal monto;
+    @Column(name = "CUOTA")
+    private BigDecimal cuota;
+    @Column(name = "SALDO_CUOTA")
+    private BigDecimal saldoCuota;
     @Column(name = "FECHA_RECARGO")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaRecargo;
     @Column(name = "RECARGO")
     private BigDecimal recargo;
+    @Column(name = "SALDO_RECARGO")
+    private BigDecimal saldoRecargo;
     @Size(max = 200)
-    @Column(name = "CONCEPTO_DESCUENTO")
-    private String conceptoDescuento;
     @Column(name = "DESCUENTO")
     private BigDecimal descuento;
     @Column(name = "ESTADO_MANTENIMIENTO")
-    private BigInteger estadoMantenimiento;
+    private Boolean estadoMantenimiento;
     @Column(name = "ESTADO_RECARGO")
-    private BigInteger estadoRecargo;
+    private Boolean estadoRecargo;
     @JoinColumn(name = "ID_PAGO", referencedColumnName = "ID_PAGO")
     @ManyToOne
     private Pago pago;
-    @JoinColumn(name = "ID_VENTA", referencedColumnName = "ID_VENTA")
-    @ManyToOne
-    private Venta venta;
 
     @Override
     public int hashCode() {
