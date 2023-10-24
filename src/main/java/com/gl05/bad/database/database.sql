@@ -50,13 +50,7 @@ alter table CUOTA_AMORTIZACION
    drop constraint FK_AMORTIZACION_VENTA;
 
 alter table CUOTA_FINANCIAMIENTO
-   drop constraint FK_FINANCIAMIENTO_VENTA;
-
-alter table CUOTA_FINANCIAMIENTO
    drop constraint FK_FINANCIAMIENTO_PAGO;
-
-alter table CUOTA_MANTENIMIENTO
-   drop constraint FK_MANTENIMIENTO_VENTA;
 
 alter table CUOTA_MANTENIMIENTO
    drop constraint FK_MANTENIMIENTO_PAGO;
@@ -183,13 +177,9 @@ drop index VENTA_AMORTIZACION_FK;
 
 drop table CUOTA_AMORTIZACION cascade constraints;
 
-drop index FINANCIAMIENTO_VENTA_FK;
-
 drop index PAGO_FINANCIAMIENTO_FK;
 
 drop table CUOTA_FINANCIAMIENTO cascade constraints;
-
-drop index MANTENIMIENTO_VENTA_FK;
 
 drop index PAGO_MANTENIMIENTO_FK;
 
@@ -620,7 +610,6 @@ create index VENTA_AMORTIZACION_FK on CUOTA_AMORTIZACION (
 create table CUOTA_FINANCIAMIENTO 
 (
    ID_CUOTA_FINANCIAMIENTO NUMBER(6)            not null,
-   ID_VENTA             NUMBER(6),
    ID_PAGO              NUMBER(6),
    FECHA_CUOTA          DATE,
    DIAS_INTERES_CORRIENTE NUMBER,
@@ -647,28 +636,21 @@ create index PAGO_FINANCIAMIENTO_FK on CUOTA_FINANCIAMIENTO (
 );
 
 /*==============================================================*/
-/* Index: FINANCIAMIENTO_VENTA_FK                               */
-/*==============================================================*/
-create index FINANCIAMIENTO_VENTA_FK on CUOTA_FINANCIAMIENTO (
-   ID_VENTA ASC
-);
-
-/*==============================================================*/
 /* Table: CUOTA_MANTENIMIENTO                                   */
 /*==============================================================*/
 create table CUOTA_MANTENIMIENTO 
 (
-   ID_CUOTA_MANTENIMIENTO NUMBER(6)            not null,
-   ID_VENTA             NUMBER(6),
-   ID_PAGO              NUMBER(6),
+   ID_CUOTA_MANTENIMIENTO NUMBER(20)            not null,
+   ID_PAGO              NUMBER(9),
    FECHA_CUOTA          DATE,
-   MONTO                NUMBER(6,2),
+   CUOTA                NUMBER(9,2),
+   SALDO_CUOTA          NUMBER(9,2),
    FECHA_RECARGO        TIMESTAMP,
-   RECARGO              NUMBER(6,2),
-   CONCEPTO_DESCUENTO   VARCHAR2(200),
-   DESCUENTO            NUMBER(6,2),
-   ESTADO_MANTENIMIENTO SMALLINT,
-   ESTADO_RECARGO       SMALLINT,
+   RECARGO              NUMBER(9,2),
+   SALDO_RECARGO        NUMBER(9,2),
+   DESCUENTO            NUMBER(9,2),
+   ESTADO_MANTENIMIENTO NUMBER(1),
+   ESTADO_RECARGO       NUMBER(1),
    constraint PK_CUOTA_MANTENIMIENTO primary key (ID_CUOTA_MANTENIMIENTO)
 );
 
@@ -677,13 +659,6 @@ create table CUOTA_MANTENIMIENTO
 /*==============================================================*/
 create index PAGO_MANTENIMIENTO_FK on CUOTA_MANTENIMIENTO (
    ID_PAGO ASC
-);
-
-/*==============================================================*/
-/* Index: MANTENIMIENTO_VENTA_FK                                */
-/*==============================================================*/
-create index MANTENIMIENTO_VENTA_FK on CUOTA_MANTENIMIENTO (
-   ID_VENTA ASC
 );
 
 /*==============================================================*/
@@ -800,6 +775,7 @@ create table PAGO
    ID_VENTA             NUMBER(6),
    FECHA                DATE,
    RECIBO               NUMBER,
+   COMPROBANTE          VARCHAR2(50),
    TIPO                 VARCHAR2(20),
    MONTO                NUMBER(6,2),
    OTROS                NUMBER(6,2),
@@ -1211,16 +1187,8 @@ alter table CUOTA_AMORTIZACION
       references VENTA (ID_VENTA);
 
 alter table CUOTA_FINANCIAMIENTO
-   add constraint FK_FINANCIAMIENTO_VENTA foreign key (ID_VENTA)
-      references VENTA (ID_VENTA);
-
-alter table CUOTA_FINANCIAMIENTO
    add constraint FK_FINANCIAMIENTO_PAGO foreign key (ID_PAGO)
       references PAGO (ID_PAGO);
-
-alter table CUOTA_MANTENIMIENTO
-   add constraint FK_MANTENIMIENTO_VENTA foreign key (ID_VENTA)
-      references VENTA (ID_VENTA);
 
 alter table CUOTA_MANTENIMIENTO
    add constraint FK_MANTENIMIENTO_PAGO foreign key (ID_PAGO)
