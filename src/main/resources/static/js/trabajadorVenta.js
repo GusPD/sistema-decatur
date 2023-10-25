@@ -142,13 +142,15 @@ $(document).ready(function() {
                 success: function (response) {
                     $('#crearModalTrabajador').modal('hide');
                     toastr.success(response);
-                    $('.form-control').val('');
+                    table.ajax.reload();
                     $.ajax({
                         url: "/TrabajadoresVenta/"+idVenta,
                         type: 'GET',
                         success: function (nuevosDatos) {
                             var elementoActualizable2 = $(nuevosDatos).find('#formGuardarTrabajador');
                             $('#formGuardarTrabajador').html(elementoActualizable2.html());
+                            var elementoActualizable2 = $(nuevosDatos).find('#formSeleccionarTrabajador');
+                            $('#formSeleccionarTrabajador').html(elementoActualizable2.html());
                             $( '#trabajadores' ).select2( {
                                 theme: "bootstrap-5",
                                 width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',

@@ -76,7 +76,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="descuento" class="form-label">Descuento: </label>
-                                <input type="text" class="form-control" id="descuento" name="descuento" maxlength="10" placeholder="Ingrese el descuento" required>
+                                <input type="text" class="form-control" id="descuento" name="descuento" maxlength="10" value="0.00" placeholder="Ingrese el descuento" required>
                             </div>
                             <div class="form-group">
                                 <label for="monto" class="form-label">Monto: </label>

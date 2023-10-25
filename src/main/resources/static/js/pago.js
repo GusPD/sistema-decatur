@@ -1,9 +1,9 @@
 $(document).ready(function() {
     //Tabla
     var idProyecto = $('#proyectoId').data('id');
-    var table = $('#terrenoTable').DataTable({
+    var table = $('#pagoTable').DataTable({
         ajax: {
-            url: '/terrenos/data/' + idProyecto,
+            url: '/pagos/data/' + idProyecto,
             dataSrc: 'data'
         },
         order: [[0, 'asc'],[1, 'asc'],[2, 'asc']],
@@ -26,8 +26,8 @@ $(document).ready(function() {
             {
                 extend: 'excel',
                 text: 'Exportar a Excel',
-                title: 'Terrenos del proyecto',
-                filename: 'Terrenos ' + getCurrentDateTime(),
+                title: 'Pagos del proyecto',
+                filename: 'Pagos ' + getCurrentDateTime(),
                 exportOptions: {
                   columns: [0, 1, 2, 3, 4, 5]
                 }
@@ -35,8 +35,8 @@ $(document).ready(function() {
             {
                 extend: 'pdf',
                 text: 'Exportar a PDF',
-                title: 'Terrenos del proyecto',
-                filename: 'Terrenos ' + getCurrentDateTime(),
+                title: 'Pagos del proyecto',
+                filename: 'Pagos ' + getCurrentDateTime(),
                 exportOptions: {
                   columns: [0, 1, 2, 3, 4, 5]
                 },
@@ -54,37 +54,14 @@ $(document).ready(function() {
                 render: function (data, type, row, meta) {
                     return meta.row + 1;
                 },
-                width: '10%'
+                width: '7%'
             },
-            { data: 'poligono', title:'Polígono', width: '10%' },
-            { data: 'lote', title:'Lote', width: '10%' },
-            { data: 'matricula', title:'Matrícula', width: '20%', sortable: false, searchable: false,},
-            {
-                data: 'areaMetros',
-                width: '15%',
-                title: "Área (m²)",
-                sortable: false,
-                searchable: false,
-                render: function(data, type, row) {
-                    if (type === 'display' || type === 'filter') {
-                        return parseFloat(data).toFixed(2);
-                    }
-                    return data;
-                }
-            },
-            {
-                data: 'areaVaras',
-                width: '15%',
-                title: "Área (v²)",
-                sortable: false,
-                searchable: false,
-                render: function(data, type, row) {
-                    if (type === 'display' || type === 'filter') {
-                        return parseFloat(data).toFixed(2);
-                    }
-                    return data;
-                }
-            },
+            { data: 'fecha', title:'Fecha', width: '10%' },
+            { data: 'recibo', title:'Recibo', width: '8%' },
+            { data: 'estado', title:'Estado', width: '15%'},
+            { data: 'tipo', title:'Tipo', width: '10%'},
+            { data: 'cuenta.banco', title:'Banco', width: '20%'},
+            { data: 'monto', title:'Monto', width: '10%'},
             {
                 data: null,
                 title: 'Acciones',
@@ -93,17 +70,17 @@ $(document).ready(function() {
                 width: '20%',
                 render: function (data, type, row) {
                     var actionsHtml = '';
-                    if(hasPrivilegeVerTerreno === true){
-                        actionsHtml = '<a type="button" class="btn btn-outline-secondary btn-sm" href="/Ventas/' + row.idTerreno + '">';
+                    if(hasPrivilegeVerPago === true){
+                        actionsHtml = '<a type="button" class="btn btn-outline-secondary btn-sm" href="/Recibo/' + row.idPago + '">';
                         actionsHtml += '<i class="far fa-eye"></i></a>';
                     }
-                    if(hasPrivilegeEditarTerreno === true){
+                    if(hasPrivilegeEditarPago === true){
                         actionsHtml += '<button type="button" class="btn btn-outline-primary abrirModal-btn btn-sm" data-bs-toggle="modal" ';
-                        actionsHtml += 'data-bs-target="#crearModal" data-tipo="editar" data-id="' + row.idTerreno + '" data-modo="actualizar">';
+                        actionsHtml += 'data-bs-target="#crearModal" data-tipo="editar" data-id="' + row.idPago + '" data-modo="actualizar">';
                         actionsHtml += '<i class="far fa-edit"></i></button>';
                     }
-                    if(hasPrivilegeEliminarTerreno === true){
-                        actionsHtml += '<button type="button" class="btn btn-outline-danger eliminarModal-btn btn-sm" data-id="' + row.idTerreno + '" ';
+                    if(hasPrivilegeEliminarPago === true){
+                        actionsHtml += '<button type="button" class="btn btn-outline-danger eliminarModal-btn btn-sm" data-id="' + row.idPago + '" ';
                         actionsHtml += 'data-cod="' + row.idTerreno + '">';
                         actionsHtml += '<i class="far fa-trash-alt"></i></button>';
                     }
@@ -169,26 +146,8 @@ $(document).ready(function() {
         var hours = String(date.getHours()).padStart(2, '0');
         var minutes = String(date.getMinutes()).padStart(2, '0');
         var seconds = String(date.getSeconds()).padStart(2, '0');
-
         return year + month + day + '_' + hours + minutes + seconds;
     }
-    //Formulario de agregar
-    document.getElementById("areaMetros").addEventListener("input", function() {
-        const metros = parseFloat(document.getElementById('areaMetros').value);
-        if (!isNaN(metros)) {
-            const varas = metros * 1.4233213046;
-            document.getElementById('areaVaras').value = varas.toFixed(2);
-        } else {
-            document.getElementById('areaVaras').value = '';
-        }
-    });
-    $.validator.addMethod(
-        "validarPoligono",
-        function(value, element) {
-            return this.optional(element) || /^[A-Za-z\s,]+$/.test(value);
-        },
-        "No se aceptan números ni caracteres especiales"
-    );
     $.validator.addMethod(
         "validarNumero",
         function(value, element) {
@@ -197,14 +156,7 @@ $(document).ready(function() {
         "Solo se aceptan números"
     );
     $.validator.addMethod(
-        "validarSeccion",
-        function(value, element) {
-            return this.optional(element) || /^[A-Za-z\s,]*$/.test(value);
-        },
-        "No se aceptan números ni caracteres especiales"
-    );
-    $.validator.addMethod(
-        "validarArea",
+        "validarMonto",
         function(value, element) {
             return this.optional(element) || /^\d+(\.\d+)?$/.test(value);
         },
@@ -213,50 +165,54 @@ $(document).ready(function() {
     var formGuardar = $('#formGuardar');
     var validator = $('#formGuardar').validate({
         rules: {
-            matricula: {
-                required: true,
-                maxlength: 18
+            venta: {
+                required: true
             },
-            poligono: {
-                required: true,
-                validarPoligono: true,
-                maxlength: 1
+            comprobante: {
+                required: true
             },
-            numero: {
+            fecha: {
+                required: true
+            },
+            recibo: {
                 required: true,
                 validarNumero: true,
-                maxlength: 3
+                maxlength: 5
             },
-            seccion:{
-                validarSeccion: true,
-                maxlength: 1
-            },
-            areaMetros: {
+            monto: {
                 required: true,
-                validarArea: true,
-                maxlength: 20
+                validarMonto: true,
+                maxlength: 10
             },
-            areaVaras:{
-                maxlength: 20
-            }          
+            descuento: {
+                validarMonto: true,
+                maxlength: 10
+            },
+            otros: {
+                validarMonto: true,
+                maxlength: 10
+            }  
         },
         messages:{
-            matricula:{
+            venta:{
                 required: 'Este campo es requerido'
             },
-            poligono:{
+            comprobante:{
                 required: 'Este campo es requerido'
             },
-            numero:{
+            fecha:{
                 required: 'Este campo es requerido'
             },
-            seccion:{
+            recibo:{
                 required: 'Este campo es requerido'
             },
-            areaMetros:{
+            monto:{
                 required: 'Este campo es requerido'
             },
-            areaVaras:{
+            descuento:{
+                required: 'Este campo es requerido'
+            },
+            otros:{
                 required: 'Este campo es requerido'
             }        
         },
@@ -267,7 +223,7 @@ $(document).ready(function() {
             $(element).removeClass('is-invalid');
         },
         errorPlacement: function(error, element) {
-            if (element.attr("name") === "matricula" || element.attr("name") === "poligono" || element.attr("name") === "numero" || element.attr("name") === "seccion" || element.attr("name") === "areaMetros" || element.attr("name") === "areaVaras") {
+            if (element.attr("name") === "venta" || element.attr("name") === "comprobante" || element.attr("name") === "fecha" || element.attr("name") === "recibo" || element.attr("name") === "monto" || element.attr("name") === "descuento" || element.attr("name") === "otros") {
                 error.insertAfter(element);
             }        
         },
@@ -305,61 +261,67 @@ $(document).ready(function() {
     });
     //Método para mostrar el modal segun sea si editar o nuevo registro
     $(document).on('click', '.abrirModal-btn', function () {
-        var idTerreno = $(this).data('id');
-        var idProyecto = $("#proyecto").val();
+        var idPago = $(this).data('id');
         var modal = $('#crearModal');
         var tituloModal = modal.find('.modal-title');
         var form = modal.find('form');
         validator.resetForm();
         formGuardar.find('.is-invalid').removeClass('is-invalid');
-        if (idTerreno) {
-            tituloModal.text('Editar Terreno');
+        if (idPago) {
+            tituloModal.text('Editar Pago');
             $.ajax({
-                url: '/ObtenerTerreno/' + idTerreno,
+                url: '/ObtenerPago/' + idPago,
                 type: 'GET',
                 success: function (response) {
-                    $('#matricula').val(response.matricula);
-                    $('#poligono').val(response.poligono);
-                    $('#numero').val(response.numero);
-                    $('#seccion').val(response.seccion);
-                    $('#areaMetros').val(response.areaMetros);
-                    $('#areaVaras').val(response.areaVaras);
-                    $('#proyecto').val(response.proyecto.idProyecto);
-                    $('#idTerreno').val(response.idTerreno);
+                    $('#comprobante').val(response.comprobante);
+                    $('#tipo').val(response.tipo);
+                    $('#fecha').val(response.fecha);
+                    $('#recibo').val(response.recibo);
+                    $('#estado').val(response.estado);
+                    $('#monto').val(response.monto);
+                    $('#otros').val(response.otros);
+                    $('#descuento').val(response.descuento);
+                    $('#observaciones').val(response.observaciones);
+                    $('#cuenta').val(response.cuenta);
+                    $('#venta').val(response.venta);
+                    $('#idPago').val(response.idPago);
                 },
                 error: function () {
-                    alert('Error al obtener los datos del terreno.');
+                    alert('Error al obtener los datos del pago.');
                 }
             });
         } else {
-            tituloModal.text('Agregar Terreno');
-            form.attr('action', '/AgregarTerreno/'+idProyecto);
-            $('#matricula').val('');
-            $('#poligono').val('');
-            $('#numero').val('');
-            $('#seccion').val('');
-            $('#areaMetros').val('');
-            $('#areaVaras').val('');
-            $('#idTerreno').val('');
+            tituloModal.text('Agregar Pago');
+            form.attr('action', '/AgregarPago');
+            $('#tipo').val('');
+            $('#fecha').val('');
+            $('#recibo').val('');
+            $('#monto').val('');
+            $('#otros').val('0.00');
+            $('#descuento').val('0.00');
+            $('#observaciones').val('');
+            $('#cuenta').val('');
+            $('#idPago').val('');
+            $('#venta').val('');
         }
         modal.modal('show');
     });
     //Método para mostrar el modal de eliminación
     $(document).on('click', '.eliminarModal-btn', function () {
-        var idTerreno = $(this).data('id');
+        var idPago = $(this).data('id');
         var modal = $('#confirmarEliminarModal');
-        var eliminarBtn = modal.find('#eliminarTerrenoBtn');
-        eliminarBtn.data('id', idTerreno);
+        var eliminarBtn = modal.find('#eliminarPagoBtn');
+        eliminarBtn.data('id', idPago);
         modal.modal('show');
     });
     //Método para enviar la solicitud de eliminar
-    $(document).on('click', '#eliminarTerrenoBtn', function () {
-        var idTerreno = $(this).data('id');
-        $('#eliminarTerrenoForm').attr('action', '/EliminarTerreno/' + idTerreno);
+    $(document).on('click', '#eliminarPagoBtn', function () {
+        var idPago = $(this).data('id');
+        $('#eliminarPagoForm').attr('action', '/EliminarPago/' + idPago);
         $.ajax({
-            url: $('#eliminarTerrenoForm').attr('action'),
+            url: $('#eliminarPagoForm').attr('action'),
             type: 'POST',
-            data: $('#eliminarTerrenoForm').serialize(),
+            data: $('#eliminarPagoForm').serialize(),
             success: function (response) {
                 $('#confirmarEliminarModal').modal('hide');
                 table.ajax.reload();
@@ -367,10 +329,81 @@ $(document).ready(function() {
             },
             error: function (xhr, status, error) {
                 $('#confirmarEliminarModal').modal('hide');
-                var errorMessage = xhr.responseText || 'Error al eliminar el terreno.';
+                var errorMessage = xhr.responseText || 'Error al eliminar el pago.';
                 toastr.error(errorMessage);
             }
         });
     });
+    //Método para abrir modal de prima
+    $(document).on('click', '#btn-prima', function () {
+        var modal = $('#crearModal');
+        var modalGuardar = $('#crearModalGuardar');
+        $("#crearModalLabelPago").text("Agregar Prima");
+        $("#tipo").val("Prima");
+        $.ajax({
+            url: "/obtenerVentasPrima?proyectoId=" + idProyecto,
+            type: "GET",
+            success: function (data) {
+                var selectElement = $("#venta");
+                selectElement.empty();
+                selectElement.append($("<option>", {value: '', text: 'Seleccione una opción'}));
+                for (var i = 0; i < data.length; i++) {
+                    selectElement.append($("<option>", {
+                        value: data[i].idVenta,
+                        text: data[i].terreno.poligono + '-' + data[i].terreno.numero + data[i].terreno.seccion
+                    }));
+                }
+            }
+        });
+        var selectElement = document.getElementById("comprobante");
+        var indexToRemove = 1;
+        selectElement.remove(indexToRemove);
+        document.getElementById("group-otros").style.display = "none";
+        document.getElementById("group-descuento").style.display = "none";
+        document.getElementById("otros").removeAttribute("required");
+        document.getElementById("descuento").removeAttribute("required");
+        modal.modal('hide');
+        modalGuardar.modal('show');
+    });
+    //Método para abrir modal de mantenimiento
+    $(document).on('click', '#btn-mantenimiento', function () {
+        var modal = $('#crearModal');
+        var modalGuardar = $('#crearModalGuardar');
+        $("#crearModalLabelPago").text("Agregar Mantenimiento");
+        $("#tipo").val("Mantenimiento");
+        $.ajax({
+            url: "/obtenerVentasMantenimiento?proyectoId=" + idProyecto,
+            type: "GET",
+            success: function (data) {
+                var selectElement = $("#venta");
+                selectElement.empty();
+                selectElement.append($("<option>", {value: '', text: 'Seleccione una opción'}));
+                for (var i = 0; i < data.length; i++) {
+                    selectElement.append($("<option>", {
+                        value: data[i].idVenta,
+                        text: data[i].terreno.poligono + '-' + data[i].terreno.numero + data[i].terreno.seccion
+                    }));
+                }
+            }
+        });
+        var selectElement = document.getElementById("comprobante");
+        var newOption = document.createElement("option");
+        newOption.text = "Crédito Fiscal";
+        newOption.value = "Crédito Fiscal";
+        selectElement.appendChild(newOption);
+        document.getElementById("group-otros").style.display = "block";
+        document.getElementById("group-descuento").style.display = "block";
+        document.getElementById("otros").removeAttribute("required");
+        document.getElementById("descuento").removeAttribute("required");
+        modal.modal('hide');
+        modalGuardar.modal('show');
+    });
+    //Función para inicializar la libreria de select2
+    $( '#venta' ).select2( {
+        theme: "bootstrap-5",
+        width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+        placeholder: $( this ).data( 'placeholder' ),
+        closeOnSelect: false,
+    } );
 }); 
 

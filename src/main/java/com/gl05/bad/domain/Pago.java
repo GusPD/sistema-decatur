@@ -58,7 +58,7 @@ public class Pago implements Serializable {
     @Column(name = "RECIBO")
     private BigInteger recibo;
     @Column(name = "ESTADO")
-    private BigInteger estado;
+    private Boolean estado;
     @Size(max = 20)
     @Column(name = "COMPROBANTE")
     private String comprobante;

@@ -87,5 +87,4 @@ public class Visita implements Serializable {
     public String toString() {
         return "com.gl05.bad.domain.Visita[ idVisita=" + idVisita + " ]";
     }
-    
 }
