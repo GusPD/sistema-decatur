@@ -114,7 +114,7 @@
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                         <div class="form-group">
                             <label for="propietarios">Seleccione los propietarios:</label>
-                            <select class="form-select" id="propietarios" name="propietarios" data-live-search="true" multiple>
+                            <select class="form-select" id="propietarios" name="propietarios" placeholder="Seleccione un propietario" data-live-search="true" multiple>
                                 <c:if test="${not empty propietariosAsignados}">
                                     <c:forEach items="${propietariosAsignados}" var="ePropietario">
                                         <option value="${ePropietario.propietario.idPropietario}">${ePropietario.propietario.persona.dui} ${ePropietario.propietario.persona.nombre} ${ePropietario.propietario.persona.apellido}</option>

@@ -54,7 +54,7 @@ public class PagoServiceImp implements PagoService{
     @Transactional(readOnly = true)
     public DataTablesOutput<Pago> listarPagos(DataTablesInput input, Long idProyecto) {
         Specification<Pago> specification = (root, query, builder) -> {
-            return builder.equal(root.get("proyecto").get("idProyecto"), idProyecto);
+            return builder.equal(root.get("venta").get("terreno").get("proyecto").get("idProyecto"), idProyecto);
         };
         return pagoDao.findAll(input, specification);
     }

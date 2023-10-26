@@ -200,22 +200,6 @@ $(document).ready(function() {
         }
         modal.modal('show');
     });
-    //Formulario de seleccionar
-    $('#crearModalConsumidorFinal').on('shown.bs.modal', function () {
-        var select2Elements = $(this).find('.select2');
-        select2Elements.each(function () {
-            $(this).on('click', function () {
-                var select2ChoiceElement = document.querySelector('.select2-selection__choice');
-                if (select2ChoiceElement) {
-                    $("#span-propietarios-error").addClass('d-none');
-                    $('#propietarios').removeClass('is-invalid');
-                }else{
-                    $("#span-propietarios-error").removeClass('d-none');
-                    $('#propietarios').addClass('is-invalid');
-                }
-            });
-        });
-    });
     var formSeleccionarGuardar = $('#formSeleccionarPropietario');
     var validator = $('#formSeleccionarPropietario').validate({
         rules: {
@@ -236,16 +220,17 @@ $(document).ready(function() {
         },
         highlight: function( element) {
             $(element).addClass('is-invalid');
-            var select2ChoiceElement = document.querySelector('.select2-selection__choice');
-            if (!select2ChoiceElement) {
+            var select2ChoiceElement = document.querySelector('#propietarios');
+            if (select2ChoiceElement.classList.contains('is-invalid')) {
                 $("#span-propietarios-error").removeClass('d-none');
                 $('#propietarios').addClass('is-invalid');
+                $("#propietarios-error").addClass('d-none');
             }
         },
         unhighlight: function(element) {
             $(element).removeClass('is-invalid');
-            var select2ChoiceElement = document.querySelector('.select2-selection__choice');
-            if (select2ChoiceElement) {
+            var select2ChoiceElement = document.querySelector('#propietarios');
+            if (!select2ChoiceElement.classList.contains('is-invalid')) {
                 $("#span-propietarios-error").addClass('d-none');
                 $('#propietarios').removeClass('is-invalid');
             }
@@ -345,17 +330,14 @@ $(document).ready(function() {
         });
     }); 
     //Función para definir el uso de la libreria selec2
-    $( '#propietarios' ).select2( {
+    var $select = $( '#propietarios' ).select2( {
         theme: "bootstrap-5",
         width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
         placeholder: $( this ).data( 'placeholder' ),
-        closeOnSelect: false,
+        dropdownParent: $('#crearModalConsumidorFinal .modal-body'),
+        closeOnSelect: false
     } );
-    //Función para definir el uso de la libreria select2
-    $( '#multiple-select-field' ).select2( {
-        theme: "bootstrap-5",
-        width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
-        placeholder: $( this ).data( 'placeholder' ),
-        closeOnSelect: false,
-    } );
+    $select.on('change', function() {
+        $(this).trigger('blur');
+    });
 }); 

@@ -80,7 +80,7 @@ public class EmpresaController {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             Usuario usuario=userService.encontrarUsername(authentication.getName());
             usuario.añadirEmpresa(empresa);
-            String error = "Ha ocurrido un error al eliminar la empresa";
+            String error = "Ha ocurrido un error al eliminar la empresa.";
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
     }

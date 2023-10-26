@@ -60,7 +60,7 @@ $(document).ready(function() {
             { data: 'recibo', title:'Recibo', width: '8%' },
             { data: 'estado', title:'Estado', width: '15%'},
             { data: 'tipo', title:'Tipo', width: '10%'},
-            { data: 'cuenta.banco', title:'Banco', width: '20%'},
+            { data: 'cuentaBancaria.banco', title:'Banco', width: '20%'},
             { data: 'monto', title:'Monto', width: '10%'},
             {
                 data: null,
@@ -85,6 +85,17 @@ $(document).ready(function() {
                         actionsHtml += '<i class="far fa-trash-alt"></i></button>';
                     }
                     return actionsHtml || '';
+                }
+            }
+        ],
+        columnDefs: [
+            {
+                targets: 1,
+                render: function(data, type, row) {
+                    if (type === 'display' || type === 'filter') {
+                        return moment(data).format('DD/MM/YYYY');
+                    }
+                    return data;
                 }
             }
         ],
@@ -172,7 +183,8 @@ $(document).ready(function() {
                 required: true
             },
             fecha: {
-                required: true
+                required: true,
+                maxlength: 10
             },
             recibo: {
                 required: true,
@@ -218,12 +230,23 @@ $(document).ready(function() {
         },
         highlight: function(element) {
             $(element).addClass('is-invalid');
+            var select2ChoiceElement = document.querySelector('#venta');
+            if (select2ChoiceElement.classList.contains('is-invalid')) {
+                $("#span-lotes-error").removeClass('d-none');
+                $('#venta').addClass('is-invalid');
+                $("#venta-error").addClass('d-none');
+            }
         },
         unhighlight: function(element) {
             $(element).removeClass('is-invalid');
+            var select2ChoiceElement = document.querySelector('#venta');
+            if (!select2ChoiceElement.classList.contains('is-invalid')) {
+                $("#span-lotes-error").addClass('d-none');
+                $('#venta').removeClass('is-invalid');
+            }
         },
         errorPlacement: function(error, element) {
-            if (element.attr("name") === "venta" || element.attr("name") === "comprobante" || element.attr("name") === "fecha" || element.attr("name") === "recibo" || element.attr("name") === "monto" || element.attr("name") === "descuento" || element.attr("name") === "otros") {
+            if (element.attr("name") === "comprobante" || element.attr("name") === "fecha" || element.attr("name") === "recibo" || element.attr("name") === "monto" || element.attr("name") === "descuento" || element.attr("name") === "otros") {
                 error.insertAfter(element);
             }        
         },
@@ -231,29 +254,43 @@ $(document).ready(function() {
         errorClass: 'invalid-feedback',
         submitHandler: function(form) {
             event.preventDefault();
-            var idTerreno = $('#idTerreno').val();
-            var idProyecto = $('#proyecto').val();
-            var formDataArray = formGuardar.serializeArray();
-            var url;
-            if (idTerreno) {
-                url = '/ActualizarTerreno/'+idProyecto;
-                formDataArray.push({name: 'idTerreno', value: idTerreno});
-            } else {
-                url = '/AgregarTerreno/'+idProyecto;
+            var idPago = $('#idPago').val();
+            var tipo = $('#tipo').val();
+            const fechaInputValue = $('#fecha').val();
+            const fechaInput = new Date(fechaInputValue);
+            const fechaLocal = new Date(fechaInput.getTime() + fechaInput.getTimezoneOffset() * 60000);
+
+            function addLeadingZero(number) {
+                return number < 10 ? `0${number}` : number;
             }
+            const day = addLeadingZero(fechaLocal.getDate());
+            const month = addLeadingZero(fechaLocal.getMonth() + 1);
+            const year = fechaLocal.getFullYear();
+            const formattedDate = `${day}/${month}/${year}`;
+            var formDataArray = formGuardar.serializeArray();
+            formDataArray = formDataArray.filter(item => item.name !== 'fecha');
+            var url;
+            if (idPago) {
+                url = '/ActualizarPago';
+                formDataArray.push({name: 'tipo', value: tipo}, {name: 'fecha', value: formattedDate});
+            } else {
+                url = '/AgregarPago';
+                formDataArray.push({name: 'tipo', value: tipo}, {name: 'fecha', value: formattedDate});
+            }
+            console.log(formDataArray);
             $.ajax({
                 url: url,
                 type: 'POST',
                 data: formDataArray,
                 success: function (response) {
-                    $('#crearModal').modal('hide');
+                    $('#crearModalGuardar').modal('hide');
                     var table = $('#terrenoTable').DataTable();
                     table.ajax.reload(null, false);
                     toastr.success(response);
                 },
                 error: function (xhr, status, error) {
-                    $('#crearModal').modal('hide');
-                    var errorMessage = xhr.responseText || 'Error al actualizar el terreno.';
+                    $('#crearModalGuardar').modal('hide');
+                    var errorMessage = xhr.responseText || 'Error al actualizar el pago.';
                     toastr.error(errorMessage);
                 }
             });
@@ -262,13 +299,9 @@ $(document).ready(function() {
     //Método para mostrar el modal segun sea si editar o nuevo registro
     $(document).on('click', '.abrirModal-btn', function () {
         var idPago = $(this).data('id');
-        var modal = $('#crearModal');
-        var tituloModal = modal.find('.modal-title');
-        var form = modal.find('form');
-        validator.resetForm();
-        formGuardar.find('.is-invalid').removeClass('is-invalid');
         if (idPago) {
-            tituloModal.text('Editar Pago');
+            validator.resetForm();
+            formGuardar.find('.is-invalid').removeClass('is-invalid');
             $.ajax({
                 url: '/ObtenerPago/' + idPago,
                 type: 'GET',
@@ -290,9 +323,11 @@ $(document).ready(function() {
                     alert('Error al obtener los datos del pago.');
                 }
             });
+            var tipo =  $('#tipo').val();
+            $('#crearModalGuardar').find('.modal-title').text('Editar '+tipo);
+            $('#crearModalGuardar').modal('show');
         } else {
-            tituloModal.text('Agregar Pago');
-            form.attr('action', '/AgregarPago');
+            $('#crearModal').find('.modal-title').text('Agregar Pago');
             $('#tipo').val('');
             $('#fecha').val('');
             $('#recibo').val('');
@@ -303,8 +338,8 @@ $(document).ready(function() {
             $('#cuenta').val('');
             $('#idPago').val('');
             $('#venta').val('');
+            $('#crearModal').modal('show');
         }
-        modal.modal('show');
     });
     //Método para mostrar el modal de eliminación
     $(document).on('click', '.eliminarModal-btn', function () {
@@ -387,10 +422,13 @@ $(document).ready(function() {
             }
         });
         var selectElement = document.getElementById("comprobante");
-        var newOption = document.createElement("option");
-        newOption.text = "Crédito Fiscal";
-        newOption.value = "Crédito Fiscal";
-        selectElement.appendChild(newOption);
+        var cantidadDeOpciones = selectElement.options.length;
+        if (cantidadDeOpciones < 2) {
+            var newOption = document.createElement("option");
+            newOption.text = "Crédito Fiscal";
+            newOption.value = "Crédito Fiscal";
+            selectElement.appendChild(newOption);
+        }
         document.getElementById("group-otros").style.display = "block";
         document.getElementById("group-descuento").style.display = "block";
         document.getElementById("otros").removeAttribute("required");
@@ -399,11 +437,15 @@ $(document).ready(function() {
         modalGuardar.modal('show');
     });
     //Función para inicializar la libreria de select2
-    $( '#venta' ).select2( {
+    var $select = $('#venta').select2({
         theme: "bootstrap-5",
-        width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
-        placeholder: $( this ).data( 'placeholder' ),
-        closeOnSelect: false,
-    } );
+        width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
+        placeholder: $(this).data('placeholder'),
+        dropdownParent: $('#crearModalGuardar .modal-body'),
+        closeOnSelect: false
+    });
+    $select.on('change', function() {
+        $(this).trigger('blur');
+    });
 }); 
 

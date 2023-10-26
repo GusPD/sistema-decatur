@@ -315,6 +315,7 @@ th {
     max-height: 55vh !Important;
     padding-right: 3px!Important;
 }
+
 .select2-results {
     position: relative;
     z-index: 9997;
@@ -322,6 +323,7 @@ th {
 .select2-container {
     z-index: 9997;
 }
+
 .invalid-feedback{
     display: flex;
     text-align: justify;

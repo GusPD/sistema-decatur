@@ -92,9 +92,8 @@
                             <input type="checkbox" class="form-check-input d-none" id="estado" name="estado" checked>
                             <div class="form-group">
                                 <label for="cuenta" class="form-label">Lote: </label>
-                                <select class="form-select" id="venta" name="venta" placeholder="Seleccione una opción" required>
-                                    <option value="">Seleccione una opción</option>
-                                </select>
+                                <select class="form-select" id="venta" name="venta" placeholder="Seleccione una opción" data-live-search="true" required></select>
+                                <div id="span-lotes-error" class="mensaje-error d-none" style=""><span>Este campo es requerido</span></div>
                             </div>
                             <div class="form-group">
                                 <label for="comprobante" class="form-label">Comprobante: </label>
@@ -116,23 +115,23 @@
                             </div>
                             <div class="form-group">
                                 <label for="fecha" class="form-label">Fecha Pago: </label>
-                                <input type="date" class="form-control" id="fecha" name="fecha" required>
+                                <input type="date" class="form-control" id="fecha" name="fecha" maxlength="10" required>
                             </div>
                             <div class="form-group">
                                 <label for="recibo" class="form-label">Recibo: </label>
-                                <input type="text" class="form-control" id="recibo" name="recibo" placeholder="Ingrese el número de recibo" required>
+                                <input type="text" class="form-control" id="recibo" name="recibo" maxlength="5" placeholder="Ingrese el número de recibo" required>
                             </div>
                             <div class="form-group">
                                 <label for="monto" class="form-label">Monto: </label>
-                                <input type="text" class="form-control" id="monto" name="monto" placeholder="Ingrese el monto" required>
+                                <input type="text" class="form-control" id="monto" name="monto" maxlength="10" placeholder="Ingrese el monto" required>
                             </div>
                             <div id="group-otros" class="form-group" style="display: none">
                                 <label for="otros" class="form-label">Otros: </label>
-                                <input type="text" class="form-control" id="otros" name="otros" value="0.00" placeholder="Ingrese el monto en concepto de otros" required>
+                                <input type="text" class="form-control" id="otros" name="otros" value="0.00" maxlength="10" placeholder="Ingrese el monto en concepto de otros" required>
                             </div>
                             <div id="group-descuento" class="form-group" style="display: none">
                                 <label for="descuento" class="form-label">Descuento: </label>
-                                <input type="text" class="form-control" id="descuento" name="descuento" value="0.00"  placeholder="Ingrese el monto en concepto de descuento" required>
+                                <input type="text" class="form-control" id="descuento" name="descuento" value="0.00"  maxlength="10" placeholder="Ingrese el monto en concepto de descuento" required>
                             </div>
                             <div class="form-group">
                                 <label for="observaciones" class="form-label">Observaciones: </label>

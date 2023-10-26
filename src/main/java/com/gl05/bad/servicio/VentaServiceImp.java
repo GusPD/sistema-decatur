@@ -63,11 +63,16 @@ public class VentaServiceImp implements VentaService{
     @Transactional(readOnly = true)
     public List<Venta> encontrarProyectoPrima(Proyecto proyecto) {        
         List<Long> ventasConFinanciamiento = new ArrayList<>();
-        List<InformacionFinanciamiento> infoFinanciamientoList = financiamientoService.listaInformacionFinanciamientos();
-        for (InformacionFinanciamiento infoFinanciamiento : infoFinanciamientoList) {
-            ventasConFinanciamiento.add(infoFinanciamiento.getVenta().getIdVenta());
+        List<Venta> ventasFiltradas;
+        List<InformacionFinanciamiento> infoFinanciamientoList = financiamientoService.listaInformacionFinanciamientosProyecto(proyecto);
+        if (infoFinanciamientoList.isEmpty()) {
+            ventasFiltradas = ventaDao.findByEstadoAndTerrenoProyecto("Activo", proyecto);
+        } else {
+            for (InformacionFinanciamiento infoFinanciamiento : infoFinanciamientoList) {
+                ventasConFinanciamiento.add(infoFinanciamiento.getVenta().getIdVenta());
+            }
+            ventasFiltradas = ventaDao.findByEstadoAndTerrenoProyectoAndIdVentaNotIn("Activo", proyecto, ventasConFinanciamiento);
         }
-        List<Venta> ventasFiltradas = ventaDao.findByEstadoAndTerrenoProyectoAndIdVentaNotIn("Activo", proyecto, ventasConFinanciamiento);
         return ventasFiltradas;
     }
     
@@ -75,7 +80,7 @@ public class VentaServiceImp implements VentaService{
     @Transactional(readOnly = true)
     public List<Venta> encontrarProyectoFinanciamiento(Proyecto proyecto) {        
         List<Long> ventasConFinanciamiento = new ArrayList<>();
-        List<InformacionFinanciamiento> infoFinanciamientoList = financiamientoService.listaInformacionFinanciamientos();
+        List<InformacionFinanciamiento> infoFinanciamientoList = financiamientoService.listaInformacionFinanciamientosProyecto(proyecto);
         for (InformacionFinanciamiento infoFinanciamiento : infoFinanciamientoList) {
             ventasConFinanciamiento.add(infoFinanciamiento.getVenta().getIdVenta());
         }
@@ -87,7 +92,7 @@ public class VentaServiceImp implements VentaService{
     @Transactional(readOnly = true)
     public List<Venta> encontrarProyectoMantenimiento(Proyecto proyecto) {        
         List<Long> ventasConMantenimiento = new ArrayList<>();
-        List<InformacionMantenimiento> infoMantenimientoList = mantenimientoService.listaInformacionMantenimientos();
+        List<InformacionMantenimiento> infoMantenimientoList = mantenimientoService.listaInformacionMantenimientosProyecto(proyecto);
         for (InformacionMantenimiento infoMantenimiento : infoMantenimientoList) {
             ventasConMantenimiento.add(infoMantenimiento.getVenta().getIdVenta());
         }

@@ -2,6 +2,7 @@ package com.gl05.bad.servicio;
 
 import com.gl05.bad.dao.InformacionMantenimientoDao;
 import com.gl05.bad.domain.InformacionMantenimiento;
+import com.gl05.bad.domain.Proyecto;
 import com.gl05.bad.domain.Venta;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,12 @@ public class InformacionMantenimientoServiceImp implements InformacionMantenimie
     @Transactional(readOnly = true)
     public List<InformacionMantenimiento> listaInformacionMantenimientos() {
         return (List<InformacionMantenimiento>) informacionMantenimientoDao.findAll();
+    }
+    
+    @Override
+    @Transactional(readOnly = true)
+    public List<InformacionMantenimiento> listaInformacionMantenimientosProyecto(Proyecto proyecto) {
+        return (List<InformacionMantenimiento>) informacionMantenimientoDao.findByVentaTerrenoProyecto(proyecto);
     }
 
     @Override

@@ -86,7 +86,7 @@
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                         <div class="form-group">
                             <label for="trabajadores">Seleccione los trabajadores:</label>
-                            <select class="form-select" id="trabajadores" name="trabajadores" data-live-search="true" multiple>
+                            <select class="form-select" id="trabajadores" name="trabajadores" placeholder="Seleccione un trabajador" data-live-search="true" multiple>
                                 <c:if test="${not empty trabajadoresNoVenta}">
                                     <c:forEach items="${trabajadoresNoVenta}" var="eTrabajador">
                                         <option value="${eTrabajador.idVisitante}">${eTrabajador.persona.dui} ${eTrabajador.persona.nombre} ${eTrabajador.persona.apellido}</option>
