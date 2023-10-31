@@ -2,6 +2,7 @@ package com.gl05.bad.servicio;
 
 import com.gl05.bad.dao.InformacionFinanciamientoDao;
 import com.gl05.bad.domain.InformacionFinanciamiento;
+import com.gl05.bad.domain.Proyecto;
 import com.gl05.bad.domain.Venta;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,12 @@ public class InformacionFinanciamientoServiceImp implements InformacionFinanciam
     @Transactional(readOnly = true)
     public List<InformacionFinanciamiento> listaInformacionFinanciamientos() {
         return (List<InformacionFinanciamiento>) informacionFinanciamientoDao.findAll();
+    }
+    
+    @Override
+    @Transactional(readOnly = true)
+    public List<InformacionFinanciamiento> listaInformacionFinanciamientosProyecto(Proyecto proyecto) {
+        return (List<InformacionFinanciamiento>) informacionFinanciamientoDao.findByVentaTerrenoProyecto(proyecto);
     }
 
     @Override

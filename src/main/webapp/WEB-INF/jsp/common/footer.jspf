@@ -17,9 +17,12 @@
     <script type="text/javascript" src="${pageContext.request.contextPath}/recursosOnline/js/jquery.spring-friendly.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/recursosOnline/js/select2.full.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/i18n/es.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/recursosOnline/js/adminlte.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/plantilla.js"></script>
     
     <script>var csrfToken = '${_csrf.token}';</script>
+    <script>$.fn.select2.defaults.set('language', 'es');</script>
     </body>
 </html>

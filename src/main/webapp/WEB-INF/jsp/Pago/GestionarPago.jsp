@@ -56,11 +56,19 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="modal-footer">
+                    <div class="form-group row">
                         <label for="seleccionar-pago" class="form-label">Seleccione un pago: </label>
-                        <button id="btn-prima" class="btn btn-outline-success btn-sm">Prima</button>
-                        <button type="btn-mantenimiento" class="btn btn-outline-success btn-sm">Mantenimiento</button>
-                        <button type="btn-financiamiento" class="btn btn-outline-success btn-sm">Financiamiento</button>
+                        <div class="col">
+                            <button id="btn-prima" class="btn btn-outline-secondary btn-sm btn-block">Prima</button>
+                        </div>
+                        <div class="col">
+                            <button id="btn-mantenimiento" class="btn btn-outline-secondary btn-sm btn-block">Mantenimiento</button>
+                        </div>
+                        <div class="col">
+                            <button id="btn-financiamiento" class="btn btn-outline-secondary btn-sm btn-block">Financiamiento</button>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
                         <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal">Cancelar</button>
                     </div>
                 </div>
@@ -68,36 +76,67 @@
         </div>
     </div>
     <!-- Modal de agregar prima-->
-    <div class="modal fade" id="crearModalPrima" tabindex="-1" aria-labelledby="crearModalLabel" aria-hidden="true">
+    <div class="modal fade" id="crearModalGuardar" tabindex="-1" aria-labelledby="crearModalLabelPago" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="crearModalLabel">Agregar Prima</h5>
+                    <h5 class="modal-title" id="crearModalLabelPago">Agregar</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
+                <div class="modal-body ">
                     <form id='formGuardar' accept-charset="UTF-8">
-                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
-                        <input type="hidden" id="idCuenta">
-                        <div class="form-group">
-                            <label for="nombre" class="form-label">Nombre: </label>
-                            <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ingrese el nombre" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="titular" class="form-label">Titular: </label>
-                            <input type="text" class="form-control" id="titular" name="titular" placeholder="Ingrese el titular" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="banco" class="form-label">Banco: </label>
-                            <input type="text" class="form-control" id="banco" name="banco" placeholder="Ingrese el banco" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="tipo" class="form-label">Tipo: </label>
-                            <input type="text" class="form-control" id="tipo" name="tipo" placeholder="Ingrese el tipo" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="cuenta" class="form-label">Cuenta: </label>
-                            <input type="text" class="form-control" id="cuenta" name="cuenta" placeholder="Ingrese número de cuenta" required>
+                        <div  class="overflow-auto">
+                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+                            <input type="hidden" id="idPago">
+                            <input type="hidden" id="tipo" value="">
+                            <input type="checkbox" class="form-check-input d-none" id="estado" name="estado" checked>
+                            <div class="form-group">
+                                <label for="cuenta" class="form-label">Lote: </label>
+                                <select class="form-select" id="venta" name="venta" placeholder="Seleccione una opción" data-live-search="true" required></select>
+                                <div id="span-lotes-error" class="mensaje-error d-none" style=""><span>Este campo es requerido</span></div>
+                            </div>
+                            <div class="form-group">
+                                <label for="comprobante" class="form-label">Comprobante: </label>
+                                <select class="form-select" id="comprobante" name="comprobante" placeholder="Seleccione una opción" required>
+                                    <option value="Factura">Factura</option>
+                                    <option value="Crédito Fiscal">Crédito Fiscal</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="cuenta" class="form-label">Tipo pago: </label>
+                                <select class="form-select" id="cuenta" name="cuenta" placeholder="Seleccione una opción">
+                                    <option value="">Efectivo</option>
+                                    <c:if test="${not empty cuentas}">
+                                        <c:forEach items="${cuentas}" var="eCuenta">
+                                            <option value="${eCuenta.idCuenta}">${eCuenta.nombre}</option>
+                                        </c:forEach>
+                                    </c:if>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="fecha" class="form-label">Fecha Pago: </label>
+                                <input type="date" class="form-control" id="fecha" name="fecha" maxlength="10" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="recibo" class="form-label">Recibo: </label>
+                                <input type="text" class="form-control" id="recibo" name="recibo" maxlength="5" placeholder="Ingrese el número de recibo" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="monto" class="form-label">Monto: </label>
+                                <input type="text" class="form-control" id="monto" name="monto" maxlength="10" placeholder="Ingrese el monto" required>
+                            </div>
+                            <div id="group-otros" class="form-group" style="display: none">
+                                <label for="otros" class="form-label">Otros: </label>
+                                <input type="text" class="form-control" id="otros" name="otros" value="0.00" maxlength="10" placeholder="Ingrese el monto en concepto de otros" required>
+                            </div>
+                            <div id="group-descuento" class="form-group" style="display: none">
+                                <label for="descuento" class="form-label">Descuento: </label>
+                                <input type="text" class="form-control" id="descuento" name="descuento" value="0.00"  maxlength="10" placeholder="Ingrese el monto en concepto de descuento" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="observaciones" class="form-label">Observaciones: </label>
+                                <textarea class="form-control" id="observaciones" name="observaciones" placeholder="Ingrese las observaciones"></textarea>
+                            </div>
                         </div>
                         <div class="modal-footer">
                             <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
@@ -133,13 +172,16 @@
 </div>
 
 <!-- Script de la página -->
-<sec:authorize access="hasAuthority('EDITAR_CUENTA_BANCARIA_PRIVILAGE')" var="hasPrivilegeEditarCuenta"></sec:authorize>
-<script>var hasPrivilegeEditarCuenta = ${hasPrivilegeEditarCuenta};</script>
+<sec:authorize access="hasAuthority('VER_PAGO_PRIVILAGE')" var="hasPrivilegeVerPago"></sec:authorize>
+<script>var hasPrivilegeVerPago = ${hasPrivilegeVerPago};</script>
 
-<sec:authorize access="hasAuthority('ELIMINAR_CUENTA_BANCARIA_PRIVILAGE')" var="hasPrivilegeEliminarCuenta"></sec:authorize>
-<script>var hasPrivilegeEliminarCuenta = ${hasPrivilegeEliminarCuenta};</script>
+<sec:authorize access="hasAuthority('EDITAR_PAGO_PRIVILAGE')" var="hasPrivilegeEditarPago"></sec:authorize>
+<script>var hasPrivilegeEditarPago = ${hasPrivilegeEditarPago};</script>
+
+<sec:authorize access="hasAuthority('ELIMINAR_PAGO_PRIVILAGE')" var="hasPrivilegeEliminarPago"></sec:authorize>
+<script>var hasPrivilegeEliminarPago = ${hasPrivilegeEliminarPago};</script>
 
 <%@ include file="../common/footer.jspf"%>
 
-<script src="${pageContext.request.contextPath}/js/cuentaBancaria.js"></script>
+<script src="${pageContext.request.contextPath}/js/pago.js"></script>
 

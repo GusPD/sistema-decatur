@@ -529,17 +529,20 @@ public class VentaController {
             Documento newDocumento = new Documento();
             
             byte[] fileBytes = documento.getBytes();
-            Blob documentoConvertido = new javax.sql.rowset.serial.SerialBlob(fileBytes);
-            
-            Venta newVenta = ventaService.encontrar(idVenta);
-            
-            newDocumento.setNombre(nombre);
-            newDocumento.setDocumento(documentoConvertido);
-            newDocumento.setIdListDocumento(newVenta.getIdListDocumento());
-            documentoService.agregar(newDocumento);
-            String mensaje = "Se ha agregado el documento correctamente.";
-            bitacoraService.registrarAccion("Agregar documento de la venta");
-            return ResponseEntity.ok(mensaje);
+            if (fileBytes != null && fileBytes.length > 0) {
+                Venta newVenta = ventaService.encontrar(idVenta);
+
+                newDocumento.setNombre(nombre);
+                newDocumento.setDocumento(fileBytes);
+                newDocumento.setIdListDocumento(newVenta.getIdListDocumento());
+                documentoService.agregar(newDocumento);
+                String mensaje = "Se ha agregado el documento correctamente.";
+                bitacoraService.registrarAccion("Agregar documento de la venta");
+                return ResponseEntity.ok(mensaje);
+            }else{
+                String error = "Ha ocurrido un error al agregar el documento, documento vacío.";
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);        
+            }
         } catch(Exception e) {
             String error = "Ha ocurrido un error al agregar el documento.";
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
@@ -566,23 +569,12 @@ public class VentaController {
         Documento archivo = new Documento();
         archivo.setIdDocumento(id);
         Documento archivoExistente = documentoService.encontrar(archivo);
-
-        Blob pdfBlob = archivoExistente.getDocumento();
-        byte[] pdfBytes;
-
-        try {
-            if (pdfBlob != null && pdfBlob.length() > 0) {
-                pdfBytes = pdfBlob.getBytes(1, (int) pdfBlob.length());
-                HttpHeaders headers = new HttpHeaders();
-                headers.setContentType(MediaType.APPLICATION_PDF);
-                headers.add("Content-Disposition", "inline; filename=" + archivoExistente.getNombre().replace(" ","_") + ".pdf");
-                bitacoraService.registrarAccion("Ver documento venta");
-                return new ResponseEntity <>(pdfBytes, headers, HttpStatus.OK);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return ResponseEntity.notFound().build();
+        byte[] pdfBytes = archivoExistente.getDocumento();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.add("Content-Disposition", "inline; filename=" + archivoExistente.getNombre().replace(" ","_") + ".pdf");
+        bitacoraService.registrarAccion("Ver documento venta");
+        return new ResponseEntity <>(pdfBytes, headers, HttpStatus.OK);
     }
     
     //Función que redirige a la vista de la facturación de la venta

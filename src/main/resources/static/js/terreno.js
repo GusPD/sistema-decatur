@@ -367,7 +367,7 @@ $(document).ready(function() {
             },
             error: function (xhr, status, error) {
                 $('#confirmarEliminarModal').modal('hide');
-                var errorMessage = xhr.responseText || 'Error al actualizar el terreno.';
+                var errorMessage = xhr.responseText || 'Error al eliminar el terreno.';
                 toastr.error(errorMessage);
             }
         });

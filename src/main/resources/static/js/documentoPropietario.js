@@ -123,6 +123,7 @@ $(document).ready(function() {
             var url = '/AgregarDocumentoPropietario';
             formDataArray.append('idDocumento', idDocumento);
             formDataArray.append('idPropietario', idPropietario);
+            console.log(formDataArray);
             $.ajax({
                 url: url,
                 type: 'POST',

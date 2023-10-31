@@ -142,18 +142,20 @@ $(document).ready(function() {
                 success: function (response) {
                     $('#crearModalTrabajador').modal('hide');
                     toastr.success(response);
-                    $('.form-control').val('');
+                    table.ajax.reload();
                     $.ajax({
                         url: "/TrabajadoresVenta/"+idVenta,
                         type: 'GET',
                         success: function (nuevosDatos) {
                             var elementoActualizable2 = $(nuevosDatos).find('#formGuardarTrabajador');
                             $('#formGuardarTrabajador').html(elementoActualizable2.html());
+                            var elementoActualizable2 = $(nuevosDatos).find('#formSeleccionarTrabajador');
+                            $('#formSeleccionarTrabajador').html(elementoActualizable2.html());
                             $( '#trabajadores' ).select2( {
                                 theme: "bootstrap-5",
                                 width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
                                 placeholder: $( this ).data( 'placeholder' ),
-                                closeOnSelect: false,
+                                closeOnSelect: false
                             } );
                         },
                         error: function () {
@@ -169,22 +171,6 @@ $(document).ready(function() {
             });
         }
     });
-    //Formulario de seleccionar
-    $('#seleccionarModalTrabajador').on('shown.bs.modal', function () {
-        var select2Elements = $(this).find('.select2');
-        select2Elements.each(function () {
-            $(this).on('click', function () {
-                var select2ChoiceElement = document.querySelector('.select2-selection__choice');
-                if (select2ChoiceElement) {
-                    $("#span-trabajadores-error").addClass('d-none');
-                    $('#trabajadores').removeClass('is-invalid');
-                }else{
-                    $("#span-trabajadores-error").removeClass('d-none');
-                    $('#trabajadores').addClass('is-invalid');
-                }
-            });
-        });
-    });
     var formSeleccionarGuardar = $('#formSeleccionarTrabajador');
     var validator = $('#formSeleccionarTrabajador').validate({
         rules: {
@@ -199,16 +185,17 @@ $(document).ready(function() {
         },
         highlight: function(element) {
             $(element).addClass('is-invalid');
-            var select2ChoiceElement = document.querySelector('.select2-selection__choice');
-            if (!select2ChoiceElement) {
+            var select2ChoiceElement = document.querySelector('#trabajadores');
+            if (select2ChoiceElement.classList.contains('is-invalid')) {
                 $("#span-trabajadores-error").removeClass('d-none');
                 $('#trabajadores').addClass('is-invalid');
+                $("#trabajadores-error").addClass('d-none');
             }
         },
         unhighlight: function(element) {
             $(element).removeClass('is-invalid');
-            var select2ChoiceElement = document.querySelector('.select2-selection__choice');
-            if (select2ChoiceElement) {
+            var select2ChoiceElement = document.querySelector('#trabajadores');
+            if (!select2ChoiceElement.classList.contains('is-invalid')) {
                 $("#span-trabajadores-error").addClass('d-none');
                 $('#trabajadores').removeClass('is-invalid');
             }
@@ -244,7 +231,7 @@ $(document).ready(function() {
                                 theme: "bootstrap-5",
                                 width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
                                 placeholder: $( this ).data( 'placeholder' ),
-                                closeOnSelect: false,
+                                closeOnSelect: false
                             } );
                         },
                         error: function () {
@@ -293,7 +280,7 @@ $(document).ready(function() {
                             theme: "bootstrap-5",
                             width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
                             placeholder: $( this ).data( 'placeholder' ),
-                            closeOnSelect: false,
+                            closeOnSelect: false
                         } );
                     },
                     error: function () {
@@ -310,17 +297,14 @@ $(document).ready(function() {
         
     });
     //Función para inicializar la libreria de select2
-    $( '#trabajadores' ).select2( {
+     var $select = $( '#trabajadores' ).select2( {
         theme: "bootstrap-5",
         width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
         placeholder: $( this ).data( 'placeholder' ),
-        closeOnSelect: false,
+        dropdownParent: $('#seleccionarModalTrabajador .modal-body'),
+        closeOnSelect: false
     } );
-    //Función para inicializar la libreria de select2
-    $( '#multiple-select-field' ).select2( {
-        theme: "bootstrap-5",
-        width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
-        placeholder: $( this ).data( 'placeholder' ),
-        closeOnSelect: false,
-    } );
+    $select.on('change', function() {
+        $(this).trigger('blur');
+    });
 }); 

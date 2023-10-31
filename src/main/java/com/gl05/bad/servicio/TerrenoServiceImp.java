@@ -1,6 +1,5 @@
 package com.gl05.bad.servicio;
 
-import com.gl05.bad.dao.TerrenoDao;
 import com.gl05.bad.domain.Terreno;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +8,8 @@ import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.gl05.bad.dao.TerrenoDao;
+import com.gl05.bad.domain.Proyecto;
 
 @Service
 public class TerrenoServiceImp implements TerrenoService{
