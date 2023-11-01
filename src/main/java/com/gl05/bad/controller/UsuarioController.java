@@ -70,7 +70,7 @@ public class UsuarioController {
 
     //Función que agrega un usuario de la base de datos
     @PostMapping("/AgregarUsuario")
-    public ResponseEntity AgregarUsuario(Usuario usuario, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> AgregarUsuario(Usuario usuario, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             String password = usuario.getPassword();
             String encryptedPassword = passwordEncoder.encode(password);
@@ -87,7 +87,7 @@ public class UsuarioController {
 
     //Función que elimina un usuario de la base de datos
     @PostMapping("/EliminarUsuario/{idUsuario}")
-    public ResponseEntity EliminarUsuario(Usuario usuario) {
+    public ResponseEntity<String> EliminarUsuario(Usuario usuario) {
         try {
             userService.eliminar(usuario);
             String mensaje = "Se ha eliminado al usuario correctamente.";
@@ -112,7 +112,7 @@ public class UsuarioController {
 
     //Función que actualiza un usuario de la base de datos
     @PostMapping("/ActualizarUsuario")
-    public ResponseEntity ActualizarUsuario(Usuario usuario, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> ActualizarUsuario(Usuario usuario, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             String password = usuario.getPassword();
 

@@ -15,8 +15,6 @@ import com.gl05.bad.servicio.ProyectoService;
 import com.gl05.bad.servicio.UserService;
 import com.gl05.bad.servicio.VisitanteService;
 import com.gl05.bad.servicio.VistaTrabajadoresProyectoService;
-import java.sql.Blob;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -145,7 +143,7 @@ public class TrabajadorController {
     
     //Función que agrega un documento al trabajador
     @PostMapping("/AgregarDocumentoTrabajador")
-    public ResponseEntity agregarDocumentoTrabajador(HttpServletRequest request, RedirectAttributes redirectAttributes,
+    public ResponseEntity<String> agregarDocumentoTrabajador(HttpServletRequest request, RedirectAttributes redirectAttributes,
             @RequestParam("nombre") String nombre,
             @RequestParam("documento") MultipartFile documento,
             @RequestParam("idVisitante") Long idVisitante) {
@@ -173,7 +171,7 @@ public class TrabajadorController {
     
     //Función que elimina un documento del trabajador
     @PostMapping("/EliminarDocumentoTrabajador/{idDocumento}")
-    public ResponseEntity eliminarDocumentoTrabajador(Documento documento, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> eliminarDocumentoTrabajador(Documento documento, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             documentoService.eliminar(documento);
             String mensaje = "Se ha eliminado el documento correctamente.";
@@ -228,7 +226,7 @@ public class TrabajadorController {
 
     //Función que agrega un trabajador a la base de datos
     @PostMapping("/AgregarTrabajador")
-    public ResponseEntity AgregarTrabajador(Visitante visitante, Persona persona, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> AgregarTrabajador(Visitante visitante, Persona persona, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             if(personaService.encontrarDui(persona.getDui())== null){
                 personaService.agregar(persona);
@@ -250,7 +248,7 @@ public class TrabajadorController {
 
     //Función que elimina un trabajador de la base de datos
     @PostMapping("/EliminarTrabajador/{idPersona}")
-    public ResponseEntity EliminarTrabajador(Persona persona) {
+    public ResponseEntity<String> EliminarTrabajador(Persona persona) {
         try {
              Visitante newTrabajador = visitanteService.encontrarPersona(persona);
              visitanteService.eliminar(newTrabajador);
@@ -281,7 +279,7 @@ public class TrabajadorController {
 
     //Función que actualiza un trabajador de la base de datos
     @PostMapping("/ActualizarTrabajador")
-    public ResponseEntity ActualizarTrabajador( Visitante visitante, Persona persona, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> ActualizarTrabajador( Visitante visitante, Persona persona, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             visitante.setPersona(persona);
             visitanteService.actualizar(visitante);

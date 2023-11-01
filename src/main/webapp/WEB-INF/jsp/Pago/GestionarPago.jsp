@@ -59,13 +59,13 @@
                     <div class="form-group row">
                         <label for="seleccionar-pago" class="form-label">Seleccione un pago: </label>
                         <div class="col">
-                            <button id="btn-prima" class="btn btn-outline-secondary btn-sm btn-block">Prima</button>
+                            <button id="btn-prima" class="btn btn-outline-dark btn-sm btn-block">Prima</button>
                         </div>
                         <div class="col">
-                            <button id="btn-mantenimiento" class="btn btn-outline-secondary btn-sm btn-block">Mantenimiento</button>
+                            <button id="btn-mantenimiento" class="btn btn-outline-dark btn-sm btn-block">Mantenimiento</button>
                         </div>
                         <div class="col">
-                            <button id="btn-financiamiento" class="btn btn-outline-secondary btn-sm btn-block">Financiamiento</button>
+                            <button id="btn-financiamiento" class="btn btn-outline-dark btn-sm btn-block">Financiamiento</button>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -105,7 +105,6 @@
                             <div class="form-group">
                                 <label for="cuenta" class="form-label">Tipo pago: </label>
                                 <select class="form-select" id="cuenta" name="cuenta" placeholder="Seleccione una opción">
-                                    <option value="">Efectivo</option>
                                     <c:if test="${not empty cuentas}">
                                         <c:forEach items="${cuentas}" var="eCuenta">
                                             <option value="${eCuenta.idCuenta}">${eCuenta.nombre}</option>

@@ -28,6 +28,13 @@
             <artifactId>postgresql</artifactId>
             <version>42.6.0</version>
         </dependency>
+        <!--Dependencias de esprint boot-->
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-actuator</artifactId>
+            </dependency>
+        </dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -93,7 +100,6 @@
             <artifactId>jstl</artifactId>
             <version>1.2</version>
         </dependency>
-        
         <!-- Correo electronico -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

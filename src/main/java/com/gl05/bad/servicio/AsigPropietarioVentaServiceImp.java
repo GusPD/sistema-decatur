@@ -3,7 +3,6 @@ package com.gl05.bad.servicio;
 import com.gl05.bad.dao.AsigPropietarioVentaDao;
 import com.gl05.bad.domain.AsignacionPropietario;
 import com.gl05.bad.domain.Propietario;
-import com.gl05.bad.domain.Terreno;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;

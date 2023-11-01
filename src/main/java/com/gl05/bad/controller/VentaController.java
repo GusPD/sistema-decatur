@@ -27,10 +27,7 @@ import com.gl05.bad.servicio.TerrenoService;
 import com.gl05.bad.servicio.VentaService;
 import com.gl05.bad.servicio.VisitanteService;
 import com.gl05.bad.servicio.VistaVentasActivaService;
-import java.sql.Blob;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -168,7 +165,7 @@ public class VentaController {
     
     //Función que agrega la información de financiamiento una venta de la base de datos
     @PostMapping("/AgregarFinanciamientoVenta")
-    public ResponseEntity AgregarFinanciamientoVenta(@RequestParam("idVenta") Long idVenta, InformacionFinanciamiento financiamiento, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> AgregarFinanciamientoVenta(@RequestParam("idVenta") Long idVenta, InformacionFinanciamiento financiamiento, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             Venta venta = ventaService.encontrar(idVenta);
             financiamiento.setVenta(venta);
@@ -197,7 +194,7 @@ public class VentaController {
     
     //Función que elimina la información de financiamiento de una venta de la base de datos
     @PostMapping("/EliminarFinanciamientoVenta/{idAsignacion}")
-    public ResponseEntity EliminarFinanciamientoVenta(InformacionFinanciamiento financiamiento) {
+    public ResponseEntity<String> EliminarFinanciamientoVenta(InformacionFinanciamiento financiamiento) {
         try {
             financiamientoService.eliminar(financiamiento);
             String mensaje = "Se ha eliminado la información del financiamiento de la venta correctamente.";
@@ -211,7 +208,7 @@ public class VentaController {
     
     //Función que agrega la información de mantenimiento una venta de la base de datos
     @PostMapping("/AgregarMantenimientoVenta")
-    public ResponseEntity AgregarMantenimientoVenta(@RequestParam("idVenta") Long idVenta, InformacionMantenimiento mantenimiento, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> AgregarMantenimientoVenta(@RequestParam("idVenta") Long idVenta, InformacionMantenimiento mantenimiento, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             Venta venta = ventaService.encontrar(idVenta);
             mantenimiento.setVenta(venta);
@@ -240,7 +237,7 @@ public class VentaController {
     
     //Función que elimina la información de mantenimiento de una venta de la base de datos
     @PostMapping("/EliminarMantenimientoVenta/{idAsignacion}")
-    public ResponseEntity EliminarMantenimientoVenta(InformacionMantenimiento mantenimiento) {
+    public ResponseEntity<String> EliminarMantenimientoVenta(InformacionMantenimiento mantenimiento) {
         try {
             mantenimientoService.eliminar(mantenimiento);
             String mensaje = "Se ha eliminado la información del mantenimiento de la venta correctamente.";
@@ -269,7 +266,7 @@ public class VentaController {
         
         List<Propietario> listaPropietarios = propietarioService.listaPropietarios();
         List<AsignacionPropietario> listaAsignaciones = asigPropietarioVentaService.listaAsignacion();
-        List<Propietario> propietariosNoVenta = new ArrayList();
+        List<Propietario> propietariosNoVenta = new ArrayList<Propietario>();
         boolean existePropietarioAsignado = false;
         for (var propietario : listaPropietarios) {
             for (var asignacion : listaAsignaciones) {
@@ -284,14 +281,14 @@ public class VentaController {
             }
         }
         
-        List<AsignacionPropietario> propietarios = new ArrayList();
+        List<AsignacionPropietario> propietarios = new ArrayList<AsignacionPropietario>();
         for (var propietario : listaAsignaciones) {
             if(Objects.equals(propietario.getVenta().getIdVenta(), venta.getIdVenta())){
                 propietarios.add(propietario);
             }
         }
         
-        List<AsignacionPropietario> propietariosSeleccionados = new ArrayList();
+        List<AsignacionPropietario> propietariosSeleccionados = new ArrayList<AsignacionPropietario>();
         for (var propietario : propietarios) {
             if(Objects.equals(propietario.getEstado(), "Seleccionado")){
                 propietariosSeleccionados.add(propietario);
@@ -309,7 +306,7 @@ public class VentaController {
     
     //Función para agregar un propietario a la venta
     @PostMapping("/AgregarPropietarioVenta")
-    public ResponseEntity AgregarPropietarioVenta(@RequestParam("idVenta") Long idVenta,  @RequestParam("nombreP") String nombre, Propietario propietario, Persona persona, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> AgregarPropietarioVenta(@RequestParam("idVenta") Long idVenta,  @RequestParam("nombreP") String nombre, Propietario propietario, Persona persona, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             if(personaService.encontrarDui(persona.getDui())== null){
                 persona.setNombre(nombre);
@@ -338,7 +335,7 @@ public class VentaController {
     
     //Función para seleccionar un propietario de otra venta a la venta    
     @PostMapping("/SeleccionarPropietariosVenta")
-    public ResponseEntity SeleccionarPropietariosVenta(@RequestParam("idVenta") Long idVenta, @RequestParam("propietarios") List<Long> propietarios, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> SeleccionarPropietariosVenta(@RequestParam("idVenta") Long idVenta, @RequestParam("propietarios") List<Long> propietarios, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             Venta venta= ventaService.encontrar(idVenta);
             int contar=0;
@@ -365,7 +362,7 @@ public class VentaController {
 
     //Función para eliminar un propietario de la venta
     @PostMapping("/EliminarPropietarioVenta/{idAsignacion}")
-    public ResponseEntity EliminarPropietarioVenta(AsignacionPropietario asignacion) {
+    public ResponseEntity<String> EliminarPropietarioVenta(AsignacionPropietario asignacion) {
         try {
              asigPropietarioVentaService.eliminar(asignacion);
              String mensaje = "Se ha eliminado un propietario de la venta correctamente.";
@@ -394,7 +391,7 @@ public class VentaController {
         
         List<Visitante> listaVisitantes = visitanteService.listaVisitantes();
         List<AsignacionVisitante> listaAsignacionesVisitante = asigVisitanteService.listaAsignacionVisitantes();
-        List<Visitante> visitantesNoVenta = new ArrayList();
+        List<Visitante> visitantesNoVenta = new ArrayList<Visitante>();
         boolean existeVisitanteAsignado = false;
         for (var visitante : listaVisitantes) {
             for (var asignacion : listaAsignacionesVisitante) {
@@ -409,7 +406,7 @@ public class VentaController {
             }
         }
         
-        List<AsignacionVisitante> trabajadores = new ArrayList();
+        List<AsignacionVisitante> trabajadores = new ArrayList<AsignacionVisitante>();
         for (var trabajador : listaAsignacionesVisitante) {
             if(Objects.equals(trabajador.getVenta().getIdVenta(), venta.getIdVenta())){
                 trabajadores.add(trabajador);
@@ -426,7 +423,7 @@ public class VentaController {
     
     //Función para agregar un trabajador a la venta
     @PostMapping("/AgregarTrabajadorVenta")
-    public ResponseEntity AgregarTrabajadorVenta(@RequestParam("idVenta") Long idVenta, Visitante visitante, Persona persona, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> AgregarTrabajadorVenta(@RequestParam("idVenta") Long idVenta, Visitante visitante, Persona persona, HttpServletRequest request, RedirectAttributes redirectAttributes) {
        try {
             if(personaService.encontrarDui(persona.getDui())== null){
                 personaService.agregar(persona);
@@ -453,7 +450,7 @@ public class VentaController {
     
     //Función para seleccionar un trabajador de otra venta a la venta
     @PostMapping("/SeleccionarTrabajadoresVenta")
-    public ResponseEntity SeleccionarTrabajadoresVenta(@RequestParam("idVenta") Long idVenta, @RequestParam("trabajadores") List<Long> trabajadores, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> SeleccionarTrabajadoresVenta(@RequestParam("idVenta") Long idVenta, @RequestParam("trabajadores") List<Long> trabajadores, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             int contar=0;
             Venta venta= ventaService.encontrar(idVenta);
@@ -479,7 +476,7 @@ public class VentaController {
 
     //Función para eliminar un trabajador de la venta
     @PostMapping("/EliminarTrabajadorVenta/{idAsignacion}")
-    public ResponseEntity EliminarTrabajadorVenta(AsignacionVisitante asignacion) {
+    public ResponseEntity<String> EliminarTrabajadorVenta(AsignacionVisitante asignacion) {
         try {
              asigVisitanteService.eliminar(asignacion);
              String mensaje = "Se ha eliminado un trabajador de la venta correctamente.";
@@ -506,7 +503,7 @@ public class VentaController {
         Terreno terrenoEncontrado = ventaEncontrada.getTerreno();
         Proyecto proyecto = terrenoEncontrado.getProyecto();
         List<Documento> listaDocumentos = documentoService.listarDocumentos();
-        List<Documento> documentosVenta = new ArrayList();
+        List<Documento> documentosVenta = new ArrayList<Documento>();
         for (var documento : listaDocumentos) {
             if(Objects.equals(documento.getIdListDocumento(), ventaEncontrada.getIdListDocumento())){
                 documentosVenta.add(documento);
@@ -521,7 +518,7 @@ public class VentaController {
     
     //Función que agrega un documento de la venta
     @PostMapping("/AgregarDocumentoVenta")
-    public ResponseEntity agregarDocumentoVenta(HttpServletRequest request, RedirectAttributes redirectAttributes,
+    public ResponseEntity<String> agregarDocumentoVenta(HttpServletRequest request, RedirectAttributes redirectAttributes,
             @RequestParam("nombre") String nombre,
             @RequestParam("documento") MultipartFile documento,
             @RequestParam("idVenta") Long idVenta) {
@@ -551,7 +548,7 @@ public class VentaController {
     
     //Función que elimina un documento de la venta
     @PostMapping("/EliminarDocumentoVenta/{idDocumento}")
-    public ResponseEntity eliminarDocumentoVenta(Documento documento, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> eliminarDocumentoVenta(Documento documento, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             documentoService.eliminar(documento);
             String mensaje = "Se ha eliminado el documento correctamente.";
@@ -587,13 +584,13 @@ public class VentaController {
         Facturacion newFacturacion = facturacionService.encontrarVenta(ventaEncontrada);
         
         List<AsignacionPropietario> listaAsignaciones = asigPropietarioVentaService.listaAsignacion();        
-        List<AsignacionPropietario> propietarios = new ArrayList();
+        List<AsignacionPropietario> propietarios = new ArrayList<AsignacionPropietario>();
         for (var propietario : listaAsignaciones) {
             if(Objects.equals(propietario.getVenta().getIdVenta(), venta.getIdVenta())){
                 propietarios.add(propietario);
             }
         }
-        List<AsignacionPropietario> propietariosSeleccionados = new ArrayList();
+        List<AsignacionPropietario> propietariosSeleccionados = new ArrayList<AsignacionPropietario>();
         for (var propietario : propietarios) {
             if(Objects.equals(propietario.getEstado(), "Seleccionado")){
                 propietariosSeleccionados.add(propietario);
@@ -610,7 +607,7 @@ public class VentaController {
     
     //Función para seleccionar los propietarios que apareceran en la factura de consumidor final de la venta    
     @PostMapping("/SeleccionarPropietariosFactuacionVenta")
-    public ResponseEntity SeleccionarPropietariosFacturacionVenta(@RequestParam("idVenta") Long idVenta, @RequestParam("estado") String estado, @RequestParam("propietarios") List<Long> propietarios, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> SeleccionarPropietariosFacturacionVenta(@RequestParam("idVenta") Long idVenta, @RequestParam("estado") String estado, @RequestParam("propietarios") List<Long> propietarios, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             Venta venta= ventaService.encontrar(idVenta);
             String mensaje="";
@@ -645,7 +642,7 @@ public class VentaController {
     
     //Función para agregar la información de la facturación del crédito fiscal a la venta
     @PostMapping("/AgregarFacturacionVenta")
-    public ResponseEntity AgregarFacturacionVenta(@RequestParam("idVenta") Long idVenta, Facturacion facturacion, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> AgregarFacturacionVenta(@RequestParam("idVenta") Long idVenta, Facturacion facturacion, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             Venta newVenta = ventaService.encontrar(idVenta);
             facturacion.setVenta(newVenta);
@@ -661,7 +658,7 @@ public class VentaController {
     
     //Función para agregar la información de la facturación del crédito fiscal a la venta
     @PostMapping("/ActualizarFacturacionVenta")
-    public ResponseEntity ActualizarFacturacionVenta(@RequestParam("idVenta") Long idVenta, Facturacion facturacion, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> ActualizarFacturacionVenta(@RequestParam("idVenta") Long idVenta, Facturacion facturacion, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             Venta newVenta = ventaService.encontrar(idVenta);
             facturacion.setVenta(newVenta);
@@ -690,7 +687,7 @@ public class VentaController {
     
     //Función que elimina la facturación de crédito fiscal de la base de datos
     @PostMapping("/EliminarFacturacionVenta/{idFacturacion}")
-    public ResponseEntity EliminarFacturacion(@PathVariable Long idFacturacion) {
+    public ResponseEntity<String> EliminarFacturacion(@PathVariable Long idFacturacion) {
         try {
             Facturacion facturacion = facturacionService.encontrar(idFacturacion);
             facturacionService.eliminar(facturacion);
@@ -705,7 +702,7 @@ public class VentaController {
 
     //Función que agrega un venta a la base de datos
     @PostMapping("/AgregarVenta/{idTerreno}")
-    public ResponseEntity AgregarVenta(@PathVariable("idTerreno") Long idTerreno,Venta venta, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> AgregarVenta(@PathVariable("idTerreno") Long idTerreno,Venta venta, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             List<Venta> listadoVentas = ventaService.listaVentas();
             if(!listadoVentas.isEmpty()){
@@ -729,12 +726,12 @@ public class VentaController {
 
     //Función que elimina un venta de la base de datos
     @PostMapping("/EliminarVenta/{idVenta}")
-    public ResponseEntity EliminarVenta(Venta venta) {
+    public ResponseEntity<String> EliminarVenta(Venta venta) {
         try {
             Venta newVenta = ventaService.encontrar(venta.getIdVenta());
             ventaService.eliminar(newVenta);
             List<Venta> listadoVentas = ventaService.listaVentas();
-            List<Venta> listadoVentasTerreno = new ArrayList();
+            List<Venta> listadoVentasTerreno = new ArrayList<Venta>();
             if(!listadoVentas.isEmpty()){
                 for (Venta valorVenta : listadoVentas){
                     if(valorVenta.getTerreno().getIdTerreno().equals(newVenta.getTerreno().getIdTerreno())){
@@ -770,7 +767,7 @@ public class VentaController {
 
     //Función que actualiza una venta de la base de datos
     @PostMapping("/ActualizarVenta/{idTerreno}")
-    public ResponseEntity ActualizarVenta(@PathVariable("idTerreno") Long idTerreno, Venta venta, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> ActualizarVenta(@PathVariable("idTerreno") Long idTerreno, Venta venta, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             Terreno terreno = terrenoService.encontrar(idTerreno);
             venta.setTerreno(terreno);

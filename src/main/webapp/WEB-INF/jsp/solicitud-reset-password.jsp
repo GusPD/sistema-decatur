@@ -7,7 +7,7 @@
         <meta charset="UTF-8">
         <title>Restablecer</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="icon" href="${pageContext.request.contextPath}/images/favicon-logo.ico" type="image/x-icon">
+        <link rel="icon" href="${pageContext.request.contextPath}/images/img/favicon-logo.ico" type="image/x-icon">
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/recursosOnline/css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/style.css">
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/recursosOnline/css/adminlte.css">
@@ -20,7 +20,7 @@
                 <div class="login-box"> 
                     <!-- Logo -->
                     <div class="login-logo">
-                         <img id="login-logo" src="${pageContext.request.contextPath}/images/logo.png" alt="Logo Decatur">
+                         <img id="login-logo" src="${pageContext.request.contextPath}/images/img/logo.png" alt="Logo Decatur">
                     </div>
                     <!-- Icono de carga -->
                     <div id="animacion-loading" class="animacion-loading">
@@ -78,7 +78,7 @@
         <!-- Script de la página -->
         <script type="text/javascript" src="${pageContext.request.contextPath}/recursosOnline/js/jquery-3.7.0.js"></script>
         <script type="text/javascript" src="${pageContext.request.contextPath}/recursosOnline/js/jquery.validate.js"></script>
-        <script type="text/javascript" src="${pageContext.request.contextPath}/recursosOnline/js/kit.fontawesome.com.js"></script>
+        <script type="text/javascript" src="${pageContext.request.contextPath}/images/iconos/fontawesome-free-6.4.2-web/js/all.js"></script>
         <script type="text/javascript" src="${pageContext.request.contextPath}/recursosOnline/js/bootstrap.bundle.min.js"></script>
         <script type="text/javascript" src="${pageContext.request.contextPath}/js/solicitud-reset-password.js"></script>
     </body>

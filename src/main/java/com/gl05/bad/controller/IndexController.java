@@ -89,7 +89,7 @@ public class IndexController {
     
     //Función para enviar la solicitud de restablecimiento de contraseña
     @PostMapping("/RestablecerPassword")
-    public ResponseEntity RestablecerPassword(@RequestParam("username") String username, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> RestablecerPassword(@RequestParam("username") String username, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             username=username.trim();
             Usuario usuarioRegistrado=usuarioService.encontrarUsername(username);

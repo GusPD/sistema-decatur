@@ -5,6 +5,6 @@ import org.springframework.data.jpa.datatables.repository.DataTablesRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface BitacoraDao extends DataTablesRepository<Bitacora, Long>{
+public interface BitacoraDao extends DataTablesRepository<Bitacora, Integer>{
   
 }

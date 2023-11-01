@@ -68,7 +68,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public AuthenticationFailureHandler falloAutenticacionHandler() {
-        return new FalloAutenticacion(javaMailSender(), userDetailsService);
+        return new FalloAutenticacion();
     }
 
     @Bean
@@ -93,40 +93,36 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     //Metodo que se utiliza para la reestricción de urls
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-          
-        http.authorizeRequests()          
-                //Aqui se debe de ponder todos los permisos de bloqueo al estar
-                .antMatchers("/", "/logout")
-                .authenticated()
-    
-                 //Reestrincion de vistas
-                .antMatchers("/GestionarUsuarios")
-                .hasAnyAuthority("GESTIONAR_USUARIO_PRIVILAGE")
-                .antMatchers("/GestionarRoles")
-                .hasAnyAuthority("GESTIONAR_ROL_PRIVILAGE")
-                .antMatchers("/GestionarBitacora")
-                .hasAnyAuthority("GESTIONAR_BITACORA_PRIVILAGE")
-                
-                .and()
-                .formLogin() 
-                .loginPage("/login")
-                .loginProcessingUrl("/authenticate") // Ruta para procesar la autenticación
-                .usernameParameter("username") // Nombre del campo de nombre de usuario en el formulario
-                .passwordParameter("password") // Nombre del campo de contraseña en el formulario
-                .defaultSuccessUrl("/welcome") // Ruta de redirección después de un inicio de sesión exitoso
-                .failureUrl("/login?error=true") // Ruta de redirección después de un inicio de sesión fallido
-                .failureHandler(falloAutenticacionHandler())
-                .successHandler(authenticationSuccessHandler())
-                .permitAll()
-                .and()
-                .exceptionHandling().accessDeniedPage("/accesoDenegado");
-
-        http.logout()
-        .logoutUrl("/logout") // Ruta para cerrar sesión
-        .logoutSuccessHandler(logoutSuccessHandler()) // Manejador de cierre de sesión personalizado
-        .invalidateHttpSession(true)
-        .deleteCookies("JSESSIONID");
+        http
+        .authorizeRequests(authorizeRequests -> authorizeRequests
+            // Aquí se deben definir todas las restricciones de acceso
+            .antMatchers("/", "/logout").authenticated()
+            .antMatchers("/GestionarUsuarios").hasAuthority("GESTIONAR_USUARIO_PRIVILAGE")
+            .antMatchers("/GestionarRoles").hasAuthority("GESTIONAR_ROL_PRIVILAGE")
+            .antMatchers("/GestionarBitacora").hasAuthority("GESTIONAR_BITACORA_PRIVILAGE")
+        )
+        .formLogin(formLogin -> formLogin
+            .loginPage("/login")
+            .loginProcessingUrl("/authenticate")
+            .usernameParameter("username")
+            .passwordParameter("password")
+            .defaultSuccessUrl("/welcome")
+            .failureUrl("/login?error=true")
+            .failureHandler(falloAutenticacionHandler())
+            .successHandler(authenticationSuccessHandler())
+            .permitAll()
+        )
+        .exceptionHandling(exceptionHandling -> exceptionHandling
+            .accessDeniedPage("/accesoDenegado")
+        )
+        .logout(logout -> logout
+            .logoutUrl("/logout")
+            .logoutSuccessHandler(logoutSuccessHandler())
+            .invalidateHttpSession(true)
+            .deleteCookies("JSESSIONID")
+        );
     }
+
 
     @Bean
     public AuthenticationSuccessHandler authenticationSuccessHandler() {

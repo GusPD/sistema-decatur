@@ -3,14 +3,19 @@
     <input type="hidden" id="fechaAplicacionFinanciamiento" value="<c:choose><c:when test="${empty financiamiento}">${venta.fecha}</c:when><c:otherwise>${financiamiento.fechaAplicacion}</c:otherwise></c:choose>">
     <input type="hidden" id="fechaAplicacionMantenimiento" value="<c:choose><c:when test="${empty mantenimiento}">${venta.fecha}</c:when><c:otherwise>${mantenimiento.fechaAplicacion}</c:otherwise></c:choose>">
     <!-- Subtitulo de la página y funciones de los datos -->
-    <div class="subtitulo-page"><h3 class="mt-0">Venta
-            <c:if test="${empty financiamientos}">
-                <sec:authorize access="hasAuthority('EDITAR_VENTA_PRIVILAGE')">
-                    <span title="Editar Información" id="EditarInformacion" class="btn abrirModal-btn text-info puntero pull-right btn-sm" data-bs-toggle="modal" data-bs-target="#crearModal" data-tipo="editar" data-id="${venta.idVenta}" data-modo="actualizar" style="cursor: pointer;">
-                        <i class="far fa-edit"></i>
-                    </span>
-                </sec:authorize>
-            </c:if>
+    <div class="subtitulo-page"><h3 class="mt-0">
+            <div class="d-flex">
+                <div class="col-sm-6">
+                    Venta
+                </div>
+                <div class="col-sm-6 d-flex justify-content-end">
+                    <c:if test="${empty financiamientos}">
+                        <sec:authorize access="hasAuthority('EDITAR_VENTA_PRIVILAGE')">
+                            <button title="Editar Venta" id="EditarInformacion" class="btn btn-blue btn-sm" data-bs-toggle="modal" data-bs-target="#crearModal" data-tipo="editar" data-id="${venta.idVenta}" data-modo="actualizar"><i class="far fa-edit"></i></button>
+                        </sec:authorize>
+                    </c:if>
+                </div>
+            </div>  
         </h3>
     </div>
     <!-- Datos -->

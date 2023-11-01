@@ -1,6 +1,5 @@
 package com.gl05.bad.servicio;
 
-import com.gl05.bad.dao.InformacionFinanciamientoDao;
 import com.gl05.bad.dao.VentaDao;
 import com.gl05.bad.domain.InformacionFinanciamiento;
 import com.gl05.bad.domain.InformacionMantenimiento;
@@ -8,8 +7,6 @@ import com.gl05.bad.domain.Proyecto;
 import com.gl05.bad.domain.Venta;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-import javax.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;

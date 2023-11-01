@@ -2,7 +2,6 @@ package com.gl05.bad.servicio;
 
 import com.gl05.bad.dao.BitacoraDao;
 import com.gl05.bad.domain.Bitacora;
-import com.gl05.bad.domain.Usuario;
 import java.time.LocalDateTime;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;

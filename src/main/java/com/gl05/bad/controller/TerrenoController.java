@@ -58,7 +58,7 @@ public class TerrenoController {
 
     //Función que agrega un terreno a la base de datos
     @PostMapping("/AgregarTerreno/{idProyecto}")
-    public ResponseEntity AgregarTerreno(@PathVariable("idProyecto") Long idProyecto,Terreno terreno, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> AgregarTerreno(@PathVariable("idProyecto") Long idProyecto,Terreno terreno, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             String valorSeccion = "";
             String valorPoligono = terreno.getPoligono().toUpperCase();
@@ -93,7 +93,7 @@ public class TerrenoController {
 
     //Función que elimina un terreno de la base de datos
     @PostMapping("/EliminarTerreno/{idTerreno}")
-    public ResponseEntity EliminarTerreno(Terreno terreno) {
+    public ResponseEntity<String> EliminarTerreno(Terreno terreno) {
         try {
             terrenoService.eliminar(terreno);
              String mensaje = "Se ha eliminado un terreno correctamente.";
@@ -118,7 +118,7 @@ public class TerrenoController {
 
     //Función que actualiza un terreno de la base de datos
     @PostMapping("/ActualizarTerreno/{idProyecto}")
-    public ResponseEntity ActualizarTerreno(@PathVariable("idProyecto") Long idProyecto, Terreno terreno, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> ActualizarTerreno(@PathVariable("idProyecto") Long idProyecto, Terreno terreno, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             Proyecto proyecto = proyectoService.encontrar(idProyecto);
             terreno.setProyecto(proyecto);

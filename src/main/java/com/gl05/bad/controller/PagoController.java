@@ -88,7 +88,7 @@ public class PagoController {
     
     //Función para agregar un pago en la base de datos
     @PostMapping("/AgregarPago")
-    public ResponseEntity AgregarPago(Pago pago, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> AgregarPago(Pago pago, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             pagoService.agregar(pago);
             String mensaje = "Se ha agregado un pago.";
@@ -102,7 +102,7 @@ public class PagoController {
 
     //Función para eliminar un pago de la base de datos
     @PostMapping("/EliminarPago/{idPago}")
-    public ResponseEntity EliminarPago(Pago pago) {
+    public ResponseEntity<String> EliminarPago(Pago pago) {
         try {
             Pago newPago = pagoService.encontrar(pago.getIdPago());
             pagoService.eliminar(pago);
@@ -128,7 +128,7 @@ public class PagoController {
 
     //Función para actualizar un pago de la base de datos
     @PostMapping("/ActualizarPago")
-    public ResponseEntity ActualizarPago(Pago pago, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> ActualizarPago(Pago pago, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             pagoService.actualizar(pago);
             String mensaje = "Se ha actualizado el pago correctamente.";
