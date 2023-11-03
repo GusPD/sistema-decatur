@@ -22,7 +22,7 @@
                 <div id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false" style="background-color: transparent; color: white; cursor: pointer;">
                     <div id="userPanel" class="user-panel d-flex">
                         <div class="image">
-                            <img src="${pageContext.request.contextPath}/images/usuario.png" class="img-circle-perfil" style="width: auto; height: 30px;">
+                            <img src="${pageContext.request.contextPath}/images/img/usuario.png" class="img-circle-perfil" style="width: auto; height: 30px;">
                         </div>
                         <div class="info align-items-center justify-content-center " style="margin-top: -10px; margin-left: -10px;">
                             <a href="#" class="nav-link text-white dropdown-toggle"></a>
@@ -46,8 +46,8 @@
                 <div class="nav-item">
                     <div>
                         <a href="/" id="etiqueta-inicio" class="nav-link d-flex align-items-center justify-content-center">
-                            <img id="nav-logo" src="${pageContext.request.contextPath}/images/logo-color.png" alt="Logo Decatur">
-                            <img id="nav-icono-logo" src="${pageContext.request.contextPath}/images/icono-logo-color.png" alt="Logo Decatur">
+                            <img id="nav-logo" src="${pageContext.request.contextPath}/images/img/logo-color.png" alt="Logo Decatur">
+                            <img id="nav-icono-logo" src="${pageContext.request.contextPath}/images/img/icono-logo-color.png" alt="Logo Decatur">
                         </a>
                     </div>
                 </div>

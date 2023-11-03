@@ -21,8 +21,6 @@ import com.gl05.bad.servicio.ReferenciaService;
 import com.gl05.bad.servicio.TelefonoService;
 import com.gl05.bad.servicio.UserService;
 import com.gl05.bad.servicio.VistaPropietariosProyectoService;
-import java.sql.Blob;
-import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -43,7 +41,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -103,7 +100,8 @@ public class PropietarioController {
     @GetMapping("/Propietarios/{idProyecto}")
     public String mostrarPropietariosProyecto(Model model, Proyecto proyecto) {
         model.addAttribute("pageTitle", "Propietarios Proyecto");
-        model.addAttribute("proyecto", proyecto);
+        Proyecto proyectoEncontrado = proyectoService.encontrar(proyecto.getIdProyecto());
+        model.addAttribute("proyecto", proyectoEncontrado);
         return "/Proyecto/PropietariosProyecto";
     }
     
@@ -165,7 +163,7 @@ public class PropietarioController {
     
     //Función que agrega un correo al propietario
     @PostMapping("/AgregarCorreo")
-    public ResponseEntity agregarCorreoPropietario(HttpServletRequest request, RedirectAttributes redirectAttributes,
+    public ResponseEntity<String> agregarCorreoPropietario(HttpServletRequest request, RedirectAttributes redirectAttributes,
             @RequestParam("tipo") String tipoCorreo,
             @RequestParam("correo") String correo,
             @RequestParam("idPropietario") Long idPropietario) {
@@ -191,7 +189,7 @@ public class PropietarioController {
     
     //Función que elimina un correo del propietario
     @PostMapping("/EliminarCorreo/{idCorreo}")
-    public ResponseEntity eliminarCorreoPropietario(Correo correo, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> eliminarCorreoPropietario(Correo correo, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             correoService.eliminar(correo);
             String mensaje = "Se ha eliminado el correo correctamente.";
@@ -234,7 +232,7 @@ public class PropietarioController {
     
     //Función que agrega un telefono al propietario
     @PostMapping("/AgregarTelefono")
-    public ResponseEntity agregarTelefonoPropietario(HttpServletRequest request, RedirectAttributes redirectAttributes,
+    public ResponseEntity<String> agregarTelefonoPropietario(HttpServletRequest request, RedirectAttributes redirectAttributes,
             @RequestParam("tipo") String tipoTelefono,
             @RequestParam("telefono") String telefono,
             @RequestParam("idPropietario") Long idPropietario) {
@@ -260,7 +258,7 @@ public class PropietarioController {
     
     //Función que elimina un telefono del propietario
     @PostMapping("/EliminarTelefono/{idTelefono}")
-    public ResponseEntity eliminarTelefonoPropietario(Telefono telefono, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> eliminarTelefonoPropietario(Telefono telefono, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             telefonoService.eliminar(telefono);
             String mensaje = "Se ha eliminado el teléfono correctamente.";
@@ -301,7 +299,7 @@ public class PropietarioController {
     
     //Función que agrega una referencia al propietario
     @PostMapping("/AgregarReferencia")
-    public ResponseEntity agregarReferenciaPropietario(HttpServletRequest request, RedirectAttributes redirectAttributes,
+    public ResponseEntity<String> agregarReferenciaPropietario(HttpServletRequest request, RedirectAttributes redirectAttributes,
             @RequestParam("nombre") String nombre,
             @RequestParam("apellido") String apellido,
             @RequestParam("telefono") String telefono,
@@ -326,7 +324,7 @@ public class PropietarioController {
     
     //Función que elimina una referencia al propietario
     @PostMapping("/EliminarReferencia/{idReferencia}")
-    public ResponseEntity eliminarCorreoPropietario(Referencia referencia, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> eliminarCorreoPropietario(Referencia referencia, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             referenciaService.eliminar(referencia);
             String mensaje = "Se ha eliminado la referencia correctamente.";
@@ -367,7 +365,7 @@ public class PropietarioController {
     
     //Función que agrega un documento al propietario
     @PostMapping("/AgregarDocumentoPropietario")
-    public ResponseEntity agregarDocumentoPropietario(HttpServletRequest request, RedirectAttributes redirectAttributes,
+    public ResponseEntity<String> agregarDocumentoPropietario(HttpServletRequest request, RedirectAttributes redirectAttributes,
             @RequestParam("nombre") String nombre,
             @RequestParam("documento") MultipartFile documento,
             @RequestParam("idPropietario") Long idPropietario) {
@@ -396,7 +394,7 @@ public class PropietarioController {
     
     //Función que elimina un documento del propietario
     @PostMapping("/EliminarDocumentoPropietario/{idDocumento}")
-    public ResponseEntity eliminarDocumentoPropietario(Documento documento, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> eliminarDocumentoPropietario(Documento documento, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             documentoService.eliminar(documento);
             String mensaje = "Se ha eliminado el documento correctamente.";
@@ -451,7 +449,7 @@ public class PropietarioController {
 
     //Función que agrega un propietario a la base de datos
     @PostMapping("/AgregarPropietario")
-    public ResponseEntity AgregarPropietario(Propietario propietario, Persona persona, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> AgregarPropietario(Propietario propietario, Persona persona, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             if(personaService.encontrarDui(persona.getDui())== null){
                 personaService.agregar(persona);
@@ -473,7 +471,7 @@ public class PropietarioController {
 
     //Función que elimina un propietario de la base de datos
     @PostMapping("/EliminarPropietario/{idPersona}")
-    public ResponseEntity EliminarPropietario(Persona persona) {
+    public ResponseEntity<String> EliminarPropietario(Persona persona) {
         try {
              Propietario newPropietario = propietarioService.encontrarPersona(persona);
              propietarioService.eliminar(newPropietario);
@@ -506,8 +504,6 @@ public class PropietarioController {
     @GetMapping("/ObtenerPropietarioProyecto/{id}")
     public ResponseEntity<Object> ObtenerPropietarioProyecto(@PathVariable Long id) {
         AsignacionPropietario asignacion = asigPropietarioService.encontrar(id);
-        Persona persona = asignacion.getPropietario().getPersona();
-        Propietario propietario = asignacion.getPropietario();
         if (asignacion != null) {
             Map<String, Object> entidadesMap = new HashMap<>();
             entidadesMap.put("asignacion", asignacion);
@@ -519,7 +515,7 @@ public class PropietarioController {
 
     //Función que actualiza un propietario de la base de datos
     @PostMapping("/ActualizarPropietario")
-    public ResponseEntity ActualizarPropietario( Propietario propietario, Persona persona, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> ActualizarPropietario( Propietario propietario, Persona persona, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             propietario.setPersona(persona);
             propietarioService.actualizar(propietario);

@@ -6,15 +6,16 @@
         <title>${pageTitle}</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        <link rel="icon" href="${pageContext.request.contextPath}/images/favicon-logo.ico" type="image/x-icon">
+        <link rel="icon" href="${pageContext.request.contextPath}/images/img/favicon-logo.ico" type="image/x-icon">
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/recursosOnline/css/bootstrap.min.css">
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/recursosOnline/css/fonts.googleapis.com.css">
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/recursosOnline/css/dataTables.bootstrap5.min.css"/>
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/recursosOnline/css/buttons.bootstrap5.min.css">
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/recursosOnline/css/fixedHeader.dataTables.min.css">
         <link rel="stylesheet" href="${pageContext.request.contextPath}/recursosOnline/css/select2.min.css" />
-        <link rel="stylesheet" href="${pageContext.request.contextPath}/recursosOnline/css/select2-bootstrap-5-theme.min.css" />     
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"/>
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/recursosOnline/css/select2-bootstrap-5-theme.min.css" />  
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/images/iconos/fontawesome-free-6.4.2-web/css/all.css">
+        <link rel="stylesheet" href="${pageContext.request.contextPath}/recursosOnline/css/toastr.min.css"/>
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/recursosOnline/css/adminlte.css">
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/style.css">
         

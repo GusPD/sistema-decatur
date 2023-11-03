@@ -95,15 +95,19 @@ public class CorreoServiceImp implements CorreoService{
         MimeMessage correo = mailSender.createMimeMessage();
 
         try {
-            MimeMessageHelper helper = new MimeMessageHelper(correo, true);
-            helper.setFrom(configuracionCorreo.getUsername(), configuracionCorreo.getName());
-            helper.setTo(destinatario);
-            helper.setSubject(asunto);
-            helper.setText(mensaje, true); // Habilita el soporte para HTML
+            if (configuracionCorreo != null) {
+                MimeMessageHelper helper = new MimeMessageHelper(correo, true);
+                helper.setFrom(configuracionCorreo.getUsername(), configuracionCorreo.getName());
+                helper.setTo(destinatario);
+                helper.setSubject(asunto);
+                helper.setText(mensaje, true); // Habilita el soporte para HTML
 
-            mailSender.send(correo);
-            
-            return true;
+                mailSender.send(correo);
+                
+                return true;
+            }else{
+                return false;
+            }
         } catch (MessagingException | UnsupportedEncodingException e) {
             return false;
         }

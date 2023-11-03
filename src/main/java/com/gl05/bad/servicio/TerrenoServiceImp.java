@@ -9,7 +9,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.gl05.bad.dao.TerrenoDao;
-import com.gl05.bad.domain.Proyecto;
 
 @Service
 public class TerrenoServiceImp implements TerrenoService{

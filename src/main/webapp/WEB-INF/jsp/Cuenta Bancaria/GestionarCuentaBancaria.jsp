@@ -25,12 +25,12 @@
                         <div class="card-header">
                             <h3 class="card-title d-flex justify-content-end">
                                 <sec:authorize access="hasAuthority('EXPORTAR_CUENTA_BANCARIA_PRIVILAGE')"> 
-                                    <button id="export-copy" class="btn btn-sm btn-outline-secondary buttons-copy" type="button"><span>Copiar  </span><i class="fa-regular fa-copy"></i></button> 
-                                    <button id="export-excel" class="btn btn-sm btn-outline-success buttons-excel ml-2" type="button"><span>Exportar </span><i class="fa-solid fa-file-csv"></i></button> 
-                                    <button id="export-pdf" class="btn btn-sm btn-outline-danger buttons-pdf ml-2" type="button"><span>Exportar </span><i class="fa-regular fa-file-pdf"></i></button> 
+                                    <button id="export-copy" title="Copiar" class="btn btn-outline-secondary buttons-copy" type="button"><i class="fa-regular fa-copy"></i></button> 
+                                    <button id="export-excel" title="Exportar Excel" class="btn btn-outline-success buttons-excel ml-2" type="button"><i class="fa-solid fa-file-csv"></i></button> 
+                                    <button id="export-pdf" title="Exportar PDF" class="btn btn-outline-danger buttons-pdf ml-2" type="button"><i class="fa-regular fa-file-pdf"></i></button> 
                                 </sec:authorize>
                                 <sec:authorize access="hasAuthority('AGREGAR_CUENTA_BANCARIA_PRIVILAGE')"> 
-                                    <button type="button" class="btn-blue btn abrirModal-btn btn-sm ml-2" data-bs-toggle="modal" data-bs-target="#crearModal" data-action="agregar"><span>Agregar </span><i class="fa-solid fa-file-pen"></i></button>
+                                    <button type="button" title="Agregar Cuenta" class="btn-blue btn abrirModal-btn ml-2" data-bs-toggle="modal" data-bs-target="#crearModal" data-action="agregar"><i class="fa-solid fa-file-pen"></i></button>
                                 </sec:authorize> 
                             </h3>
                         </div>
@@ -57,31 +57,36 @@
                 </div>
                 <div class="modal-body">
                     <form id='formGuardar' accept-charset="UTF-8">
-                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
-                        <input type="hidden" id="idCuenta">
-                        <div class="form-group">
-                            <label for="nombre" class="form-label">Nombre: </label>
-                            <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ingrese el nombre" required>
+                        <div  class="overflow-auto">
+                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+                            <input type="hidden" id="idCuenta">
+                            <div class="form-group">
+                                <label for="nombre" class="form-label">Nombre:<strong class="text-danger"> *</strong></label>
+                                <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ingrese el nombre" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="titular" class="form-label">Titular:<strong class="text-danger"> *</strong></label>
+                                <input type="text" class="form-control" id="titular" name="titular" placeholder="Ingrese el titular" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="banco" class="form-label">Banco:<strong class="text-danger"> *</strong></label>
+                                <input type="text" class="form-control" id="banco" name="banco" placeholder="Ingrese el banco" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="tipo" class="form-label">Tipo:<strong class="text-danger"> *</strong></label>
+                                <input type="text" class="form-control" id="tipo" name="tipo" placeholder="Ingrese el tipo" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="cuenta" class="form-label">Cuenta:<strong class="text-danger"> *</strong></label>
+                                <input type="text" class="form-control" id="cuenta" name="cuenta" placeholder="Ingrese número de cuenta" required>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="titular" class="form-label">Titular: </label>
-                            <input type="text" class="form-control" id="titular" name="titular" placeholder="Ingrese el titular" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="banco" class="form-label">Banco: </label>
-                            <input type="text" class="form-control" id="banco" name="banco" placeholder="Ingrese el banco" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="tipo" class="form-label">Tipo: </label>
-                            <input type="text" class="form-control" id="tipo" name="tipo" placeholder="Ingrese el tipo" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="cuenta" class="form-label">Cuenta: </label>
-                            <input type="text" class="form-control" id="cuenta" name="cuenta" placeholder="Ingrese número de cuenta" required>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
-                            <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                        <div class="modal-footer d-flex justify-content-between">
+                            <label for="monto" class="form-label text-danger">(*) Campos Obligatorios</label>
+                            <div>
+                                <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
+                                <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                            </div>
                         </div>
                     </form>
                 </div>

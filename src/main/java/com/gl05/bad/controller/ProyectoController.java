@@ -62,7 +62,7 @@ public class ProyectoController {
 
     //Función para agregar proyectos a la base de datos
     @PostMapping("/AgregarProyecto")
-    public ResponseEntity AgregarProyecto(Proyecto proyecto, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> AgregarProyecto(Proyecto proyecto, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             proyectoService.agregar(proyecto);
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -79,7 +79,7 @@ public class ProyectoController {
 
     //Función para eliminar proyectos de la base de datos
     @PostMapping("/EliminarProyecto/{idProyecto}")
-    public ResponseEntity EliminarProyecto(Proyecto proyecto) {
+    public ResponseEntity<String> EliminarProyecto(Proyecto proyecto) {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             Usuario usuario=userService.encontrarUsername(authentication.getName());
@@ -110,7 +110,7 @@ public class ProyectoController {
 
     //Función para actualizar un proyecto de la base de datos
     @PostMapping("/ActualizarProyecto")
-    public ResponseEntity ActualizarProyecto(Proyecto proyecto, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> ActualizarProyecto(Proyecto proyecto, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             proyectoService.actualizar(proyecto);
             String mensaje = "Se ha actualizado el proyecto correctamente.";

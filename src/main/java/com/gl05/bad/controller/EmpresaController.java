@@ -50,7 +50,7 @@ public class EmpresaController {
 
     //Función para agregar una empresa en la base de datos
     @PostMapping("/AgregarEmpresa")
-    public ResponseEntity AgregarEmpresa(Empresa empresa, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> AgregarEmpresa(Empresa empresa, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             empresaService.agregar(empresa);
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -67,7 +67,7 @@ public class EmpresaController {
 
     //Función para eliminar una empresa de la base de datos
     @PostMapping("/EliminarEmpresa/{idEmpresa}")
-    public ResponseEntity EliminarEmpresa(Empresa empresa) {
+    public ResponseEntity<String> EliminarEmpresa(Empresa empresa) {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             Usuario usuario=userService.encontrarUsername(authentication.getName());
@@ -98,7 +98,7 @@ public class EmpresaController {
 
     //Función para actualizar una empresa de la base de datos
     @PostMapping("/ActualizarEmpresa")
-    public ResponseEntity ActualizarEmpresa(Empresa empresa, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> ActualizarEmpresa(Empresa empresa, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             empresaService.actualizar(empresa);
             String mensaje = "Se ha actualizado la empresa correctamente.";

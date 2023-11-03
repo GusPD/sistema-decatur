@@ -6,12 +6,17 @@
             <div class="card-header">
                 <!-- Subtitulo de la página y funciones de los datos -->
                 <div class="subtitulo-page">
-                    <h3 class="m-0">Documentos
-                        <sec:authorize access="hasAuthority('AGREGAR_DOCUMENTO_TRABAJADOR_PRIVILAGE')"> 
-                            <span id="AgregarDocumento" class="btn abrirModal-btn text-info puntero pull-right btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalDocumento" data-action="agregar" style="cursor: pointer;">
-                                <i class="fa-solid fa-file-pen"></i>
-                            </span>
-                        </sec:authorize>
+                    <h3 class="m-0">
+                        <div class="d-flex">
+                            <div class="col-sm-6">
+                                Documentos
+                            </div>
+                            <div class="col-sm-6 d-flex justify-content-end">
+                                <sec:authorize access="hasAuthority('AGREGAR_DOCUMENTO_TRABAJADOR_PRIVILAGE')">
+                                    <button title="Agregar Documento" id="AgregarDocumento" class="btn btn-blue btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalDocumento" data-tipo="agregar"><i class="fa-solid fa-file-pen"></i></button>
+                                </sec:authorize>
+                            </div>
+                        </div>
                     </h3>
                 </div>
             </div>
@@ -41,17 +46,20 @@
                         <input type="hidden" id="idVisitante" value="${trabajador.getIdVisitante()}">
                         <input type="hidden" id="idDocumento">
                         <div class="form-group">
-                            <label for="nombre" class="form-label">Nombre:</label>
+                            <label for="nombre" class="form-label">Nombre:<strong class="text-danger"> *</strong></label>
                             <input type="text" class="form-control" id="nombre" name="nombre" maxlength="200" placeholder="Ingrese el nombre del documento" required>
                         </div>
                         <div class="form-group">
-                            <label for="documento" class="form-label">Documento:</label>
+                            <label for="documento" class="form-label">Documento:<strong class="text-danger"> *</strong></label>
                             <input type="file" class="form-control" id="documento" name="documento" aria-hidden="true" accept=".pdf" required>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
-                        <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                    <div class="modal-footer d-flex justify-content-between">
+                        <label for="monto" class="form-label text-danger">(*) Campos Obligatorios</label>
+                        <div>
+                            <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
+                            <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                        </div>
                     </div>
                 </form>
             </div>

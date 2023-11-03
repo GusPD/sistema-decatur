@@ -6,12 +6,17 @@
             <div class="card-header">
                 <!-- Subtitulo de la página y funciones de los datos -->
                 <div class="subtitulo-page">
-                    <h3 class="m-0">Referencias
-                        <sec:authorize access="hasAuthority('AGREGAR_REFERENCIA_PROPIETARIO_PRIVILAGE')">
-                            <span id="AgregarReferencia" class="btn abrirModal-btn text-info puntero pull-right btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalReferencia" data-action="agregar" style="cursor: pointer;">
-                                <i class="fas fa-user-plus"></i>
-                            </span>
-                        </sec:authorize>
+                    <h3 class="m-0">
+                        <div class="d-flex">
+                            <div class="col-sm-6">
+                                Referencias
+                            </div>
+                            <div class="col-sm-6 d-flex justify-content-end">
+                                <sec:authorize access="hasAuthority('AGREGAR_REFERENCIA_PROPIETARIO_PRIVILAGE')">
+                                    <button title="Agregar Referencia" id="AgregarReferencia" class="btn btn-blue btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalReferencia" data-modo="agregar"><i class="fas fa-user-plus"></i></button>
+                                </sec:authorize>
+                            </div>
+                        </div>
                     </h3>
                 </div>
             </div>
@@ -41,15 +46,15 @@
                         <input type="hidden" id="idPropietario" value="${propietario.getIdPropietario()}">
                         <input type="hidden" id="idReferencia">
                         <div class="form-group">
-                            <label for="nombre" class="form-label">Nombre:</label>
+                            <label for="nombre" class="form-label">Nombre:<strong class="text-danger"> *</strong></label>
                             <input type="text" class="form-control" id="nombre" name="nombre" maxlength="200" placeholder="Ingrese el nombre de la persona" required>
                         </div>
                         <div class="form-group">
-                            <label for="apellido" class="form-label">Apellido:</label>
+                            <label for="apellido" class="form-label">Apellido:<strong class="text-danger"> *</strong></label>
                             <input type="text" class="form-control" id="apellido" name="apellido" maxlength="200" placeholder="Ingrese el apellido de la persona" required>
                         </div>
                         <div class="form-group">
-                            <label for="telefono" class="form-label">Teléfono:</label>
+                            <label for="telefono" class="form-label">Teléfono:<strong class="text-danger"> *</strong></label>
                             <input type="text" class="form-control" id="telefono" name="telefono" maxlength="12" placeholder="Ingrese el número de teléfono" required>
                         </div>
                         <div class="form-group">
@@ -57,9 +62,12 @@
                             <input type="text" class="form-control" id="correo" name="correo" maxlength="150" placeholder="Ingrese el correo electrónico" required>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
-                        <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                    <div class="modal-footer d-flex justify-content-between">
+                        <label for="monto" class="form-label text-danger">(*) Campos Obligatorios</label>
+                        <div>
+                            <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
+                            <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                        </div>
                     </div>
                 </form>
             </div>

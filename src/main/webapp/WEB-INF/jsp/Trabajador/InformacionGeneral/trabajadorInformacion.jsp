@@ -2,12 +2,17 @@
 <div class="row pb-3">
     <!-- Subtitulo de la página y funciones de los datos -->
     <div class="subtitulo-page">
-        <h3 class="mt-0">Información General
-            <sec:authorize access="hasAuthority('EDITAR_TRABAJADOR_PRIVILAGE')">
-                <span title="Editar Información" id="EditarInformacion" class="btn abrirModal-btn text-info puntero pull-right btn-sm" data-bs-toggle="modal" data-bs-target="#crearModal" data-tipo="editar" data-id="${persona.idPersona}" data-modo="actualizar" style="cursor: pointer;">
-                    <i class="far fa-edit"></i>
-                </span>
-            </sec:authorize>
+        <h3 class="mt-0">
+            <div class="d-flex">
+                <div class="col-sm-6">
+                    Información General
+                </div>
+                <div class="col-sm-6 d-flex justify-content-end">
+                    <sec:authorize access="hasAuthority('EDITAR_TRABAJADOR_PRIVILAGE')">
+                        <button title="Editar Información" id="EditarInformacion" class="btn btn-blue btn-sm" data-bs-toggle="modal" data-bs-target="#crearModal" data-modo="editar" data-id="${persona.idPersona}" data-modo="actualizar"><i class="far fa-edit"></i></button>
+                    </sec:authorize>
+                </div>
+            </div>
         </h3>
     </div>
     <!-- Datos -->
@@ -51,25 +56,28 @@
                         <input type="hidden" id="idDocumento" value="${visitante.getIdDocumento()}">
                         <input type="hidden" id="rol" value="${visitante.getRol()}">
                         <div class="form-group">
-                            <label for="dui" class="form-label">DUI: </label>
+                            <label for="dui" class="form-label">DUI:<strong class="text-danger"> *</strong></label>
                             <input type="text" class="form-control" id="dui" name="dui" maxlength="9" placeholder="Ingrese el número de DUI sin guiones" required>
                         </div>
                         <div class="form-group">
-                            <label for="nombre" class="form-label">Nombre: </label>
+                            <label for="nombre" class="form-label">Nombre:<strong class="text-danger"> *</strong></label>
                             <input type="text" class="form-control" id="nombre" name="nombre" maxlength="200" placeholder="Ingrese el nombre" required>
                         </div>
                         <div class="form-group">
-                            <label for="apellido" class="form-label">Apellido: </label>
+                            <label for="apellido" class="form-label">Apellido:<strong class="text-danger"> *</strong></label>
                             <input type="text" class="form-control" id="apellido" name="apellido" maxlength="200" placeholder="Ingrese el apellido" required>
                         </div>
                         <div class="form-group">
-                            <label for="apellido" class="form-label">Especialidad: </label>
+                            <label for="apellido" class="form-label">Especialidad:<strong class="text-danger"> *</strong></label>
                             <input type="text" class="form-control" id="empleador" name="empleador" maxlength="200" placeholder="Ingrese la especialidad" required>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
-                        <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                    <div class="modal-footer d-flex justify-content-between">
+                        <label for="monto" class="form-label text-danger">(*) Campos Obligatorios</label>
+                        <div>
+                            <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
+                            <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                        </div>
                     </div>
                 </form>
             </div>

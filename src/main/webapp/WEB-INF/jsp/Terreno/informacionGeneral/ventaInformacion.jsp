@@ -2,15 +2,21 @@
 <div id="page-informacion" class="row">
     <input type="hidden" id="fechaAplicacionFinanciamiento" value="<c:choose><c:when test="${empty financiamiento}">${venta.fecha}</c:when><c:otherwise>${financiamiento.fechaAplicacion}</c:otherwise></c:choose>">
     <input type="hidden" id="fechaAplicacionMantenimiento" value="<c:choose><c:when test="${empty mantenimiento}">${venta.fecha}</c:when><c:otherwise>${mantenimiento.fechaAplicacion}</c:otherwise></c:choose>">
-    <!-- Subtitulo de la página y funciones de los datos -->
-    <div class="subtitulo-page"><h3 class="mt-0">Venta
-            <c:if test="${empty financiamientos}">
-                <sec:authorize access="hasAuthority('EDITAR_VENTA_PRIVILAGE')">
-                    <span title="Editar Información" id="EditarInformacion" class="btn abrirModal-btn text-info puntero pull-right btn-sm" data-bs-toggle="modal" data-bs-target="#crearModal" data-tipo="editar" data-id="${venta.idVenta}" data-modo="actualizar" style="cursor: pointer;">
-                        <i class="far fa-edit"></i>
-                    </span>
-                </sec:authorize>
-            </c:if>
+    <!-- Subtitulo de la pï¿½gina y funciones de los datos -->
+    <div class="subtitulo-page">
+        <h3 class="mt-0">
+            <div class="d-flex">
+                <div class="col-sm-6">
+                    Venta
+                </div>
+                <div class="col-sm-6 d-flex justify-content-end">
+                    <c:if test="${empty financiamientos}">
+                        <sec:authorize access="hasAuthority('EDITAR_VENTA_PRIVILAGE')">
+                            <button title="Editar Venta" id="EditarInformacion" class="btn btn-blue btn-sm" data-bs-toggle="modal" data-bs-target="#crearModal" data-tipo="editar" data-id="${venta.idVenta}" data-modo="actualizar"><i class="far fa-edit"></i></button>
+                        </sec:authorize>
+                    </c:if>
+                </div>
+            </div>  
         </h3>
     </div>
     <!-- Datos -->
@@ -49,12 +55,18 @@
         </table>
     </div>
     <!-- Subtitulo de la página y funciones de los datos -->
-    <div class="subtitulo-page mt-4"><h3>Financiamiento
-            <sec:authorize access="hasAuthority('EDITAR_INFORMACION_FINANCIAMIENTO_PRIVILAGE')">
-                <span title="Editar Información" id="EditarInformacionFinanciamiento" class="btn abrirModal-btn text-info puntero pull-right btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalFinanciamiento" data-tipo="editar" data-id="${venta.idVenta}" data-modo="actualizar" style="cursor: pointer;">
-                    <i class="far fa-edit"></i>
-                </span>
-            </sec:authorize>
+    <div class="subtitulo-page mt-4">
+        <h3>
+            <div class="d-flex">
+                <div class="col-sm-6">
+                    Financiamiento
+                </div>
+                <div class="col-sm-6 d-flex justify-content-end">
+                    <sec:authorize access="hasAuthority('EDITAR_INFORMACION_FINANCIAMIENTO_PRIVILAGE')">
+                        <button title="Editar Financiamiento" id="EditarInformacionFinanciamiento" class="btn btn-blue btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalFinanciamiento" data-tipo="editar" data-id="${financiamiento.idAsignacion}" data-modo="actualizar"><i class="far fa-edit"></i></button>
+                    </sec:authorize>
+                </div>
+            </div> 
         </h3>
     </div>
     <!-- Datos -->
@@ -130,12 +142,18 @@
         </div>
     </div>
     <!-- Subtitulo de la página y funciones de los datos -->
-    <div class="subtitulo-page mt-4"><h3>Mantenimiento
-            <sec:authorize access="hasAuthority('EDITAR_INFORMACION_MANTENIMIENTO_PRIVILAGE')">
-                <span title="Editar Información" id="EditarInformacionMantenimiento" class="btn abrirModal-btn text-info puntero pull-right btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalMantenimiento" data-tipo="editar" data-id="${mantenimiento.idAsignacion}" data-modo="actualizar" style="cursor: pointer;">
-                    <i class="far fa-edit"></i>
-                </span>
-            </sec:authorize>
+    <div class="subtitulo-page mt-4">
+        <h3>
+            <div class="d-flex">
+                <div class="col-sm-6">
+                    Mantenimiento
+                </div>
+                <div class="col-sm-6 d-flex justify-content-end">
+                    <sec:authorize access="hasAuthority('EDITAR_INFORMACION_MANTENIMIENTO_PRIVILAGE')">
+                        <button title="Editar Mantenimiento" id="EditarInformacionMantenimiento" class="btn btn-blue btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalMantenimiento" data-tipo="editar" data-id="${mantenimiento.idAsignacion}" data-modo="actualizar"><i class="far fa-edit"></i></button>
+                    </sec:authorize>
+                </div>
+            </div>
         </h3>
     </div>
     <!-- Datos -->
@@ -216,29 +234,32 @@
                         <input type="hidden" id="estado" value="Activo">
                         <input type="hidden" id="idListDocumento" value="${venta.getIdListDocumento()}">
                         <div class="form-group">
-                            <label for="nombre" class="form-label">Nombre: </label>
+                            <label for="nombre" class="form-label">Nombre:<strong class="text-danger"> *</strong></label>
                             <input type="text" class="form-control" id="nombre" name="nombre" maxlength="200" placeholder="Ingrese el nombre de la venta" required>
                         </div>
                         <div class="form-group">
-                            <label for="fecha" class="form-label">Fecha: </label>
+                            <label for="fecha" class="form-label">Fecha:<strong class="text-danger"> *</strong></label>
                             <input type="date" class="form-control" id="fecha" name="fecha" maxlength="10" placeholder="Ingrese la fecha de la venta">
                         </div>
                         <div class="form-group">
-                            <label for="" class="form-label">Precio: </label>
+                            <label for="" class="form-label">Precio:<strong class="text-danger"> *</strong></label>
                             <input type="text" class="form-control" id="precio" name="precio" maxlength="9" placeholder="Ingrese el precio de la venta">
                         </div>
                         <div class="form-group">
-                            <label for="descuento" class="form-label">Descuento: </label>
+                            <label for="descuento" class="form-label">Descuento:<strong class="text-danger"> *</strong></label>
                             <input type="text" class="form-control" id="descuento" name="descuento" maxlength="9" placeholder="Ingrese el descuento de la venta">
                         </div>
                         <div class="form-group">
-                            <label for="monto" class="form-label">Monto: </label>
+                            <label for="monto" class="form-label">Monto:<strong class="text-danger"> *</strong></label>
                             <input type="text" class="form-control" id="monto" name="monto" placeholder="0.00" readonly>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
-                        <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                    <div class="modal-footer d-flex justify-content-between">
+                        <label for="monto" class="form-label text-danger">(*) Campos Obligatorios</label>
+                        <div>
+                            <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
+                            <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -250,7 +271,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="crearModalLabel">Editar Información Financiamiento</h5>
+                <h5 class="modal-title" id="crearModalLabel">Editar Financiamiento</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -259,41 +280,44 @@
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                         <input type="hidden" id="idFinanciamiento" value="">
                         <div class="form-group">
-                            <label for="montoF" class="form-label">Monto: </label>
+                            <label for="montoF" class="form-label">Monto:</label>
                             <input type="text" class="form-control" id="montoF" name="montoF" placeholder="0.00" value="${venta.getMonto()}" readonly>
                         </div>
                         <div class="form-group">
-                            <label for="prima" class="form-label">Prima: </label>
+                            <label for="prima" class="form-label">Prima:</label>
                             <input type="text" class="form-control" id="prima" name="prima" placeholder="0.00" value="${valorPrima}" readonly>
                         </div>
                         <div class="form-group">
-                            <label for="financiamiento" class="form-label">Financiamiento: </label>
+                            <label for="financiamiento" class="form-label">Financiamiento:</label>
                             <input type="text" class="form-control" id="financiamiento" name="financiamiento" placeholder="0.00"  value="${venta.getMonto() - valorPrima}" readonly>
                         </div>
                         <div class="form-group">
-                            <label for="fecha" class="form-label">Fecha Aplicación: </label>
-                            <input type="date" class="form-control" id="fechaAplicacionF" name="fechaAplicacionF" maxlength="10" placeholder="Ingrese la fecha de aplicación">
+                            <label for="fecha" class="form-label">Fecha Aplicación:<strong class="text-danger"> *</strong></label>
+                            <input type="date" class="form-control" id="fechaAplicacionF" name="fechaAplicacionF" maxlength="10" placeholder="Ingrese la fecha de aplicaciï¿½n">
                         </div>
                         <div class="form-group">
-                            <label for="plazo" class="form-label">Plazo: </label>
+                            <label for="plazo" class="form-label">Plazo:<strong class="text-danger"> *</strong></label>
                             <input type="text" class="form-control" id="plazo" name="plazo" maxlength="3" placeholder="Ingrese el plazo del financiamiento">
                         </div>
                         <div class="form-group">
-                            <label for="tasa" class="form-label">Tasa: </label>
+                            <label for="tasa" class="form-label">Tasa:<strong class="text-danger"> *</strong></label>
                             <input type="text" class="form-control" id="tasa" name="tasa" maxlength="6" placeholder="Ingrese la tasa del financiamiento">
                         </div>
                         <div class="form-group">
-                            <label for="cuotaKi" class="form-label">Cuota Financiamiento: </label>
+                            <label for="cuotaKi" class="form-label">Cuota Financiamiento:</label>
                             <input type="text" class="form-control" id="cuotaKi" name="cuotaKi" placeholder="0.00" readonly>
                         </div>
                         <div class="form-group">
-                            <label for="multaFinanciamiento" class="form-label">Multa Financiamiento: </label>
+                            <label for="multaFinanciamiento" class="form-label">Multa Financiamiento:<strong class="text-danger"> *</strong></label>
                             <input type="text" class="form-control" id="multaFinanciamiento" name="multaFinanciamiento" maxlength="9" placeholder="Ingrese la multa de financiamientos">
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
-                        <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                    <div class="modal-footer d-flex justify-content-between">
+                        <label for="monto" class="form-label text-danger">(*) Campos Obligatorios</label>
+                        <div>
+                            <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
+                            <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -305,7 +329,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="crearModalLabel">Editar Información Mantenimiento</h5>
+                <h5 class="modal-title" id="crearModalLabel">Editar Mantenimiento</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -314,21 +338,24 @@
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                         <input type="hidden" id="idMantenimiento" value="">
                         <div class="form-group">
-                            <label for="fecha" class="form-label">Fecha Aplicación: </label>
-                            <input type="date" class="form-control" id="fechaAplicacionM" name="fechaAplicacionM" maxlength="10" placeholder="Ingrese la fecha de aplicación">
+                            <label for="fecha" class="form-label">Fecha Aplicación:<strong class="text-danger"> *</strong></label>
+                            <input type="date" class="form-control" id="fechaAplicacionM" name="fechaAplicacionM" maxlength="10" placeholder="Ingrese la fecha de aplicaciï¿½n">
                         </div>
                         <div class="form-group">
-                            <label for="cuotaMantenimiento" class="form-label">Cuota Mantenimiento: </label>
+                            <label for="cuotaMantenimiento" class="form-label">Cuota Mantenimiento:<strong class="text-danger"> *</strong></label>
                             <input type="text" class="form-control" id="cuotaMantenimiento" name="cuotaMantenimiento" maxlength="9" placeholder="Ingrese la cuota de mantenimiento">
                         </div>
                         <div class="form-group">
-                            <label for="multaMantenimiento" class="form-label">Multa Mantenimiento: </label>
+                            <label for="multaMantenimiento" class="form-label">Multa Mantenimiento:<strong class="text-danger"> *</strong></label>
                             <input type="text" class="form-control" id="multaMantenimiento" name="multaMantenimiento" maxlength="9" placeholder="Ingrese la multa de mantenimiento">
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
-                        <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                    <div class="modal-footer d-flex justify-content-between">
+                        <label for="monto" class="form-label text-danger">(*) Campos Obligatorios</label>
+                        <div>
+                            <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
+                            <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -340,7 +367,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="confirmarEliminarLabel">Confirmar eliminación</h5>
+                <h5 class="modal-title" id="confirmarEliminarLabel">Confirmar eliminaciï¿½n</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -362,7 +389,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="confirmarEliminarLabel">Confirmar eliminación</h5>
+                <h5 class="modal-title" id="confirmarEliminarLabel">Confirmar eliminaciï¿½n</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -380,7 +407,7 @@
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 </form>
         
-<!-- Script de la página -->
+<!-- Script de la pï¿½gina -->
 <%@ include file="../venta-footer.jspf"%>
 
 <script src="${pageContext.request.contextPath}/js/informacionVenta.js"></script>

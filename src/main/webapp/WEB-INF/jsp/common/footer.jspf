@@ -1,8 +1,8 @@
     </div>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/recursosOnline/js/kit.fontawesome.com.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/recursosOnline/js/jquery-3.7.0.js"></script>    
     <script type="text/javascript" src="${pageContext.request.contextPath}/recursosOnline/js/jquery.validate.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/recursosOnline/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/images/iconos/fontawesome-free-6.4.2-web/js/all.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/recursosOnline/js/jquery.dataTables.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/recursosOnline/js/dataTables.bootstrap5.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/recursosOnline/js/dataTables.buttons.min.js"></script>
@@ -16,9 +16,9 @@
     <script type="text/javascript" src="${pageContext.request.contextPath}/recursosOnline/js/jquery.inputmask.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/recursosOnline/js/jquery.spring-friendly.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/recursosOnline/js/select2.full.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/i18n/es.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/recursosOnline/js/es.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/recursosOnline/js/toastr.min.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/recursosOnline/js/moment.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/recursosOnline/js/adminlte.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/plantilla.js"></script>
     

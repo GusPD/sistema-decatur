@@ -1,7 +1,6 @@
 package com.gl05.bad.servicio;
 
 import com.gl05.bad.dao.PropietarioDao;
-import com.gl05.bad.dao.PersonaDao;
 import com.gl05.bad.domain.Persona;
 import com.gl05.bad.domain.Propietario;
 import java.util.List;

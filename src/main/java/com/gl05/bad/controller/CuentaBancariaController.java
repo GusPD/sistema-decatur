@@ -51,7 +51,7 @@ public class CuentaBancariaController {
 
     //Función para agregar una cuenta en la base de datos
     @PostMapping("/AgregarCuenta")
-    public ResponseEntity AgregarCuenta(@RequestParam("idProyecto") Long idProyecto, CuentaBancaria cuenta, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> AgregarCuenta(@RequestParam("idProyecto") Long idProyecto, CuentaBancaria cuenta, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             Proyecto proyecto = proyectoService.encontrar(idProyecto);
             cuenta.setProyecto(proyecto);
@@ -67,7 +67,7 @@ public class CuentaBancariaController {
 
     //Función para eliminar una cuenta de la base de datos
     @PostMapping("/EliminarCuenta/{idCuenta}")
-    public ResponseEntity EliminarCuenta(CuentaBancaria cuenta) {
+    public ResponseEntity<String> EliminarCuenta(CuentaBancaria cuenta) {
         try {
             cuentaService.eliminar(cuenta);
             String mensaje = "Se ha eliminado una cuenta bancaria correctamente.";
@@ -92,7 +92,7 @@ public class CuentaBancariaController {
 
     //Función para actualizar una cuenta de la base de datos
     @PostMapping("/ActualizarCuenta")
-    public ResponseEntity ActualizarCuenta(@RequestParam("idProyecto") Long idProyecto, CuentaBancaria cuenta, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> ActualizarCuenta(@RequestParam("idProyecto") Long idProyecto, CuentaBancaria cuenta, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             Proyecto proyecto = proyectoService.encontrar(idProyecto);
             cuenta.setProyecto(proyecto);

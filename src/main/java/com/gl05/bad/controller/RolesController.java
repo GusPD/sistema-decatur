@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import com.gl05.bad.dao.RolDao;
 
 @Controller
 public class RolesController {
@@ -31,9 +30,6 @@ public class RolesController {
 
     @Autowired
     private PermisosService permisosService;
-
-    @Autowired
-    private RolDao rolDao;
 
     //Función que redirige a la vista de los roles
     @GetMapping("/Roles")
@@ -56,7 +52,7 @@ public class RolesController {
 
     //Función que agrea un rol en la base de datos
     @PostMapping("/AgregarRol")
-    public ResponseEntity AgregarRol(Rol rol, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> AgregarRol(Rol rol, HttpServletRequest request, RedirectAttributes redirectAttributes) {
          
         try {
             rolesService.agregar(rol);
@@ -71,7 +67,7 @@ public class RolesController {
 
     //Función que elimina un rol de la base de datos
     @PostMapping("/EliminarRol/{idRol}")
-    public ResponseEntity EliminarRol(Rol rol, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> EliminarRol(Rol rol, RedirectAttributes redirectAttributes) {
         try {
             rolesService.eliminar(rol);
             String mensaje = "Se ha eliminado el rol correctamente.";
@@ -96,7 +92,7 @@ public class RolesController {
     
     //Fucción que actualiza un rol de la base de datos
     @PostMapping("/ActualizarRol")
-    public ResponseEntity ActualizarRol(Rol rol, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> ActualizarRol(Rol rol, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
             rolesService.actualizar(rol);
             String mensaje = "Se ha actualizado el rol correctamente.";

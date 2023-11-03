@@ -35,7 +35,6 @@ var validator = $('#form-reset-password').validate({
     submitHandler: function(form) {
         event.preventDefault();
         var formDataArray = formReset.serializeArray();
-        console.log(formDataArray);
         $("#animacion-loading").show();
         $.ajax({
             url: '/RestablecerPassword',

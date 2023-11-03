@@ -113,3 +113,4 @@ INSERT INTO configuracion_correo (name, host, port, protocol, username, password
 VALUES ('Sistema Decatur', 'smtp.gmail.com', '587', 'smtp', 'mail.projects.notification@gmail.com', 'imiowrxsfxzmaopa', 1, 1);
 
 CREATE ROLE decatur WITH LOGIN PASSWORD 'admin755';
+ALTER USER decatur WITH SUPERUSER;

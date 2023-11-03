@@ -104,7 +104,6 @@ $(document).ready(function() {
                 maxlength: 12
             },
             correo: {
-                required: true,
                 validarCorreo: true,
                 maxlength: 150
             } 

@@ -11,21 +11,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 
 public class FalloAutenticacion implements AuthenticationFailureHandler {
 
-    private JavaMailSender javaMailSender;
-
     @Autowired
     private UsuarioDao usuarioDao;
-
-    @Autowired
-    private UserDetailsService usuarioService;
     
     @Autowired
     private ConfiguracionCorreoServiceImp configuracionCorreoService;
@@ -33,10 +25,7 @@ public class FalloAutenticacion implements AuthenticationFailureHandler {
     @Autowired
     private CorreoServiceImp correoService;
 
-    public FalloAutenticacion(JavaMailSender javaMailSender, UserDetailsService usuarioService) {
-        this.javaMailSender = javaMailSender;
-        this.usuarioService = usuarioService;
-    }
+    public FalloAutenticacion() {}
 
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
