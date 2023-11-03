@@ -25,12 +25,12 @@
                         <div class="card-header">
                             <h3 class="card-title d-flex justify-content-end">
                                 <sec:authorize access="hasAuthority('EXPORTAR_VENTA_PRIVILAGE')"> 
-                                    <button id="export-copy" class="btn btn-sm btn-outline-secondary buttons-copy" type="button"><span>Copiar  </span><i class="fa-regular fa-copy"></i></button> 
-                                    <button id="export-excel" class="btn btn-sm btn-outline-success buttons-excel ml-2" type="button"><span>Exportar </span><i class="fa-solid fa-file-csv"></i></button> 
-                                    <button id="export-pdf" class="btn btn-sm btn-outline-danger buttons-pdf ml-2" type="button"><span>Exportar </span><i class="fa-regular fa-file-pdf"></i></button> 
+                                    <button id="export-copy" title="Copiar" class="btn btn-outline-secondary buttons-copy" type="button"><i class="fa-regular fa-copy"></i></button> 
+                                    <button id="export-excel" title="Exportar Excel" class="btn btn-outline-success buttons-excel ml-2" type="button"><i class="fa-solid fa-file-csv"></i></button> 
+                                    <button id="export-pdf" title="Exportar PDF" class="btn btn-outline-danger buttons-pdf ml-2" type="button"><i class="fa-regular fa-file-pdf"></i></button>
                                 </sec:authorize>
                                 <sec:authorize access="hasAuthority('AGREGAR_VENTA_PRIVILAGE')"> 
-                                    <button type="button" class="btn-blue btn abrirModal-btn btn-sm ml-2" data-bs-toggle="modal" data-bs-target="#crearModal" data-action="agregar"><span>Agregar </span><i class="fa-solid fa-file-pen"></i></button>
+                                    <button type="button" title="Agregar Venta" class="btn-blue btn abrirModal-btn ml-2" data-bs-toggle="modal" data-bs-target="#crearModal" data-action="agregar"><i class="fa-solid fa-file-pen"></i></button>
                                 </sec:authorize> 
                             </h3>
                         </div>
@@ -63,29 +63,32 @@
                             <input type="hidden" id="idTerreno" value="${terreno.getIdTerreno()}">
                             <input type="hidden" id="estado" value="Activo">
                             <div class="form-group">
-                                <label for="nombre" class="form-label">Nombre: </label>
+                                <label for="nombre" class="form-label">Nombre:<strong class="text-danger"> *</strong></label>
                                 <input type="text" class="form-control" id="nombre" name="nombre" maxlength="200" placeholder="Ingrese el nombre de la venta" required>
                             </div>
                             <div class="form-group">
-                                <label for="fecha" class="form-label">Fecha: </label>
+                                <label for="fecha" class="form-label">Fecha:<strong class="text-danger"> *</strong></label>
                                 <input type="date" class="form-control" id="fecha" name="fecha" maxlength="10" placeholder="Ingrese la fecha de la venta" required>
                             </div>
                             <div class="form-group">
-                                <label for="precio" class="form-label">Precio: </label>
+                                <label for="precio" class="form-label">Precio:<strong class="text-danger"> *</strong></label>
                                 <input type="text" class="form-control" id="precio" name="precio" maxlength="10" placeholder="Ingrese el precio" required>
                             </div>
                             <div class="form-group">
-                                <label for="descuento" class="form-label">Descuento: </label>
-                                <input type="text" class="form-control" id="descuento" name="descuento" maxlength="10" value="0.00" placeholder="Ingrese el descuento" required>
+                                <label for="descuento" class="form-label">Descuento:</label>
+                                <input type="text" class="form-control" id="descuento" name="descuento" maxlength="10" value="0.00">
                             </div>
                             <div class="form-group">
-                                <label for="monto" class="form-label">Monto: </label>
+                                <label for="monto" class="form-label">Monto:</label>
                                 <input type="text" class="form-control" id="monto" name="monto" maxlength="10" placeholder="0.00" readonly>
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
-                            <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                        <div class="modal-footer d-flex justify-content-between">
+                            <label for="monto" class="form-label text-danger">(*) Campos Obligatorios</label>
+                            <div>
+                                <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
+                                <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                            </div>
                         </div>
                     </form>
                 </div>

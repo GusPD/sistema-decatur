@@ -25,12 +25,12 @@
                         <div class="card-header">
                             <h3 class="card-title d-flex justify-content-end">
                                 <sec:authorize access="hasAuthority('EXPORTAR_PROPIETARIO_PRIVILAGE')"> 
-                                    <button id="export-copy" class="btn btn-sm btn-outline-secondary buttons-copy" type="button"><span>Copiar  </span><i class="fa-regular fa-copy"></i></button> 
-                                    <button id="export-excel" class="btn btn-sm btn-outline-success buttons-excel ml-2" type="button"><span>Exportar </span><i class="fa-solid fa-file-csv"></i></button> 
-                                    <button id="export-pdf" class="btn btn-sm btn-outline-danger buttons-pdf ml-2" type="button"><span>Exportar </span><i class="fa-regular fa-file-pdf"></i></button> 
+                                    <button id="export-copy" title="Copiar" class="btn btn-outline-secondary buttons-copy" type="button"><i class="fa-regular fa-copy"></i></button> 
+                                    <button id="export-excel" title="Exportar Excel" class="btn btn-outline-success buttons-excel ml-2" type="button"><i class="fa-solid fa-file-csv"></i></button> 
+                                    <button id="export-pdf" title="Exportar PDF" class="btn btn-outline-danger buttons-pdf ml-2" type="button"><i class="fa-regular fa-file-pdf"></i></button> 
                                 </sec:authorize>
                                 <sec:authorize access="hasAuthority('AGREGAR_PROPIETARIO_PRIVILAGE')"> 
-                                    <button type="button" class="btn-blue btn abrirModal-btn btn-sm ml-2" data-bs-toggle="modal" data-bs-target="#crearModal" data-action="agregar"><span>Agregar </span><i class="fa-solid fa-file-pen"></i></button>
+                                    <button type="button" title="Agregar Propietario" class="btn-blue btn abrirModal-btn ml-2" data-bs-toggle="modal" data-bs-target="#crearModal" data-action="agregar"><i class="fa-solid fa-file-pen"></i></button>
                                 </sec:authorize> 
                             </h3>
                         </div>
@@ -63,37 +63,40 @@
                             <input type="hidden" id="idPersona">
                             <input type="hidden" id="idDocumento">
                             <div class="form-group">
-                                <label for="dui" class="form-label">DUI: </label>
+                                <label for="dui" class="form-label">DUI:<strong class="text-danger"> *</strong></label>
                                 <input type="text" class="form-control" id="dui" name="dui" maxlength="9" placeholder="Ingrese el número de DUI sin guiones" required>
                             </div>
                             <div class="form-group">
-                                <label for="nombre" class="form-label">Nombre: </label>
+                                <label for="nombre" class="form-label">Nombre:<strong class="text-danger"> *</strong></label>
                                 <input type="text" class="form-control" id="nombre" name="nombre" maxlength="200" placeholder="Ingrese el nombre" required>
                             </div>
                             <div class="form-group">
-                                <label for="apellido" class="form-label">Apellido: </label>
+                                <label for="apellido" class="form-label">Apellido:<strong class="text-danger"> *</strong></label>
                                 <input type="text" class="form-control" id="apellido" name="apellido" maxlength="200" placeholder="Ingrese el apellido" required>
                             </div>
                             <div class="form-group">
-                                <label for="profesion" class="form-label">Profesión: </label>
+                                <label for="profesion" class="form-label">Profesión:<strong class="text-danger"> *</strong></label>
                                 <input type="text" class="form-control" id="profesion" name="profesion" maxlength="200" placeholder="Ingrese la profesión" required>
                             </div>
                             <div class="form-group">
-                                <label for="direccionCasa" class="form-label">Dirección Casa: </label>
+                                <label for="direccionCasa" class="form-label">Dirección Casa:<strong class="text-danger"> *</strong></label>
                                 <input type="text" class="form-control" id="direccionCasa" name="direccionCasa" maxlength="300" placeholder="Ingrese la dirección de casa" required>
                             </div>
                             <div class="form-group">
-                                <label for="lugarTrabajo" class="form-label">Lugar de Trabajo: </label>
+                                <label for="lugarTrabajo" class="form-label">Lugar de Trabajo:</label>
                                 <input type="text" class="form-control" id="lugarTrabajo" name="lugarTrabajo" placeholder="Ingrese el lugar de trabajo " required>
                             </div>
                             <div class="form-group">
-                                <label for="direccionTrabajo" class="form-label">Dirección de Trabajo: </label>
+                                <label for="direccionTrabajo" class="form-label">Dirección de Trabajo:</label>
                                 <input type="text" class="form-control" id="direccionTrabajo" name="direccionTrabajo" placeholder="Ingrese la dirección del trabajo" required>
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
-                            <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                        <div class="modal-footer d-flex justify-content-between">
+                            <label for="monto" class="form-label text-danger">(*) Campos Obligatorios</label>
+                            <div>
+                                <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
+                                <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                            </div>
                         </div>
                     </form>
                 </div>

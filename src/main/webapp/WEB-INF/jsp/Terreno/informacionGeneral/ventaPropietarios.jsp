@@ -5,17 +5,20 @@
             <div class="card-header">
                 <!-- Subtitulo de la página y funciones de los datos -->
                 <div class="subtitulo-page">
-                    <h3 class="mt-0 mb-0">Propietarios
-                        <sec:authorize access="hasAuthority('SELECCIONAR_PROPIETARIO_PRIVILAGE')">
-                            <span id="SeleccionarPropietario" class="btn abrirModal-btn text-info puntero pull-right btn-sm" data-bs-toggle="modal" data-bs-target="#seleccionarModalPropietario" data-action="seleccionar" style="cursor: pointer;">
-                                <i class="fas fa-user-check"></i>
-                            </span>
-                        </sec:authorize>
-                        <sec:authorize access="hasAuthority('AGREGAR_PROPIETARIO_PRIVILAGE')">
-                            <span id="AgregarPropietario" class="btn abrirModalPropietario-btn text-info puntero pull-right btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalPropietario" data-action="agregar" style="cursor: pointer;">
-                                <i class="fas fa-user-plus"></i>
-                            </span>
-                        </sec:authorize>
+                    <h3 class="mt-0 mb-0">
+                        <div class="d-flex">
+                            <div class="col-sm-6">
+                                Propietarios
+                            </div>
+                            <div class="col-sm-6 d-flex justify-content-end">
+                                <sec:authorize access="hasAuthority('SELECCIONAR_PROPIETARIO_PRIVILAGE')">
+                                    <button title="Seleccionar Propietario" id="SeleccionarPropietario" class="btn btn-blue btn-sm" data-bs-toggle="modal" data-bs-target="#seleccionarModalPropietario" data-tipo="seleccionar"><i class="fas fa-user-check"></i></button>
+                                </sec:authorize>
+                                <sec:authorize access="hasAuthority('AGREGAR_PROPIETARIO_PRIVILAGE')">
+                                    <button title="Agregar Propietario" id="AgregarPropietario" class="btn btn-blue btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalPropietario" data-tipo="agregar"><i class="fas fa-user-plus"></i></button>
+                                </sec:authorize>
+                            </div>
+                        </div>
                     </h3>
                 </div>
             </div>
@@ -48,37 +51,40 @@
                         <input type="hidden" id="idDocumento">
                         <input type="hidden" id="idAsignacion">
                         <div class="form-group">
-                            <label for="dui" class="form-label">DUI: </label>
+                            <label for="dui" class="form-label">DUI:<strong class="text-danger"> *</strong></label>
                             <input type="text" class="form-control" id="dui" name="dui" maxlength="9" placeholder="Ingrese el número de DUI sin guiones" required>
                         </div>
                         <div class="form-group">
-                            <label for="nombreP" class="form-label">Nombre: </label>
+                            <label for="nombreP" class="form-label">Nombre:<strong class="text-danger"> *</strong></label>
                             <input type="text" class="form-control" id="nombreP" name="nombreP" maxlength="200" placeholder="Ingrese el nombre" required>
                         </div>
                         <div class="form-group">
-                            <label for="apellido" class="form-label">Apellido: </label>
+                            <label for="apellido" class="form-label">Apellido:<strong class="text-danger"> *</strong></label>
                             <input type="text" class="form-control" id="apellido" name="apellido" maxlength="200" placeholder="Ingrese el apellido" required>
                         </div>
                         <div class="form-group">
-                            <label for="profesion" class="form-label">Profesión: </label>
+                            <label for="profesion" class="form-label">Profesión:<strong class="text-danger"> *</strong></label>
                             <input type="text" class="form-control" id="profesion" name="profesion" maxlength="200" placeholder="Ingrese la profesión" required>
                         </div>
                         <div class="form-group">
-                            <label for="direccionCasa" class="form-label">Dirección Casa: </label>
+                            <label for="direccionCasa" class="form-label">Dirección Casa:<strong class="text-danger"> *</strong></label>
                             <input type="text" class="form-control" id="direccionCasa" name="direccionCasa" maxlength="300" placeholder="Ingrese la dirección de casa" required>
                         </div>
                         <div class="form-group">
-                            <label for="lugarTrabajo" class="form-label">Lugar de Trabajo: </label>
-                            <input type="text" class="form-control" id="lugarTrabajo" name="lugarTrabajo" placeholder="Ingrese el lugar de trabajo " required>
+                            <label for="lugarTrabajo" class="form-label">Lugar de Trabajo:</label>
+                            <input type="text" class="form-control" id="lugarTrabajo" name="lugarTrabajo" placeholder="Ingrese el lugar de trabajo">
                         </div>
                         <div class="form-group">
-                            <label for="direccionTrabajo" class="form-label">Dirección de Trabajo: </label>
-                            <input type="text" class="form-control" id="direccionTrabajo" name="direccionTrabajo" placeholder="Ingrese la dirección del trabajo" required>
+                            <label for="direccionTrabajo" class="form-label">Dirección de Trabajo:</label>
+                            <input type="text" class="form-control" id="direccionTrabajo" name="direccionTrabajo" placeholder="Ingrese la dirección del trabajo">
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
-                        <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                    <div class="modal-footer d-flex justify-content-between">
+                        <label for="monto" class="form-label text-danger">(*) Campos Obligatorios</label>
+                        <div>
+                            <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
+                            <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -98,7 +104,7 @@
                     <div  class="overflow-auto">
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                         <div class="form-group">
-                            <label for="propietarios">Seleccione los propietarios:</label>
+                            <label for="propietarios">Seleccione los propietarios:<strong class="text-danger"> *</strong></label>
                             <select class="form-select" id="propietarios" name="propietarios" placeholder="Seleccione un propietario" data-live-search="true" multiple>
                                 <c:if test="${not empty propietariosNoVenta}">
                                     <c:forEach items="${propietariosNoVenta}" var="ePropietario">
@@ -109,9 +115,12 @@
                             <div id="span-propietarios-error" class="mensaje-error d-none" style=""><span>Este campo es requerido</span></div>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button id="btnGuardarSeleccionarPropietario" type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
-                        <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                    <div class="modal-footer d-flex justify-content-between">
+                        <label for="monto" class="form-label text-danger">(*) Campos Obligatorios</label>
+                        <div>
+                            <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
+                            <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                        </div>
                     </div>
                 </form>
             </div>

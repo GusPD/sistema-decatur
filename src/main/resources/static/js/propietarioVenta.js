@@ -106,11 +106,9 @@ $(document).ready(function() {
                 maxlength: 300
             },
             lugarTrabajo: {
-                required: true,
                 maxlength: 200
             },
             direccionTrabajo:{
-                required: true,
                 maxlength: 300
             } 
         },

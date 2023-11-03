@@ -6,12 +6,17 @@
             <div class="card-header">
                 <!-- Subtitulo de la página y funciones de los datos-->
                 <div class="subtitulo-page">
-                    <h3 class="m-0">Correos Eléctronicos
-                        <sec:authorize access="hasAuthority('AGREGAR_CORREO_PROPIETARIO_PRIVILAGE')">
-                            <span id="AgregarCorreo" class="btn abrirModal-btn text-info puntero pull-right btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalCorreo" data-action="agregar" style="cursor: pointer;">
-                                <i class="fa-solid fa-envelope"></i>
-                            </span>
-                        </sec:authorize>
+                    <h3 class="m-0">
+                        <div class="d-flex">
+                            <div class="col-sm-6">
+                                Correos Eléctronicos
+                            </div>
+                            <div class="col-sm-6 d-flex justify-content-end">
+                                <sec:authorize access="hasAuthority('AGREGAR_CORREO_PROPIETARIO_PRIVILAGE')">
+                                    <button title="Agregar Correo" id="AgregarCorreo" class="btn btn-blue btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalCorreo" data-modo="agregar"><i class="fa-solid fa-envelope"></i></button>
+                                </sec:authorize>
+                            </div>
+                        </div>
                     </h3>
                 </div>
             </div>
@@ -41,7 +46,7 @@
                         <input type="hidden" id="idPropietario" value="${propietario.getIdPropietario()}">
                         <input type="hidden" id="idCorreo">
                         <div class="form-group">
-                            <label for="tipo" class="form-label">Tipo de Correo:</label>
+                            <label for="tipo" class="form-label">Tipo de Correo:<strong class="text-danger"> *</strong></label>
                             <select type="text" class="form-select" id="tipo" name="tipo" required>
                                 <option value="">Seleccione una opción</option>
                                 <c:forEach items="${tiposCorreo}" var="eTipoCorreo" varStatus="status">
@@ -50,13 +55,16 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="correo" class="form-label">Correo:</label>
+                            <label for="correo" class="form-label">Correo:<strong class="text-danger"> *</strong></label>
                             <input type="text" class="form-control" id="correo" name="correo" maxlength="150" placeholder="Ingrese el correo electrónico" required>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
-                        <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                    <div class="modal-footer d-flex justify-content-between">
+                        <label for="monto" class="form-label text-danger">(*) Campos Obligatorios</label>
+                        <div>
+                            <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
+                            <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                        </div>
                     </div>
                 </form>
             </div>

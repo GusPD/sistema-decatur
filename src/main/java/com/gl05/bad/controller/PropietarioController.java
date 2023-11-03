@@ -100,7 +100,8 @@ public class PropietarioController {
     @GetMapping("/Propietarios/{idProyecto}")
     public String mostrarPropietariosProyecto(Model model, Proyecto proyecto) {
         model.addAttribute("pageTitle", "Propietarios Proyecto");
-        model.addAttribute("proyecto", proyecto);
+        Proyecto proyectoEncontrado = proyectoService.encontrar(proyecto.getIdProyecto());
+        model.addAttribute("proyecto", proyectoEncontrado);
         return "/Proyecto/PropietariosProyecto";
     }
     

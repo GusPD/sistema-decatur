@@ -24,12 +24,12 @@
                         <div class="card-header">
                             <h3 class="card-title d-flex justify-content-end">
                                 <sec:authorize access="hasAuthority('EXPORTAR_ROL_PRIVILAGE')"> 
-                                    <button id="export-copy" class="btn btn-sm btn-outline-secondary buttons-copy" type="button"><span>Copiar  </span><i class="fa-regular fa-copy"></i></button> 
-                                    <button id="export-excel" class="btn btn-sm btn-outline-success buttons-excel ml-2" type="button"><span>Exportar </span><i class="fa-solid fa-file-csv"></i></button> 
-                                    <button id="export-pdf" class="btn btn-sm btn-outline-danger buttons-pdf ml-2" type="button"><span>Exportar </span><i class="fa-regular fa-file-pdf"></i></button> 
+                                    <button id="export-copy" title="Copiar" class="btn btn-outline-secondary buttons-copy" type="button"><i class="fa-regular fa-copy"></i></button> 
+                                    <button id="export-excel" title="Exportar Excel" class="btn btn-outline-success buttons-excel ml-2" type="button"><i class="fa-solid fa-file-csv"></i></button> 
+                                    <button id="export-pdf" title="Exportar PDF" class="btn btn-outline-danger buttons-pdf ml-2" type="button"><i class="fa-regular fa-file-pdf"></i></button>
                                 </sec:authorize>
                                 <sec:authorize access="hasAuthority('AGREGAR_ROL_PRIVILAGE')"> 
-                                    <button type="button" class="btn-blue btn abrirModal-btn btn-sm ml-2" data-bs-toggle="modal" data-bs-target="#crearModal" data-action="agregar"><span>Agregar </span><i class="fa-solid fa-file-pen"></i></button>
+                                    <button type="button" title="Agregar Rol" class="btn-blue btn abrirModal-btn ml-2" data-bs-toggle="modal" data-bs-target="#crearModal" data-action="agregar"><i class="fa-solid fa-file-pen"></i></button>
                                 </sec:authorize> 
                             </h3>
                         </div>
@@ -60,11 +60,11 @@
                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                             <input type="hidden" id="rolId">
                             <div class="form-group">
-                                <label for="nombre" class="form-label">Nombre de rol: </label>
+                                <label for="nombre" class="form-label">Nombre de rol:<strong class="text-danger"> *</strong></label>
                                 <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" required>
                             </div>
                             <div class="form-group">
-                                <label for="permisos" class="form-label mb-0">Permisos: </label>
+                                <label for="permisos" class="form-label mb-0">Permisos:</label>
                                 <div id="permisos-error" class="error-message mt-0 mb-1"></div>
                                 <div class="table-responsive">
                                     <table class="table table-flush-spacing" style="font-size: 13px">
@@ -1884,9 +1884,12 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <button id='btnSumit' type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
-                            <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                        <div class="modal-footer d-flex justify-content-between">
+                            <label for="monto" class="form-label text-danger">(*) Campos Obligatorios</label>
+                            <div>
+                                <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
+                                <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                            </div>
                         </div>
                     </form>
                 </div>

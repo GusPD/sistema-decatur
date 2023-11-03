@@ -291,6 +291,7 @@ th {
     font-size: 6.5rem !Important;
     justify-content: center;
     display: flex;
+    padding:0px;
 }
 .tab-perfil{
     font-size: 1em;

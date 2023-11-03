@@ -6,12 +6,17 @@
             <div class="card-header">
                 <!-- Subtitulo de la página -->
                 <div class="subtitulo-page">
-                    <h3 class="m-0">Teléfonos
-                        <sec:authorize access="hasAuthority('AGREGAR_TELEFONO_PROPIETARIO_PRIVILAGE')">
-                            <span id="AgregarTelefono" class="btn abrirModal-btn text-info puntero pull-right btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalTelefono" data-action="agregar" style="cursor: pointer;">
-                                <i class="fa-solid fa-phone"></i>
-                            </span>
-                        </sec:authorize>
+                    <h3 class="m-0">
+                        <div class="d-flex">
+                            <div class="col-sm-6">
+                                Teléfonos
+                            </div>
+                            <div class="col-sm-6 d-flex justify-content-end">
+                                <sec:authorize access="hasAuthority('AGREGAR_TELEFONO_PROPIETARIO_PRIVILAGE')">
+                                    <button title="Agregar Teléfono" id="AgregarTelefono" class="btn btn-blue btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalTelefono" data-modo="agregar"><i class="fa-solid fa-phone"></i></button>
+                                </sec:authorize>
+                            </div>
+                        </div>
                     </h3>
                 </div>
             </div>
@@ -41,7 +46,7 @@
                         <input type="hidden" id="idPropietario" value="${propietario.getIdPropietario()}">
                         <input type="hidden" id="idTelefono">
                         <div class="form-group">
-                            <label for="tipo" class="form-label">Tipo de Teléfono:</label>
+                            <label for="tipo" class="form-label">Tipo de Teléfono:<strong class="text-danger"> *</strong></label>
                             <select type="text" class="form-select" id="tipo" name="tipo" required>
                                 <option value="">Seleccione una opción</option>
                                 <c:forEach items="${tiposTelefonos}" var="eTipoTelefono" varStatus="status">
@@ -50,13 +55,16 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="telefono" class="form-label">Teléfono:</label>
+                            <label for="telefono" class="form-label">Teléfono:<strong class="text-danger"> *</strong></label>
                             <input type="text" class="form-control" id="telefono" name="telefono" maxlength="12" placeholder="Ingrese el número de teléfono" required>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
-                        <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                    <div class="modal-footer d-flex justify-content-between">
+                        <label for="monto" class="form-label text-danger">(*) Campos Obligatorios</label>
+                        <div>
+                            <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
+                            <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                        </div>
                     </div>
                 </form>
             </div>

@@ -5,17 +5,20 @@
             <div class="card-header">
                 <!-- Subtitulo de la página y funciones de los datos -->
                 <div class="subtitulo-page">
-                    <h3 class="mt-0 mb-0">Trabajadores
-                        <sec:authorize access="hasAuthority('SELECCIONAR_TRABAJADOR_PRIVILAGE')">
-                            <span id="SeleccionarTrabajador" class="btn abrirModal-btn text-info puntero pull-right btn-sm" data-bs-toggle="modal" data-bs-target="#seleccionarModalTrabajador" data-action="seleccionar" style="cursor: pointer;">
-                                <i class="fas fa-user-check"></i>
-                            </span>
-                        </sec:authorize>
-                        <sec:authorize access="hasAuthority('AGREGAR_TRABAJADOR_PRIVILAGE')">
-                            <span id="AgregarTrabajador" class="btn abrirModal-btn text-info puntero pull-right btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalTrabajador" data-action="agregar" style="cursor: pointer;">
-                                <i class="fas fa-user-plus"></i>
-                            </span>
-                        </sec:authorize>
+                    <h3 class="mt-0 mb-0">
+                        <div class="d-flex">
+                            <div class="col-sm-6">
+                                Trabajadores
+                            </div>
+                            <div class="col-sm-6 d-flex justify-content-end">
+                                <sec:authorize access="hasAuthority('SELECCIONAR_TRABAJADOR_PRIVILAGE')">
+                                    <button title="Seleccionar Trabajador" id="SeleccionarTrabajador" class="btn btn-blue btn-sm" data-bs-toggle="modal" data-bs-target="#seleccionarModalTrabajador" data-tipo="seleccionar"><i class="fas fa-user-check"></i></button>
+                                </sec:authorize>
+                                <sec:authorize access="hasAuthority('AGREGAR_TRABAJADOR_PRIVILAGE')">
+                                    <button title="Agregar Trabajador" id="AgregarTrabajador" class="btn btn-blue btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalTrabajador" data-tipo="agregar"><i class="fas fa-user-plus"></i></button>
+                                </sec:authorize>
+                            </div>
+                        </div>
                     </h3>
                 </div>
             </div>
@@ -47,25 +50,28 @@
                         <input type="hidden" id="rol">
                         <input type="hidden" id="idVenta" value="${venta.getIdVenta()}">
                         <div class="form-group">
-                            <label for="dui" class="form-label">DUI: </label>
+                            <label for="dui" class="form-label">DUI:<strong class="text-danger"> *</strong></label>
                             <input type="text" class="form-control" id="dui" name="dui" maxlength="9" placeholder="Ingrese el número de DUI sin guiones" required>
                         </div>
                         <div class="form-group">
-                            <label for="nombre" class="form-label">Nombre: </label>
+                            <label for="nombre" class="form-label">Nombre:<strong class="text-danger"> *</strong></label>
                             <input type="text" class="form-control" id="nombre" name="nombre" maxlength="200" placeholder="Ingrese el nombre" required>
                         </div>
                         <div class="form-group">
-                            <label for="apellido" class="form-label">Apellido: </label>
+                            <label for="apellido" class="form-label">Apellido:<strong class="text-danger"> *</strong></label>
                             <input type="text" class="form-control" id="apellido" name="apellido" maxlength="200" placeholder="Ingrese el apellido" required>
                         </div>
                         <div class="form-group">
-                            <label for="apellido" class="form-label">Especialidad: </label>
+                            <label for="apellido" class="form-label">Especialidad:<strong class="text-danger"> *</strong></label>
                             <input type="text" class="form-control" id="empleador" name="empleador" maxlength="200" placeholder="Ingrese la especialidad" required>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
-                        <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                    <div class="modal-footer d-flex justify-content-between">
+                        <label for="monto" class="form-label text-danger">(*) Campos Obligatorios</label>
+                        <div>
+                            <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
+                            <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -85,7 +91,7 @@
                     <div  class="overflow-auto">
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                         <div class="form-group">
-                            <label for="trabajadores">Seleccione los trabajadores:</label>
+                            <label for="trabajadores">Seleccione los trabajadores:<strong class="text-danger"> *</strong></label>
                             <select class="form-select" id="trabajadores" name="trabajadores" placeholder="Seleccione un trabajador" data-live-search="true" multiple>
                                 <c:if test="${not empty trabajadoresNoVenta}">
                                     <c:forEach items="${trabajadoresNoVenta}" var="eTrabajador">
@@ -96,9 +102,12 @@
                             <div id="span-trabajadores-error" class="mensaje-error d-none" style=""><span>Este campo es requerido</span></div>
                         </div>
                     </div>
-                    <div class="modal-footer">
-                        <button id="btnGuardarSeleccionarTrabajador" type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
-                        <button type="button" class="btn btn-outline-danger btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                    <div class="modal-footer d-flex justify-content-between">
+                        <label for="monto" class="form-label text-danger">(*) Campos Obligatorios</label>
+                        <div>
+                            <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
+                            <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                        </div>
                     </div>
                 </form>
             </div>

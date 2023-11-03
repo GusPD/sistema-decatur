@@ -83,7 +83,8 @@ public class TrabajadorController {
     @GetMapping("/Trabajadores/{idProyecto}")
     public String mostrarTrabajadoresProyecto(Model model, Proyecto proyecto) {
         model.addAttribute("pageTitle", "Trabajadores Proyecto");
-        model.addAttribute("proyecto", proyecto);
+        Proyecto proyectoEncontrado = proyectoService.encontrar(proyecto.getIdProyecto());
+        model.addAttribute("proyecto", proyectoEncontrado);
         return "/Proyecto/TrabajadoresProyecto";
     }
     

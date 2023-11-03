@@ -226,7 +226,6 @@ $(document).ready(function() {
                 maxlength: 9
             },
             descuento:{
-                required: true,
                 validarDescuento: true,
                 maxlength: 9
             }
@@ -273,15 +272,20 @@ $(document).ready(function() {
             var idVenta = $('#idVenta').val();
             var estado = $('#estado').val();
             var idTerreno = $('#idTerreno').val();
+            var descuento = $('#descuento').val();
             var formDataArray = formGuardar.serializeArray();
             formDataArray = formDataArray.filter(item => item.name !== 'fecha');
+            formDataArray = formDataArray.filter(item => item.name !== 'descuento');
             var url;
+            if(descuento===''){
+                descuento='0.00';
+            }
             if (idVenta) {
                 url = '/ActualizarVenta/'+idTerreno;
-                formDataArray.push({name: 'idVenta', value: idVenta},{name: 'estado', value: estado},{name: 'fecha', value: formattedDate});
+                formDataArray.push({name: 'idVenta', value: idVenta},{name: 'estado', value: estado},{name: 'fecha', value: formattedDate},{name: 'descuento', value: descuento});
             } else {
                 url = '/AgregarVenta/'+idTerreno;
-                formDataArray.push({name: 'estado', value: estado},{name: 'fecha', value: formattedDate});
+                formDataArray.push({name: 'estado', value: estado},{name: 'fecha', value: formattedDate},{name: 'descuento', value: descuento});
             }
             $.ajax({
                 url: url,
@@ -338,6 +342,7 @@ $(document).ready(function() {
             tituloModal.text('Agregar Venta');
             form.attr('action', '/AgregarVenta/'+idTerreno);
             $('.form-control').val('');
+            $('#descuento').val('0.00');
         }
         modal.modal('show');
     });

@@ -182,6 +182,9 @@ $(document).ready(function() {
             comprobante: {
                 required: true
             },
+            cuenta: {
+                required: true
+            },
             fecha: {
                 required: true,
                 maxlength: 10
@@ -210,6 +213,9 @@ $(document).ready(function() {
                 required: 'Este campo es requerido'
             },
             comprobante:{
+                required: 'Este campo es requerido'
+            },
+            cuenta:{
                 required: 'Este campo es requerido'
             },
             fecha:{
@@ -246,7 +252,7 @@ $(document).ready(function() {
             }
         },
         errorPlacement: function(error, element) {
-            if (element.attr("name") === "comprobante" || element.attr("name") === "fecha" || element.attr("name") === "recibo" || element.attr("name") === "monto" || element.attr("name") === "descuento" || element.attr("name") === "otros") {
+            if (element.attr("name") === "comprobante" || element.attr("name") === "cuenta" || element.attr("name") === "fecha" || element.attr("name") === "recibo" || element.attr("name") === "monto" || element.attr("name") === "descuento" || element.attr("name") === "otros") {
                 error.insertAfter(element);
             }        
         },
