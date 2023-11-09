@@ -48,6 +48,7 @@ public class Pago implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idPago;
     @Column(name = "FECHA_REGISTRO")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fechaRegistro;
     @Column(name = "FECHA")
     @Temporal(TemporalType.DATE)

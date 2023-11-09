@@ -45,9 +45,10 @@ public class CuotaMantenimiento implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idCuotaMantenimiento;
     @Column(name = "FECHA_REGISTRO")
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fechaRegistro;
     @Column(name = "FECHA_CUOTA")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date fechaCuota;
     @Column(name = "CUOTA")
@@ -55,7 +56,7 @@ public class CuotaMantenimiento implements Serializable {
     @Column(name = "SALDO_CUOTA")
     private double saldoCuota;
     @Column(name = "FECHA_RECARGO")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     private Date fechaRecargo;
     @Column(name = "RECARGO")
     private double recargo;
