@@ -63,7 +63,7 @@
                             <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Empresa" required>
                         </div>
                         <div class="modal-footer d-flex justify-content-between">
-                            <label for="monto" class="form-label text-danger">(*) Campos Obligatorios</label>
+                            <label for="monto" class="form-label text-danger mensaje-obligatorios">(*) Campos Obligatorios</label>
                             <div>
                                 <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
                                 <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
@@ -100,13 +100,13 @@
 
 <!-- Script de la página -->
 <sec:authorize access="hasAuthority('VER_EMPRESA_PRIVILAGE')" var="hasPrivilegeVerEmpresa"></sec:authorize>
-<script>var hasPrivilegeVerEmpresa = ${hasPrivilegeVerEmpresa};</script>    
+<script>var hasPrivilegeVerEmpresa = <c:out value='${hasPrivilegeVerEmpresa}' />;</script>    
         
 <sec:authorize access="hasAuthority('EDITAR_EMPRESA_PRIVILAGE')" var="hasPrivilegeEditarEmpresa"></sec:authorize>
-<script>var hasPrivilegeEditarEmpresa = ${hasPrivilegeEditarEmpresa};</script>
+<script>var hasPrivilegeEditarEmpresa = <c:out value='${hasPrivilegeEditarEmpresa}' />;</script>
 
 <sec:authorize access="hasAuthority('ELIMINAR_EMPRESA_PRIVILAGE')" var="hasPrivilegeEliminarEmpresa"></sec:authorize>
-<script>var hasPrivilegeEliminarEmpresa = ${hasPrivilegeEliminarEmpresa};</script>
+<script>var hasPrivilegeEliminarEmpresa = <c:out value='${hasPrivilegeEliminarEmpresa}' />;</script>
 
 <%@ include file="../common/footer.jspf"%>
 

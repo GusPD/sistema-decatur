@@ -1,8 +1,8 @@
 $(document).ready(function() {
     //Tabla
-    var idProyecto = $('#proyectoId').data('id');
+    var idEmpresa = $('#empresaId').data('id');
     var table = $('#cuentaTable').DataTable({
-        ajax: '/cuentas/data/'+idProyecto,
+        ajax: '/cuentas/data/'+idEmpresa,
         processing: true,
         serverSide: true,
         order: [[0, 'asc']],
@@ -23,7 +23,7 @@ $(document).ready(function() {
             {
                 extend: 'excel',
                 text: 'Exportar a Excel',
-                title: 'Cuentas bancarias del proyecto',
+                title: 'Cuentas bancarias de la empresa',
                 filename: 'Cuentas Bancarias ' + getCurrentDateTime(),
                 exportOptions: {
                   columns: [0, 1, 2, 3, 4, 5]
@@ -32,7 +32,7 @@ $(document).ready(function() {
             {
                 extend: 'pdf',
                 text: 'Exportar a PDF',
-                title: 'Cuentas bancarias del proyecto',
+                title: 'Cuentas bancarias de la empresa',
                 filename: 'Cuentas Bancarias ' + getCurrentDateTime(),
                 exportOptions: {
                   columns: [0, 1, 2, 3, 4, 5]
@@ -142,19 +142,24 @@ $(document).ready(function() {
     var validator = $('#formGuardar').validate({
         rules: {
             nombre: {
-                required: true
+                required: true,
+                maxlength: 200
             },
             titular: {
-                required: true
+                required: true,
+                maxlength: 200
             },
             banco: {
-                required: true
+                required: true,
+                maxlength: 200
             },
             tipo: {
-                required: true
+                required: true,
+                maxlength: 20
             },
             cuenta: {
-                required: true
+                required: true,
+                maxlength: 20
             } 
         },
         messages:{
@@ -190,15 +195,15 @@ $(document).ready(function() {
         submitHandler: function(form) {
             event.preventDefault();
             var idCuenta = $('#idCuenta').val();
-            var idProyecto = $('#proyectoId').data('id');
+            var idEmpresa = $('#empresaId').data('id');
             var formDataArray = formGuardar.serializeArray();
             var url;
             if (idCuenta) {
                 url = '/ActualizarCuenta';
-                formDataArray.push({name: 'idCuenta', value: idCuenta}, {name: 'idProyecto', value: idProyecto});
+                formDataArray.push({name: 'idCuenta', value: idCuenta}, {name: 'idEmpresa', value: idEmpresa});
             } else {
                 url = '/AgregarCuenta';
-                formDataArray.push({name: 'idProyecto', value: idProyecto});
+                formDataArray.push({name: 'idEmpresa', value: idEmpresa});
             }
             $.ajax({
                 url: url,

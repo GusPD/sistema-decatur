@@ -1,9 +1,7 @@
 package com.gl05.bad.domain;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.time.LocalDateTime;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -50,9 +48,9 @@ public class Pago implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idPago;
     @Column(name = "FECHA_REGISTRO")
-    private LocalDateTime fechaRegistro;
+    private Date fechaRegistro;
     @Column(name = "FECHA")
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date fecha;
     @Column(name = "RECIBO")
@@ -66,18 +64,18 @@ public class Pago implements Serializable {
     @Column(name = "TIPO")
     private String tipo;
     @Column(name = "MONTO")
-    private BigDecimal monto;
+    private double monto;
     @Column(name = "OTROS")
-    private BigDecimal otros;
+    private double otros;
     @Column(name = "DESCUENTO")
-    private BigDecimal descuento;
+    private double descuento;
     @Size(max = 500)
     @Column(name = "OBSERVACIONES")
     private String observaciones;
-    @JoinColumn(name = "ID_CUENTA_BANCARIA", referencedColumnName = "ID_CUENTA_BANCARIA")
+    @JoinColumn(name = "ID_CUENTA_BANCARIA")
     @ManyToOne
     private CuentaBancaria cuentaBancaria;
-    @JoinColumn(name = "ID_VENTA", referencedColumnName = "ID_VENTA")
+    @JoinColumn(name = "ID_VENTA")
     @ManyToOne
     private Venta venta;
 

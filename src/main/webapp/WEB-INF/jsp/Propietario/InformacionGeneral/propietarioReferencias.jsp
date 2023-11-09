@@ -63,7 +63,7 @@
                         </div>
                     </div>
                     <div class="modal-footer d-flex justify-content-between">
-                        <label for="monto" class="form-label text-danger">(*) Campos Obligatorios</label>
+                        <label for="monto" class="form-label text-danger mensaje-obligatorios">(*) Campos Obligatorios</label>
                         <div>
                             <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
                             <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
@@ -99,7 +99,7 @@
 
 <!-- Script de la página -->
 <sec:authorize access="hasAuthority('ELIMINAR_REFERENCIA_PROPIETARIO_PRIVILAGE')" var="hasPrivilegeEliminarReferencia"></sec:authorize>
-<script>var hasPrivilegeEliminarReferencia = ${hasPrivilegeEliminarReferencia};</script>
+<script>var hasPrivilegeEliminarReferencia = <c:out value='${hasPrivilegeEliminarReferencia}' />;</script>
 
 <%@ include file="../propietario-footer.jspf"%>
 

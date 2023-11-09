@@ -1885,7 +1885,7 @@
                             </div>
                         </div>
                         <div class="modal-footer d-flex justify-content-between">
-                            <label for="monto" class="form-label text-danger">(*) Campos Obligatorios</label>
+                            <label for="monto" class="form-label text-danger mensaje-obligatorios">(*) Campos Obligatorios</label>
                             <div>
                                 <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
                                 <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
@@ -1922,10 +1922,10 @@
 
 <!-- Script de la página -->
 <sec:authorize access="hasAuthority('EDITAR_ROL_PRIVILAGE')" var="hasPrivilegeEditarRol"></sec:authorize>
-<script>var hasPrivilegeEditarRol = ${hasPrivilegeEditarRol};</script>
+<script>var hasPrivilegeEditarRol = <c:out value='${hasPrivilegeEditarRol}' />;</script>
 
 <sec:authorize access="hasAuthority('ELIMINAR_ROL_PRIVILAGE')" var="hasPrivilegeEliminarRol"></sec:authorize>
-<script>var hasPrivilegeEliminarRol = ${hasPrivilegeEliminarRol};</script>    
+<script>var hasPrivilegeEliminarRol = <c:out value='${hasPrivilegeEliminarRol}' />;</script>    
 
 <%@ include file="../common/footer.jspf"%>
 

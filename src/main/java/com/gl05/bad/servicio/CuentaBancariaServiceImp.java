@@ -2,7 +2,7 @@ package com.gl05.bad.servicio;
 
 import com.gl05.bad.dao.CuentaBancariaDao;
 import com.gl05.bad.domain.CuentaBancaria;
-import com.gl05.bad.domain.Proyecto;
+import com.gl05.bad.domain.Empresa;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
@@ -43,8 +43,8 @@ public class CuentaBancariaServiceImp implements CuentaBancariaService{
     
     @Override
     @Transactional(readOnly = true)
-    public List<CuentaBancaria> encontrarProyecto(Proyecto proyecto) {
-        return cuentaDao.findByProyecto(proyecto);
+    public List<CuentaBancaria> encontrarEmpresa(Empresa empresa) {
+        return cuentaDao.findByEmpresa(empresa);
     }
 
     @Override
@@ -59,9 +59,9 @@ public class CuentaBancariaServiceImp implements CuentaBancariaService{
 
     @Override
     @Transactional(readOnly = true)
-    public DataTablesOutput<CuentaBancaria> listarCuentas(DataTablesInput input, Long idProyecto) {
+    public DataTablesOutput<CuentaBancaria> listarCuentas(DataTablesInput input, Long idEmpresa) {
         Specification<CuentaBancaria> specification = (root, query, builder) -> {
-            return builder.equal(root.get("proyecto").get("idProyecto"), idProyecto);
+            return builder.equal(root.get("empresa").get("idEmpresa"), idEmpresa);
         };
         return cuentaDao.findAll(input, specification);
     }

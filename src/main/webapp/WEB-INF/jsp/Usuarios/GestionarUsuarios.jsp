@@ -117,7 +117,7 @@
                             </div>
                         </div>
                         <div class="modal-footer d-flex justify-content-between">
-                            <label for="monto" class="form-label text-danger">(*) Campos Obligatorios</label>
+                            <label for="monto" class="form-label text-danger mensaje-obligatorios">(*) Campos Obligatorios</label>
                             <div>
                                 <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
                                 <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
@@ -154,10 +154,10 @@
         
 <!-- Script de la página -->
 <sec:authorize access="hasAuthority('EDITAR_USUARIO_PRIVILAGE')" var="hasPrivilegeEditarUsuario"></sec:authorize>
-<script>var hasPrivilegeEditarUsuario = ${hasPrivilegeEditarUsuario};</script>
+<script>var hasPrivilegeEditarUsuario = <c:out value='${hasPrivilegeEditarUsuario}' />;</script>
 
 <sec:authorize access="hasAuthority('ELIMINAR_USUARIO_PRIVILAGE')" var="hasPrivilegeEliminarUsuario"></sec:authorize>
-<script>var hasPrivilegeEliminarUsuario = ${hasPrivilegeEliminarUsuario};</script>
+<script>var hasPrivilegeEliminarUsuario = <c:out value='${hasPrivilegeEliminarUsuario}' />;</script>
 
 <%@ include file="../common/footer.jspf"%>
 

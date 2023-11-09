@@ -80,7 +80,7 @@
                         </div>
                     </div>
                     <div class="modal-footer d-flex justify-content-between">
-                        <label for="monto" class="form-label text-danger">(*) Campos Obligatorios</label>
+                        <label for="monto" class="form-label text-danger mensaje-obligatorios">(*) Campos Obligatorios</label>
                         <div>
                             <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
                             <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
@@ -116,7 +116,7 @@
                         </div>
                     </div>
                     <div class="modal-footer d-flex justify-content-between">
-                        <label for="monto" class="form-label text-danger">(*) Campos Obligatorios</label>
+                        <label for="monto" class="form-label text-danger mensaje-obligatorios">(*) Campos Obligatorios</label>
                         <div>
                             <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
                             <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
@@ -152,10 +152,10 @@
 
 <!-- Script de la página -->
 <sec:authorize access="hasAuthority('VER_PROPIETARIO_PRIVILAGE')" var="hasPrivilegeVerPropietario"></sec:authorize>
-<script>var hasPrivilegeVerPropietario = ${hasPrivilegeVerPropietario};</script>    
+<script>var hasPrivilegeVerPropietario = <c:out value='${hasPrivilegeVerPropietario}' />;</script>    
 
 <sec:authorize access="hasAuthority('ELIMINAR_PROPIETARIO_PRIVILAGE')" var="hasPrivilegeEliminarPropietario"></sec:authorize>
-<script>var hasPrivilegeEliminarPropietario = ${hasPrivilegeEliminarPropietario};</script>
+<script>var hasPrivilegeEliminarPropietario = <c:out value='${hasPrivilegeEliminarPropietario}' />;</script>
 
 <%@ include file="../venta-footer.jspf"%>
 

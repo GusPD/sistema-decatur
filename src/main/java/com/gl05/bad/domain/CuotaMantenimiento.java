@@ -1,8 +1,6 @@
 package com.gl05.bad.domain;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -49,25 +47,25 @@ public class CuotaMantenimiento implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idCuotaMantenimiento;
     @Column(name = "FECHA_REGISTRO")
-    private LocalDateTime fechaRegistro;
+    private Date fechaRegistro;
     @Column(name = "FECHA_CUOTA")
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date fechaCuota;
     @Column(name = "CUOTA")
-    private BigDecimal cuota;
+    private double cuota;
     @Column(name = "SALDO_CUOTA")
-    private BigDecimal saldoCuota;
+    private double saldoCuota;
     @Column(name = "FECHA_RECARGO")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaRecargo;
     @Column(name = "RECARGO")
-    private BigDecimal recargo;
+    private double recargo;
     @Column(name = "SALDO_RECARGO")
-    private BigDecimal saldoRecargo;
+    private double saldoRecargo;
     @Size(max = 200)
     @Column(name = "DESCUENTO")
-    private BigDecimal descuento;
+    private double descuento;
     @Column(name = "ESTADO_MANTENIMIENTO")
     private Boolean estadoMantenimiento;
     @Column(name = "ESTADO_RECARGO")

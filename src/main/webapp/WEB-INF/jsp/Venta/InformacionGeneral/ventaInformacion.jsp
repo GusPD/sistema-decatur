@@ -255,7 +255,7 @@
                         </div>
                     </div>
                     <div class="modal-footer d-flex justify-content-between">
-                        <label for="monto" class="form-label text-danger">(*) Campos Obligatorios</label>
+                        <label for="monto" class="form-label text-danger mensaje-obligatorios">(*) Campos Obligatorios</label>
                         <div>
                             <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
                             <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
@@ -313,7 +313,7 @@
                         </div>
                     </div>
                     <div class="modal-footer d-flex justify-content-between">
-                        <label for="monto" class="form-label text-danger">(*) Campos Obligatorios</label>
+                        <label for="monto" class="form-label text-danger mensaje-obligatorios">(*) Campos Obligatorios</label>
                         <div>
                             <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
                             <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
@@ -351,7 +351,7 @@
                         </div>
                     </div>
                     <div class="modal-footer d-flex justify-content-between">
-                        <label for="monto" class="form-label text-danger">(*) Campos Obligatorios</label>
+                        <label for="monto" class="form-label text-danger mensaje-obligatorios">(*) Campos Obligatorios</label>
                         <div>
                             <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
                             <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>

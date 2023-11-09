@@ -1,6 +1,8 @@
 package com.gl05.bad.servicio;
 
 import com.gl05.bad.domain.Pago;
+import com.gl05.bad.domain.Venta;
+
 import java.util.List;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
@@ -16,6 +18,8 @@ public interface PagoService {
     public void eliminar(Pago pago);
     
     public Pago encontrar(Long idPago);
+
+    public List<Pago> encontrarPago(String tipo,Venta venta);
     
     public void actualizar(Pago pago);
 }

@@ -1,7 +1,6 @@
 package com.gl05.bad.domain;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -47,15 +46,15 @@ public class InformacionFinanciamiento implements Serializable {
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date fechaAplicacion;
     @Column(name = "MONTO")
-    private BigDecimal monto;
+    private double monto;
     @Column(name = "PLAZO")
     private Integer plazo;
     @Column(name = "TASA")
-    private BigDecimal tasa;
+    private double tasa;
     @Column(name = "CUOTA_KI")
-    private BigDecimal cuota;
+    private double cuota;
     @Column(name = "MULTA_FINANCIAMIENTO")
-    private BigDecimal multa;
+    private double multa;
     @ManyToOne
     @JoinColumn(name = "ID_VENTA", referencedColumnName = "ID_VENTA")
     private Venta venta;

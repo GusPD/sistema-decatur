@@ -1,7 +1,7 @@
 <%@ include file="../common/header.jspf"%>
-<%@ include file="../common/navigationProyecto.jspf"%>
+<%@ include file="../common/navigationEmpresa.jspf"%>
 <div class="content-wrapper">
-    <div id="proyectoId" class="hidden" data-id="${proyecto.idProyecto}"></div>
+    <div id="empresaId" class="hidden" data-id="${empresa.idEmpresa}"></div>
     <!-- Título de la página -->
     <section class="content-header">
         <div class="container">
@@ -59,30 +59,30 @@
                     <form id='formGuardar' accept-charset="UTF-8">
                         <div  class="overflow-auto">
                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
-                            <input type="hidden" id="idCuenta">
+                            <input type="hidden" class="form-control" id="idCuenta">
                             <div class="form-group">
                                 <label for="nombre" class="form-label">Nombre:<strong class="text-danger"> *</strong></label>
-                                <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ingrese el nombre" required>
+                                <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ingrese el nombre" maxlength="200" required>
                             </div>
                             <div class="form-group">
                                 <label for="titular" class="form-label">Titular:<strong class="text-danger"> *</strong></label>
-                                <input type="text" class="form-control" id="titular" name="titular" placeholder="Ingrese el titular" required>
+                                <input type="text" class="form-control" id="titular" name="titular" placeholder="Ingrese el titular" maxlength="200" required>
                             </div>
                             <div class="form-group">
                                 <label for="banco" class="form-label">Banco:<strong class="text-danger"> *</strong></label>
-                                <input type="text" class="form-control" id="banco" name="banco" placeholder="Ingrese el banco" required>
+                                <input type="text" class="form-control" id="banco" name="banco" placeholder="Ingrese el banco" maxlength="200" required>
                             </div>
                             <div class="form-group">
                                 <label for="tipo" class="form-label">Tipo:<strong class="text-danger"> *</strong></label>
-                                <input type="text" class="form-control" id="tipo" name="tipo" placeholder="Ingrese el tipo" required>
+                                <input type="text" class="form-control" id="tipo" name="tipo" placeholder="Ingrese el tipo" maxlength="20" required>
                             </div>
                             <div class="form-group">
                                 <label for="cuenta" class="form-label">Cuenta:<strong class="text-danger"> *</strong></label>
-                                <input type="text" class="form-control" id="cuenta" name="cuenta" placeholder="Ingrese número de cuenta" required>
+                                <input type="text" class="form-control" id="cuenta" name="cuenta" placeholder="Ingrese número de cuenta" maxlength="20" required>
                             </div>
                         </div>
                         <div class="modal-footer d-flex justify-content-between">
-                            <label for="monto" class="form-label text-danger">(*) Campos Obligatorios</label>
+                            <label for="monto" class="form-label text-danger mensaje-obligatorios">(*) Campos Obligatorios</label>
                             <div>
                                 <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
                                 <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
@@ -119,10 +119,10 @@
 
 <!-- Script de la página -->
 <sec:authorize access="hasAuthority('EDITAR_CUENTA_BANCARIA_PRIVILAGE')" var="hasPrivilegeEditarCuenta"></sec:authorize>
-<script>var hasPrivilegeEditarCuenta = ${hasPrivilegeEditarCuenta};</script>
+<script>var hasPrivilegeEditarCuenta = <c:out value='${hasPrivilegeEditarCuenta}' />;</script>
 
 <sec:authorize access="hasAuthority('ELIMINAR_CUENTA_BANCARIA_PRIVILAGE')" var="hasPrivilegeEliminarCuenta"></sec:authorize>
-<script>var hasPrivilegeEliminarCuenta = ${hasPrivilegeEliminarCuenta};</script>
+<script>var hasPrivilegeEliminarCuenta = <c:out value='${hasPrivilegeEliminarCuenta}' />;</script>
 
 <%@ include file="../common/footer.jspf"%>
 

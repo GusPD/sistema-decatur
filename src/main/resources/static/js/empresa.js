@@ -62,7 +62,7 @@ $(document).ready(function() {
                 render: function (data, type, row) {
                     var actionsHtml = '';
                     if(hasPrivilegeVerEmpresa === true){
-                        actionsHtml = '<a type="button" class="btn btn-outline-secondary btn-sm" href="/Empresa/' + row.idEmpresa + '">';
+                        actionsHtml = '<a type="button" class="btn btn-outline-secondary btn-sm" href="/CuentasBancarias/' + row.idEmpresa + '">';
                         actionsHtml += '<i class="far fa-eye"></i></a>';
                     }
                     if(hasPrivilegeEditarEmpresa === true){

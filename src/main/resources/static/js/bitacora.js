@@ -4,7 +4,7 @@ $(document).ready(function() {
         ajax: '/bitacora/data',
         processing: true,
         serverSide: true,
-        order: [[2, 'desc']],
+        order: [[3, 'desc']],
         dom: "<'row w-100'<'col-sm-12 mb-4'B>>" +
              "<'row w-100'<'col-sm-6'l><'col-sm-6'f>>" +
              "<'row w-100'<'col-sm-12 my-4'tr>>" +

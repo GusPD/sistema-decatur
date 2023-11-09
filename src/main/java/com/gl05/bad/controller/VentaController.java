@@ -9,6 +9,7 @@ import com.gl05.bad.domain.Propietario;
 import com.gl05.bad.domain.Proyecto;
 import com.gl05.bad.domain.Terreno;
 import com.gl05.bad.domain.Venta;
+import com.gl05.bad.domain.Pago;
 import com.gl05.bad.domain.Visitante;
 import com.gl05.bad.domain.VistaVentasActiva;
 import com.gl05.bad.domain.InformacionFinanciamiento;
@@ -20,6 +21,7 @@ import com.gl05.bad.servicio.DocumentoService;
 import com.gl05.bad.servicio.FacturacionService;
 import com.gl05.bad.servicio.InformacionFinanciamientoService;
 import com.gl05.bad.servicio.InformacionMantenimientoService;
+import com.gl05.bad.servicio.PagoService;
 import com.gl05.bad.servicio.PersonaService;
 import com.gl05.bad.servicio.PropietarioService;
 import com.gl05.bad.servicio.ProyectoService;
@@ -27,6 +29,7 @@ import com.gl05.bad.servicio.TerrenoService;
 import com.gl05.bad.servicio.VentaService;
 import com.gl05.bad.servicio.VisitanteService;
 import com.gl05.bad.servicio.VistaVentasActivaService;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -86,6 +89,9 @@ public class VentaController {
     
     @Autowired
     private ProyectoService proyectoService;
+
+    @Autowired
+    private PagoService pagoService;
     
     @Autowired
     private FacturacionService facturacionService;
@@ -106,7 +112,7 @@ public class VentaController {
         Proyecto proyecto = terrenoEncontrado.getProyecto();
         model.addAttribute("proyecto", proyecto);
         model.addAttribute("valorPrima", prima);
-        return "/Terreno/VentasTerreno";
+        return "/Proyecto/VentasTerrenoProyecto";
     }
     
     //Función que obtiene las ventas del terreno
@@ -133,6 +139,11 @@ public class VentaController {
     }
     
     //Función que redirige a la vista de la información de la venta  
+    /**
+     * @param model
+     * @param venta
+     * @return
+     */
     @GetMapping("/InformacionVenta/{idVenta}")
     public String mostrarInformacionVenta(Model model, Venta venta) {
         model.addAttribute("pageTitle", "Venta");
@@ -149,8 +160,11 @@ public class VentaController {
         if(!mantenimientos.isEmpty()){
             mantenimiento = mantenimientos.get(0);
         }
-        
-        double prima = 0;
+        List<Pago> primas = pagoService.encontrarPago("Prima",venta);
+        double valorPrima = 0;
+        for (Pago prima : primas) {
+            valorPrima += prima.getMonto();
+        }
         
         model.addAttribute("financiamiento", financiamiento);
         model.addAttribute("financiamientos", financiamientos);
@@ -159,8 +173,8 @@ public class VentaController {
         model.addAttribute("proyecto", proyecto);
         model.addAttribute("terreno", terrenoEncontrado);
         model.addAttribute("venta", ventaEncontrada);
-        model.addAttribute("valorPrima", prima);
-        return "/Terreno/InformacionGeneral/ventaInformacion";
+        model.addAttribute("valorPrima", valorPrima);
+        return "/Venta/InformacionGeneral/ventaInformacion";
     }
     
     //Función que agrega la información de financiamiento una venta de la base de datos
@@ -301,7 +315,7 @@ public class VentaController {
         model.addAttribute("proyecto", proyecto);
         model.addAttribute("terreno", terrenoEncontrado);
         model.addAttribute("venta", ventaEncontrada);
-        return "/Terreno/InformacionGeneral/ventaPropietarios";
+        return "/Venta/InformacionGeneral/ventaPropietarios";
     }
     
     //Función para agregar un propietario a la venta
@@ -418,7 +432,7 @@ public class VentaController {
         model.addAttribute("proyecto", proyecto);
         model.addAttribute("terreno", terrenoEncontrado);
         model.addAttribute("venta", ventaEncontrada);
-        return "/Terreno/InformacionGeneral/ventaTrabajadores";
+        return "/Venta/InformacionGeneral/ventaTrabajadores";
     }
     
     //Función para agregar un trabajador a la venta
@@ -513,7 +527,7 @@ public class VentaController {
         model.addAttribute("proyecto", proyecto);
         model.addAttribute("terreno", terrenoEncontrado);
         model.addAttribute("venta", ventaEncontrada);
-        return "/Terreno/InformacionGeneral/ventaDocumentos";
+        return "/Venta/InformacionGeneral/ventaDocumentos";
     }
     
     //Función que agrega un documento de la venta
@@ -602,7 +616,7 @@ public class VentaController {
         model.addAttribute("proyecto", proyecto);
         model.addAttribute("terreno", terrenoEncontrado);
         model.addAttribute("venta", ventaEncontrada);
-        return "/Terreno/InformacionGeneral/ventaFacturacion";
+        return "/Venta/InformacionGeneral/ventaFacturacion";
     }
     
     //Función para seleccionar los propietarios que apareceran en la factura de consumidor final de la venta    

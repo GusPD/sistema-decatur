@@ -291,7 +291,6 @@ $(document).ready(function() {
                 data: formDataArray,
                 success: function (response) {
                     $('#crearModal').modal('hide');
-                    var table = $('#terrenoTable').DataTable();
                     table.ajax.reload(null, false);
                     toastr.success(response);
                 },

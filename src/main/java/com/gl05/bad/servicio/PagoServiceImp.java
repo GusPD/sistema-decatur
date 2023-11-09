@@ -1,6 +1,8 @@
 package com.gl05.bad.servicio;
 
 import com.gl05.bad.domain.Pago;
+import com.gl05.bad.domain.Venta;
+
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
@@ -38,6 +40,12 @@ public class PagoServiceImp implements PagoService{
     @Transactional(readOnly = true)
     public Pago encontrar(Long idPago) {
         return pagoDao.findById(idPago).orElse(null);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Pago> encontrarPago(String tipo,Venta venta) {
+        return pagoDao.findByTipoAndVenta(tipo, venta);
     }
 
     @Override

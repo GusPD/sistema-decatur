@@ -1,10 +1,10 @@
 package com.gl05.bad.controller;
 
 import com.gl05.bad.domain.CuentaBancaria;
-import com.gl05.bad.domain.Proyecto;
+import com.gl05.bad.domain.Empresa;
 import com.gl05.bad.servicio.BitacoraServiceImp;
 import com.gl05.bad.servicio.CuentaBancariaService;
-import com.gl05.bad.servicio.ProyectoService;
+import com.gl05.bad.servicio.EmpresaService;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,30 +31,30 @@ public class CuentaBancariaController {
     private CuentaBancariaService cuentaService;
     
     @Autowired
-    private ProyectoService proyectoService;
+    private EmpresaService empresaService;
     
     //Función para redigir a la vista de cuentas
-    @GetMapping("/CuentasBancarias/{idProyecto}")
-    public String mostrarProyecto(Model model, @PathVariable("idProyecto") Long idProyecto) {
+    @GetMapping("/CuentasBancarias/{idEmpresa}")
+    public String mostrarCuentas(Model model, @PathVariable("idEmpresa") Long idEmpresa) {
         model.addAttribute("pageTitle", "Cuentas");
-        Proyecto newProyecto = proyectoService.encontrar(idProyecto);
-        model.addAttribute("proyecto", newProyecto);
+        Empresa newEmpresa = empresaService.encontrar(idEmpresa);
+        model.addAttribute("empresa", newEmpresa);
         return "/Cuenta Bancaria/GestionarCuentaBancaria";
     }
     
     //Función para obtener las cuentas de la base de datos
-    @GetMapping("/cuentas/data/{idProyecto}")
+    @GetMapping("/cuentas/data/{idEmpresa}")
     @ResponseBody
-    public DataTablesOutput<CuentaBancaria> GetCuentas(@Valid DataTablesInput input, @PathVariable Long idProyecto) {
-        return cuentaService.listarCuentas(input, idProyecto );
+    public DataTablesOutput<CuentaBancaria> GetCuentas(@Valid DataTablesInput input, @PathVariable Long idEmpresa) {
+        return cuentaService.listarCuentas(input, idEmpresa );
     }
 
     //Función para agregar una cuenta en la base de datos
     @PostMapping("/AgregarCuenta")
-    public ResponseEntity<String> AgregarCuenta(@RequestParam("idProyecto") Long idProyecto, CuentaBancaria cuenta, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> AgregarCuenta(@RequestParam("idEmpresa") Long idEmpresa, CuentaBancaria cuenta, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
-            Proyecto proyecto = proyectoService.encontrar(idProyecto);
-            cuenta.setProyecto(proyecto);
+            Empresa empresa = empresaService.encontrar(idEmpresa);
+            cuenta.setEmpresa(empresa);
             cuentaService.agregar(cuenta);
             String mensaje = "Se ha agregado una cuenta bancaria.";
             bitacoraService.registrarAccion("Agregar cuenta bancaria");
@@ -92,10 +92,10 @@ public class CuentaBancariaController {
 
     //Función para actualizar una cuenta de la base de datos
     @PostMapping("/ActualizarCuenta")
-    public ResponseEntity<String> ActualizarCuenta(@RequestParam("idProyecto") Long idProyecto, CuentaBancaria cuenta, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> ActualizarCuenta(@RequestParam("idEmpresa") Long idEmpresa, CuentaBancaria cuenta, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
-            Proyecto proyecto = proyectoService.encontrar(idProyecto);
-            cuenta.setProyecto(proyecto);
+            Empresa empresa = empresaService.encontrar(idEmpresa);
+            cuenta.setEmpresa(empresa);
             cuentaService.actualizar(cuenta);
             String mensaje = "Se ha actualizado la cuenta bancaria correctamente.";
             bitacoraService.registrarAccion("Actualizar cuenta bancaria");

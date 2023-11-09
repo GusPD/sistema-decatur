@@ -48,7 +48,7 @@
 
 <!-- Script de la página -->
 <sec:authorize access="hasAuthority('VER_VENTA_PRIVILAGE')" var="hasPrivilegeVerVenta"></sec:authorize>
-<script>var hasPrivilegeVerVenta = ${hasPrivilegeVerVenta};</script>    
+<script>var hasPrivilegeVerVenta = <c:out value='${hasPrivilegeVerVenta}' />;</script>    
 
 <%@ include file="../common/footer.jspf"%>
 

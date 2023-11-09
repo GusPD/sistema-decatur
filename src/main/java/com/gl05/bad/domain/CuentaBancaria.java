@@ -52,9 +52,9 @@ public class CuentaBancaria implements Serializable {
     @Size(max = 20)
     @Column(name = "CUENTA")
     private String cuenta;
-    @JoinColumn(name = "ID_PROYECTO", referencedColumnName = "ID_PROYECTO")
+    @JoinColumn(name = "ID_EMPRESA", referencedColumnName = "ID_EMPRESA")
     @ManyToOne
-    private Proyecto proyecto;
+    private Empresa empresa;
 
     @Override
     public int hashCode() {

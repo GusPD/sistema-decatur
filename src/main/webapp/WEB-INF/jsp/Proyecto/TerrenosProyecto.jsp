@@ -87,7 +87,7 @@
                             </div>
                         </div>
                         <div class="modal-footer d-flex justify-content-between">
-                            <label for="monto" class="form-label text-danger">(*) Campos Obligatorios</label>
+                            <label for="monto" class="form-label text-danger mensaje-obligatorios">(*) Campos Obligatorios</label>
                             <div>
                                 <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
                                 <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
@@ -124,13 +124,13 @@
 
 <!-- Script de la página -->
 <sec:authorize access="hasAuthority('VER_TERRENO_PRIVILAGE')" var="hasPrivilegeVerTerreno"></sec:authorize>
-<script>var hasPrivilegeVerTerreno = ${hasPrivilegeVerTerreno};</script>    
+<script>var hasPrivilegeVerTerreno = <c:out value=' ${hasPrivilegeVerTerreno}' />;</script>    
         
 <sec:authorize access="hasAuthority('EDITAR_TERRENO_PRIVILAGE')" var="hasPrivilegeEditarTerreno"></sec:authorize>
-<script>var hasPrivilegeEditarTerreno = ${hasPrivilegeEditarTerreno};</script>
+<script>var hasPrivilegeEditarTerreno = <c:out value=' ${hasPrivilegeEditarTerreno}' />;</script>
 
 <sec:authorize access="hasAuthority('ELIMINAR_TERRENO_PRIVILAGE')" var="hasPrivilegeEliminarTerreno"></sec:authorize>
-<script>var hasPrivilegeEliminarTerreno = ${hasPrivilegeEliminarTerreno};</script>
+<script>var hasPrivilegeEliminarTerreno = <c:out value=' ${hasPrivilegeEliminarTerreno}' />;</script>
 
 <%@ include file="../common/footer.jspf"%>
 

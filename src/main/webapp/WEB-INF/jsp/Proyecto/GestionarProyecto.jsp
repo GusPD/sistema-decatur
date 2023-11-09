@@ -74,7 +74,7 @@
                             </select>
                         </div>
                         <div class="modal-footer d-flex justify-content-between">
-                            <label for="monto" class="form-label text-danger">(*) Campos Obligatorios</label>
+                            <label for="monto" class="form-label text-danger mensaje-obligatorios">(*) Campos Obligatorios</label>
                             <div>
                                 <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
                                 <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
@@ -111,13 +111,13 @@
 
 <!-- Script de la página -->
 <sec:authorize access="hasAuthority('VER_PROYECTO_PRIVILAGE')" var="hasPrivilegeVerProyecto"></sec:authorize>
-<script>var hasPrivilegeVerProyecto = ${hasPrivilegeVerProyecto};</script>    
+<script>var hasPrivilegeVerProyecto = <c:out value='${hasPrivilegeVerProyecto}' />;</script>    
         
 <sec:authorize access="hasAuthority('EDITAR_PROYECTO_PRIVILAGE')" var="hasPrivilegeEditarProyecto"></sec:authorize>
-<script>var hasPrivilegeEditarProyecto = ${hasPrivilegeEditarProyecto};</script>
+<script>var hasPrivilegeEditarProyecto = <c:out value='${hasPrivilegeEditarProyecto}' />;</script>
 
 <sec:authorize access="hasAuthority('ELIMINAR_PROYECTO_PRIVILAGE')" var="hasPrivilegeEliminarProyecto"></sec:authorize>
-<script>var hasPrivilegeEliminarProyecto = ${hasPrivilegeEliminarProyecto};</script>
+<script>var hasPrivilegeEliminarProyecto = <c:out value='${hasPrivilegeEliminarProyecto}' />;</script>
 
 <%@ include file="../common/footer.jspf"%>
 

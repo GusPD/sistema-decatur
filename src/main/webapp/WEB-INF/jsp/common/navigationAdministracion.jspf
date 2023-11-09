@@ -68,7 +68,7 @@
                             <sec:authorize access="hasAuthority('GESTIONAR_PROYECTO_PRIVILAGE')">
                             <li class="nav-item">
                                 <a href="/Proyectos" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == '/Proyectos' ? 'active' : ''}">
-                                    <i class="fa-solid fa-globe nav-icon text-blue"></i>
+                                    <i class="fa-solid fa-earth-oceania nav-icon text-blue"></i>
                                     <p>Proyectos</p>
                                 </a>
                             </li>

@@ -327,6 +327,10 @@ th {
     text-align: justify;
 }
 
+.mensaje-obligatorios{
+    font-size: 10px;
+}
+
 
 /*Configuración de Icono Ver Contraseña Login*/
 .input-group-text{
@@ -453,6 +457,10 @@ th {
     }
     /*Configuración de terreno*/
     .tarjeta-container{
+        display: block !important;
+    }
+    /*Configuración de botones*/
+    .btn-alineacion{
         display: block !important;
     }
 }

@@ -1,5 +1,7 @@
 <%@ include file="../common/header.jspf"%>
 <%@ include file="../common/navigationProyecto.jspf"%>
+<%@ page import="java.util.HashMap" %>
+
 <div class="content-wrapper">
     <div id="proyectoId" class="hidden" data-id="${proyecto.idProyecto}"></div>
     <!-- Título de la página -->
@@ -56,7 +58,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group row">
+                    <div class="form-group row btn-alineacion">
                         <label for="seleccionar-pago" class="form-label">Seleccione un pago: </label>
                         <div class="col">
                             <button id="btn-prima" class="btn btn-outline-dark btn-sm btn-block">Prima</button>
@@ -93,7 +95,7 @@
                             <div class="form-group">
                                 <label for="cuenta" class="form-label">Lote:<strong class="text-danger"> *</strong></label>
                                 <select class="form-select" id="venta" name="venta" placeholder="Seleccione una opción" data-live-search="true" required></select>
-                                <div id="span-lotes-error" class="mensaje-error d-none" style=""><span>Este campo es requerido</span></div>
+                                <div id="span-lotes-error" class="mensaje-error d-none"><span>Este campo es requerido</span></div>
                             </div>
                             <div class="form-group">
                                 <label for="comprobante" class="form-label">Comprobante:<strong class="text-danger"> *</strong></label>
@@ -138,7 +140,7 @@
                             </div>
                         </div>
                         <div class="modal-footer d-flex justify-content-between">
-                            <label for="monto" class="form-label text-danger">(*) Campos Obligatorios</label>
+                            <label for="monto" class="form-label text-danger mensaje-obligatorios">(*) Campos Obligatorios</label>
                             <div>
                                 <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
                                 <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
@@ -175,13 +177,13 @@
 
 <!-- Script de la página -->
 <sec:authorize access="hasAuthority('VER_PAGO_PRIVILAGE')" var="hasPrivilegeVerPago"></sec:authorize>
-<script>var hasPrivilegeVerPago = ${hasPrivilegeVerPago};</script>
+<script>var hasPrivilegeVerPago = <c:out value='${hasPrivilegeVerPago}'/>;</script>
 
 <sec:authorize access="hasAuthority('EDITAR_PAGO_PRIVILAGE')" var="hasPrivilegeEditarPago"></sec:authorize>
-<script>var hasPrivilegeEditarPago = ${hasPrivilegeEditarPago};</script>
+<script>var hasPrivilegeEditarPago = <c:out value='${hasPrivilegeEditarPago}'/>;</script>
 
 <sec:authorize access="hasAuthority('ELIMINAR_PAGO_PRIVILAGE')" var="hasPrivilegeEliminarPago"></sec:authorize>
-<script>var hasPrivilegeEliminarPago = ${hasPrivilegeEliminarPago};</script>
+<script>var hasPrivilegeEliminarPago = <c:out value='${hasPrivilegeEliminarPago}'/>;</script>
 
 <%@ include file="../common/footer.jspf"%>
 

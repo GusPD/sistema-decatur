@@ -49,7 +49,7 @@
 
 <!-- Script de la página -->
 <sec:authorize access="hasAuthority('VER_PROPIETARIO_PRIVILAGE')" var="hasPrivilegeVerPropietarioProyecto"></sec:authorize>
-<script>var hasPrivilegeVerPropietarioProyecto = ${hasPrivilegeVerPropietarioProyecto};</script>    
+<script>var hasPrivilegeVerPropietarioProyecto = <c:out value='${hasPrivilegeVerPropietarioProyecto}' />;</script>    
 
 <%@ include file="../common/footer.jspf"%>
 

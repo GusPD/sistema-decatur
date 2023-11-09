@@ -76,7 +76,7 @@ $(document).ready(function() {
                     }
                     if(hasPrivilegeEditarPago === true){
                         actionsHtml += '<button type="button" class="btn btn-outline-primary abrirModal-btn btn-sm" data-bs-toggle="modal" ';
-                        actionsHtml += 'data-bs-target="#crearModal" data-tipo="editar" data-id="' + row.idPago + '" data-modo="actualizar">';
+                        actionsHtml += 'data-bs-target="#crearModalGuardar" data-tipo="editar" data-id="' + row.idPago + '" data-modo="actualizar">';
                         actionsHtml += '<i class="far fa-edit"></i></button>';
                     }
                     if(hasPrivilegeEliminarPago === true){
@@ -260,9 +260,11 @@ $(document).ready(function() {
         errorClass: 'invalid-feedback',
         submitHandler: function(form) {
             event.preventDefault();
+            validator.resetForm();
             var idPago = $('#idPago').val();
             var tipo = $('#tipo').val();
             const fechaInputValue = $('#fecha').val();
+            const cuenta = $('#cuenta').val();
             const fechaInput = new Date(fechaInputValue);
             const fechaLocal = new Date(fechaInput.getTime() + fechaInput.getTimezoneOffset() * 60000);
 
@@ -275,22 +277,22 @@ $(document).ready(function() {
             const formattedDate = `${day}/${month}/${year}`;
             var formDataArray = formGuardar.serializeArray();
             formDataArray = formDataArray.filter(item => item.name !== 'fecha');
+            formDataArray = formDataArray.filter(item => item.name !== 'cuenta');
             var url;
             if (idPago) {
                 url = '/ActualizarPago';
-                formDataArray.push({name: 'tipo', value: tipo}, {name: 'fecha', value: formattedDate});
+                formDataArray.push({name: 'tipo', value: tipo}, {name: 'fecha', value: formattedDate}, {name: 'cuentaBancaria', value: cuenta}, {name: 'idPago', value: idPago});
             } else {
                 url = '/AgregarPago';
-                formDataArray.push({name: 'tipo', value: tipo}, {name: 'fecha', value: formattedDate});
+                formDataArray.push({name: 'tipo', value: tipo}, {name: 'fecha', value: formattedDate}, {name: 'cuentaBancaria', value: cuenta});
             }
-            console.log(formDataArray);
+            //console.log(formDataArray);
             $.ajax({
                 url: url,
                 type: 'POST',
                 data: formDataArray,
                 success: function (response) {
                     $('#crearModalGuardar').modal('hide');
-                    var table = $('#terrenoTable').DataTable();
                     table.ajax.reload(null, false);
                     toastr.success(response);
                 },
@@ -304,9 +306,10 @@ $(document).ready(function() {
     });
     //Método para mostrar el modal segun sea si editar o nuevo registro
     $(document).on('click', '.abrirModal-btn', function () {
+        validator.resetForm();
         var idPago = $(this).data('id');
+        var tipo = '';
         if (idPago) {
-            validator.resetForm();
             formGuardar.find('.is-invalid').removeClass('is-invalid');
             $.ajax({
                 url: '/ObtenerPago/' + idPago,
@@ -314,6 +317,59 @@ $(document).ready(function() {
                 success: function (response) {
                     $('#comprobante').val(response.comprobante);
                     $('#tipo').val(response.tipo);
+                    tipo =  response.tipo;
+                    if(response.tipo==='Prima'){
+                        $.ajax({
+                            url: "/obtenerVentasPrima?proyectoId=" + idProyecto,
+                            type: "GET",
+                            success: function (data) {
+                                var selectElement = $("#venta");
+                                selectElement.empty();
+                                selectElement.append($("<option>", {value: '', text: 'Seleccione una opción'}));
+                                for (var i = 0; i < data.length; i++) {
+                                    selectElement.append($("<option>", {
+                                        value: data[i].idVenta,
+                                        text: data[i].terreno.poligono + '-' + data[i].terreno.numero + data[i].terreno.seccion,
+                                        selected: data[i].idVenta === response.venta.idVenta
+                                    }));
+                                }
+                            }
+                        });
+                    }else if(response.tipo==='Mantenimiento'){
+                        $.ajax({
+                            url: "/obtenerVentasMantenimiento?proyectoId=" + idProyecto,
+                            type: "GET",
+                            success: function (data) {
+                                var selectElement = $("#venta");
+                                selectElement.empty();
+                                selectElement.append($("<option>", {value: '', text: 'Seleccione una opción'}));
+                                for (var i = 0; i < data.length; i++) {
+                                    selectElement.append($("<option>", {
+                                        value: data[i].idVenta,
+                                        text: data[i].terreno.poligono + '-' + data[i].terreno.numero + data[i].terreno.seccion,
+                                        selected: data[i].idVenta === response.venta.idVenta
+                                    }));
+                                }
+                            }
+                        });
+                    }else if(response.tipo==='Financiamiento'){
+                        $.ajax({
+                            url: "/obtenerVentasFinanciamiento?proyectoId=" + idProyecto,
+                            type: "GET",
+                            success: function (data) {
+                                var selectElement = $("#venta");
+                                selectElement.empty();
+                                selectElement.append($("<option>", {value: '', text: 'Seleccione una opción'}));
+                                for (var i = 0; i < data.length; i++) {
+                                    selectElement.append($("<option>", {
+                                        value: data[i].idVenta,
+                                        text: data[i].terreno.poligono + '-' + data[i].terreno.numero + data[i].terreno.seccion,
+                                        selected: data[i].idVenta === response.venta.idVenta
+                                    }));
+                                }
+                            }
+                        });
+                    }
                     $('#fecha').val(response.fecha);
                     $('#recibo').val(response.recibo);
                     $('#estado').val(response.estado);
@@ -321,15 +377,14 @@ $(document).ready(function() {
                     $('#otros').val(response.otros);
                     $('#descuento').val(response.descuento);
                     $('#observaciones').val(response.observaciones);
-                    $('#cuenta').val(response.cuenta);
-                    $('#venta').val(response.venta);
+                    $('#cuenta').val(response.cuentaBancaria.idCuenta);
                     $('#idPago').val(response.idPago);
+                    $("#span-lotes-error").addClass('d-none');
                 },
                 error: function () {
                     alert('Error al obtener los datos del pago.');
                 }
             });
-            var tipo =  $('#tipo').val();
             $('#crearModalGuardar').find('.modal-title').text('Editar '+tipo);
             $('#crearModalGuardar').modal('show');
         } else {
@@ -344,6 +399,7 @@ $(document).ready(function() {
             $('#cuenta').val('');
             $('#idPago').val('');
             $('#venta').val('');
+            $("#span-lotes-error").addClass('d-none');
             $('#crearModal').modal('show');
         }
     });
@@ -377,6 +433,7 @@ $(document).ready(function() {
     });
     //Método para abrir modal de prima
     $(document).on('click', '#btn-prima', function () {
+        validator.resetForm();
         var modal = $('#crearModal');
         var modalGuardar = $('#crearModalGuardar');
         $("#crearModalLabelPago").text("Agregar Prima");
@@ -408,6 +465,7 @@ $(document).ready(function() {
     });
     //Método para abrir modal de mantenimiento
     $(document).on('click', '#btn-mantenimiento', function () {
+        validator.resetForm();
         var modal = $('#crearModal');
         var modalGuardar = $('#crearModalGuardar');
         $("#crearModalLabelPago").text("Agregar Mantenimiento");

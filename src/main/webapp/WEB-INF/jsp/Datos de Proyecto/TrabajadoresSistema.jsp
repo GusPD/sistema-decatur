@@ -81,7 +81,7 @@
                             </div>
                         </div>
                         <div class="modal-footer d-flex justify-content-between">
-                            <label for="monto" class="form-label text-danger">(*) Campos Obligatorios</label>
+                            <label for="monto" class="form-label text-danger mensaje-obligatorios">(*) Campos Obligatorios</label>
                             <div>
                                 <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
                                 <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
@@ -118,13 +118,13 @@
 
 <!-- Script de la página -->
 <sec:authorize access="hasAuthority('VER_TRABAJADOR_PRIVILAGE')" var="hasPrivilegeVerTrabajador"></sec:authorize>
-<script>var hasPrivilegeVerTrabajador = ${hasPrivilegeVerTrabajador};</script>    
+<script>var hasPrivilegeVerTrabajador = <c:out value='${hasPrivilegeVerTrabajador}' />;</script>    
         
 <sec:authorize access="hasAuthority('EDITAR_TRABAJADOR_PRIVILAGE')" var="hasPrivilegeEditarTrabajador"></sec:authorize>
-<script>var hasPrivilegeEditarTrabajador = ${hasPrivilegeEditarTrabajador};</script>
+<script>var hasPrivilegeEditarTrabajador = <c:out value='${hasPrivilegeEditarTrabajador}' />;</script>
 
 <sec:authorize access="hasAuthority('ELIMINAR_TRABAJADOR_PRIVILAGE')" var="hasPrivilegeEliminarTrabajador"></sec:authorize>
-<script>var hasPrivilegeEliminarTrabajador = ${hasPrivilegeEliminarTrabajador};</script>
+<script>var hasPrivilegeEliminarTrabajador = <c:out value='${hasPrivilegeEliminarTrabajador}' />;</script>
 
 <%@ include file="../common/footer.jspf"%>
 

@@ -84,7 +84,7 @@
                             </div>
                         </div>
                         <div class="modal-footer d-flex justify-content-between">
-                            <label for="monto" class="form-label text-danger">(*) Campos Obligatorios</label>
+                            <label for="monto" class="form-label text-danger mensaje-obligatorios">(*) Campos Obligatorios</label>
                             <div>
                                 <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
                                 <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
@@ -121,13 +121,13 @@
 
 <!-- Script de la página -->
 <sec:authorize access="hasAuthority('VER_VENTA_PRIVILAGE')" var="hasPrivilegeVerVenta"></sec:authorize>
-<script>var hasPrivilegeVerVenta = ${hasPrivilegeVerVenta};</script>    
+<script>var hasPrivilegeVerVenta = <c:out value='${hasPrivilegeVerVenta}' />;</script>    
         
 <sec:authorize access="hasAuthority('EDITAR_VENTA_PRIVILAGE')" var="hasPrivilegeEditarVenta"></sec:authorize>
-<script>var hasPrivilegeEditarVenta = ${hasPrivilegeEditarVenta};</script>
+<script>var hasPrivilegeEditarVenta = <c:out value='${hasPrivilegeEditarVenta}' />;</script>
 
 <sec:authorize access="hasAuthority('ELIMINAR_VENTA_PRIVILAGE')" var="hasPrivilegeEliminarVenta"></sec:authorize>
-<script>var hasPrivilegeEliminarVenta = ${hasPrivilegeEliminarVenta};</script>
+<script>var hasPrivilegeEliminarVenta = <c:out value='${hasPrivilegeEliminarVenta}' />;</script>
 
 <%@ include file="../common/footer.jspf"%>
 

@@ -57,8 +57,8 @@
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <li class="nav-item">  
                     <a href="#" class="nav-link" style="background-color: #E3E7EA;">
-                        <i class="fa-solid fa-globe nav-icon text-blue"></i>
-                        <p>&nbsp;Proyecto ${proyecto.nombre}</p>
+                        <i class="fa-solid fa-earth-oceania nav-icon text-blue"></i>
+                        <p>&nbsp;Proyecto<br>&nbsp;${proyecto.nombre}</p>
                     </a>
                 </li>
                 <sec:authorize access="hasAuthority('ENVIO_CORREO_PRIVILAGE')">
@@ -69,11 +69,10 @@
                         </a>
                     </li>
                 </sec:authorize>
-                <sec:authorize access="hasAuthority('GESTIONAR_PAGO_PRIVILAGE') or hasAuthority('GESTIONAR_CUENTA_BANCARIA_PRIVILAGE') or hasAuthority('GESTIONAR_MONITOREO_PAGO_PRIVILAGE')">
-                    <c:set var="urlCuentas" value="/CuentasBancarias/${proyecto.idProyecto}" />
+                <sec:authorize access="hasAuthority('GESTIONAR_PAGO_PRIVILAGE') or hasAuthority('GESTIONAR_MONITOREO_PAGO_PRIVILAGE')">
                     <c:set var="urlPagos" value="/Pagos/${proyecto.idProyecto}" />
-                    <li class="nav-item ${requestScope['javax.servlet.forward.request_uri'] == urlPagos || requestScope['javax.servlet.forward.request_uri'] == urlCuentas || requestScope['javax.servlet.forward.request_uri'] == '/MonitoreoPagos' ? 'menu-open' : ''}">
-                        <a href="#" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlPagos || requestScope['javax.servlet.forward.request_uri'] == urlCuentas || requestScope['javax.servlet.forward.request_uri'] == '/MonitoreoPagos' ? 'active' : ''}">
+                    <li class="nav-item ${requestScope['javax.servlet.forward.request_uri'] == urlPagos || requestScope['javax.servlet.forward.request_uri'] == '/MonitoreoPagos' ? 'menu-open' : ''}">
+                        <a href="#" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlPagos || requestScope['javax.servlet.forward.request_uri'] == '/MonitoreoPagos' ? 'active' : ''}">
                             <i class="nav-icon fas fa-coins"></i>
                             <p>Facturación<i class="right fas fa-angle-left"></i></p>
                         </a>
@@ -91,14 +90,6 @@
                                     <a href="/MonitoreoPagos"class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == '/MonitoreoPagos' ? 'active' : ''}">
                                         <i class="fa-solid fa-chart-line nav-icon text-blue"></i>
                                         <p>Monitoreo de Pagos</p>
-                                    </a>
-                                </li>
-                            </sec:authorize>
-                            <sec:authorize access="hasAuthority('GESTIONAR_CUENTA_BANCARIA_PRIVILAGE')">
-                                <li class="nav-item">
-                                    <a href="/CuentasBancarias/${proyecto.idProyecto}" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlCuentas ? 'active' : ''}">
-                                        <i class="fa-solid fa-building-columns nav-icon text-blue"></i>
-                                        <p>Cuentas Bancarias</p>
                                     </a>
                                 </li>
                             </sec:authorize>
