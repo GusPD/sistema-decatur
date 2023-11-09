@@ -71,15 +71,16 @@
                 </sec:authorize>
                 <sec:authorize access="hasAuthority('GESTIONAR_PAGO_PRIVILAGE') or hasAuthority('GESTIONAR_MONITOREO_PAGO_PRIVILAGE')">
                     <c:set var="urlPagos" value="/Pagos/${proyecto.idProyecto}" />
-                    <li class="nav-item ${requestScope['javax.servlet.forward.request_uri'] == urlPagos || requestScope['javax.servlet.forward.request_uri'] == '/MonitoreoPagos' ? 'menu-open' : ''}">
-                        <a href="#" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlPagos || requestScope['javax.servlet.forward.request_uri'] == '/MonitoreoPagos' ? 'active' : ''}">
+                    <c:set var="urlRecibo" value="/Recibo/${pago.idPago}" />
+                    <li class="nav-item ${requestScope['javax.servlet.forward.request_uri'] == urlPagos || requestScope['javax.servlet.forward.request_uri'] == urlRecibo || requestScope['javax.servlet.forward.request_uri'] == '/MonitoreoPagos' ? 'menu-open' : ''}">
+                        <a href="#" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlPagos || requestScope['javax.servlet.forward.request_uri'] == urlRecibo || requestScope['javax.servlet.forward.request_uri'] == '/MonitoreoPagos' ? 'active' : ''}">
                             <i class="nav-icon fas fa-coins"></i>
                             <p>Facturación<i class="right fas fa-angle-left"></i></p>
                         </a>
                         <ul class="nav nav-treeview">
                             <sec:authorize access="hasAuthority('GESTIONAR_PAGO_PRIVILAGE')">
                             <li class="nav-item">
-                                <a href="/Pagos/${proyecto.idProyecto}" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlPagos ? 'active' : ''}">
+                                <a href="/Pagos/${proyecto.idProyecto}" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlPagos || requestScope['javax.servlet.forward.request_uri'] == urlRecibo ? 'active' : ''}">
                                     <i class="fa-solid fa-cash-register nav-icon text-blue"></i>
                                     <p>Registro de Pagos</p>
                                 </a>

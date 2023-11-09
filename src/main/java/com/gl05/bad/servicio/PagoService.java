@@ -11,7 +11,7 @@ public interface PagoService {
     
     public List<Pago> listaPagos();
     
-    public DataTablesOutput<Pago> listarPagos(DataTablesInput input, Long idProyecto);
+    public DataTablesOutput<Pago> listarPagos(DataTablesInput input, Long idProyecto, String fechaInicio, String fechaFin, String comprobante, String estado, String tipoPago);
    
     public void agregar(Pago pago);
         

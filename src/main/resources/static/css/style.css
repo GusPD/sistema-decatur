@@ -278,6 +278,16 @@ th {
     background-color: white;
 }
 
+/*Configuracion de recibos*/
+.badge-recibo{
+    width: 100%;
+    font-size: 0.85rem;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
 /* Configuración de la Venta de Terreno */
 #numeroTerrenoVenta{
     font-weight: bold!Important;

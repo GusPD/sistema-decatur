@@ -3,7 +3,7 @@ $(document).ready(function() {
     var idProyecto = $('#proyectoId').data('id');
     var table = $('#pagoTable').DataTable({
         ajax: {
-            url: '/pagos/data/' + idProyecto,
+            url: '/pagos/data/' + idProyecto+'?fecha_inicio='+$("#b_fecha_inicio").val()+'&fecha_fin='+$("#b_fecha_fin").val()+'&comprobante='+$("#b_comprobante").val()+'&estado='+$("#b_estado").val()+'&tipo_pago='+$("#b_tipo_pago").val(),
             dataSrc: 'data'
         },
         order: [[0, 'asc'],[1, 'asc'],[2, 'asc']],
@@ -57,17 +57,47 @@ $(document).ready(function() {
                 width: '7%'
             },
             { data: 'fecha', title:'Fecha', width: '10%' },
-            { data: 'recibo', title:'Recibo', width: '8%' },
-            { data: 'estado', title:'Estado', width: '15%'},
-            { data: 'tipo', title:'Tipo', width: '10%'},
-            { data: 'cuentaBancaria.banco', title:'Banco', width: '20%'},
-            { data: 'monto', title:'Monto', width: '10%'},
+            {
+                data: 'recibo',
+                title: 'Recibo',
+                width: '10%',
+                render: function (data, type, row) {
+                    var claseCSS = '';
+                    
+                    if(row.estado){
+                        if(row.tipo === "Prima"){
+                            claseCSS = 'badge bg-secondary';
+                        }else if(row.tipo === "Mantenimiento"){
+                            claseCSS = 'badge bg-info';
+                        }if(row.tipo === "Financiamiento"){
+                            claseCSS = 'badge bg-warning';
+                        }
+                    }else{
+                        claseCSS = 'badge bg-danger';
+                    }
+            
+                    return '<span class="badge-recibo ' + claseCSS + '">' + data + '</span>';
+                }
+            },
+            { data: 'tipo', title:'Tipo', width: '15%'},
+            { data: 'cuentaBancaria.nombre', title:'Tipo Pago', width: '15%'},
+            { data: 'monto', title:'Monto', width: '15%'},
+            {
+                data: null,
+                title: 'Lote',
+                sortable: false,
+                searchable: false,
+                width: '10%',
+                render: function (data, type, row) {            
+                    return row.venta.terreno.poligono + '-' + row.venta.terreno.numero + row.venta.terreno.seccion;
+                }
+            },
             {
                 data: null,
                 title: 'Acciones',
                 sortable: false,
                 searchable: false,
-                width: '20%',
+                width: '28%',
                 render: function (data, type, row) {
                     var actionsHtml = '';
                     if(hasPrivilegeVerPago === true){
@@ -131,6 +161,7 @@ $(document).ready(function() {
                 }
             }
         },
+        searching: false,
         search: {
             return: true
         },
@@ -147,6 +178,11 @@ $(document).ready(function() {
     });
     $('#export-copy').on('click', function() {
         table.button('.buttons-copy').trigger();
+    });
+    //Método para filtrar la tabla de pagos
+    $(document).on('click', '#b_buscar', function () {
+        console.log('/pagos/data/' + idProyecto+'?fecha_inicio='+$("#b_fecha_inicio").val()+'&fecha_fin='+$("#b_fecha_fin").val()+'&comprobante='+$("#b_comprobante").val()+'&estado='+$("#b_estado").val()+'&tipo_pago='+$("#b_tipo_pago").val());
+        table.ajax.reload();
     });
     // Función para obtener la fecha y hora actual en formato deseado
     function getCurrentDateTime() {

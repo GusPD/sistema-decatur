@@ -38,6 +38,46 @@
                         <!-- Datos -->
                         <div class="card-body">
                             <div id="table_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                                <div class="col-sm-12 d-flex" style="padding:4px;">
+                                    <div class="col-sm-2 form-group" style="padding-left: 0%!Important; padding-right: 1%!Important;">
+                                        <label for="b_fecha_inicio" class="form-label">Fecha Inicio:</label>
+                                        <input type="date" class="form-control form-control-sm" id="b_fecha_inicio" name="b_fecha_inicio" maxlength="10">
+                                    </div>
+                                    <div class="col-sm-2 form-group" style="padding-left: 0%!Important; padding-right: 1%!Important;">
+                                        <label for="b_fecha_fin" class="form-label">Fecha Fin:</label>
+                                        <input type="date" class="form-control form-control-sm" id="fecha_fin" name="fecha_fin" maxlength="10">
+                                    </div>
+                                    <div class="col-sm-2 form-group" style="padding-left: 0%!Important; padding-right: 1%!Important;">
+                                        <label for="b_comprobante" class="form-label">Comprobante:</label>
+                                        <select class="form-select form-select-sm" id="b_comprobante" name="b_comprobante" placeholder="Seleccione una opción" required>
+                                            <option value="">Seleccione una opción</option>
+                                            <option value="Prima">Prima</option>
+                                            <option value="Mantenimiento">Mantenimiento</option>
+                                            <option value="Financiamiento">Financiamiento</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2 form-group" style="padding-left: 0%!Important; padding-right: 1%!Important;">
+                                        <label for="b_estado" class="form-label">Estado:</label>
+                                        <select class="form-select form-select-sm" id="b_estado" name="b_estado" placeholder="Seleccione una opción" required>
+                                            <option value="">Seleccione una opción</option>
+                                            <option value="false">Anulado</option>
+                                            <option value="true">No anulado</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2 form-group" style="padding-left: 0%!Important; padding-right: 1%!Important;">
+                                        <label for="b_tipo_pago" class="form-label">Tipo Pago:</label>
+                                        <select class="form-select form-select-sm" id="b_tipo_pago" name="b_tipo_pago" placeholder="Seleccione una opción" required>
+                                            <c:if test="${not empty cuentas}">
+                                                <c:forEach items="${cuentas}" var="eCuenta">
+                                                    <option value="${eCuenta.idCuenta}">${eCuenta.nombre}</option>
+                                                </c:forEach>
+                                            </c:if>
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2 form-group align-items-end d-flex" style="padding-left: 0%!Important; padding-right: 1%!Important;">
+                                        <button id="b_buscar" title="Obtener Registros" class="btn btn-outline-dark" type="button"><i class="fa-solid fa-magnifying-glass"></i></button> 
+                                    </div>
+                                </div>
                                 <div class="col-sm-12 table-responsive pt-1" style="height: 60vh; padding:4px;">
                                     <table id="pagoTable" class="table table-bordered table-striped dataTable dtr-inline mt-1"></table>
                                 </div>
