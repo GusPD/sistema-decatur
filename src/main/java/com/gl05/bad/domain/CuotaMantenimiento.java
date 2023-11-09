@@ -35,9 +35,7 @@ import org.springframework.format.annotation.DateTimeFormat;
     @NamedQuery(name = "CuotaMantenimiento.findByFechaRecargo", query = "SELECT c FROM CuotaMantenimiento c WHERE c.fechaRecargo = :fechaRecargo"),
     @NamedQuery(name = "CuotaMantenimiento.findByRecargo", query = "SELECT c FROM CuotaMantenimiento c WHERE c.recargo = :recargo"),
     @NamedQuery(name = "CuotaMantenimiento.findBySaldoRecargo", query = "SELECT c FROM CuotaMantenimiento c WHERE c.saldoRecargo = :saldoRecargo"),
-    @NamedQuery(name = "CuotaMantenimiento.findByDescuento", query = "SELECT c FROM CuotaMantenimiento c WHERE c.descuento = :descuento"),
-    @NamedQuery(name = "CuotaMantenimiento.findByEstadoMantenimiento", query = "SELECT c FROM CuotaMantenimiento c WHERE c.estadoMantenimiento = :estadoMantenimiento"),
-    @NamedQuery(name = "CuotaMantenimiento.findByEstadoRecargo", query = "SELECT c FROM CuotaMantenimiento c WHERE c.estadoRecargo = :estadoRecargo")})
+    @NamedQuery(name = "CuotaMantenimiento.findByDescuento", query = "SELECT c FROM CuotaMantenimiento c WHERE c.descuento = :descuento")})
 public class CuotaMantenimiento implements Serializable {
 
     @Id
@@ -66,10 +64,6 @@ public class CuotaMantenimiento implements Serializable {
     @Size(max = 200)
     @Column(name = "DESCUENTO")
     private double descuento;
-    @Column(name = "ESTADO_MANTENIMIENTO")
-    private Boolean estadoMantenimiento;
-    @Column(name = "ESTADO_RECARGO")
-    private Boolean estadoRecargo;
     @JoinColumn(name = "ID_PAGO", referencedColumnName = "ID_PAGO")
     @ManyToOne
     private Pago pago;

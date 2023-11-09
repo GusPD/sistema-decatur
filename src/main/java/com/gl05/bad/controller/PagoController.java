@@ -3,7 +3,6 @@ package com.gl05.bad.controller;
 import com.gl05.bad.domain.CuentaBancaria;
 import com.gl05.bad.domain.CuotaMantenimiento;
 import com.gl05.bad.domain.Empresa;
-import com.gl05.bad.domain.InformacionFinanciamiento;
 import com.gl05.bad.domain.InformacionMantenimiento;
 import com.gl05.bad.domain.Pago;
 import com.gl05.bad.domain.Proyecto;
@@ -17,7 +16,6 @@ import com.gl05.bad.servicio.PagoService;
 import com.gl05.bad.servicio.ProyectoService;
 import com.gl05.bad.servicio.VentaService;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -107,6 +105,19 @@ public class PagoController {
     public DataTablesOutput<Pago> GetPagos(@Valid DataTablesInput input,  @PathVariable Long idProyecto) {
         return pagoService.listarPagos(input, idProyecto);
     }
+
+    //Función para ver el pago
+    @GetMapping("/Recibo/{idPago}")
+    public String mostrarPago(Model model, @PathVariable("idPago") Long idPago) {
+        model.addAttribute("pageTitle", "Recibo Pago");
+        Pago newPago = pagoService.encontrar(idPago);
+        Proyecto newProyecto = proyectoService.encontrar(newPago.getVenta().getTerreno().getProyecto().getIdProyecto());
+        List<CuotaMantenimiento> listaCuotaMantenimientos = cuotaMantenimientoService.encontrarPago(newPago);
+        model.addAttribute("listaCuotaMantenimientos", listaCuotaMantenimientos);
+        model.addAttribute("pago", newPago);
+        model.addAttribute("proyecto", newProyecto);
+        return "/Pago/Recibo";
+    }
     
     //Función para agregar un pago en la base de datos
     @PostMapping("/AgregarPago")
@@ -114,9 +125,9 @@ public class PagoController {
         try {
             Date fechaActual = new Date();
             pago.setFechaRegistro(fechaActual);
-            if(pago.getTipo()=="Prima"){
+            if(pago.getTipo().equals("Prima")){
                 pagoService.agregar(pago);
-            }else if(pago.getTipo()=="Mantenimiento"){
+            }else if(pago.getTipo().equals("Mantenimiento")){
                 pagoService.agregar(pago);
                 RegistroCuotaMantenimiento(pago);
             }
@@ -188,17 +199,80 @@ public class PagoController {
         
         //Verificación si existe un saldo que cancelar, para realizar el cobro
         if((ultimaCuota.getSaldoCuota() + ultimaCuota.getSaldoRecargo()) > 0){
-            CuotaMantenimiento cuota = new CuotaMantenimiento();
-            cuota.setFechaRegistro(fechaActual);
-            cuota.setFechaCuota(ultimaCuota.getFechaCuota());
-            cuota.setCuota(ultimaCuota.getSaldoCuota());
-            cuota.setSaldoCuota(0.0);
-            cuota.setFechaRecargo(ultimaCuota.getFechaRecargo());
-            cuota.setRecargo(ultimaCuota.getSaldoRecargo());
-            cuota.setDescuento(0.0);
-            cuota.setSaldoRecargo(0.0);
-            cuota.setPago(pago);
-            monto-=(ultimaCuota.getSaldoCuota()+ultimaCuota.getSaldoRecargo());
+            //Cobro en caso del que el monto sea mayor que el saldo
+            if(monto > (ultimaCuota.getSaldoCuota() + ultimaCuota.getSaldoRecargo())){
+                CuotaMantenimiento cuota = new CuotaMantenimiento();
+                cuota.setFechaRegistro(fechaActual);
+                cuota.setFechaCuota(ultimaCuota.getFechaCuota());
+                cuota.setCuota(ultimaCuota.getSaldoCuota());
+                cuota.setSaldoCuota(0.0);
+                cuota.setFechaRecargo(ultimaCuota.getFechaRecargo());
+                cuota.setRecargo(ultimaCuota.getSaldoRecargo());
+                cuota.setDescuento(0.0);
+                cuota.setSaldoRecargo(0.0);
+                cuota.setPago(pago);
+                monto-=(ultimaCuota.getSaldoCuota()+ultimaCuota.getSaldoRecargo());
+            }else{
+                //Si existe saldo de recargo
+                if(ultimaCuota.getSaldoRecargo() > 0){
+                    //Cobro del recargo y un abono si alcanza
+                    if(monto > ultimaCuota.getSaldoRecargo()){
+                        CuotaMantenimiento cuota = new CuotaMantenimiento();
+                        cuota.setFechaRegistro(fechaActual);
+                        cuota.setFechaRecargo(ultimaCuota.getFechaRecargo());
+                        cuota.setRecargo(ultimaCuota.getSaldoRecargo());
+                        cuota.setDescuento(0.0);
+                        cuota.setSaldoRecargo(0.0);
+                        cuota.setFechaCuota(ultimaCuota.getFechaCuota());
+                        double valorCuota = monto-ultimaCuota.getSaldoRecargo();
+                        double saldoCuota = ultimaCuota.getSaldoCuota() - valorCuota;
+                        cuota.setCuota(valorCuota);
+                        cuota.setSaldoCuota(saldoCuota);
+                        cuota.setPago(pago);
+                        monto-=monto;
+                    }else{//Cobro solo del recargo
+                        CuotaMantenimiento cuota = new CuotaMantenimiento();
+                        cuota.setFechaRegistro(fechaActual);
+                        cuota.setFechaRecargo(ultimaCuota.getFechaRecargo());
+                        cuota.setRecargo(monto);
+                        cuota.setDescuento(0.0);
+                        cuota.setSaldoRecargo(ultimaCuota.getSaldoRecargo() - monto);
+                        cuota.setFechaCuota(ultimaCuota.getFechaCuota());
+                        cuota.setCuota(0.0);
+                        cuota.setSaldoCuota(ultimaCuota.getSaldoCuota());
+                        cuota.setPago(pago);
+                        monto-=monto;
+                    }
+                //Si existe saldo de cuota
+                }else if(ultimaCuota.getSaldoCuota() > 0){
+                    //Cobro del saldo de la cuota
+                    if(monto >= ultimaCuota.getSaldoCuota()){
+                        CuotaMantenimiento cuota = new CuotaMantenimiento();
+                        cuota.setFechaRegistro(fechaActual);
+                        cuota.setFechaRecargo(ultimaCuota.getFechaRecargo());
+                        cuota.setRecargo(0.0);
+                        cuota.setDescuento(0.0);
+                        cuota.setSaldoRecargo(0.0);
+                        cuota.setFechaCuota(ultimaCuota.getFechaCuota());
+                        cuota.setCuota(monto);
+                        cuota.setSaldoCuota(0.0);
+                        cuota.setPago(pago);
+                        monto-=monto;
+                    }else{//Cobro solo de abono a la cuota
+                        CuotaMantenimiento cuota = new CuotaMantenimiento();
+                        cuota.setFechaRegistro(fechaActual);
+                        cuota.setFechaRecargo(ultimaCuota.getFechaRecargo());
+                        cuota.setRecargo(0.0);
+                        cuota.setDescuento(0.0);
+                        cuota.setSaldoRecargo(0.0);
+                        cuota.setFechaCuota(ultimaCuota.getFechaCuota());
+                        cuota.setCuota(monto);
+                        cuota.setSaldoCuota(ultimaCuota.getSaldoCuota()-monto);
+                        cuota.setPago(pago);
+                        monto-=monto;
+                    }
+                }
+            }
         }
 
         //Verificar si se encuentra al día
