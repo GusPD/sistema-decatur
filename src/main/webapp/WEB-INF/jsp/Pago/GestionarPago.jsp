@@ -1,6 +1,5 @@
 <%@ include file="../common/header.jspf"%>
 <%@ include file="../common/navigationProyecto.jspf"%>
-<%@ page import="java.util.HashMap" %>
 
 <div class="content-wrapper">
     <div id="proyectoId" class="hidden" data-id="${proyecto.idProyecto}"></div>

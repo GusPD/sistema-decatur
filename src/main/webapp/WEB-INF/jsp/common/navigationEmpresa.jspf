@@ -79,7 +79,7 @@
                         <ul class="nav nav-treeview">
                             <sec:authorize access="hasAuthority('GESTIONAR_CUENTA_BANCARIA_PRIVILAGE')">
                                 <li class="nav-item">
-                                    <a href="/CuentasBancarias/${proyecto.idProyecto}" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlCuentas ? 'active' : ''}">
+                                    <a href="/CuentasBancarias/${empresa.idEmpresa}" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlCuentas ? 'active' : ''}">
                                         <i class="fa-solid fa-building-columns nav-icon text-blue"></i>
                                         <p>Cuentas Bancarias</p>
                                     </a>
