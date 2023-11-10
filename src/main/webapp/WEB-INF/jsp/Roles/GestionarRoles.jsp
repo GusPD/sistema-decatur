@@ -133,8 +133,8 @@
                                                 <c:set var="permisoEvaluado3" value="${'AGREGAR_PROYECTO'}"/>
                                                 <c:set var="permisoEvaluado4" value="${'EDITAR_PROYECTO'}"/>
                                                 <c:set var="permisoEvaluado5" value="${'ELIMINAR_PROYECTO'}"/>
-                                                <c:set var="permisoEvaluado6" value="${'GESTIONAR_PROYECTO'}"/>
-                                                <c:set var="permisoEvaluado7" value="${'EXPORTAR_PROYECTO'}"/>
+                                                <c:set var="permisoEvaluado6" value="${'EXPORTAR_PROYECTO'}"/>
+                                                <c:set var="permisoEvaluado7" value="${'GESTIONAR_PROYECTO'}"/>
                                                 <tr>
                                                     <td class="w-70">
                                                         <div class="mt-1 mb-0 p-0 d-flex align-items-center">
@@ -260,8 +260,8 @@
                                                 <c:set var="permisoEvaluado3" value="${'AGREGAR_EMPRESA'}"/>
                                                 <c:set var="permisoEvaluado4" value="${'EDITAR_EMPRESA'}"/>
                                                 <c:set var="permisoEvaluado5" value="${'ELIMINAR_EMPRESA'}"/>
-                                                <c:set var="permisoEvaluado6" value="${'GESTIONAR_EMPRESA'}"/>
-                                                <c:set var="permisoEvaluado7" value="${'EXPORTAR_EMPRESA'}"/>
+                                                <c:set var="permisoEvaluado6" value="${'EXPORTAR_EMPRESA'}"/>
+                                                <c:set var="permisoEvaluado7" value="${'GESTIONAR_EMPRESA'}"/>
                                                 <tr>
                                                     <td class="w-70">
                                                         <div class="mt-1 mb-0 p-0 d-flex align-items-center">
@@ -387,8 +387,8 @@
                                                 <c:set var="permisoEvaluado3" value="${'AGREGAR_TERRENO'}"/>
                                                 <c:set var="permisoEvaluado4" value="${'EDITAR_TERRENO'}"/>
                                                 <c:set var="permisoEvaluado5" value="${'ELIMINAR_TERRENO'}"/>
-                                                <c:set var="permisoEvaluado6" value="${'GESTIONAR_TERRENO'}"/>
-                                                <c:set var="permisoEvaluado7" value="${'EXPORTAR_TERRENO'}"/>
+                                                <c:set var="permisoEvaluado6" value="${'EXPORTAR_TERRENO'}"/>
+                                                <c:set var="permisoEvaluado7" value="${'GESTIONAR_TERRENO'}"/>
                                                 <tr>
                                                     <td class="w-70">
                                                         <div class="mt-1 mb-0 p-0 d-flex align-items-center">
@@ -514,8 +514,8 @@
                                                 <c:set var="permisoEvaluado3" value="${'AGREGAR_VENTA'}"/>
                                                 <c:set var="permisoEvaluado4" value="${'EDITAR_VENTA'}"/>
                                                 <c:set var="permisoEvaluado5" value="${'ELIMINAR_VENTA'}"/>
-                                                <c:set var="permisoEvaluado6" value="${'GESTIONAR_VENTA'}"/>
-                                                <c:set var="permisoEvaluado7" value="${'EXPORTAR_VENTA'}"/>
+                                                <c:set var="permisoEvaluado6" value="${'EXPORTAR_VENTA'}"/>
+                                                <c:set var="permisoEvaluado7" value="${'GESTIONAR_VENTA'}"/>
                                                 <tr>
                                                     <td class="w-70">
                                                         <div class="mt-1 mb-0 p-0 d-flex align-items-center">
@@ -641,8 +641,8 @@
                                                 <c:set var="permisoEvaluado3" value="${'AGREGAR_PROPIETARIO'}"/>
                                                 <c:set var="permisoEvaluado4" value="${'EDITAR_PROPIETARIO'}"/>
                                                 <c:set var="permisoEvaluado5" value="${'ELIMINAR_PROPIETARIO'}"/>
-                                                <c:set var="permisoEvaluado6" value="${'GESTIONAR_PROPIETARIO'}"/>
-                                                <c:set var="permisoEvaluado7" value="${'EXPORTAR_PROPIETARIO'}"/>
+                                                <c:set var="permisoEvaluado6" value="${'EXPORTAR_PROPIETARIO'}"/>
+                                                <c:set var="permisoEvaluado7" value="${'GESTIONAR_PROPIETARIO'}"/>
                                                 <tr>
                                                     <td class="w-70">
                                                         <div class="mt-1 mb-0 p-0 d-flex align-items-center">
@@ -768,8 +768,8 @@
                                                 <c:set var="permisoEvaluado3" value="${'AGREGAR_TRABAJADOR'}"/>
                                                 <c:set var="permisoEvaluado4" value="${'EDITAR_TRABAJADOR'}"/>
                                                 <c:set var="permisoEvaluado5" value="${'ELIMINAR_TRABAJADOR'}"/>
-                                                <c:set var="permisoEvaluado6" value="${'GESTIONAR_TRABAJADOR'}"/>
-                                                <c:set var="permisoEvaluado7" value="${'EXPORTAR_TRABAJADOR'}"/>
+                                                <c:set var="permisoEvaluado6" value="${'EXPORTAR_TRABAJADOR'}"/>
+                                                <c:set var="permisoEvaluado7" value="${'GESTIONAR_TRABAJADOR'}"/>
                                                 <tr>
                                                     <td class="w-70">
                                                         <div class="mt-1 mb-0 p-0 d-flex align-items-center">
@@ -894,8 +894,8 @@
                                                 <c:set var="permisoEvaluado2" value="${'AGREGAR_PAGO'}"/>
                                                 <c:set var="permisoEvaluado3" value="${'EDITAR_PAGO'}"/>
                                                 <c:set var="permisoEvaluado4" value="${'ELIMINAR_PAGO'}"/>
-                                                <c:set var="permisoEvaluado5" value="${'GESTIONAR_PAGO'}"/>
-                                                <c:set var="permisoEvaluado6" value="${'EXPORTAR_PAGO'}"/>
+                                                <c:set var="permisoEvaluado5" value="${'EXPORTAR_PAGO'}"/>
+                                                <c:set var="permisoEvaluado6" value="${'GESTIONAR_PAGO'}"/>
                                                 <tr>
                                                     <td class="w-70">
                                                         <div class="mt-1 mb-0 p-0 d-flex align-items-center">
@@ -1004,8 +1004,8 @@
                                                 <c:set var="permisoEvaluado1" value="${'AGREGAR_CUENTA_BANCARIA'}"/>
                                                 <c:set var="permisoEvaluado2" value="${'EDITAR_CUENTA_BANCARIA'}"/>
                                                 <c:set var="permisoEvaluado3" value="${'ELIMINAR_CUENTA_BANCARIA'}"/>
-                                                <c:set var="permisoEvaluado4" value="${'GESTIONAR_CUENTA_BANCARIA'}"/>
-                                                <c:set var="permisoEvaluado5" value="${'EXPORTAR_CUENTA_BANCARIA'}"/>
+                                                <c:set var="permisoEvaluado4" value="${'EXPORTAR_CUENTA_BANCARIA'}"/>
+                                                <c:set var="permisoEvaluado5" value="${'GESTIONAR_CUENTA_BANCARIA'}"/>
                                                 <tr>
                                                     <td class="w-70">
                                                         <div class="mt-1 mb-0 p-0 d-flex align-items-center">
@@ -1639,8 +1639,8 @@
                                             <c:set var="permisoEvaluado2" value="${'AGREGAR_USUARIO'}"/>
                                             <c:set var="permisoEvaluado3" value="${'EDITAR_USUARIO'}"/>
                                             <c:set var="permisoEvaluado4" value="${'ELIMINAR_USUARIO'}"/>
-                                            <c:set var="permisoEvaluado5" value="${'GESTIONAR_USUARIO'}"/>
-                                            <c:set var="permisoEvaluado6" value="${'EXPORTAR_USUARIO'}"/>
+                                            <c:set var="permisoEvaluado5" value="${'EXPORTAR_USUARIO'}"/>
+                                            <c:set var="permisoEvaluado6" value="${'GESTIONAR_USUARIO'}"/>
                                             <tr>
                                                 <td colspan="2" class="w-70">
                                                     <div class="mt-1 mb-0 p-0 d-flex align-items-center">
@@ -1748,8 +1748,8 @@
                                             <c:set var="permisoEvaluado1" value="${'AGREGAR_ROL'}"/>
                                             <c:set var="permisoEvaluado2" value="${'EDITAR_ROL'}"/>
                                             <c:set var="permisoEvaluado3" value="${'ELIMINAR_ROL'}"/>
-                                            <c:set var="permisoEvaluado4" value="${'GESTIONAR_ROL'}"/>
-                                            <c:set var="permisoEvaluado5" value="${'EXPORTAR_ROL'}"/>
+                                            <c:set var="permisoEvaluado4" value="${'EXPORTAR_ROL'}"/>
+                                            <c:set var="permisoEvaluado5" value="${'GESTIONAR_ROL'}"/>
                                             <tr>
                                                 <td colspan="3" class="w-75">
                                                     <div class="mt-1 mb-0 p-0 d-flex align-items-center">
@@ -1838,8 +1838,8 @@
                                                 </c:if>
                                             </tr>
                                             <c:set var="nombrePermisoLista" value="Bitácora"/>
-                                            <c:set var="permisoEvaluado1" value="${'GESTIONAR_BITACORA'}"/>
-                                            <c:set var="permisoEvaluado2" value="${'EXPORTAR_BITACORA'}"/>
+                                            <c:set var="permisoEvaluado1" value="${'EXPORTAR_BITACORA'}"/>
+                                            <c:set var="permisoEvaluado2" value="${'GESTIONAR_BITACORA'}"/>
                                             <tr>
                                                 <td colspan="6" class="w-90">
                                                     <div class="mt-1 mb-0 p-0 d-flex align-items-center">

@@ -3,6 +3,7 @@ package com.gl05.bad.servicio;
 import com.gl05.bad.domain.Pago;
 import com.gl05.bad.domain.Venta;
 
+import java.util.Date;
 import java.util.List;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
@@ -11,7 +12,7 @@ public interface PagoService {
     
     public List<Pago> listaPagos();
     
-    public DataTablesOutput<Pago> listarPagos(DataTablesInput input, Long idProyecto, String fechaInicio, String fechaFin, String comprobante, String estado, String tipoPago);
+    public DataTablesOutput<Pago> listarPagos(DataTablesInput input, Long idProyecto, Date fechaInicio, Date fechaFin, String comprobante, Boolean estado, Integer tipoPago);
    
     public void agregar(Pago pago);
         
