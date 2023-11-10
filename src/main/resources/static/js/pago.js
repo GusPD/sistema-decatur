@@ -1,9 +1,14 @@
 $(document).ready(function() {
     //Tabla
+    var fechaInicio = $("#b_fecha_inicio").length > 0 ? $("#b_fecha_inicio").val() : '';
+    var fechaFin = $("#b_fecha_fin").length > 0 ? $("#b_fecha_fin").val() : '';
+    var comprobante = $("#b_comprobante").length > 0 ? $("#b_comprobante").val() : '';
+    var estado = $("#b_estado").length > 0 ? $("#b_estado").val() : '';
+    var tipoPago = $("#b_tipo_pago").length > 0 ? $("#b_tipo_pago").val() : '0';
     var idProyecto = $('#proyectoId').data('id');
     var table = $('#pagoTable').DataTable({
         ajax: {
-            url: '/pagos/data/' + idProyecto+'?fecha_inicio='+$("#b_fecha_inicio").val()+'&fecha_fin='+$("#b_fecha_fin").val()+'&comprobante='+$("#b_comprobante").val()+'&estado='+$("#b_estado").val()+'&tipo_pago='+$("#b_tipo_pago").val(),
+            url: '/pagos/data/' + idProyecto + '?fecha_inicio=' + fechaInicio + '&fecha_fin=' + fechaFin + '&comprobante=' + comprobante + '&estado=' + estado + '&tipo_pago=' + tipoPago,
             dataSrc: 'data'
         },
         order: [[0, 'asc'],[1, 'asc'],[2, 'asc']],
@@ -20,7 +25,7 @@ $(document).ready(function() {
                 extend: 'copy',
                 text: 'Copiar',
                 exportOptions: {
-                  columns: [0, 1, 2, 3, 4, 5]
+                  columns: [0, 1, 2, 3, 4, 5, 6]
                 }
             },
             {
@@ -29,7 +34,7 @@ $(document).ready(function() {
                 title: 'Pagos del proyecto',
                 filename: 'Pagos ' + getCurrentDateTime(),
                 exportOptions: {
-                  columns: [0, 1, 2, 3, 4, 5]
+                  columns: [0, 1, 2, 3, 4, 5, 6]
                 }
             },
             {
@@ -38,7 +43,7 @@ $(document).ready(function() {
                 title: 'Pagos del proyecto',
                 filename: 'Pagos ' + getCurrentDateTime(),
                 exportOptions: {
-                  columns: [0, 1, 2, 3, 4, 5]
+                  columns: [0, 1, 2, 3, 4, 5, 6]
                 },
                 customize: function (doc) {
                   doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split('');
@@ -181,8 +186,14 @@ $(document).ready(function() {
     });
     //Método para filtrar la tabla de pagos
     $(document).on('click', '#b_buscar', function () {
-        console.log('/pagos/data/' + idProyecto+'?fecha_inicio='+$("#b_fecha_inicio").val()+'&fecha_fin='+$("#b_fecha_fin").val()+'&comprobante='+$("#b_comprobante").val()+'&estado='+$("#b_estado").val()+'&tipo_pago='+$("#b_tipo_pago").val());
-        table.ajax.reload();
+        var fechaInicio = $("#b_fecha_inicio").val();
+        var fechaFin = $("#b_fecha_fin").val();
+        var comprobante = $("#b_comprobante").val();
+        var estado = $("#b_estado").val();
+        var tipoPago = $("#b_tipo_pago").val();
+        var url = '/pagos/data/' + idProyecto + '?fecha_inicio=' + fechaInicio + '&fecha_fin=' + fechaFin + '&comprobante=' + comprobante + '&estado=' + estado + '&tipo_pago=' + tipoPago;
+        console.log(url);
+        table.ajax.url(url).load();
     });
     // Función para obtener la fecha y hora actual en formato deseado
     function getCurrentDateTime() {

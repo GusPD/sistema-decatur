@@ -16,6 +16,8 @@ import com.gl05.bad.servicio.PagoService;
 import com.gl05.bad.servicio.ProyectoService;
 import com.gl05.bad.servicio.VentaService;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -106,8 +108,30 @@ public class PagoController {
         @Valid DataTablesInput input,  @PathVariable Long idProyecto, 
         @RequestParam("fecha_inicio") String fechaInicio, @RequestParam("fecha_fin") String fechaFin,
         @RequestParam("comprobante") String comprobante, @RequestParam("estado") String estado,
-        @RequestParam("tipo_pago") String tipoPago) {
-        return pagoService.listarPagos(input, idProyecto, fechaInicio, fechaFin, comprobante, estado, tipoPago);
+        @RequestParam("tipo_pago") Integer tipoPago) throws ParseException {
+            System.out.println("FechaInicio:"+fechaInicio);
+            System.out.println("FechaFin:"+fechaFin);
+            System.out.println("Comprobante:"+comprobante);
+            System.out.println("Estado:"+estado);
+            System.out.println("Tipo:"+tipoPago);
+        Date fechaInicioDate = null;
+        if(!fechaInicio.equals("")){
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            fechaInicioDate = sdf.parse(fechaInicio);
+        }
+        Date fechaFinDate = null;
+        if(!fechaFin.equals("")){
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            fechaFinDate = sdf.parse(fechaFin);
+        }
+        Boolean estadoBoolean = null;
+        if(!estado.equals("")){
+            estadoBoolean = Boolean.valueOf(estado);
+        }
+        System.out.println("D Fecha Inicio:"+fechaInicioDate);
+        System.out.println("D Fecha Fin:"+fechaFinDate);
+        System.out.println("Estado:"+estadoBoolean);
+        return pagoService.listarPagos(input, idProyecto, fechaInicioDate, fechaFinDate, comprobante, estadoBoolean, tipoPago);
     }
 
     //Función para ver el pago

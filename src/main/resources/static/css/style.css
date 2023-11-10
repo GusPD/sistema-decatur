@@ -469,8 +469,8 @@ th {
     .tarjeta-container{
         display: block !important;
     }
-    /*Configuración de botones*/
-    .btn-alineacion{
+    /*Configuración de alineación de elementos*/
+    .display-alineacion{
         display: block !important;
     }
 }

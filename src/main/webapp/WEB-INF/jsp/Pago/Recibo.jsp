@@ -69,10 +69,12 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <c:if test="${not empty listaCuotaMantenimientos}">
+                                <c:if test="${not empty listaCuotaMantenimientos or not empty listaCuotaFinanciamientos}">
                                 <div class="col-sm-12" style="padding:4px;">
                                     <h5 class="p-0 m-0">Cuotas Canceladas</h5>
                                 </div>
+                                </c:if>
+                                <c:if test="${not empty listaCuotaMantenimientos}">
                                 <div class="col-sm-12 table-responsive" style="height: 40vh; padding:4px;">
                                     <table id="mantenimientoTable" class="table table-bordered table-striped dataTable dtr-inline mt-1">
                                         <thead>
