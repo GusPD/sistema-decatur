@@ -3,8 +3,6 @@ package com.gl05.bad.servicio;
 import com.gl05.bad.domain.Pago;
 import com.gl05.bad.domain.Venta;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,6 +14,8 @@ import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.gl05.bad.dao.CuotaMantenimientoDao;
 import com.gl05.bad.dao.PagoDao;
 
 @Service
@@ -23,6 +23,9 @@ public class PagoServiceImp implements PagoService{
     
     @Autowired
     private PagoDao pagoDao;
+
+    @Autowired
+    private CuotaMantenimientoDao cuotaMantenimientoDao;
 
     @Override
     @Transactional(readOnly = true)
@@ -39,7 +42,12 @@ public class PagoServiceImp implements PagoService{
     @Override
     @Transactional
     public void eliminar(Pago pago) {
-        pagoDao.delete(pago);
+        if(pago.getTipo().equals("Prima")){
+            pagoDao.delete(pago);
+        }else{
+            cuotaMantenimientoDao.deleteByPago(pago);
+            pagoDao.delete(pago);
+        }
     }
 
     @Override
@@ -66,7 +74,7 @@ public class PagoServiceImp implements PagoService{
     
     @Override
     @Transactional(readOnly = true)
-    public DataTablesOutput<Pago> listarPagos(DataTablesInput input, Long idProyecto, Date fechaInicio, Date fechaFin, String comprobante, Boolean estado, Integer tipoPago) {
+    public DataTablesOutput<Pago> listarPagos(DataTablesInput input, Long idProyecto, Date fechaInicio, Date fechaFin, String comprobante, Boolean estado, Integer tipoPago, Venta venta) {
         Specification<Pago> specification = (root, query, builder) -> {
             List<Predicate> predicates = new ArrayList<>();
             predicates.add(builder.equal(root.get("venta").get("terreno").get("proyecto").get("idProyecto"), idProyecto));
@@ -85,9 +93,11 @@ public class PagoServiceImp implements PagoService{
             if (tipoPago > 0) {
                 predicates.add(builder.equal(root.get("cuentaBancaria").get("idCuenta"), tipoPago));
             }
+            if (venta != null) {
+                predicates.add(builder.equal(root.get("venta").get("idVenta"), venta.getIdVenta()));
+            }
             return builder.and(predicates.toArray(new Predicate[0]));
         };
-
         return pagoDao.findAll(input, specification);
     }
 }

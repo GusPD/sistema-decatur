@@ -53,16 +53,24 @@ public class CuotaMantenimientoServiceImp implements CuotaMantenimientoService{
         CuotaMantenimiento ultimaCuota=new CuotaMantenimiento();
         List<Pago> listaPagos = pagoDao.findByTipoAndVenta("Mantenimiento",venta);
         if (!listaPagos.isEmpty()) {
-            Pago ultimoPago = listaPagos.get(listaPagos.size() - 1);
-            List<CuotaMantenimiento> listaCuotas = cuotaMantenimientoDao.findByPago(ultimoPago);
-            if (!listaCuotas.isEmpty()) {
-                return ultimaCuota = listaCuotas.get(listaCuotas.size() - 1);
-            } else {
+            if(listaPagos.size()>=2){
+                Pago ultimoPago = listaPagos.get(listaPagos.size() - 2);
+                List<CuotaMantenimiento> listaCuotas = cuotaMantenimientoDao.findByPago(ultimoPago);
+                if (!listaCuotas.isEmpty()) {
+                    return ultimaCuota = listaCuotas.get(listaCuotas.size() - 1);
+                } else {
+                    ultimaCuota.setFechaCuota(venta.getFecha());
+                    ultimaCuota.setSaldoCuota(0);
+                    ultimaCuota.setSaldoRecargo(0);
+                    return ultimaCuota;
+                }
+            }else {
                 ultimaCuota.setFechaCuota(venta.getFecha());
                 ultimaCuota.setSaldoCuota(0);
                 ultimaCuota.setSaldoRecargo(0);
                 return ultimaCuota;
             }
+            
         } else {
             ultimaCuota.setFechaCuota(venta.getFecha());
             ultimaCuota.setSaldoCuota(0);

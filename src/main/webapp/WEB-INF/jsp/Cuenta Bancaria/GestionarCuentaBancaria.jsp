@@ -23,15 +23,19 @@
                     <div class="card">
                         <!-- Funciones de la página -->
                         <div class="card-header">
-                            <h3 class="card-title d-flex justify-content-end">
-                                <sec:authorize access="hasAuthority('EXPORTAR_CUENTA_BANCARIA_PRIVILAGE')"> 
-                                    <button id="export-copy" title="Copiar" class="btn btn-outline-secondary buttons-copy" type="button"><i class="fa-regular fa-copy"></i></button> 
-                                    <button id="export-excel" title="Exportar Excel" class="btn btn-outline-success buttons-excel ml-2" type="button"><i class="fa-solid fa-file-csv"></i></button> 
-                                    <button id="export-pdf" title="Exportar PDF" class="btn btn-outline-danger buttons-pdf ml-2" type="button"><i class="fa-regular fa-file-pdf"></i></button> 
-                                </sec:authorize>
-                                <sec:authorize access="hasAuthority('AGREGAR_CUENTA_BANCARIA_PRIVILAGE')"> 
-                                    <button type="button" title="Agregar Cuenta" class="btn-blue btn abrirModal-btn ml-2" data-bs-toggle="modal" data-bs-target="#crearModal" data-action="agregar"><i class="fa-solid fa-file-pen"></i></button>
-                                </sec:authorize> 
+                            <h3 class="card-title d-flex justify-content-between">
+                                <div class="d-flex justify-content-estart">
+                                    <sec:authorize access="hasAuthority('EXPORTAR_CUENTA_BANCARIA_PRIVILAGE')">
+                                        <button id="export-copy" title="Copiar" class="btn btn-outline-secondary buttons-copy" type="button"><i class="fa-regular fa-copy"></i></button> 
+                                        <button id="export-excel" title="Exportar Excel" class="btn btn-outline-success buttons-excel ml-2" type="button"><i class="fa-solid fa-file-csv"></i></button> 
+                                        <button id="export-pdf" title="Exportar PDF" class="btn btn-outline-danger buttons-pdf ml-2" type="button"><i class="fa-regular fa-file-pdf"></i></button>
+                                    </sec:authorize>
+                                </div>
+                                <div class="d-flex justify-content-end">
+                                    <sec:authorize access="hasAuthority('AGREGAR_CUENTA_BANCARIA_PRIVILAGE')"> 
+                                        <button type="button" title="Agregar Cuenta" class="btn-blue btn abrirModal-btn ml-2" data-bs-toggle="modal" data-bs-target="#crearModal" data-action="agregar"><i class="fa-solid fa-file-pen"></i></button>
+                                    </sec:authorize> 
+                                </div>
                             </h3>
                         </div>
                         <!-- Datos -->

@@ -2,6 +2,7 @@ package com.gl05.bad.domain;
 
 import java.io.Serializable;
 import java.math.BigInteger;
+import java.time.LocalDateTime;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -48,8 +49,7 @@ public class Pago implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idPago;
     @Column(name = "FECHA_REGISTRO")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaRegistro;
+    private LocalDateTime fechaRegistro;
     @Column(name = "FECHA")
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd/MM/yyyy")

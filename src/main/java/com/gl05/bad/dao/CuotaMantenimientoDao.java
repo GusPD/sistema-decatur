@@ -10,4 +10,5 @@ import org.springframework.data.jpa.repository.Query;
 public interface CuotaMantenimientoDao extends DataTablesRepository<CuotaMantenimiento, Long> {
     @Query("SELECT c FROM CuotaMantenimiento c WHERE c.pago = :pago ORDER BY c.fechaRegistro ASC")
     List<CuotaMantenimiento> findByPago(Pago pago);
+    void deleteByPago(Pago pago);
 }

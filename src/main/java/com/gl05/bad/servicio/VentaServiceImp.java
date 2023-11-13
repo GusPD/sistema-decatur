@@ -55,6 +55,12 @@ public class VentaServiceImp implements VentaService{
     public Venta encontrarDocumento(Integer idDocumento) {
         return ventaDao.findByIdListDocumento(idDocumento);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Venta> encontrarActivas(Proyecto proyecto) {
+        return ventaDao.findByEstadoAndTerrenoProyecto("Activo", proyecto);
+    }
     
     @Override
     @Transactional(readOnly = true)

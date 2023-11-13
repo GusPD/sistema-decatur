@@ -24,23 +24,30 @@
                     <div class="card">
                         <!-- Funciones de la página -->
                         <div class="card-header">
-                            <h3 class="card-title d-flex justify-content-end">
-                                <sec:authorize access="hasAuthority('EXPORTAR_PAGO_PRIVILAGE')">
-                                    <button id="b_buscar" title="Obtener Registros" class="btn btn-outline-dark" type="button"><i class="fa-solid fa-magnifying-glass"></i></button> 
-                                    <button id="export-copy" title="Copiar" class="btn btn-outline-secondary buttons-copy" type="button"><i class="fa-regular fa-copy"></i></button> 
-                                    <button id="export-excel" title="Exportar Excel" class="btn btn-outline-success buttons-excel ml-2" type="button"><i class="fa-solid fa-file-csv"></i></button> 
-                                    <button id="export-pdf" title="Exportar PDF" class="btn btn-outline-danger buttons-pdf ml-2" type="button"><i class="fa-regular fa-file-pdf"></i></button>
-                                </sec:authorize>
-                                <sec:authorize access="hasAuthority('AGREGAR_PAGO_PRIVILAGE')"> 
-                                    <button type="button" title="Agregar Pago" class="btn-blue btn abrirModal-btn ml-2" data-bs-toggle="modal" data-bs-target="#crearModal" data-action="agregar"><i class="fa-solid fa-file-pen"></i></button>
-                                </sec:authorize>  
+                            <h3 class="card-title d-flex justify-content-between">
+                                <div class="d-flex justify-content-estart">
+                                    <sec:authorize access="hasAuthority('EXPORTAR_PAGO_PRIVILAGE')">
+                                        <button id="export-copy" title="Copiar" class="btn btn-outline-secondary buttons-copy" type="button"><i class="fa-regular fa-copy"></i></button> 
+                                        <button id="export-excel" title="Exportar Excel" class="btn btn-outline-success buttons-excel ml-2" type="button"><i class="fa-solid fa-file-csv"></i></button> 
+                                        <button id="export-pdf" title="Exportar PDF" class="btn btn-outline-danger buttons-pdf ml-2" type="button"><i class="fa-regular fa-file-pdf"></i></button>
+                                    </sec:authorize>
+                                </div>
+                                <div class="d-flex justify-content-end">
+                                    <sec:authorize access="hasAuthority('EXPORTAR_PAGO_PRIVILAGE')">
+                                        <button id="b_clear" title="Eliminar Filtros" class="btn btn-outline-dark" type="button"><i class="fa-solid fa-filter-circle-xmark"></i></button>
+                                        <button id="b_buscar" title="Filtrar Registros" class="btn btn-outline-dark" type="button"><i class="fa-solid fa-filter"></i></button>
+                                    </sec:authorize>
+                                    <sec:authorize access="hasAuthority('AGREGAR_PAGO_PRIVILAGE')"> 
+                                        <button type="button" title="Agregar Pago" class="btn-blue btn abrirModal-btn ml-2" data-bs-toggle="modal" data-bs-target="#crearModal" data-action="agregar"><i class="fa-solid fa-file-pen"></i></button>
+                                    </sec:authorize>
+                                </div>
                             </h3>
                         </div>
                         <!-- Datos -->
                         <div class="card-body">
                             <div id="table_wrapper" class="dataTables_wrapper dt-bootstrap4">
                                 <sec:authorize access="hasAuthority('EXPORTAR_PAGO_PRIVILAGE')"> 
-                                <div class="col-sm-12 d-flex border-bottom display-alineacion mb-3" style="padding:4px;">
+                                <div class="col-sm-12 d-flex display-alineacion border-bottom mb-3 " style="padding:4px;">
                                     <div class="col-sm-2 form-group" style="padding-left: 0%!Important; padding-right: 1%!Important;">
                                         <label for="b_fecha_inicio" class="form-label">Fecha Inicio:</label>
                                         <input type="date" class="form-control form-control-sm" id="b_fecha_inicio" name="b_fecha_inicio" maxlength="10">
@@ -51,7 +58,7 @@
                                     </div>
                                     <div class="col-sm-2 form-group" style="padding-left: 0%!Important; padding-right: 1%!Important;">
                                         <label for="b_comprobante" class="form-label">Comprobante:</label>
-                                        <select class="form-select form-select-sm" id="b_comprobante" name="b_comprobante" placeholder="Seleccione una opción" required>
+                                        <select class="form-select form-select-sm" id="b_comprobante" name="b_comprobante" placeholder="Seleccione una opción">
                                             <option value="">Seleccione una opción</option>
                                             <option value="Prima">Prima</option>
                                             <option value="Mantenimiento">Mantenimiento</option>
@@ -60,7 +67,7 @@
                                     </div>
                                     <div class="col-sm-2 form-group" style="padding-left: 0%!Important; padding-right: 1%!Important;">
                                         <label for="b_estado" class="form-label">Estado:</label>
-                                        <select class="form-select form-select-sm" id="b_estado" name="b_estado" placeholder="Seleccione una opción" required>
+                                        <select class="form-select form-select-sm" id="b_estado" name="b_estado" placeholder="Seleccione una opción">
                                             <option value="">Seleccione una opción</option>
                                             <option value="false">Anulado</option>
                                             <option value="true">No anulado</option>
@@ -68,7 +75,7 @@
                                     </div>
                                     <div class="col-sm-2 form-group" style="padding-left: 0%!Important; padding-right: 1%!Important;">
                                         <label for="b_tipo_pago" class="form-label">Tipo Pago:</label>
-                                        <select class="form-select form-select-sm" id="b_tipo_pago" name="b_tipo_pago" placeholder="Seleccione una opción" required>
+                                        <select class="form-select form-select-sm" id="b_tipo_pago" name="b_tipo_pago" placeholder="Seleccione una opción">
                                             <option value="0">Seleccione una opción</option>
                                             <c:if test="${not empty cuentas}">
                                                 <c:forEach items="${cuentas}" var="eCuenta">
@@ -77,12 +84,20 @@
                                             </c:if>
                                         </select>
                                     </div>
-                                    <div class="col-sm-2 form-group align-items-end d-flex" style="padding-left: 0%!Important; padding-right: 1%!Important;">
-                                        
+                                    <div class="col-sm-2 form-group" style="padding-left: 0%!Important; padding-right: 1%!Important;">
+                                        <label for="b_lote" class="form-label">Lote:</label>
+                                        <select class="form-select form-select-sm" id="b_lote" name="b_lote" placeholder="Seleccione una opción">
+                                            <option value="0">Seleccione una opción</option>
+                                            <c:if test="${not empty ventas}">
+                                                <c:forEach items="${ventas}" var="eVenta">
+                                                    <option value="${eVenta.idVenta}">${eVenta.terreno.poligono}-${eVenta.terreno.numero}${eVenta.terreno.seccion}</option>
+                                                </c:forEach>
+                                            </c:if>
+                                        </select>
                                     </div>
                                 </div>
                                 </sec:authorize> 
-                                <div class="col-sm-12 table-responsive pt-1" style="height: 60vh; padding:4px;">
+                                <div class="col-sm-12 table-responsive pt-1" style="height: 43vh; padding:4px;">
                                     <table id="pagoTable" class="table table-bordered table-striped dataTable dtr-inline mt-1"></table>
                                 </div>
                             </div>
