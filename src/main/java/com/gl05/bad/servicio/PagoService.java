@@ -12,7 +12,7 @@ public interface PagoService {
     
     public List<Pago> listaPagos();
     
-    public DataTablesOutput<Pago> listarPagos(DataTablesInput input, Long idProyecto, Date fechaInicio, Date fechaFin, String comprobante, Boolean estado, Integer tipoPago);
+    public DataTablesOutput<Pago> listarPagos(DataTablesInput input, Long idProyecto, Date fechaInicio, Date fechaFin, String comprobante, Boolean estado, Integer tipoPago, Venta venta);
    
     public void agregar(Pago pago);
         

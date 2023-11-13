@@ -19,7 +19,7 @@ public class BitacoraController {
 
     //Función que redirige a la vista de la bitacora
     @GetMapping("/Bitacora")
-    public String mostrarUsuarios(Model model) {
+    public String mostrarBitacora(Model model) {
         model.addAttribute("pageTitle", "Bitácora");
         return "/Bitacora/GestionarBitacora";
     }

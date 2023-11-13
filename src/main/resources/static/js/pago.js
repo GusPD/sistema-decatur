@@ -5,13 +5,14 @@ $(document).ready(function() {
     var comprobante = $("#b_comprobante").length > 0 ? $("#b_comprobante").val() : '';
     var estado = $("#b_estado").length > 0 ? $("#b_estado").val() : '';
     var tipoPago = $("#b_tipo_pago").length > 0 ? $("#b_tipo_pago").val() : '0';
+    var lote = $("#b_lote").length > 0 ? $("#b_lote").val() : '0';
     var idProyecto = $('#proyectoId').data('id');
     var table = $('#pagoTable').DataTable({
         ajax: {
-            url: '/pagos/data/' + idProyecto + '?fecha_inicio=' + fechaInicio + '&fecha_fin=' + fechaFin + '&comprobante=' + comprobante + '&estado=' + estado + '&tipo_pago=' + tipoPago,
+            url: '/pagos/data/' + idProyecto + '?fecha_inicio=' + fechaInicio + '&fecha_fin=' + fechaFin + '&comprobante=' + comprobante + '&estado=' + estado + '&tipo_pago=' + tipoPago + '&lote=' + lote,
             dataSrc: 'data'
         },
-        order: [[0, 'asc'],[1, 'asc'],[2, 'asc']],
+        order: [[1, 'desc']],
         processing: true,
         serverSide: true,
         dom: "<'row w-100'<'col-sm-12 mb-4'B>>" +
@@ -61,11 +62,32 @@ $(document).ready(function() {
                 },
                 width: '7%'
             },
-            { data: 'fecha', title:'Fecha', width: '10%' },
+            {
+                data: 'fechaRegistro',
+                width: '10%',
+                title: 'Fecha Registro',
+                class: 'd-none',
+                searchable: false
+            },
+            {
+                data: 'fecha', 
+                width: '10%', 
+                title: 'Fecha',
+                searchable: false,
+                render: function(data, type, row) {
+                    if (type === 'display' || type === 'filter') {
+                      var date = new Date(data);
+                      var formattedDate = date.toLocaleDateString();
+                      return formattedDate;
+                    }
+                    return data;
+                }
+            },
             {
                 data: 'recibo',
                 title: 'Recibo',
                 width: '10%',
+                searchable: false,
                 render: function (data, type, row) {
                     var claseCSS = '';
                     
@@ -84,9 +106,9 @@ $(document).ready(function() {
                     return '<span class="badge-recibo ' + claseCSS + '">' + data + '</span>';
                 }
             },
-            { data: 'tipo', title:'Tipo', width: '15%'},
-            { data: 'cuentaBancaria.nombre', title:'Tipo Pago', width: '15%'},
-            { data: 'monto', title:'Monto', width: '15%'},
+            { data: 'tipo', title:'Tipo', width: '15%', searchable: false},
+            { data: 'cuentaBancaria.nombre', title:'Tipo Pago', width: '15%', searchable: false},
+            { data: 'monto', title:'Monto', width: '15%', sortable: false, searchable: false,},
             {
                 data: null,
                 title: 'Lote',
@@ -120,17 +142,6 @@ $(document).ready(function() {
                         actionsHtml += '<i class="far fa-trash-alt"></i></button>';
                     }
                     return actionsHtml || '';
-                }
-            }
-        ],
-        columnDefs: [
-            {
-                targets: 1,
-                render: function(data, type, row) {
-                    if (type === 'display' || type === 'filter') {
-                        return moment(data).format('DD/MM/YYYY');
-                    }
-                    return data;
                 }
             }
         ],
@@ -191,7 +202,20 @@ $(document).ready(function() {
         var comprobante = $("#b_comprobante").val();
         var estado = $("#b_estado").val();
         var tipoPago = $("#b_tipo_pago").val();
-        var url = '/pagos/data/' + idProyecto + '?fecha_inicio=' + fechaInicio + '&fecha_fin=' + fechaFin + '&comprobante=' + comprobante + '&estado=' + estado + '&tipo_pago=' + tipoPago;
+        var lote = $("#b_lote").val();
+        var url = '/pagos/data/' + idProyecto + '?fecha_inicio=' + fechaInicio + '&fecha_fin=' + fechaFin + '&comprobante=' + comprobante + '&estado=' + estado + '&tipo_pago=' + tipoPago + '&lote=' + lote;
+        console.log(url);
+        table.ajax.url(url).load();
+    });
+    //Método para eliminar los filtros la tabla de pagos
+    $(document).on('click', '#b_clear', function () {
+        var fechaInicio = "";
+        var fechaFin = "";
+        var comprobante = "";
+        var estado = "";
+        var tipoPago = "0";
+        var lote = "0";
+        var url = '/pagos/data/' + idProyecto + '?fecha_inicio=' + fechaInicio + '&fecha_fin=' + fechaFin + '&comprobante=' + comprobante + '&estado=' + estado + '&tipo_pago=' + tipoPago + '&lote=' + lote;
         console.log(url);
         table.ajax.url(url).load();
     });
@@ -555,6 +579,13 @@ $(document).ready(function() {
         dropdownParent: $('#crearModalGuardar .modal-body'),
         closeOnSelect: false
     });
+    //Función para definir el uso de la libreria selec2
+    var $select = $( '#b_lote' ).select2( {
+        theme: "bootstrap-5",
+        width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+        placeholder: $( this ).data( 'placeholder' ),
+        closeOnSelect: false
+    } );
     $select.on('change', function() {
         $(this).trigger('blur');
     });

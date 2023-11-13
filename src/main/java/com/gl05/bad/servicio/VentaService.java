@@ -19,6 +19,8 @@ public interface VentaService {
     public Venta encontrar(Long idVenta);
     
     public Venta encontrarDocumento(Integer idDocumento);
+
+    public List<Venta> encontrarActivas(Proyecto proyecto);
     
     public List<Venta> encontrarProyectoPrima(Proyecto proyecto);
     

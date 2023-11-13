@@ -54,8 +54,7 @@ public class CuotaFinanciamiento implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idCuotaFinanciamiento;
     @Column(name = "FECHA_REGISTRO")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaRegistro;
+    private LocalDateTime fechaRegistro;
     @Column(name = "FECHA_CUOTA")
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd/MM/yyyy")

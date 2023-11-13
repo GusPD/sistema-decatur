@@ -18,6 +18,7 @@ import com.gl05.bad.servicio.VentaService;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -72,6 +73,8 @@ public class PagoController {
         Proyecto newProyecto = proyectoService.encontrar(idProyecto);
         Empresa newEmpresa = empresaService.encontrar(newProyecto.getEmpresa().getIdEmpresa());
         List<CuentaBancaria> cuentas = cuentaService.encontrarEmpresa(newEmpresa);
+        List<Venta> ventas = ventaService.encontrarActivas(newProyecto);
+        model.addAttribute("ventas", ventas);
         model.addAttribute("cuentas", cuentas);
         model.addAttribute("proyecto", newProyecto);
         return "/Pago/GestionarPago";
@@ -108,12 +111,7 @@ public class PagoController {
         @Valid DataTablesInput input,  @PathVariable Long idProyecto, 
         @RequestParam("fecha_inicio") String fechaInicio, @RequestParam("fecha_fin") String fechaFin,
         @RequestParam("comprobante") String comprobante, @RequestParam("estado") String estado,
-        @RequestParam("tipo_pago") Integer tipoPago) throws ParseException {
-            System.out.println("FechaInicio:"+fechaInicio);
-            System.out.println("FechaFin:"+fechaFin);
-            System.out.println("Comprobante:"+comprobante);
-            System.out.println("Estado:"+estado);
-            System.out.println("Tipo:"+tipoPago);
+        @RequestParam("tipo_pago") Integer tipoPago, @RequestParam("lote") Long venta) throws ParseException {
         Date fechaInicioDate = null;
         if(!fechaInicio.equals("")){
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -128,10 +126,11 @@ public class PagoController {
         if(!estado.equals("")){
             estadoBoolean = Boolean.valueOf(estado);
         }
-        System.out.println("D Fecha Inicio:"+fechaInicioDate);
-        System.out.println("D Fecha Fin:"+fechaFinDate);
-        System.out.println("Estado:"+estadoBoolean);
-        return pagoService.listarPagos(input, idProyecto, fechaInicioDate, fechaFinDate, comprobante, estadoBoolean, tipoPago);
+        Venta ventaObj = null;
+        if(venta > 0){
+            ventaObj = ventaService.encontrar(venta);
+        }
+        return pagoService.listarPagos(input, idProyecto, fechaInicioDate, fechaFinDate, comprobante, estadoBoolean, tipoPago, ventaObj);
     }
 
     //Función para ver el pago
@@ -151,8 +150,7 @@ public class PagoController {
     @PostMapping("/AgregarPago")
     public ResponseEntity<String> AgregarPago(Pago pago, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
-            Date fechaActual = new Date();
-            pago.setFechaRegistro(fechaActual);
+            pago.setFechaRegistro(LocalDateTime.now());
             if(pago.getTipo().equals("Prima")){
                 pagoService.agregar(pago);
             }else if(pago.getTipo().equals("Mantenimiento")){
@@ -233,7 +231,7 @@ public class PagoController {
 
         //Obtener la ultima cuota cancelada, la fecha de corte, la fecha de pago, y el monto para aplicar a las cuotas
         CuotaMantenimiento ultimaCuota = cuotaMantenimientoService.encontrarUltimaCuota(venta);
-        Date fechaCorte = SiguienteMes(ultimaCuota.getFechaCuota(), venta);
+        Date fechaCorte = SiguienteMes(ultimaCuota.getFechaCuota(), venta, 1);
         double monto = pago.getMonto() + pago.getDescuento() - pago.getOtros();
         double montoDescuento = pago.getDescuento();
         
@@ -241,13 +239,11 @@ public class PagoController {
         if((ultimaCuota.getSaldoCuota() + ultimaCuota.getSaldoRecargo()) > 0){
             //Cobro en caso del que el monto sea mayor que el saldo
             if(monto > (ultimaCuota.getSaldoCuota() + ultimaCuota.getSaldoRecargo())){
-                Date fechaRegistro = new Date();
                 CuotaMantenimiento cuota = new CuotaMantenimiento();
-                cuota.setFechaRegistro(fechaRegistro);
+                cuota.setFechaRegistro(LocalDateTime.now());
                 cuota.setFechaCuota(ultimaCuota.getFechaCuota());
                 cuota.setCuota(ultimaCuota.getSaldoCuota());
                 cuota.setSaldoCuota(0.0);
-                cuota.setFechaRecargo(ultimaCuota.getFechaCuota());
                 cuota.setRecargo(ultimaCuota.getSaldoRecargo());
                 cuota.setDescuento(0.0);
                 cuota.setSaldoRecargo(0.0);
@@ -259,10 +255,8 @@ public class PagoController {
                 if(ultimaCuota.getSaldoRecargo() > 0){
                     //Cobro del recargo y un abono si alcanza
                     if(monto > ultimaCuota.getSaldoRecargo()){
-                        Date fechaRegistro = new Date();
                         CuotaMantenimiento cuota = new CuotaMantenimiento();
-                        cuota.setFechaRegistro(fechaRegistro);
-                        cuota.setFechaRecargo(ultimaCuota.getFechaCuota());
+                        cuota.setFechaRegistro(LocalDateTime.now());
                         cuota.setRecargo(ultimaCuota.getSaldoRecargo());
                         cuota.setDescuento(0.0);
                         cuota.setSaldoRecargo(0.0);
@@ -275,10 +269,8 @@ public class PagoController {
                         cuotaMantenimientoService.agregar(cuota);
                         monto-=monto;
                     }else{//Cobro solo del recargo
-                        Date fechaRegistro = new Date();
                         CuotaMantenimiento cuota = new CuotaMantenimiento();
-                        cuota.setFechaRegistro(fechaRegistro);
-                        cuota.setFechaRecargo(ultimaCuota.getFechaCuota());
+                        cuota.setFechaRegistro(LocalDateTime.now());
                         cuota.setRecargo(monto);
                         cuota.setDescuento(0.0);
                         cuota.setSaldoRecargo(ultimaCuota.getSaldoRecargo() - monto);
@@ -293,10 +285,8 @@ public class PagoController {
                 }else if(ultimaCuota.getSaldoCuota() > 0){
                     //Cobro del saldo de la cuota
                     if(monto >= ultimaCuota.getSaldoCuota()){
-                        Date fechaRegistro = new Date();
                         CuotaMantenimiento cuota = new CuotaMantenimiento();
-                        cuota.setFechaRegistro(fechaRegistro);
-                        cuota.setFechaRecargo(ultimaCuota.getFechaCuota());
+                        cuota.setFechaRegistro(LocalDateTime.now());
                         cuota.setRecargo(0.0);
                         cuota.setDescuento(0.0);
                         cuota.setSaldoRecargo(0.0);
@@ -307,10 +297,8 @@ public class PagoController {
                         cuotaMantenimientoService.agregar(cuota);
                         monto-=monto;
                     }else{//Cobro solo de abono a la cuota
-                        Date fechaRegistro = new Date();
                         CuotaMantenimiento cuota = new CuotaMantenimiento();
-                        cuota.setFechaRegistro(fechaRegistro);
-                        cuota.setFechaRecargo(ultimaCuota.getFechaCuota());
+                        cuota.setFechaRegistro(LocalDateTime.now());
                         cuota.setRecargo(0.0);
                         cuota.setDescuento(0.0);
                         cuota.setSaldoRecargo(0.0);
@@ -325,9 +313,9 @@ public class PagoController {
             }
         }
         System.out.println("\n\n\nAntes de Ingresar al registro de cuota\n\n");
-        System.out.println(fechaPago+"\n\n"+fechaActual);
+        System.out.println(fechaPago+"\n\n"+fechaCorte);
         //Verificar si se encuentra al día
-        if(!fechaPago.before(fechaActual)){
+        if(fechaCorte.before(fechaPago) || fechaCorte.equals(fechaPago)){
             System.out.println("\n\nRegistro de cuota");
             //Calculo de la cantidad de coutas a cancelar
             int cantidadCuotas = (int) Math.floor(monto / informacionCuota.getCuota());
@@ -342,13 +330,11 @@ public class PagoController {
             //Registro de las cuotas
             if(monto >= informacionCuota.getCuota()){
                 for (int i=0;i<cantidadCuotas;i++){
-                    Date fechaRegistro = new Date();
                     CuotaMantenimiento cuota = new CuotaMantenimiento();
-                    cuota.setFechaRegistro(fechaRegistro);
+                    cuota.setFechaRegistro(LocalDateTime.now());
                     cuota.setFechaCuota(fechaCorte);
                     cuota.setCuota(informacionCuota.getCuota());
                     cuota.setSaldoCuota(0.0);
-                    cuota.setFechaRecargo(fechaCorte);
                     cuota.setRecargo(0.0);
                     cuota.setDescuento(descuento);
                     cuota.setSaldoRecargo(0.0);
@@ -356,18 +342,16 @@ public class PagoController {
                     cuotaMantenimientoService.agregar(cuota);
                     monto-=informacionCuota.getCuota();
                     montoDescuento-=descuento;
-                    fechaCorte = SiguienteMes(fechaCorte, venta);
+                    fechaCorte = SiguienteMes(fechaCorte, venta, 1);
                 }
             }
             //Registro de abono en caso de que exista
             if(existeAbono>0){
-                Date fechaRegistro = new Date();
                 CuotaMantenimiento cuota = new CuotaMantenimiento();
-                cuota.setFechaRegistro(fechaRegistro);
+                cuota.setFechaRegistro(LocalDateTime.now());
                 cuota.setFechaCuota(fechaCorte);
                 cuota.setCuota(monto);
                 cuota.setSaldoCuota(informacionCuota.getCuota()-monto);
-                cuota.setFechaRecargo(fechaCorte);
                 cuota.setRecargo(0.0);
                 cuota.setDescuento(montoDescuento);
                 cuota.setSaldoRecargo(0.0);
@@ -376,15 +360,20 @@ public class PagoController {
                 monto-=monto;
                 montoDescuento-=montoDescuento;
             }
-        }else if(!fechaPago.after(fechaActual)){ //Verificar si se encuentra en mora
+        }else{ //Verificar si se encuentra en mora
             System.out.println("\n\nRegistro de cuota con mora");
             //Calculo de las cantidad de meses en mora
             int cantidadCuotasMora = CantidadMeses(fechaCorte, fechaPago);
+            Date fechaCorteEvaluacion = SiguienteMes(fechaCorte, venta, cantidadCuotasMora + 1);
+            if(fechaPago.before(fechaCorteEvaluacion) || fechaPago.equals(fechaCorteEvaluacion)){
+                cantidadCuotasMora++;
+            }
             double montoMora = cantidadCuotasMora * (informacionCuota.getCuota()+informacionCuota.getMulta());
             if(monto>=montoMora){
                 monto-=montoMora;
             }else{
                 montoMora=monto;
+                cantidadCuotasMora = (int) Math.floor(montoMora / (informacionCuota.getCuota()+informacionCuota.getMulta()));
                 monto=0;
             }
             //Calculo del descuento para cada cuota en mora
@@ -401,16 +390,16 @@ public class PagoController {
             }else{
                 existeAbono = montoMora % (informacionCuota.getCuota()+informacionCuota.getMulta());
             }
+            //Control del abono para las cuotas con mora o sin mora
+            boolean cobroRecargo = false;
             //Registro de las cuotas con mora
             if(montoMora >= (informacionCuota.getCuota()+informacionCuota.getMulta())){
                 for (int i=0;i<cantidadCuotasMora;i++){
-                    Date fechaRegistro = new Date();
                     CuotaMantenimiento cuota = new CuotaMantenimiento();
-                    cuota.setFechaRegistro(fechaRegistro);
+                    cuota.setFechaRegistro(LocalDateTime.now());
                     cuota.setFechaCuota(fechaCorte);
                     cuota.setCuota(informacionCuota.getCuota());
                     cuota.setSaldoCuota(0.0);
-                    cuota.setFechaRecargo(fechaCorte);
                     cuota.setRecargo(informacionCuota.getMulta());
                     cuota.setDescuento(descuento);
                     cuota.setSaldoRecargo(0.0);
@@ -418,52 +407,55 @@ public class PagoController {
                     cuotaMantenimientoService.agregar(cuota);
                     montoMora-=(informacionCuota.getCuota()+informacionCuota.getMulta());
                     montoDescuento-=descuento;
-                    fechaCorte = SiguienteMes(fechaCorte, venta);
+                    fechaCorte = SiguienteMes(fechaCorte, venta, 1);
+                    cobroRecargo = true;
                 }
             }
             //Registro de las cuotas sin mora
             if(monto >= informacionCuota.getCuota()){
                 for (int i=0;i<cantidadCuotas;i++){
-                    Date fechaRegistro = new Date();
                     CuotaMantenimiento cuota = new CuotaMantenimiento();
-                    cuota.setFechaRegistro(fechaRegistro);
+                    cuota.setFechaRegistro(LocalDateTime.now());
                     cuota.setFechaCuota(fechaCorte);
                     cuota.setCuota(informacionCuota.getCuota());
                     cuota.setSaldoCuota(0.0);
-                    cuota.setFechaRecargo(fechaCorte);
                     cuota.setRecargo(0.0);
                     cuota.setDescuento(0.0);
                     cuota.setSaldoRecargo(0.0);
                     cuota.setPago(pago);
                     cuotaMantenimientoService.agregar(cuota);
                     monto-=informacionCuota.getCuota();
-                    fechaCorte = SiguienteMes(fechaCorte, venta);
+                    fechaCorte = SiguienteMes(fechaCorte, venta,1);
+                    cobroRecargo = false;
                 }
             }
             //Registro de abono a cuota en caso de que exista
             if(existeAbono>0){
-                Date fechaRegistro = new Date();
                 double montoEvaluar = monto + montoMora;
                 CuotaMantenimiento cuota = new CuotaMantenimiento();
-                cuota.setFechaRegistro(fechaRegistro);
-                cuota.setFechaRecargo(fechaCorte);
-                cuota.setDescuento(montoDescuento);
-                if(montoEvaluar>=informacionCuota.getMulta()){
-                    cuota.setRecargo(informacionCuota.getMulta());
-                    cuota.setSaldoRecargo(0.0);
-                    montoEvaluar-=informacionCuota.getMulta();
-                }else{
-                    cuota.setRecargo(montoEvaluar);
-                    cuota.setSaldoRecargo(informacionCuota.getMulta()-montoEvaluar);
-                    montoEvaluar-=montoEvaluar;
-                }
+                cuota.setFechaRegistro(LocalDateTime.now());
                 cuota.setFechaCuota(fechaCorte);
+                cuota.setDescuento(montoDescuento);
+                if(cobroRecargo){
+                    if(montoEvaluar>=informacionCuota.getMulta()){
+                        cuota.setRecargo(informacionCuota.getMulta());
+                        cuota.setSaldoRecargo(0.0);
+                        montoEvaluar-=informacionCuota.getMulta();
+                    }else{
+                        cuota.setRecargo(montoEvaluar);
+                        cuota.setSaldoRecargo(informacionCuota.getMulta()-montoEvaluar);
+                        montoEvaluar-=montoEvaluar;
+                    }
+                }else{
+                    cuota.setRecargo(0.0);
+                    cuota.setSaldoRecargo(0.0);
+                }
                 if(montoEvaluar>=informacionCuota.getCuota()){
                     cuota.setCuota(informacionCuota.getCuota());
                     cuota.setSaldoCuota(0.0);
                     montoEvaluar-=informacionCuota.getCuota();
                 }else{
-                    cuota.setCuota(monto);
+                    cuota.setCuota(montoEvaluar);
                     cuota.setSaldoCuota(informacionCuota.getCuota()-montoEvaluar);
                     montoEvaluar-=montoEvaluar;
                 }
@@ -502,7 +494,7 @@ public class PagoController {
     }
 
     //Función que obtiene la siguiente fecha de corte
-    public Date SiguienteMes(Date fechaCorte, Venta venta) {
+    public Date SiguienteMes(Date fechaCorte, Venta venta, int cantidad) {
         Date fechaEscritura = venta.getFecha();
 
         // Convierte la fecha a Calendar
@@ -513,7 +505,7 @@ public class PagoController {
         calCorte.setTime(fechaCorte);
 
         // Incrementa el mes en 1
-        calCorte.add(Calendar.MONTH, 1);
+        calCorte.add(Calendar.MONTH, cantidad);
 
         // Mantén el día si es posible, de lo contrario, establece en el último día del mes
         int diaActual = calCorte.get(Calendar.DAY_OF_MONTH);
