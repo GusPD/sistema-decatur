@@ -62,12 +62,16 @@ $(document).ready(function() {
                 title: 'Fecha',
                 class: 'text-center',
                 render: function(data, type, row) {
-                  if (type === 'display' || type === 'filter') {
-                    var date = new Date(data);
-                    var formattedDate = date.toLocaleDateString();
-                    return formattedDate;
-                  }
-                  return data;
+                    if (type === 'display' || type === 'filter') {
+                        var date = new Date(data);
+                        var formattedDate = new Date(date.toLocaleString('en-US', { timeZone: 'UTC' }));
+                        var day = formattedDate.getDate();
+                        var month = formattedDate.getMonth() + 1;
+                        var year = formattedDate.getFullYear();
+                        var formattedDateString = day + "/" + month + "/" + year;
+                        return formattedDateString;
+                    }
+                    return data;
                 }
             },
             {

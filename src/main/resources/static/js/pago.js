@@ -12,7 +12,7 @@ $(document).ready(function() {
             url: '/pagos/data/' + idProyecto + '?fecha_inicio=' + fechaInicio + '&fecha_fin=' + fechaFin + '&comprobante=' + comprobante + '&estado=' + estado + '&tipo_pago=' + tipoPago + '&lote=' + lote,
             dataSrc: 'data'
         },
-        order: [[1, 'desc']],
+        order: [[1, 'desc'],[2, 'asc']],
         processing: true,
         serverSide: true,
         dom: "<'row w-100'<'col-sm-12 mb-4'B>>" +
@@ -76,9 +76,13 @@ $(document).ready(function() {
                 searchable: false,
                 render: function(data, type, row) {
                     if (type === 'display' || type === 'filter') {
-                      var date = new Date(data);
-                      var formattedDate = date.toLocaleDateString();
-                      return formattedDate;
+                        var date = new Date(data);
+                        var formattedDate = new Date(date.toLocaleString('en-US', { timeZone: 'UTC' }));
+                        var day = formattedDate.getDate();
+                        var month = formattedDate.getMonth() + 1;
+                        var year = formattedDate.getFullYear();
+                        var formattedDateString = day + "/" + month + "/" + year;
+                        return formattedDateString;
                     }
                     return data;
                 }

@@ -16,6 +16,7 @@ import com.gl05.bad.servicio.PagoService;
 import com.gl05.bad.servicio.ProyectoService;
 import com.gl05.bad.servicio.VentaService;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -209,31 +210,18 @@ public class PagoController {
     //Función que registra las cuotas de mantenimiento del pago
     public void RegistroCuotaMantenimiento(Pago pago) {
 
-        //Obtener la fecha actual
-        Date fechaActual = new Date();
-
-        //Convertir la fecha de pago al mismo formato que la fecha actual
-        Date fechaPagoRealizado = pago.getFecha();
-        Calendar calendarfechaPagoRealizado = Calendar.getInstance();
-        calendarfechaPagoRealizado.setTime(fechaPagoRealizado);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(fechaActual);
-        calendar.set(Calendar.YEAR, calendarfechaPagoRealizado.get(Calendar.YEAR));
-        calendar.set(Calendar.MONTH, calendarfechaPagoRealizado.get(Calendar.MONTH));
-        calendar.set(Calendar.DAY_OF_MONTH, calendarfechaPagoRealizado.get(Calendar.DAY_OF_MONTH));
-        Date fechaPago = calendar.getTime();
-
         //Obtener la venta del pago
         Venta venta = ventaService.encontrar(pago.getVenta().getIdVenta());
 
         //Obtener la información sobre el valor de la cuota a cancelar
-        InformacionMantenimiento informacionCuota= InformacionCuotaMantenimiento(venta);
+        InformacionMantenimiento informacionCuota = InformacionCuotaMantenimiento(venta);
 
         //Obtener la ultima cuota cancelada, la fecha de corte, la fecha de pago, y el monto para aplicar a las cuotas
         CuotaMantenimiento ultimaCuota = cuotaMantenimientoService.encontrarUltimaCuota(venta);
         Date fechaCorte = SiguienteMes(ultimaCuota.getFechaCuota(), venta, 1);
         double monto = pago.getMonto() + pago.getDescuento() - pago.getOtros();
         double montoDescuento = pago.getDescuento();
+        Date fechaPago = pago.getFecha();
         
         //Verificación si existe un saldo que cancelar, para realizar el cobro
         if((ultimaCuota.getSaldoCuota() + ultimaCuota.getSaldoRecargo()) > 0){
@@ -315,7 +303,7 @@ public class PagoController {
         System.out.println("\n\n\nAntes de Ingresar al registro de cuota\n\n");
         System.out.println(fechaPago+"\n\n"+fechaCorte);
         //Verificar si se encuentra al día
-        if(fechaCorte.before(fechaPago) || fechaCorte.equals(fechaPago)){
+        if(fechaCorte.after(fechaPago) || fechaCorte.equals(fechaPago)){
             System.out.println("\n\nRegistro de cuota");
             //Calculo de la cantidad de coutas a cancelar
             int cantidadCuotas = (int) Math.floor(monto / informacionCuota.getCuota());
@@ -364,8 +352,9 @@ public class PagoController {
             System.out.println("\n\nRegistro de cuota con mora");
             //Calculo de las cantidad de meses en mora
             int cantidadCuotasMora = CantidadMeses(fechaCorte, fechaPago);
-            Date fechaCorteEvaluacion = SiguienteMes(fechaCorte, venta, cantidadCuotasMora + 1);
-            if(fechaPago.before(fechaCorteEvaluacion) || fechaPago.equals(fechaCorteEvaluacion)){
+            Date fechaCorteEvaluacion = SiguienteMes(fechaCorte, venta, cantidadCuotasMora);
+            System.out.println(fechaPago+"\n\n"+fechaCorteEvaluacion);
+            if(fechaPago.after(fechaCorteEvaluacion)){
                 cantidadCuotasMora++;
             }
             double montoMora = cantidadCuotasMora * (informacionCuota.getCuota()+informacionCuota.getMulta());
