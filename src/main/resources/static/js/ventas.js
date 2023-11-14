@@ -327,6 +327,7 @@ $(document).ready(function() {
                     $('#nombre').val(response.nombre);
                     $('#fecha').val(response.fecha);
                     $('#precio').val(response.precio);
+                    $('#monto').val(response.monto);
                     $('#descuento').val(response.descuento);
                     $('#idListDocumento').val(response.idListDocumento);
                     $('#estado').val(response.estado);

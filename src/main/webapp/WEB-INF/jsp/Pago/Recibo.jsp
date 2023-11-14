@@ -26,7 +26,7 @@
                             <h3 class="m-0">
                                 <div class="d-flex">
                                     <div class="col-sm-6">
-                                        Recibo ${pago.tipo} ${pago.recibo}
+                                        Recibo de ${pago.tipo} N° ${pago.recibo}
                                     </div>
                                     <sec:authorize access="hasAuthority('IMPRIMIR_PAGO_PRIVILAGE')"> 
                                         <button type="button" title="Imprimir Pago" class=" btn btn-outline-dark abrirModal-btn ml-2"><i class="fa-solid fa-print"></i></button>
@@ -84,7 +84,9 @@
                                                 <th>Mantenimiento</th>
                                                 <th>Saldo Mantenimiento</th>
                                                 <th>Recargo</th>
+                                                <th>Descuento</th>
                                                 <th>Saldo Recargo</th>
+                                                <th>Otros</th>
                                                 <th>Abonado</th>
                                                 <th>Pendiente</th>
                                             </tr>
@@ -94,12 +96,14 @@
                                                 <tr>
                                                     <td>${numero.index+1}</td>
                                                     <td style="text-transform:capitalize;"><fmt:formatDate value="${eCuota.fechaCuota}" pattern="MMMM/yyyy" /></td>
-                                                    <td><c:out value="${String.format('%.2f', eCuota.cuota)}"/></td>
-                                                    <td><c:out value="${String.format('%.2f', eCuota.saldoCuota)}"/></td>
-                                                    <td><c:out value="${String.format('%.2f', eCuota.recargo)}"/></td>
-                                                    <td><c:out value="${String.format('%.2f', eCuota.saldoRecargo)}"/></td>
-                                                    <td><c:out value="${String.format('%.2f', eCuota.cuota + eCuota.recargo)}"/></td>
-                                                    <td><c:out value="${String.format('%.2f', eCuota.saldoCuota + eCuota.saldoRecargo)}"/></td>
+                                                    <td>$ <c:out value="${String.format('%.2f', eCuota.cuota)}"/></td>
+                                                    <td>$ <c:out value="${String.format('%.2f', eCuota.saldoCuota)}"/></td>
+                                                    <td>$ <c:out value="${String.format('%.2f', eCuota.recargo)}"/></td>
+                                                    <td>$ <c:out value="${String.format('%.2f', eCuota.descuento)}"/></td>
+                                                    <td>$ <c:out value="${String.format('%.2f', eCuota.saldoRecargo)}"/></td>
+                                                    <td>$ <c:out value="${String.format('%.2f', eCuota.otros)}"/></td>
+                                                    <td>$ <c:out value="${String.format('%.2f', eCuota.cuota + eCuota.recargo - eCuota.descuento + eCuota.otros)}"/></td>
+                                                    <td>$ <c:out value="${String.format('%.2f', eCuota.saldoCuota + eCuota.saldoRecargo)}"/></td>
                                                 </tr>
                                             </c:forEach>
                                         </body>
