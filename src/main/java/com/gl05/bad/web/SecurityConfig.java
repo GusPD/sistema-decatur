@@ -52,17 +52,19 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public JavaMailSender javaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         ConfiguracionCorreo configuracionCorreo = configuracionCorreoService.obtenerConfiguracionCorreo();
-        mailSender.setHost(configuracionCorreo.getHost());
-        mailSender.setPort(Integer.parseInt(configuracionCorreo.getPort()));
-        mailSender.setUsername(configuracionCorreo.getUsername());
-        mailSender.setPassword(configuracionCorreo.getPassword());
-        Properties props = mailSender.getJavaMailProperties();
-        props.put("mail.transport.protocol", configuracionCorreo.getProtocol());
-        props.put("mail.smtp.auth", String.valueOf(configuracionCorreo.getSmtp_auth()));
-        props.put("mail.smtp.starttls.enable", String.valueOf(configuracionCorreo.getStart_tls()));
-        props.put("mail.debug", "true");
-        Session session = Session.getDefaultInstance(props);
-        mailSender.setSession(session);
+        if (configuracionCorreo!=null) {
+            mailSender.setHost(configuracionCorreo.getHost());
+            mailSender.setPort(Integer.parseInt(configuracionCorreo.getPort()));
+            mailSender.setUsername(configuracionCorreo.getUsername());
+            mailSender.setPassword(configuracionCorreo.getPassword());
+            Properties props = mailSender.getJavaMailProperties();
+            props.put("mail.transport.protocol", configuracionCorreo.getProtocol());
+            props.put("mail.smtp.auth", String.valueOf(configuracionCorreo.getSmtp_auth()));
+            props.put("mail.smtp.starttls.enable", String.valueOf(configuracionCorreo.getStart_tls()));
+            props.put("mail.debug", "true");
+            Session session = Session.getDefaultInstance(props);
+            mailSender.setSession(session);
+        }
         return mailSender;
     }
 

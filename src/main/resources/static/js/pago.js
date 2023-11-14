@@ -213,6 +213,12 @@ $(document).ready(function() {
     });
     //Método para eliminar los filtros la tabla de pagos
     $(document).on('click', '#b_clear', function () {
+        $("#b_fecha_inicio").val("");
+        $("#b_fecha_fin").val("");
+        $("#b_comprobante").val("");
+        $("#b_estado").val("");
+        $("#b_tipo_pago").val("0");
+        $("#b_lote").val("0");
         var fechaInicio = "";
         var fechaFin = "";
         var comprobante = "";
@@ -248,6 +254,38 @@ $(document).ready(function() {
         },
         "Ingrese un número válido"
     );
+    $.validator.addMethod(
+        "otrosMenorQueMonto",
+        function(value, element, params) {
+            var montoValue = parseFloat($("#monto").val()) || 0;
+            var descuentoValue = parseFloat($("#descuento").val()) || 0;
+            var valorPago = montoValue + descuentoValue;
+            return parseFloat(value) >= 0 && parseFloat(value) <= valorPago;
+        },
+        "El valor en 'Otros' debe ser menor o igual que el valor en 'Monto'"
+    );
+    $.validator.addMethod(
+        "montoMenorIgualCalculado",
+        function(value, element, params) {
+            var deferred = $.Deferred();
+            $.ajax({
+                url: '/obtenerValorCalculado',
+                method: 'GET',
+                dataType: 'json',
+                success: function(response) {
+                    var valorCalculado = parseFloat(response.valorCalculado) || 0;
+                    deferred.resolve({ valorCalculado: valorCalculado });
+                },
+                error: function() {
+                    deferred.resolve({ valorCalculado: 0 });
+                }
+            });
+            return deferred.promise();
+        },
+        function(params, element) {
+            return "El valor en 'Monto' debe ser igual o menor que " + params.valorCalculado;
+        }
+    );
     var formGuardar = $('#formGuardar');
     var validator = $('#formGuardar').validate({
         rules: {
@@ -280,6 +318,7 @@ $(document).ready(function() {
             },
             otros: {
                 validarMonto: true,
+                otrosMenorQueMonto: true,
                 maxlength: 10
             }  
         },

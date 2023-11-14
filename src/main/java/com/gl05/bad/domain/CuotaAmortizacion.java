@@ -60,9 +60,9 @@ public class CuotaAmortizacion implements Serializable {
     private BigDecimal capital;
     @Column(name = "SALDO")
     private BigDecimal saldo;
-    @JoinColumn(name = "ID_VENTA", referencedColumnName = "ID_VENTA")
+    @JoinColumn(name = "ID_INFO_FINANCIAMIENTO", referencedColumnName = "ID_INFO_FINANCIAMIENTO")
     @ManyToOne
-    private Venta venta;
+    private InformacionFinanciamiento informacion;
 
     @Override
     public int hashCode() {

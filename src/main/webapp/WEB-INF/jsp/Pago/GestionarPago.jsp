@@ -135,7 +135,7 @@
             </div>
         </div>
     </div>
-    <!-- Modal de agregar prima-->
+    <!-- Modal de agregar pago-->
     <div class="modal fade" id="crearModalGuardar" tabindex="-1" aria-labelledby="crearModalLabelPago" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">

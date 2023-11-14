@@ -17,7 +17,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -35,7 +34,8 @@ import org.springframework.format.annotation.DateTimeFormat;
     @NamedQuery(name = "CuotaMantenimiento.findBySaldoCuota", query = "SELECT c FROM CuotaMantenimiento c WHERE c.saldoCuota = :saldoCuota"),
     @NamedQuery(name = "CuotaMantenimiento.findByRecargo", query = "SELECT c FROM CuotaMantenimiento c WHERE c.recargo = :recargo"),
     @NamedQuery(name = "CuotaMantenimiento.findBySaldoRecargo", query = "SELECT c FROM CuotaMantenimiento c WHERE c.saldoRecargo = :saldoRecargo"),
-    @NamedQuery(name = "CuotaMantenimiento.findByDescuento", query = "SELECT c FROM CuotaMantenimiento c WHERE c.descuento = :descuento")})
+    @NamedQuery(name = "CuotaMantenimiento.findByDescuento", query = "SELECT c FROM CuotaMantenimiento c WHERE c.descuento = :descuento"),
+    @NamedQuery(name = "CuotaMantenimiento.findByOtros", query = "SELECT c FROM CuotaMantenimiento c WHERE c.otros = :otros")})
 public class CuotaMantenimiento implements Serializable {
 
     @Id
@@ -58,12 +58,16 @@ public class CuotaMantenimiento implements Serializable {
     private double recargo;
     @Column(name = "SALDO_RECARGO")
     private double saldoRecargo;
-    @Size(max = 200)
     @Column(name = "DESCUENTO")
     private double descuento;
+    @Column(name = "OTROS")
+    private double otros;
     @JoinColumn(name = "ID_PAGO", referencedColumnName = "ID_PAGO")
     @ManyToOne
     private Pago pago;
+    @JoinColumn(name = "ID_INFO_MANTENIMIENTO", referencedColumnName = "ID_INFO_MANTENIMIENTO")
+    @ManyToOne
+    private InformacionMantenimiento informacion;
 
     @Override
     public int hashCode() {
@@ -87,6 +91,5 @@ public class CuotaMantenimiento implements Serializable {
     @Override
     public String toString() {
         return "com.gl05.bad.domain.CuotaMantenimiento[ idCuotaMantenimiento=" + idCuotaMantenimiento + " ]";
-    }
-    
+    } 
 }
