@@ -148,6 +148,7 @@
                         <div  class="overflow-auto">
                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                             <input type="hidden" id="idPago">
+                            <input type="hidden" id="fechaRegistro">
                             <input type="hidden" id="tipo" value="">
                             <input type="checkbox" class="form-check-input d-none" id="estado" name="estado" checked>
                             <div class="form-group">
@@ -219,7 +220,7 @@
                 </div>
                 <div class="modal-body">
                     <strong>¿Estás seguro de eliminar el pago seleccionado?</strong>
-                    <p>Ten en cuenta que se eliminarán los datos relacionados al pago.</p>
+                    <p>Ten en cuenta que se eliminarán los datos relacionados al pago, y los pagos realizados a continuación a este.</p>
                 </div>
                 <div class="modal-footer">
                   <button id="eliminarPagoBtn" class="btn btn-outline-danger btn-sm">Eliminar</button>

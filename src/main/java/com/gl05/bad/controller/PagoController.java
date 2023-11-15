@@ -155,10 +155,20 @@ public class PagoController {
         try {
             pago.setFechaRegistro(LocalDateTime.now());
             if(pago.getTipo().equals("Prima")){
-                pagoService.agregar(pago);
+                if(pagoService.encontrarRecibo("Prima", pago.getRecibo(), pago.getVenta().getTerreno().getProyecto(), pago.getComprobante())==null && pagoService.encontrarRecibo("Financiamiento", pago.getRecibo(), pago.getVenta().getTerreno().getProyecto(), pago.getComprobante())==null){
+                    pagoService.agregar(pago);
+                }else{
+                    String error = "Ocurrió un error al agregar el pago, el recibo ya se encuentra registrado.";
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+                }
             }else if(pago.getTipo().equals("Mantenimiento")){
-                pagoService.agregar(pago);
-                RegistroCuotaMantenimiento(pago);
+                if(pagoService.encontrarRecibo("Mantenimiento", pago.getRecibo(), pago.getVenta().getTerreno().getProyecto(), pago.getComprobante())==null){
+                    pagoService.agregar(pago);
+                    RegistroCuotaMantenimiento(pago);
+                }else{
+                    String error = "Ocurrió un error al agregar el pago, el recibo ya se encuentra registrado.";
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+                }
             }
             String mensaje = "Se ha agregado un pago.";
             bitacoraService.registrarAccion("Agregar pago "+pago.getTipo().toLowerCase());
@@ -175,7 +185,7 @@ public class PagoController {
         try {
             Pago newPago = pagoService.encontrar(idPago);
             pagoService.eliminar(newPago);
-            String mensaje = "Se ha eliminado un pago correctamente.";
+            String mensaje = "Se han eliminado los pagos correctamente.";
             bitacoraService.registrarAccion("Eliminar pago "+newPago.getTipo().toLowerCase());
             return ResponseEntity.ok(mensaje);
         } catch (Exception e) {
@@ -199,7 +209,23 @@ public class PagoController {
     @PostMapping("/ActualizarPago")
     public ResponseEntity<String> ActualizarPago(Pago pago, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
-            pagoService.actualizar(pago);
+            Pago pagoSinActualizar = pagoService.encontrar(pago.getIdPago());
+            pago.setFechaRegistro(pagoSinActualizar.getFechaRegistro());
+            if(pago.getTipo().equals("Prima")){
+                if(pagoService.encontrarRecibo("Financiamiento", pago.getRecibo(), pago.getVenta().getTerreno().getProyecto(), pago.getComprobante())==null || pagoService.encontrarRecibo("Prima", pago.getRecibo(), pago.getVenta().getTerreno().getProyecto(), pago.getComprobante())==pago){
+                    pagoService.actualizar(pago);
+                }else{
+                    String error = "Ocurrió un error al actualizar el pago, el recibo ya se encuentra registrado.";
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+                }
+            }else if(pago.getTipo().equals("Mantenimiento")){
+                if(pagoService.encontrarRecibo("Mantenimiento", pago.getRecibo(), pago.getVenta().getTerreno().getProyecto(), pago.getComprobante())==null || pagoService.encontrarRecibo("Mantenimiento", pago.getRecibo(), pago.getVenta().getTerreno().getProyecto(), pago.getComprobante())==pago){
+                    pagoService.actualizar(pago);
+                }else{
+                    String error = "Ocurrió un error al actualizar el pago, el recibo ya se encuentra registrado.";
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+                }
+            }
             String mensaje = "Se ha actualizado el pago correctamente.";
             bitacoraService.registrarAccion("Actualizar pago "+pago.getTipo().toLowerCase());
             return ResponseEntity.ok(mensaje);
@@ -209,7 +235,45 @@ public class PagoController {
         }
     }
 
-    //Función para obtener un pago de la base de datos
+    //Función para anular un recibo
+    @GetMapping("/AnularRecibo")
+    public ResponseEntity<String> AnularRecibo(@RequestParam Long idPago, @RequestParam boolean estado) {
+        try {
+            String mensaje = "";
+            Pago pago = pagoService.encontrar(idPago);
+            List<Pago> pagosPosteriores = pagoService.encontrarMayores("Mantenimiento", pago.getVenta(), pago.getFechaRegistro());
+            if(pagosPosteriores.size()==0){
+                pago.setEstado(estado);
+                pagoService.actualizar(pago);
+                if(estado==false){
+                    mensaje = "Se ha anulado el recibo correctamente.";
+                    bitacoraService.registrarAccion("Anular pago "+pago.getTipo().toLowerCase());
+                }else{
+                    mensaje = "Se ha desanulado el recibo correctamente.";
+                    bitacoraService.registrarAccion("Desanular pago "+pago.getTipo().toLowerCase());
+                }
+                return ResponseEntity.ok(mensaje);
+            }else{
+                String error = "";
+                if(estado==false){
+                    error = "Ha ocurrido un error al anular el recibo, existen pagos registrados posterior a este.";
+                }else{
+                    error = "Ha ocurrido un error al desanular el recibo, existen pagos registrados posterior a este.";
+                }
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+            } 
+        } catch (Exception e) {
+            String error = "";
+            if(estado==false){
+                error = "Ha ocurrido un error al anular el recibo.";
+            }else{
+                error = "Ha ocurrido un error al desanular el recibo.";
+            }
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        }
+    }
+
+    //Función para obtener el descuento disponible del pago
     @GetMapping("/ObtenerDescuento/{id}")
     public ResponseEntity<ObjectNode> ObtenerDescuentoPago(@PathVariable Long id, @RequestParam double monto, @RequestParam double otros, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date fecha) throws ParseException {
         Venta venta = ventaService.encontrar(id);
@@ -219,21 +283,24 @@ public class PagoController {
         Date fechaCorte = ultimaCuota.getFechaCuota();
         double descuentoCalculado = 0;
         double montoMora = 0;
-        //Cálculo de las cantidad de meses en mora
-        int cantidadCuotasMora = CantidadMeses(fechaCorte, fechaPago);
-        Date fechaCorteEvaluacion = SiguienteMes(fechaCorte, venta, cantidadCuotasMora);
-        if(fechaCorteEvaluacion.after(fechaPago) || fechaCorteEvaluacion.equals(fechaPago)){
-            cantidadCuotasMora--;
-        }
-        if(monto>(ultimaCuota.getSaldoCuota() - ultimaCuota.getSaldoRecargo())){
-            monto = monto - otros - ultimaCuota.getSaldoCuota() - ultimaCuota.getSaldoRecargo();
-            montoMora = cantidadCuotasMora * (informacionCuota.getCuota()+informacionCuota.getMulta());
-            if(monto <= montoMora){
-                montoMora = monto;
-                cantidadCuotasMora = (int) Math.ceil(montoMora / (informacionCuota.getCuota()+informacionCuota.getMulta()));
+        //Validar si se encuentra en mora
+        if(fechaPago.after(fechaCorte)){
+            //Cálculo de las cantidad de meses en mora
+            int cantidadCuotasMora = CantidadMeses(fechaCorte, fechaPago);
+            Date fechaCorteEvaluacion = SiguienteMes(fechaCorte, venta, cantidadCuotasMora);
+            if(fechaCorteEvaluacion.after(fechaPago) || fechaCorteEvaluacion.equals(fechaPago)){
+                cantidadCuotasMora--;
             }
-            //Cálculo del descuento que se le puede aplicar según el abono.
-            descuentoCalculado = cantidadCuotasMora * informacionCuota.getMulta();
+            if(monto>(ultimaCuota.getSaldoCuota() - ultimaCuota.getSaldoRecargo())){
+                monto = monto - otros - ultimaCuota.getSaldoCuota() - ultimaCuota.getSaldoRecargo();
+                montoMora = cantidadCuotasMora * (informacionCuota.getCuota()+informacionCuota.getMulta());
+                if(monto <= montoMora){
+                    montoMora = monto;
+                    cantidadCuotasMora = (int) Math.ceil(montoMora / (informacionCuota.getCuota()+informacionCuota.getMulta()));
+                }
+                //Cálculo del descuento que se le puede aplicar según el abono.
+                descuentoCalculado = cantidadCuotasMora * informacionCuota.getMulta();
+            }
         }
         // Crear un objeto JSON para devolver al cliente
         ObjectMapper objectMapper = new ObjectMapper();
@@ -401,29 +468,25 @@ public class PagoController {
         }else{ //Verificar si se encuentra en mora
             //Control del cobro del recargo para el abono para las cuotas con mora o sin mora
             boolean cobroRecargo = true;
-            //Calculo de las cantidad de meses en mora
+            //Calculo de las cantidad de meses en mora y si existirá abono de cuota
             int cantidadCuotasMora = CantidadMeses(fechaCorte, fechaPago);
             Date fechaCorteEvaluacion = SiguienteMes(fechaCorte, venta, cantidadCuotasMora);
-            if(fechaCorteEvaluacion.after(fechaPago) || fechaCorteEvaluacion.equals(fechaPago)){
-                cantidadCuotasMora--;
+            if(fechaPago.after(fechaCorteEvaluacion)){
+                cantidadCuotasMora++;
             }
             double montoMora = cantidadCuotasMora * (informacionCuota.getCuota()+informacionCuota.getMulta());
+            double existeAbono = 0;
             if(monto>=montoMora){
                 monto-=montoMora;
+                existeAbono = monto % (informacionCuota.getCuota());
             }else{
                 montoMora=monto;
+                existeAbono = montoMora % (informacionCuota.getCuota()+informacionCuota.getMulta());
                 cantidadCuotasMora = (int) Math.floor(montoMora / (informacionCuota.getCuota()+informacionCuota.getMulta()));
                 monto=0;
             }
             //Calculo de la cantidad de coutas a cancelar sin mora
-            int cantidadCuotas = (int) Math.floor(monto / (informacionCuota.getCuota()));
-            //Verificación si existira un abono en la cuota
-            double existeAbono = 0;
-            if(monto>=montoMora){
-                existeAbono = monto % (informacionCuota.getCuota());
-            }else{
-                existeAbono = montoMora % (informacionCuota.getCuota()+informacionCuota.getMulta());
-            }
+            int cantidadCuotas = (int) Math.floor(monto / (informacionCuota.getCuota())); 
             //Registro de las cuotas con mora
             if(montoMora >= (informacionCuota.getCuota()+informacionCuota.getMulta())){
                 for (int i=0;i<cantidadCuotasMora;i++){
@@ -527,7 +590,6 @@ public class PagoController {
                 montoDescuento-=montoDescuento;
             }
         }
-
     }
 
     //Funcion que obtiene la informacion de la cuota de mantenimiento actual
