@@ -1,5 +1,7 @@
 package com.gl05.bad.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.gl05.bad.domain.CuentaBancaria;
 import com.gl05.bad.domain.CuotaMantenimiento;
 import com.gl05.bad.domain.Empresa;
@@ -28,6 +30,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -208,14 +211,35 @@ public class PagoController {
 
     //Función para obtener un pago de la base de datos
     @GetMapping("/ObtenerDescuento/{id}")
-    public ResponseEntity<String> ObtenerDescuentoPago(@PathVariable Long id) {
+    public ResponseEntity<ObjectNode> ObtenerDescuentoPago(@PathVariable Long id, @RequestParam double monto, @RequestParam double otros, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date fecha) throws ParseException {
         Venta venta = ventaService.encontrar(id);
-        String valorDescuento = "";
-        if (valorDescuento != "") {
-            return ResponseEntity.ok(valorDescuento);
-        } else {
-            return ResponseEntity.notFound().build();
+        InformacionMantenimiento informacionCuota = InformacionCuotaMantenimiento(venta);
+        CuotaMantenimiento ultimaCuota = cuotaMantenimientoService.encontrarUltimaCuota(venta);
+        Date fechaPago = fecha;
+        Date fechaCorte = ultimaCuota.getFechaCuota();
+        double descuentoCalculado = 0;
+        double montoMora = 0;
+        //Cálculo de las cantidad de meses en mora
+        int cantidadCuotasMora = CantidadMeses(fechaCorte, fechaPago);
+        Date fechaCorteEvaluacion = SiguienteMes(fechaCorte, venta, cantidadCuotasMora);
+        if(fechaCorteEvaluacion.after(fechaPago) || fechaCorteEvaluacion.equals(fechaPago)){
+            cantidadCuotasMora--;
         }
+        if(monto>(ultimaCuota.getSaldoCuota() - ultimaCuota.getSaldoRecargo())){
+            monto = monto - otros - ultimaCuota.getSaldoCuota() - ultimaCuota.getSaldoRecargo();
+            montoMora = cantidadCuotasMora * (informacionCuota.getCuota()+informacionCuota.getMulta());
+            if(monto <= montoMora){
+                montoMora = monto;
+                cantidadCuotasMora = (int) Math.ceil(montoMora / (informacionCuota.getCuota()+informacionCuota.getMulta()));
+            }
+            //Cálculo del descuento que se le puede aplicar según el abono.
+            descuentoCalculado = cantidadCuotasMora * informacionCuota.getMulta();
+        }
+        // Crear un objeto JSON para devolver al cliente
+        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectNode responseJson = objectMapper.createObjectNode();
+        responseJson.put("descuentoCalculado", descuentoCalculado);
+        return ResponseEntity.ok(responseJson);
     }
 
     //Función que registra las cuotas de mantenimiento del pago
@@ -228,7 +252,7 @@ public class PagoController {
         InformacionMantenimiento informacionCuota = InformacionCuotaMantenimiento(venta);
 
         //Obtener la ultima cuota cancelada, la fecha de corte, la fecha de pago, y el monto para aplicar a las cuotas
-        CuotaMantenimiento ultimaCuota = cuotaMantenimientoService.encontrarUltimaCuota(venta);
+        CuotaMantenimiento ultimaCuota = cuotaMantenimientoService.encontrarPenultimaCuota(venta);
         Date fechaCorte = SiguienteMes(ultimaCuota.getFechaCuota(), venta, 1);
         double monto = pago.getMonto() + pago.getDescuento() - pago.getOtros();
         double montoDescuento = pago.getDescuento();
@@ -380,9 +404,8 @@ public class PagoController {
             //Calculo de las cantidad de meses en mora
             int cantidadCuotasMora = CantidadMeses(fechaCorte, fechaPago);
             Date fechaCorteEvaluacion = SiguienteMes(fechaCorte, venta, cantidadCuotasMora);
-            System.out.println("\n\n\n\n"+fechaPago + " " +fechaCorteEvaluacion+"\n\n\n\n");
-            if(fechaPago.after(fechaCorteEvaluacion)){
-                cantidadCuotasMora++;
+            if(fechaCorteEvaluacion.after(fechaPago) || fechaCorteEvaluacion.equals(fechaPago)){
+                cantidadCuotasMora--;
             }
             double montoMora = cantidadCuotasMora * (informacionCuota.getCuota()+informacionCuota.getMulta());
             if(monto>=montoMora){

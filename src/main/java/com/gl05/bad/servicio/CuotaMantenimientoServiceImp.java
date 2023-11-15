@@ -49,12 +49,44 @@ public class CuotaMantenimientoServiceImp implements CuotaMantenimientoService{
 
     @Override
     @Transactional(readOnly = true)
-    public CuotaMantenimiento encontrarUltimaCuota(Venta venta) {
+    public CuotaMantenimiento encontrarPenultimaCuota(Venta venta) {
         CuotaMantenimiento ultimaCuota=new CuotaMantenimiento();
         List<Pago> listaPagos = pagoDao.findByTipoAndVenta("Mantenimiento",venta);
         if (!listaPagos.isEmpty()) {
             if(listaPagos.size()>=2){
                 Pago ultimoPago = listaPagos.get(listaPagos.size() - 2);
+                List<CuotaMantenimiento> listaCuotas = cuotaMantenimientoDao.findByPago(ultimoPago);
+                if (!listaCuotas.isEmpty()) {
+                    return ultimaCuota = listaCuotas.get(listaCuotas.size() - 1);
+                } else {
+                    ultimaCuota.setFechaCuota(venta.getFecha());
+                    ultimaCuota.setSaldoCuota(0);
+                    ultimaCuota.setSaldoRecargo(0);
+                    return ultimaCuota;
+                }
+            }else {
+                ultimaCuota.setFechaCuota(venta.getFecha());
+                ultimaCuota.setSaldoCuota(0);
+                ultimaCuota.setSaldoRecargo(0);
+                return ultimaCuota;
+            }
+            
+        } else {
+            ultimaCuota.setFechaCuota(venta.getFecha());
+            ultimaCuota.setSaldoCuota(0);
+            ultimaCuota.setSaldoRecargo(0);
+            return ultimaCuota;
+        }
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public CuotaMantenimiento encontrarUltimaCuota(Venta venta) {
+        CuotaMantenimiento ultimaCuota=new CuotaMantenimiento();
+        List<Pago> listaPagos = pagoDao.findByTipoAndVenta("Mantenimiento",venta);
+        if (!listaPagos.isEmpty()) {
+            if(listaPagos.size()>=1){
+                Pago ultimoPago = listaPagos.get(listaPagos.size() - 1);
                 List<CuotaMantenimiento> listaCuotas = cuotaMantenimientoDao.findByPago(ultimoPago);
                 if (!listaCuotas.isEmpty()) {
                     return ultimaCuota = listaCuotas.get(listaCuotas.size() - 1);
