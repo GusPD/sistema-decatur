@@ -1,8 +1,10 @@
 package com.gl05.bad.servicio;
 
 import com.gl05.bad.domain.Pago;
+import com.gl05.bad.domain.Proyecto;
 import com.gl05.bad.domain.Venta;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -44,9 +46,9 @@ public class PagoServiceImp implements PagoService{
     public void eliminar(Pago pago) {
         if(pago.getTipo().equals("Prima")){
             pagoDao.delete(pago);
-        }else{
-            cuotaMantenimientoDao.deleteByPago(pago);
-            pagoDao.delete(pago);
+        }else if(pago.getTipo().equals("Mantenimiento")){
+            cuotaMantenimientoDao.deleteByPagoVentaAndFechaRegistroGreaterThanEqual(pago.getVenta(), pago.getFechaRegistro());
+            pagoDao.deleteByTipoAndVentaAndFechaRegistroGreaterThanEqual("Mantenimiento",pago.getVenta(), pago.getFechaRegistro());
         }
     }
 
@@ -58,8 +60,20 @@ public class PagoServiceImp implements PagoService{
 
     @Override
     @Transactional(readOnly = true)
-    public List<Pago> encontrarPago(String tipo,Venta venta) {
-        return pagoDao.findByTipoAndVenta(tipo, venta);
+    public List<Pago> encontrarPago(Boolean estado, String tipo,Venta venta) {
+        return pagoDao.findByEstadoAndTipoAndVenta(estado, tipo, venta);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Pago> encontrarMayores(String tipo,Venta venta, LocalDateTime fechaRegistro){
+        return pagoDao.findByTipoAndVentaAndFechaRegistroAfter(tipo, venta, fechaRegistro);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Pago encontrarRecibo(String tipo,Integer recibo, Proyecto proyecto, String comprobante) {
+        return pagoDao.findByTipoAndReciboAndVentaTerrenoProyectoAndComprobante(tipo, recibo, proyecto, comprobante);
     }
 
     @Override

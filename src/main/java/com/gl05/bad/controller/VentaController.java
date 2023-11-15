@@ -138,12 +138,7 @@ public class VentaController {
         return vistaVentasActivaService.listarTerrenos(input, idProyecto);
     }
     
-    //Función que redirige a la vista de la información de la venta  
-    /**
-     * @param model
-     * @param venta
-     * @return
-     */
+    //Función que redirige a la vista de la información de la venta 
     @GetMapping("/InformacionVenta/{idVenta}")
     public String mostrarInformacionVenta(Model model, Venta venta) {
         model.addAttribute("pageTitle", "Venta");
@@ -160,7 +155,7 @@ public class VentaController {
         if(!mantenimientos.isEmpty()){
             mantenimiento = mantenimientos.get(0);
         }
-        List<Pago> primas = pagoService.encontrarPago("Prima",venta);
+        List<Pago> primas = pagoService.encontrarPago(true, "Prima",venta);
         double valorPrima = 0;
         for (Pago prima : primas) {
             valorPrima += prima.getMonto();
@@ -712,6 +707,20 @@ public class VentaController {
             String error = "Ha ocurrido un error al eliminar la facturación de crédito fiscal.";
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
+    }
+
+    //Función que redirige a la vista de los pagos de la venta
+    @GetMapping("/PagosVenta/{idVenta}")
+    public String mostrarPagosVenta(Model model, Venta venta) {
+        model.addAttribute("pageTitle", "Venta");
+        Venta ventaEncontrada = ventaService.encontrar(venta.getIdVenta());
+        Terreno terrenoEncontrado = ventaEncontrada.getTerreno();
+        Proyecto proyecto = terrenoEncontrado.getProyecto();
+        
+        model.addAttribute("proyecto", proyecto);
+        model.addAttribute("terreno", terrenoEncontrado);
+        model.addAttribute("venta", ventaEncontrada);
+        return "/Venta/InformacionGeneral/ventaPagos";
     }
 
     //Función que agrega un venta a la base de datos

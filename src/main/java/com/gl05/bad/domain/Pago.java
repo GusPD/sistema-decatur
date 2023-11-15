@@ -1,7 +1,6 @@
 package com.gl05.bad.domain;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.util.Date;
 import javax.persistence.Basic;
@@ -55,7 +54,7 @@ public class Pago implements Serializable {
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date fecha;
     @Column(name = "RECIBO")
-    private BigInteger recibo;
+    private Integer recibo;
     @Column(name = "ESTADO")
     private Boolean estado;
     @Size(max = 20)

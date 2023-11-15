@@ -51,7 +51,7 @@ public class CuotaMantenimientoServiceImp implements CuotaMantenimientoService{
     @Transactional(readOnly = true)
     public CuotaMantenimiento encontrarPenultimaCuota(Venta venta) {
         CuotaMantenimiento ultimaCuota=new CuotaMantenimiento();
-        List<Pago> listaPagos = pagoDao.findByTipoAndVenta("Mantenimiento",venta);
+        List<Pago> listaPagos = pagoDao.findByEstadoAndTipoAndVenta(true, "Mantenimiento",venta);
         if (!listaPagos.isEmpty()) {
             if(listaPagos.size()>=2){
                 Pago ultimoPago = listaPagos.get(listaPagos.size() - 2);
@@ -83,7 +83,7 @@ public class CuotaMantenimientoServiceImp implements CuotaMantenimientoService{
     @Transactional(readOnly = true)
     public CuotaMantenimiento encontrarUltimaCuota(Venta venta) {
         CuotaMantenimiento ultimaCuota=new CuotaMantenimiento();
-        List<Pago> listaPagos = pagoDao.findByTipoAndVenta("Mantenimiento",venta);
+        List<Pago> listaPagos = pagoDao.findByEstadoAndTipoAndVenta(true,"Mantenimiento",venta);
         if (!listaPagos.isEmpty()) {
             if(listaPagos.size()>=1){
                 Pago ultimoPago = listaPagos.get(listaPagos.size() - 1);

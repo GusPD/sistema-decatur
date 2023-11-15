@@ -112,7 +112,7 @@
                                     </c:forEach>
                                 </c:if>
                             </select>
-                            <div id="span-propietarios-error" class="mensaje-error d-none" style=""><span>Este campo es requerido</span></div>
+                            <div id="span-propietarios-error" class="mensaje-error d-none"><span>Este campo es requerido</span></div>
                         </div>
                     </div>
                     <div class="modal-footer d-flex justify-content-between">

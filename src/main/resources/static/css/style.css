@@ -286,6 +286,15 @@ th {
     padding-bottom: 5px;
     padding-left: 10px;
     padding-right: 10px;
+    font-weight: normal;
+}
+
+.bg-verde{
+    background: #89C48F; 
+}
+
+.bg-azul{
+    background: #6CB4E3;
 }
 
 /* Configuración de la Venta de Terreno */

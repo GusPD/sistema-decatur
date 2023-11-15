@@ -47,6 +47,23 @@
                                         <c:set var="urlTrabajadores" value="/TrabajadoresVenta/${venta.idVenta}" />
                                         <c:set var="urlDocumentos" value="/DocumentosVenta/${venta.idVenta}" />
                                         <c:set var="urlFacturacion" value="/FacturacionVenta/${venta.idVenta}" />
+                                        <c:set var="urlEstados" value="" />
+                                        <c:set var="urlActual" value="/PagosVenta/${venta.idVenta}" />
+                                        <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
+                                            <c:set var="urlEstados" value="/PagosVenta/${venta.idVenta}" />
+                                        </c:if>
+                                        <c:set var="urlActual" value="/PrimasVenta/${venta.idVenta}" />
+                                        <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
+                                            <c:set var="urlEstados" value="/PrimasVenta/${venta.idVenta}" />
+                                        </c:if>
+                                        <c:set var="urlActual" value="/MantenimientosVenta/${venta.idVenta}" />
+                                        <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
+                                            <c:set var="urlEstados" value="/MantenimientosVenta/${venta.idVenta}" />
+                                        </c:if>
+                                        <c:set var="urlActual" value="/FinanciamientosVenta/${venta.idVenta}" />
+                                        <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
+                                            <c:set var="urlEstados" value="/FinanciamientosVenta/${venta.idVenta}" />
+                                        </c:if>
                                         <a class="tab-perfil list-group-item list-group-item-info btn-info text-center ${requestScope['javax.servlet.forward.request_uri'] == urlInformacion ? 'active' : ''}" href="/InformacionVenta/${venta.idVenta}" type="button">
                                             Información
                                         </a>
@@ -61,6 +78,9 @@
                                         </a>
                                         <a class="tab-perfil list-group-item list-group-item-info text-center btn-info ${requestScope['javax.servlet.forward.request_uri'] == urlFacturacion ? 'active' : ''}" href="/FacturacionVenta/${venta.idVenta}" type="button">
                                             Facturación
+                                        </a>
+                                        <a class="tab-perfil list-group-item list-group-item-info text-center btn-info ${requestScope['javax.servlet.forward.request_uri'] == urlEstados ? 'active' : ''}" href="/PagosVenta/${venta.idVenta}" type="button">
+                                            Informes
                                         </a>
                                     </div>
                                 </div>
