@@ -265,27 +265,29 @@ $(document).ready(function() {
         "El valor en 'Otros' debe ser menor o igual que el valor en 'Monto'"
     );
     $.validator.addMethod(
-        "montoMenorIgualCalculado",
+        "descuentoMenorCalculado",
         function(value, element, params) {
-            var deferred = $.Deferred();
+            var descuentoIngresado = parseFloat(value) || 0;
+            var descuentoCalculado = 0;
+            var isValid = false;
             $.ajax({
-                url: '/obtenerValorCalculado',
+                url: '/ObtenerDescuento/' + $("#venta").val() + '?monto=' + $("#monto").val() + '&otros=' + $("#otros").val() + '&fecha=' + $("#fecha").val(),
                 method: 'GET',
                 dataType: 'json',
+                async: false,
                 success: function(response) {
-                    var valorCalculado = parseFloat(response.valorCalculado) || 0;
-                    deferred.resolve({ valorCalculado: valorCalculado });
+                    descuentoCalculado = parseFloat(response.descuentoCalculado) || 0;
+                    isValid = descuentoIngresado <= descuentoCalculado;
                 },
                 error: function() {
-                    deferred.resolve({ valorCalculado: 0 });
+                    isValid = descuentoIngresado == 0;
                 }
             });
-            return deferred.promise();
+            $.validator.messages.descuentoMenorCalculado = "El valor en 'Descuento' debe ser menor o igual a " + descuentoCalculado;
+            return isValid;
         },
-        function(params, element) {
-            return "El valor en 'Monto' debe ser igual o menor que " + params.valorCalculado;
-        }
-    );
+        ""
+    );        
     var formGuardar = $('#formGuardar');
     var validator = $('#formGuardar').validate({
         rules: {
@@ -314,6 +316,7 @@ $(document).ready(function() {
             },
             descuento: {
                 validarMonto: true,
+                descuentoMenorCalculado: true,
                 maxlength: 10
             },
             otros: {

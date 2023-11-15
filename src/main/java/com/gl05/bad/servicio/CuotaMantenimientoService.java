@@ -22,6 +22,8 @@ public interface CuotaMantenimientoService {
 
     public CuotaMantenimiento encontrarUltimaCuota(Venta venta);
 
+    public CuotaMantenimiento encontrarPenultimaCuota(Venta venta);
+
     public List<CuotaMantenimiento> encontrarPago(Pago pago);
     
     public void actualizar(CuotaMantenimiento cuotaMantenimiento);

@@ -46,10 +46,10 @@
     <class>com.gl05.bad.domain.Visitante</class>
     <exclude-unlisted-classes>false</exclude-unlisted-classes>
     <properties>
-      <property name="javax.persistence.jdbc.url" value="jdbc:oracle:thin:@localhost:1521:XE"/>
-      <property name="javax.persistence.jdbc.user" value="C##decatur"/>
-      <property name="javax.persistence.jdbc.driver" value="oracle.jdbc.OracleDriver"/>
-      <property name="javax.persistence.jdbc.password" value="admin"/>
+      <property name="javax.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/sistema-decatur"/>
+      <property name="javax.persistence.jdbc.user" value="decatur"/>
+      <property name="javax.persistence.jdbc.driver" value="org.postgresql.Driver"/>
+      <property name="javax.persistence.jdbc.password" value="admin755"/>
     </properties>
   </persistence-unit>
 </persistence>
