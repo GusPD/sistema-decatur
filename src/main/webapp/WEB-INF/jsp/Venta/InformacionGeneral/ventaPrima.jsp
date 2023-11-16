@@ -1,6 +1,6 @@
 <%@ include file="../venta-header.jspf"%>
 <div class="row">
-    <div class="col-12">
+    <div class="col-12 pb-3">
         <div class="card">
             <input type="hidden" id="idVenta" value="${venta.getIdVenta()}">
             <!-- Menú de los estados de cuenta -->
@@ -39,7 +39,7 @@
             </div>
             <!-- Datos -->
             <div class="card-body">
-                <div id="table_wrapper" class="dataTables_wrapper dt-bootstrap4 mb-5">
+                <div id="table_wrapper" class="dataTables_wrapper dt-bootstrap4">
                     <div class="col-sm-12 table-responsive pt-1" style="height: 48vh; padding:4px;">
                         <table id="primaTable" class="table table-bordered table-striped dataTable dtr-inline mt-1"></table>
                     </div>

@@ -6,7 +6,7 @@ $(document).ready(function() {
             url: '/mantenimientoVenta/data/' + idVenta,
             dataSrc: 'data'
         },
-        order: [[1, 'desc'],[4, 'desc']],
+        order: [[1, 'asc'],[4, 'asc']],
         processing: true,
         serverSide: true,
         dom: "<'row w-100'<'col-sm-12 mb-4'B>>" +
@@ -87,9 +87,9 @@ $(document).ready(function() {
                 width: '9.3%',
                 render: function (data, type, row) {
                     var claseCSS = '';
-                    if(row.estado === false){
+                    if(row.pago.estado === false){
                         claseCSS = 'badge bg-danger';
-                    }else if(row.comprobante=="Factura"){
+                    }else if(row.pago.comprobante=="Factura"){
                         claseCSS = 'badge bg-azul';
                     }else{
                         claseCSS = 'badge bg-verde';

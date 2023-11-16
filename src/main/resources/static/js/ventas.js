@@ -315,6 +315,7 @@ $(document).ready(function() {
         var form = modal.find('form');
         validator.resetForm();
         formGuardar.find('.is-invalid').removeClass('is-invalid');
+        var habilitarEdicion = false;
         if (idVenta) {
             tituloModal.text('Editar Venta');
             $.ajax({
@@ -346,6 +347,38 @@ $(document).ready(function() {
             $('.form-control').val('');
             $('#descuento').val('0.00');
         }
+        //Habilitar la edición solo si esta disponible en la venta
+        $.ajax({
+            url: '/HabilitarActualizarVenta/' + idVenta,
+            type: 'GET',
+            success: function (response) {
+                habilitarEdicion = response.habilitarEdicion;
+                if(habilitarEdicion){
+                    $('#nombre').prop('disabled', false);
+                    $('#fecha').prop('disabled', false);
+                    $('#precio').prop('disabled', false);
+                    $('#monto').prop('disabled', true);
+                    $('#descuento').prop('disabled', false);
+                    $('#idListDocumento').prop('disabled', false);
+                    $('#estado').prop('disabled', false);
+                    $('#terreno').prop('disabled', false);
+                    $('#idVenta').prop('disabled', false);
+                }else{
+                    $('#nombre').prop('disabled', true);
+                    $('#fecha').prop('disabled', true);
+                    $('#precio').prop('disabled', true);
+                    $('#monto').prop('disabled', true);
+                    $('#descuento').prop('disabled', true);
+                    $('#idListDocumento').prop('disabled', true);
+                    $('#estado').prop('disabled', true);
+                    $('#terreno').prop('disabled', true);
+                    $('#idVenta').prop('disabled', true);
+                }
+            },
+            error: function () {
+                alert('Error al obtener el permiso de la edición.');
+            }
+        });
         modal.modal('show');
     });
     //Método para mostrar el modal de eliminación

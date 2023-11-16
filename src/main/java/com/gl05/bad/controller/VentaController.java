@@ -1,5 +1,7 @@
 package com.gl05.bad.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.gl05.bad.domain.AsignacionPropietario;
 import com.gl05.bad.domain.AsignacionVisitante;
 import com.gl05.bad.domain.CuotaMantenimiento;
@@ -253,6 +255,7 @@ public class VentaController {
     @PostMapping("/EliminarMantenimientoVenta/{idAsignacion}")
     public ResponseEntity<String> EliminarMantenimientoVenta(InformacionMantenimiento mantenimiento) {
         try {
+            cuotaMantenimientoService.eliminarInformacion(mantenimiento);
             mantenimientoService.eliminar(mantenimiento);
             String mensaje = "Se ha eliminado la información del mantenimiento de la venta correctamente.";
             bitacoraService.registrarAccion("Eliminar información del mantenimiento de la venta");
@@ -870,5 +873,22 @@ public class VentaController {
             String error = "Ha ocurrido un error al actualizar la venta.";
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
+    }
+
+    //Función para obtener el descuento disponible del pago
+    @GetMapping("/HabilitarActualizarVenta/{id}")
+    public ResponseEntity<ObjectNode> HabilitarActualizarVenta(@PathVariable Long id){
+        Venta venta = ventaService.encontrar(id);
+        List<InformacionFinanciamiento> listaFinanciamiento = financiamientoService.encontrarVenta(venta);
+        List<InformacionMantenimiento> listaMantenimiento = mantenimientoService.encontrarVenta(venta);
+        Boolean habilitarEdicion = false;
+        if(listaFinanciamiento.isEmpty() && listaMantenimiento.isEmpty()){
+            habilitarEdicion = true;
+        }
+        // Crear un objeto JSON para devolver al cliente
+        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectNode responseJson = objectMapper.createObjectNode();
+        responseJson.put("habilitarEdicion", habilitarEdicion);
+        return ResponseEntity.ok(responseJson);
     }
 }

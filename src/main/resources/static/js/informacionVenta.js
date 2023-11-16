@@ -66,6 +66,26 @@ document.addEventListener('DOMContentLoaded', function() {
                 const cuota = (va * tasa) / (1 - Math.pow(1 + tasa, -nper));
                 return cuota;
             }
+            //Función para seleccionar la fecha de aplicación para los mantenimientos
+            $('#fechaAplicacionM').change(function () {
+                var valorFecha = $(this).val();
+                if (valorFecha) {
+                    var fecha = new Date(valorFecha);
+                    fecha.setDate(0);
+                    var nuevoValorFecha = fecha.toISOString().slice(0, 10);
+                    $(this).val(nuevoValorFecha);
+                }
+            });
+            //Función para seleccionar la fecha de aplicación para los financiamientos
+            $('#fechaAplicacionF').change(function () {
+                var valorFecha = $(this).val();
+                if (valorFecha) {
+                    var fecha = new Date(valorFecha);
+                    fecha.setDate(0);
+                    var nuevoValorFecha = fecha.toISOString().slice(0, 10);
+                    $(this).val(nuevoValorFecha);
+                }
+            });
         }
         //Formulario de editar
         $.validator.addMethod(
@@ -136,18 +156,22 @@ document.addEventListener('DOMContentLoaded', function() {
             function(value, element) {
                 var fechaIngresada = new Date(value);
                 var fechaFinanciamiento = new Date($("#fechaAplicacionFinanciamiento").val());
-                return fechaIngresada >= fechaFinanciamiento;
+                var mesIngresada = fechaIngresada.getMonth();
+                var mesFinanciamiento = fechaFinanciamiento.getMonth();
+                return fechaIngresada >= fechaFinanciamiento || (fechaIngresada.getFullYear() > fechaFinanciamiento.getFullYear() && mesIngresada >= mesFinanciamiento);
             }, 
-            "La fecha debe ser mayor que la fecha anterior."
+            "La fecha debe ser mayor al mes de la fecha de aplicación anterior."
         );
         $.validator.addMethod(
             "fechaMayorMantenimiento", 
             function(value, element) {
                 var fechaIngresada = new Date(value);
                 var fechaMantenimiento = new Date($("#fechaAplicacionMantenimiento").val());
-                return fechaIngresada >= fechaMantenimiento;
+                var mesIngresada = fechaIngresada.getMonth();
+                var mesMantenimiento = fechaMantenimiento.getMonth();
+                return fechaIngresada >= fechaMantenimiento || (fechaIngresada.getFullYear() > fechaMantenimiento.getFullYear() && mesIngresada >= mesMantenimiento);
             }, 
-            "La fecha debe ser mayor que la fecha anterior."
+            "La fecha debe ser mayor al mes de la fecha aplicación anterior."
         );
         var formGuardar = $('#formGuardar');
         var validator = $('#formGuardar').validate({

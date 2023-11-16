@@ -1,6 +1,7 @@
 package com.gl05.bad.dao;
 
 import com.gl05.bad.domain.CuotaMantenimiento;
+import com.gl05.bad.domain.InformacionMantenimiento;
 import com.gl05.bad.domain.Pago;
 import com.gl05.bad.domain.Venta;
 
@@ -12,5 +13,7 @@ import org.springframework.data.jpa.repository.Query;
 public interface CuotaMantenimientoDao extends DataTablesRepository<CuotaMantenimiento, Long> {
     @Query("SELECT c FROM CuotaMantenimiento c WHERE c.pago = :pago ORDER BY c.fechaRegistro ASC")
     List<CuotaMantenimiento> findByPago(Pago pago);
+    List<CuotaMantenimiento> findByInformacion(InformacionMantenimiento informacion);
     void deleteByPagoVentaAndFechaRegistroGreaterThanEqual(Venta venta, LocalDateTime fechaRegistro);
+    void deleteByPago(Pago pago);
 }

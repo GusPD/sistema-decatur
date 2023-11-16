@@ -1,6 +1,6 @@
 <%@ include file="../venta-header.jspf"%>
 <div class="row">
-    <div class="col-12 pb-3">
+    <div class="col-12">
         <div class="card">
             <div class="card-header">
                 <!-- Subtitulo de la página -->
@@ -11,7 +11,7 @@
             <!-- Datos -->
             <div class="card-body pb-0">
                 <div id="table_wrapper" class="dataTables_wrapper dt-bootstrap4">
-                    <div class="col-sm-12 d-flex aling-items-center justify-content-center pt-1 page-scroll" style="height: 55vh; padding:4px;">
+                    <div class="col-sm-12 d-flex aling-items-center justify-content-center pt-1 page-scroll" style="height: 57.5vh; padding:4px;">
                         <div class="row col-md-12 pb-3 h-100">
                             <!-- Columna izquierda -->
                             <div class="col-md-6 border p-3 rounded">
