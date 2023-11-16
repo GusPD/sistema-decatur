@@ -6,10 +6,10 @@
             <!-- Menú de los estados de cuenta -->
             <ul class="nav nav-tabs">
                 <li class="nav-item">
-                    <a class="nav-link text-dark active" aria-current="page" href="/PagosVenta/${venta.idVenta}">Pagos</a>
+                    <a class="nav-link text-dark" aria-current="page" href="/PagosVenta/${venta.idVenta}">Pagos</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-dark" aria-current="page" href="/PrimaVenta/${venta.idVenta}">Prima</a>
+                    <a class="nav-link text-dark active" aria-current="page" href="/PrimaVenta/${venta.idVenta}">Prima</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-dark" aria-current="page" href="/MantenimientoVenta/${venta.idVenta}">Matenimiento</a>
@@ -24,7 +24,7 @@
                     <h3 class="mt-0 mb-0">
                         <div class="d-flex">
                             <div class="col-sm-6">
-                                Pagos
+                                Prima
                             </div>
                             <div class="col-sm-6 d-flex justify-content-end">
                                 <sec:authorize access="hasAuthority('EXPORTAR_PAGO_PRIVILAGE')">
@@ -41,7 +41,7 @@
             <div class="card-body">
                 <div id="table_wrapper" class="dataTables_wrapper dt-bootstrap4 mb-5">
                     <div class="col-sm-12 table-responsive pt-1" style="height: 48vh; padding:4px;">
-                        <table id="pagoTable" class="table table-bordered table-striped dataTable dtr-inline mt-1"></table>
+                        <table id="primaTable" class="table table-bordered table-striped dataTable dtr-inline mt-1"></table>
                     </div>
                 </div>
             </div>
@@ -55,7 +55,7 @@
 
 <%@ include file="../venta-footer.jspf"%>
 
-<script src="${pageContext.request.contextPath}/js/pagosVenta.js"></script>
+<script src="${pageContext.request.contextPath}/js/primaVenta.js"></script>
 
 
       

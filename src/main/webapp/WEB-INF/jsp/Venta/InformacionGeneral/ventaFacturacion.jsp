@@ -123,7 +123,7 @@
                                     </c:forEach>
                                 </c:if>
                             </select>
-                            <div id="span-propietarios-error" class="mensaje-error d-none" style=""><span>Este campo es requerido</span></div>
+                            <div id="span-propietarios-error" class="mensaje-error d-none"><span>Este campo es requerido</span></div>
                         </div>
                         <div class="form-group">
                             <label for="estadoS" class="form-label">Impresión Comprobante:<strong class="text-danger"> *</strong></label>

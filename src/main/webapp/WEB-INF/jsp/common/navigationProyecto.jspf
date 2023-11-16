@@ -129,6 +129,22 @@
                     <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
                         <c:set var="urlTerreno" value="/FacturacionVenta/${venta.idVenta}" />
                     </c:if>
+                    <c:set var="urlActual" value="/PagosVenta/${venta.idVenta}" />
+                    <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
+                        <c:set var="urlTerreno" value="/PagosVenta/${venta.idVenta}" />
+                    </c:if>
+                    <c:set var="urlActual" value="/PrimaVenta/${venta.idVenta}" />
+                    <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
+                        <c:set var="urlTerreno" value="/PrimaVenta/${venta.idVenta}" />
+                    </c:if>
+                    <c:set var="urlActual" value="/MantenimientoVenta/${venta.idVenta}" />
+                    <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
+                        <c:set var="urlTerreno" value="/MantenimientoVenta/${venta.idVenta}" />
+                    </c:if>
+                    <c:set var="urlActual" value="/FinanciamientoVenta/${venta.idVenta}" />
+                    <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
+                        <c:set var="urlTerreno" value="/FinanciamientoVenta/${venta.idVenta}" />
+                    </c:if>
                     
                     <c:set var="urlPropietario" value="" />
                     <c:set var="urlActual" value="/Propietarios/${proyecto.idProyecto}" />

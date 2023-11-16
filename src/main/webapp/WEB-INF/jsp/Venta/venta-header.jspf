@@ -52,17 +52,17 @@
                                         <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
                                             <c:set var="urlEstados" value="/PagosVenta/${venta.idVenta}" />
                                         </c:if>
-                                        <c:set var="urlActual" value="/PrimasVenta/${venta.idVenta}" />
+                                        <c:set var="urlActual" value="/PrimaVenta/${venta.idVenta}" />
                                         <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
-                                            <c:set var="urlEstados" value="/PrimasVenta/${venta.idVenta}" />
+                                            <c:set var="urlEstados" value="/PrimaVenta/${venta.idVenta}" />
                                         </c:if>
-                                        <c:set var="urlActual" value="/MantenimientosVenta/${venta.idVenta}" />
+                                        <c:set var="urlActual" value="/MantenimientoVenta/${venta.idVenta}" />
                                         <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
-                                            <c:set var="urlEstados" value="/MantenimientosVenta/${venta.idVenta}" />
+                                            <c:set var="urlEstados" value="/MantenimientoVenta/${venta.idVenta}" />
                                         </c:if>
-                                        <c:set var="urlActual" value="/FinanciamientosVenta/${venta.idVenta}" />
+                                        <c:set var="urlActual" value="/FinanciamientoVenta/${venta.idVenta}" />
                                         <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
-                                            <c:set var="urlEstados" value="/FinanciamientosVenta/${venta.idVenta}" />
+                                            <c:set var="urlEstados" value="/FinanciamientoVenta/${venta.idVenta}" />
                                         </c:if>
                                         <a class="tab-perfil list-group-item list-group-item-info btn-info text-center ${requestScope['javax.servlet.forward.request_uri'] == urlInformacion ? 'active' : ''}" href="/InformacionVenta/${venta.idVenta}" type="button">
                                             Información
@@ -91,6 +91,6 @@
                             <div class="row pb-4" >
                                 <div class="col-12 table-responsive page-scroll" style="height: 76vh;">
                                     <div class="card">
-                                        <div class="card-body pb-0">
+                                        <div class="card-body">
                                             <div class="col-sm-12">
                                                

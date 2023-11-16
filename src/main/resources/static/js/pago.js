@@ -26,7 +26,7 @@ $(document).ready(function() {
                 extend: 'copy',
                 text: 'Copiar',
                 exportOptions: {
-                  columns: [0, 1, 2, 3, 4, 5, 6]
+                  columns: [0, 2, 3, 4, 5, 6, 7]
                 }
             },
             {
@@ -35,7 +35,7 @@ $(document).ready(function() {
                 title: 'Pagos del proyecto',
                 filename: 'Pagos ' + getCurrentDateTime(),
                 exportOptions: {
-                  columns: [0, 1, 2, 3, 4, 5, 6]
+                  columns: [0, 2, 3, 4, 5, 6, 7]
                 }
             },
             {
@@ -44,7 +44,7 @@ $(document).ready(function() {
                 title: 'Pagos del proyecto',
                 filename: 'Pagos ' + getCurrentDateTime(),
                 exportOptions: {
-                  columns: [0, 1, 2, 3, 4, 5, 6]
+                  columns: [0, 2, 3, 4, 5, 6, 7]
                 },
                 customize: function (doc) {
                   doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split('');
