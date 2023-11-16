@@ -10,7 +10,7 @@
                     Venta
                 </div>
                 <div class="col-sm-6 d-flex justify-content-end">
-                    <c:if test="${empty financiamientos}">
+                    <c:if test="${empty financiamientos and empty mantenimientos}">
                         <sec:authorize access="hasAuthority('EDITAR_VENTA_PRIVILAGE')">
                             <button title="Editar Venta" id="EditarInformacion" class="btn btn-blue btn-sm" data-bs-toggle="modal" data-bs-target="#crearModal" data-tipo="editar" data-id="${venta.idVenta}" data-modo="actualizar"><i class="far fa-edit"></i></button>
                         </sec:authorize>
@@ -157,7 +157,7 @@
         </h3>
     </div>
     <!-- Datos -->
-    <div class="tarjeta-container d-flex mb-3">
+    <div class="tarjeta-container d-flex">
         <div class="col-md-4 border p-3 rounded">
             <table class="table small table-borderless" id="tabla-informacion-mantenimiento">
                 <tbody>
@@ -372,7 +372,7 @@
             </div>
             <div class="modal-body">
                 <strong>¿Estás seguro de eliminar la información?</strong>
-                <p>Ten en cuenta que se eliminará la información del financiamiento de la venta.</p>
+                <p>Ten en cuenta que se eliminará la información del financiamiento de la venta, y los pagos realizados que se encuentren relacionados a esta.</p>
             </div>
             <div class="modal-footer">
               <button id="eliminarFinanciamientoBtn" class="btn btn-outline-danger btn-sm">Eliminar</button>
@@ -394,7 +394,7 @@
             </div>
             <div class="modal-body">
                 <strong>¿Estás seguro de eliminar la información?</strong>
-                <p>Ten en cuenta que se eliminará la información del mantenimiento de la venta.</p>
+                <p>Ten en cuenta que se eliminará la información del mantenimiento de la venta, y los pagos realizados que se encuentren relacionados a esta.</p>
             </div>
             <div class="modal-footer">
               <button id="eliminarMantenimientoBtn" class="btn btn-outline-danger btn-sm">Eliminar</button>
