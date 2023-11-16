@@ -2,6 +2,7 @@ package com.gl05.bad.controller;
 
 import com.gl05.bad.domain.AsignacionPropietario;
 import com.gl05.bad.domain.AsignacionVisitante;
+import com.gl05.bad.domain.CuotaMantenimiento;
 import com.gl05.bad.domain.Documento;
 import com.gl05.bad.domain.Facturacion;
 import com.gl05.bad.domain.Persona;
@@ -17,6 +18,7 @@ import com.gl05.bad.domain.InformacionMantenimiento;
 import com.gl05.bad.servicio.AsigPropietarioVentaService;
 import com.gl05.bad.servicio.AsignacionVisitanteService;
 import com.gl05.bad.servicio.BitacoraServiceImp;
+import com.gl05.bad.servicio.CuotaMantenimientoService;
 import com.gl05.bad.servicio.DocumentoService;
 import com.gl05.bad.servicio.FacturacionService;
 import com.gl05.bad.servicio.InformacionFinanciamientoService;
@@ -101,6 +103,9 @@ public class VentaController {
     
     @Autowired
     private InformacionMantenimientoService mantenimientoService;
+
+    @Autowired
+    private CuotaMantenimientoService cuotaMantenimientoService;
     
     //Función que redirige a la vista de las ventas del terreno
     @GetMapping("/Ventas/{idTerreno}")
@@ -721,6 +726,69 @@ public class VentaController {
         model.addAttribute("terreno", terrenoEncontrado);
         model.addAttribute("venta", ventaEncontrada);
         return "/Venta/InformacionGeneral/ventaPagos";
+    }
+
+    //Función para obtener las pagos de la venta de la base de datos
+    @GetMapping("/pagosVenta/data/{idVenta}")
+    @ResponseBody
+    public DataTablesOutput<Pago> GetPagosVenta(@Valid DataTablesInput input,  @PathVariable Long idVenta){
+        return pagoService.listarPagosVenta(input, idVenta);
+    }
+
+    //Función que redirige a la vista de la prima de la venta
+    @GetMapping("/PrimaVenta/{idVenta}")
+    public String mostrarPrimasVenta(Model model, Venta venta) {
+        model.addAttribute("pageTitle", "Venta");
+        Venta ventaEncontrada = ventaService.encontrar(venta.getIdVenta());
+        Terreno terrenoEncontrado = ventaEncontrada.getTerreno();
+        Proyecto proyecto = terrenoEncontrado.getProyecto();
+        
+        model.addAttribute("proyecto", proyecto);
+        model.addAttribute("terreno", terrenoEncontrado);
+        model.addAttribute("venta", ventaEncontrada);
+        return "/Venta/InformacionGeneral/ventaPrima";
+    }
+
+    //Función para obtener la prima de la venta de la base de datos
+    @GetMapping("/primaVenta/data/{idVenta}")
+    @ResponseBody
+    public DataTablesOutput<Pago> GetPrimaVenta(@Valid DataTablesInput input,  @PathVariable Long idVenta){
+        return pagoService.listarPrimaVenta(input, idVenta);
+    }
+
+    //Función que redirige a la vista del mantenimiento de la venta
+    @GetMapping("/MantenimientoVenta/{idVenta}")
+    public String mostrarMantenimientoVenta(Model model, Venta venta) {
+        model.addAttribute("pageTitle", "Venta");
+        Venta ventaEncontrada = ventaService.encontrar(venta.getIdVenta());
+        Terreno terrenoEncontrado = ventaEncontrada.getTerreno();
+        Proyecto proyecto = terrenoEncontrado.getProyecto();
+        
+        model.addAttribute("proyecto", proyecto);
+        model.addAttribute("terreno", terrenoEncontrado);
+        model.addAttribute("venta", ventaEncontrada);
+        return "/Venta/InformacionGeneral/ventaMantenimiento";
+    }
+
+    //Función para obtener el mantenimiento de la venta de la base de datos
+    @GetMapping("/mantenimientoVenta/data/{idVenta}")
+    @ResponseBody
+    public DataTablesOutput<CuotaMantenimiento> GetMantenimientoVenta(@Valid DataTablesInput input,  @PathVariable Long idVenta){
+        return cuotaMantenimientoService.listarVenta(input, idVenta);
+    }
+
+    //Función que redirige a la vista del financiamiento de la venta
+    @GetMapping("/FinanciamientoVenta/{idVenta}")
+    public String mostrarFinanciamientoVenta(Model model, Venta venta) {
+        model.addAttribute("pageTitle", "Venta");
+        Venta ventaEncontrada = ventaService.encontrar(venta.getIdVenta());
+        Terreno terrenoEncontrado = ventaEncontrada.getTerreno();
+        Proyecto proyecto = terrenoEncontrado.getProyecto();
+        
+        model.addAttribute("proyecto", proyecto);
+        model.addAttribute("terreno", terrenoEncontrado);
+        model.addAttribute("venta", ventaEncontrada);
+        return "/Venta/InformacionGeneral/ventaFinanciamiento";
     }
 
     //Función que agrega un venta a la base de datos

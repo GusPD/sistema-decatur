@@ -273,6 +273,7 @@ $(document).ready(function() {
             var estado = $('#estado').val();
             var idTerreno = $('#idTerreno').val();
             var descuento = $('#descuento').val();
+            var idListDocumento = $('#idListDocumento').val();
             var formDataArray = formGuardar.serializeArray();
             formDataArray = formDataArray.filter(item => item.name !== 'fecha');
             formDataArray = formDataArray.filter(item => item.name !== 'descuento');
@@ -282,7 +283,7 @@ $(document).ready(function() {
             }
             if (idVenta) {
                 url = '/ActualizarVenta/'+idTerreno;
-                formDataArray.push({name: 'idVenta', value: idVenta},{name: 'estado', value: estado},{name: 'fecha', value: formattedDate},{name: 'descuento', value: descuento});
+                formDataArray.push({name: 'idVenta', value: idVenta},{name: 'estado', value: estado},{name: 'fecha', value: formattedDate},{name: 'descuento', value: descuento}, {name: 'idListDocumento', value: idListDocumento});
             } else {
                 url = '/AgregarVenta/'+idTerreno;
                 formDataArray.push({name: 'estado', value: estado},{name: 'fecha', value: formattedDate},{name: 'descuento', value: descuento});

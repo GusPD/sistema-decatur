@@ -65,6 +65,7 @@
                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                             <input type="hidden" id="idVenta">
                             <input type="hidden" id="idTerreno" value="${terreno.getIdTerreno()}">
+                            <input type="hidden" id="idListDocumento">
                             <input type="hidden" id="estado" value="Activo">
                             <div class="form-group">
                                 <label for="nombre" class="form-label">Nombre:<strong class="text-danger"> *</strong></label>

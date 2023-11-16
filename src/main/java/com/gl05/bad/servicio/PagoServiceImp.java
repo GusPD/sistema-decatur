@@ -114,4 +114,27 @@ public class PagoServiceImp implements PagoService{
         };
         return pagoDao.findAll(input, specification);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public DataTablesOutput<Pago> listarPagosVenta(DataTablesInput input, Long idVenta) {
+        Specification<Pago> specification = (root, query, builder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            predicates.add(builder.equal(root.get("venta").get("idVenta"), idVenta));
+            return builder.and(predicates.toArray(new Predicate[0]));
+        };
+        return pagoDao.findAll(input, specification);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public DataTablesOutput<Pago> listarPrimaVenta(DataTablesInput input, Long idVenta) {
+        Specification<Pago> specification = (root, query, builder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            predicates.add(builder.equal(root.get("venta").get("idVenta"), idVenta));
+            predicates.add(builder.equal(root.get("tipo"), "Prima"));
+            return builder.and(predicates.toArray(new Predicate[0]));
+        };
+        return pagoDao.findAll(input, specification);
+    }
 }
