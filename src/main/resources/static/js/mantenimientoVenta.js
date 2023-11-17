@@ -20,7 +20,7 @@ $(document).ready(function() {
                 extend: 'copy',
                 text: 'Copiar',
                 exportOptions: {
-                  columns: [0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+                  columns: [0, 2, 3, 4, 5, 6, 7, 8, 9, 10]
                 }
             },
             {
@@ -29,7 +29,7 @@ $(document).ready(function() {
                 title: 'Mantenimiento de la venta',
                 filename: 'Mantenimiento ' + getCurrentDateTime(),
                 exportOptions: {
-                  columns: [0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+                  columns: [0, 2, 3, 4, 5, 6, 7, 8, 9, 10]
                 }
             },
             {
@@ -38,7 +38,7 @@ $(document).ready(function() {
                 title: 'Mantenimiento de la venta',
                 filename: 'Mantenimiento ' + getCurrentDateTime(),
                 exportOptions: {
-                  columns: [0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+                  columns: [0, 2, 3, 4, 5, 6, 7, 8, 9, 10]
                 },
                 customize: function (doc) {
                   doc.pageOrientation = 'landscape';
@@ -65,7 +65,7 @@ $(document).ready(function() {
             },
             {
                 data: 'pago.fecha', 
-                width: '9.3%', 
+                width: '10.3%', 
                 title: 'Fecha Pago',
                 searchable: false,
                 render: function(data, type, row) {
@@ -84,7 +84,7 @@ $(document).ready(function() {
             {
                 data: 'pago.recibo',
                 title: 'Recibo',
-                width: '9.3%',
+                width: '10.3%',
                 render: function (data, type, row) {
                     var claseCSS = '';
                     if(row.pago.estado === false){
@@ -100,7 +100,7 @@ $(document).ready(function() {
             {
                 data: 'fechaCuota', 
                 title: 'Fecha Cuota',
-                width: '9.3%',
+                width: '10.3%',
                 searchable: false,
                 render: function(data, type, row) {
                     if (type === 'display' || type === 'filter') {
@@ -118,7 +118,7 @@ $(document).ready(function() {
             {
                 data: 'cuota',
                 title: 'Cuota',
-                width: '9.3%',
+                width: '10.3%',
                 sortable: false,
                 searchable: false,
                 render: function (data, type, row) {
@@ -131,7 +131,7 @@ $(document).ready(function() {
             {
                 data: 'recargo',
                 title: 'Recargo',
-                width: '9.3%',
+                width: '10.3%',
                 sortable: false,
                 searchable: false,
                 render: function (data, type, row) {
@@ -144,7 +144,7 @@ $(document).ready(function() {
             {
                 data: 'descuento',
                 title: 'Descuento',
-                width: '9.3%',
+                width: '10.3%',
                 sortable: false,
                 searchable: false,
                 render: function (data, type, row) {
@@ -155,22 +155,9 @@ $(document).ready(function() {
                 }
             },
             {
-                data: null,
-                title: 'Saldo',
-                width: '9.3%',
-                sortable: false,
-                searchable: false,
-                render: function (data, type, row) {
-                  if (type === 'display' || type === 'filter') {
-                    return '$' + parseFloat(row.saldoCuota+row.saldoRecargo).toFixed(2);
-                  }
-                  return data;
-                }
-            },
-            {
                 data: 'otros',
                 title: 'Otros',
-                width: '9.3%',
+                width: '10.3%',
                 sortable: false,
                 searchable: false,
                 render: function (data, type, row) {
@@ -183,7 +170,7 @@ $(document).ready(function() {
             {
                 data: null,
                 title: 'Abono',
-                width: '9.3%',
+                width: '10.3%',
                 sortable: false,
                 searchable: false,
                 render: function (data, type, row) {
@@ -196,7 +183,7 @@ $(document).ready(function() {
             {
                 data: null,
                 title: 'Pendiente',
-                width: '9.3%',
+                width: '10.3%',
                 sortable: false,
                 searchable: false,
                 render: function (data, type, row) {

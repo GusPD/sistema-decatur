@@ -467,20 +467,17 @@ public class PagoController {
             //Control del cobro del recargo para el abono para las cuotas con mora o sin mora
             boolean cobroRecargo = true;
             //Registro de las cuotas
-            if(monto >= (informacionCuota.getCuota()+informacionCuota.getMulta())){
+            if(monto >= informacionCuota.getCuota()){
                 while (monto >= informacionCuota.getCuota()){
                     informacionCuota = InformacionCuotaMantenimiento(venta, fechaCorte);
                     CuotaMantenimiento cuota = new CuotaMantenimiento();
                     cuota.setFechaRegistro(LocalDateTime.now());
                     cuota.setFechaCuota(fechaCorte);
-                    cuota.setCuota(informacionCuota.getCuota());
-                    cuota.setSaldoCuota(0.0);
                     if(fechaCorte.after(fechaPago) || fechaCorte.equals(fechaPago)){
                         cuota.setRecargo(0.0);
                         cuota.setDescuento(0.0);
                         cuota.setSaldoRecargo(0.0);
                         cobroRecargo = false;
-                        monto-=informacionCuota.getCuota();
                     }else{
                         cuota.setRecargo(informacionCuota.getMulta());
                         //Aplicación del descuento a la cuota
@@ -493,7 +490,16 @@ public class PagoController {
                         }
                         cuota.setSaldoRecargo(0.0);
                         cobroRecargo = true;
-                        monto-=(informacionCuota.getCuota()+informacionCuota.getMulta());
+                        monto-=informacionCuota.getMulta();
+                    }
+                    if(monto>informacionCuota.getCuota()){
+                        cuota.setCuota(informacionCuota.getCuota());
+                        cuota.setSaldoCuota(0.0);
+                        monto-=informacionCuota.getCuota();
+                    }else{
+                        cuota.setCuota(monto);
+                        cuota.setSaldoCuota(informacionCuota.getCuota()-monto);
+                        monto-=monto;
                     }
                     cuota.setPago(pago);
                     cuota.setInformacion(informacionCuota);

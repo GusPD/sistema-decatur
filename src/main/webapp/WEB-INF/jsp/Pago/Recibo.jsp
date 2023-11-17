@@ -80,12 +80,10 @@
                                         <thead>
                                             <tr>
                                                 <th>N°</th>
+                                                <th>Fecha Cuota</th>
                                                 <th>Cuota</th>
-                                                <th>Mantenimiento</th>
-                                                <th>Saldo Mantenimiento</th>
                                                 <th>Recargo</th>
                                                 <th>Descuento</th>
-                                                <th>Saldo Recargo</th>
                                                 <th>Otros</th>
                                                 <th>Abonado</th>
                                                 <th>Pendiente</th>
@@ -97,10 +95,8 @@
                                                     <td>${numero.index+1}</td>
                                                     <td style="text-transform:capitalize;"><fmt:formatDate value="${eCuota.fechaCuota}" pattern="MMMM/yyyy" /></td>
                                                     <td>$ <c:out value="${String.format('%.2f', eCuota.cuota)}"/></td>
-                                                    <td>$ <c:out value="${String.format('%.2f', eCuota.saldoCuota)}"/></td>
                                                     <td>$ <c:out value="${String.format('%.2f', eCuota.recargo)}"/></td>
                                                     <td>$ <c:out value="${String.format('%.2f', eCuota.descuento)}"/></td>
-                                                    <td>$ <c:out value="${String.format('%.2f', eCuota.saldoRecargo)}"/></td>
                                                     <td>$ <c:out value="${String.format('%.2f', eCuota.otros)}"/></td>
                                                     <td>$ <c:out value="${String.format('%.2f', eCuota.cuota + eCuota.recargo - eCuota.descuento + eCuota.otros)}"/></td>
                                                     <td>$ <c:out value="${String.format('%.2f', eCuota.saldoCuota + eCuota.saldoRecargo)}"/></td>
