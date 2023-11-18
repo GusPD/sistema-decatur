@@ -48,6 +48,9 @@ public class ProyectoController {
         var empresas = empresaService.listaEmpresas();
         Proyecto proyecto=new Proyecto();
         proyecto.setIdProyecto(0L);
+        String username = authentication.getName();
+        Usuario usuario = userService.encontrarUsername(username);
+        model.addAttribute("usuario", usuario);
         model.addAttribute("empresas", empresas);
         model.addAttribute("proyecto", proyecto);
         return "Proyecto/GestionarProyecto";

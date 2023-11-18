@@ -8,6 +8,7 @@ import com.gl05.bad.domain.Empresa;
 import com.gl05.bad.domain.InformacionMantenimiento;
 import com.gl05.bad.domain.Pago;
 import com.gl05.bad.domain.Proyecto;
+import com.gl05.bad.domain.Usuario;
 import com.gl05.bad.domain.Venta;
 import com.gl05.bad.servicio.BitacoraServiceImp;
 import com.gl05.bad.servicio.CuentaBancariaService;
@@ -16,6 +17,7 @@ import com.gl05.bad.servicio.EmpresaService;
 import com.gl05.bad.servicio.InformacionMantenimientoService;
 import com.gl05.bad.servicio.PagoService;
 import com.gl05.bad.servicio.ProyectoService;
+import com.gl05.bad.servicio.UserServiceImp;
 import com.gl05.bad.servicio.VentaService;
 
 import java.text.ParseException;
@@ -33,6 +35,7 @@ import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -68,15 +71,21 @@ public class PagoController {
     
     @Autowired
     private VentaService ventaService;
+
+    @Autowired
+    private UserServiceImp usuarioService;
     
     //Función para redigir a la vista de pagos del proyecto
     @GetMapping("/Pagos/{idProyecto}")
-    public String mostrarProyecto(Model model, @PathVariable("idProyecto") Long idProyecto) {
+    public String mostrarProyecto(Model model, @PathVariable("idProyecto") Long idProyecto, Authentication authentication) {
         model.addAttribute("pageTitle", "Pagos");
         Proyecto newProyecto = proyectoService.encontrar(idProyecto);
         Empresa newEmpresa = empresaService.encontrar(newProyecto.getEmpresa().getIdEmpresa());
         List<CuentaBancaria> cuentas = cuentaService.encontrarEmpresa(newEmpresa);
         List<Venta> ventas = ventaService.encontrarActivas(newProyecto);
+        String username = authentication.getName();
+        Usuario usuario = usuarioService.encontrarUsername(username);
+        model.addAttribute("usuario", usuario);
         model.addAttribute("ventas", ventas);
         model.addAttribute("cuentas", cuentas);
         model.addAttribute("proyecto", newProyecto);
@@ -276,31 +285,47 @@ public class PagoController {
     //Función para obtener el descuento disponible del pago
     @GetMapping("/ObtenerDescuento/{id}")
     public ResponseEntity<ObjectNode> ObtenerDescuentoPago(@PathVariable Long id, @RequestParam double monto, @RequestParam double otros, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date fecha) throws ParseException {
-        Date fechaActual = new Date();
         Venta venta = ventaService.encontrar(id);
-        InformacionMantenimiento informacionCuota = InformacionCuotaMantenimiento(venta, fechaActual);
         CuotaMantenimiento ultimaCuota = cuotaMantenimientoService.encontrarUltimaCuota(venta);
+        InformacionMantenimiento informacionCuota = InformacionCuotaMantenimiento(venta, ultimaCuota.getFechaCuota());
         Date fechaPago = fecha;
         Date fechaCorte = ultimaCuota.getFechaCuota();
         double descuentoCalculado = 0;
-        double montoMora = 0;
-        //Validar si se encuentra en mora
-        if(fechaPago.after(fechaCorte)){
-            //Cálculo de las cantidad de meses en mora
-            int cantidadCuotasMora = CantidadMeses(fechaCorte, fechaPago);
-            Date fechaCorteEvaluacion = SiguienteMes(fechaCorte, venta, cantidadCuotasMora);
-            if(fechaCorteEvaluacion.after(fechaPago) || fechaCorteEvaluacion.equals(fechaPago)){
-                cantidadCuotasMora--;
-            }
-            if(monto>(ultimaCuota.getSaldoCuota() - ultimaCuota.getSaldoRecargo())){
-                monto = monto - otros - ultimaCuota.getSaldoCuota() - ultimaCuota.getSaldoRecargo();
-                montoMora = cantidadCuotasMora * (informacionCuota.getCuota()+informacionCuota.getMulta());
-                if(monto <= montoMora){
-                    montoMora = monto;
-                    cantidadCuotasMora = (int) Math.ceil(montoMora / (informacionCuota.getCuota()+informacionCuota.getMulta()));
+        monto = monto - otros - ultimaCuota.getSaldoCuota() - ultimaCuota.getSaldoRecargo();
+        //Se utiliza la misma logica para registrar la cuota de mantenimiento
+        //Control del cobro del recargo para el abono para las cuotas con mora o sin mora
+        boolean cobroRecargo = true;
+        //Registro de las cuotas
+        if(monto >= informacionCuota.getCuota()){
+            while (monto >= informacionCuota.getCuota()){
+                informacionCuota = InformacionCuotaMantenimiento(venta, fechaCorte);
+                if(fechaCorte.after(fechaPago) || fechaCorte.equals(fechaPago)){
+                    descuentoCalculado +=0;
+                    cobroRecargo = false;
+                }else{
+                    descuentoCalculado+=informacionCuota.getMulta();
+                    cobroRecargo = true;
+                    monto-=informacionCuota.getMulta();
                 }
-                //Cálculo del descuento que se le puede aplicar según el abono.
-                descuentoCalculado = cantidadCuotasMora * informacionCuota.getMulta();
+                if(monto>informacionCuota.getCuota()){
+                    monto-=informacionCuota.getCuota();
+                }else{
+                    monto-=monto;
+                }
+                fechaCorte = SiguienteMes(fechaCorte, venta, 1);
+            }
+        }
+        //Registro de abono a cuota en caso de que exista
+        if(monto>0){
+            informacionCuota = InformacionCuotaMantenimiento(venta, fechaCorte);
+            if(cobroRecargo){
+                if(monto>=informacionCuota.getMulta()){
+                    descuentoCalculado+=informacionCuota.getMulta();
+                    monto-=informacionCuota.getMulta();
+                }else{
+                    descuentoCalculado+=monto;
+                    monto-=monto;
+                }
             }
         }
         // Crear un objeto JSON para devolver al cliente
@@ -340,7 +365,6 @@ public class PagoController {
             cuotaOtros.setSaldoRecargo(0.0);
             cuotaOtros.setOtros(montoOtros);
             cuotaOtros.setPago(pago);
-            cuotaOtros.setInformacion(informacionCuota);
             cuotaMantenimientoService.agregar(cuotaOtros);
             montoOtros-=montoOtros;
         }
@@ -357,7 +381,6 @@ public class PagoController {
                 cuota.setDescuento(0.0);
                 cuota.setSaldoRecargo(0.0);
                 cuota.setPago(pago);
-                cuota.setInformacion(informacionCuota);
                 cuotaMantenimientoService.agregar(cuota);
                 monto-=(ultimaCuota.getSaldoCuota()+ultimaCuota.getSaldoRecargo());
             }else{
@@ -376,7 +399,6 @@ public class PagoController {
                         cuota.setCuota(valorCuota);
                         cuota.setSaldoCuota(saldoCuota);
                         cuota.setPago(pago);
-                        cuota.setInformacion(informacionCuota);
                         cuotaMantenimientoService.agregar(cuota);
                         monto-=monto;
                     }else{//Cobro solo del recargo
@@ -389,7 +411,6 @@ public class PagoController {
                         cuota.setCuota(0.0);
                         cuota.setSaldoCuota(ultimaCuota.getSaldoCuota());
                         cuota.setPago(pago);
-                        cuota.setInformacion(informacionCuota);
                         cuotaMantenimientoService.agregar(cuota);
                         monto-=monto;
                     }
@@ -406,7 +427,6 @@ public class PagoController {
                         cuota.setCuota(monto);
                         cuota.setSaldoCuota(0.0);
                         cuota.setPago(pago);
-                        cuota.setInformacion(informacionCuota);
                         cuotaMantenimientoService.agregar(cuota);
                         monto-=monto;
                     }else{//Cobro solo de abono a la cuota
@@ -419,7 +439,6 @@ public class PagoController {
                         cuota.setCuota(monto);
                         cuota.setSaldoCuota(ultimaCuota.getSaldoCuota()-monto);
                         cuota.setPago(pago);
-                        cuota.setInformacion(informacionCuota);
                         cuotaMantenimientoService.agregar(cuota);
                         monto-=monto;
                     }
@@ -441,7 +460,6 @@ public class PagoController {
                     cuota.setDescuento(0.0);
                     cuota.setSaldoRecargo(0.0);
                     cuota.setPago(pago);
-                    cuota.setInformacion(informacionCuota);
                     cuotaMantenimientoService.agregar(cuota);
                     monto-=informacionCuota.getCuota();
                     fechaCorte = SiguienteMes(fechaCorte, venta, 1);
@@ -458,7 +476,6 @@ public class PagoController {
                 cuota.setDescuento(0.0);
                 cuota.setSaldoRecargo(0.0);
                 cuota.setPago(pago);
-                cuota.setInformacion(informacionCuota);
                 cuotaMantenimientoService.agregar(cuota);
                 monto-=monto;
                 montoDescuento-=montoDescuento;
@@ -502,7 +519,6 @@ public class PagoController {
                         monto-=monto;
                     }
                     cuota.setPago(pago);
-                    cuota.setInformacion(informacionCuota);
                     cuotaMantenimientoService.agregar(cuota);
                     fechaCorte = SiguienteMes(fechaCorte, venta, 1);
                 }
@@ -554,7 +570,6 @@ public class PagoController {
                     monto-=monto;
                 }
                 cuota.setPago(pago);
-                cuota.setInformacion(informacionCuota);
                 cuotaMantenimientoService.agregar(cuota);
                 montoDescuento-=montoDescuento;
             }

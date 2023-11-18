@@ -53,6 +53,17 @@ public class PagoServiceImp implements PagoService{
     }
 
     @Override
+    @Transactional
+    public void eliminarVenta(String tipo, Venta venta) {
+        if(tipo.equals("Prima")){
+            pagoDao.deleteByTipoAndVenta(tipo, venta);
+        }else if(tipo.equals("Mantenimiento")){
+            cuotaMantenimientoDao.deleteByPagoVenta(venta);
+            pagoDao.deleteByTipoAndVenta(tipo, venta);
+        }
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public Pago encontrar(Long idPago) {
         return pagoDao.findById(idPago).orElse(null);

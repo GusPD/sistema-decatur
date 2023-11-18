@@ -1,9 +1,12 @@
 package com.gl05.bad.controller;
 
 import com.gl05.bad.domain.Rol;
+import com.gl05.bad.domain.Usuario;
 import com.gl05.bad.servicio.BitacoraServiceImp;
 import com.gl05.bad.servicio.PermisosService;
 import com.gl05.bad.servicio.RolesService;
+import com.gl05.bad.servicio.UserServiceImp;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +14,7 @@ import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,13 +35,18 @@ public class RolesController {
     @Autowired
     private PermisosService permisosService;
 
+    @Autowired
+    private UserServiceImp usuarioService;
+
     //Función que redirige a la vista de los roles
     @GetMapping("/Roles")
-    public String mostrarRoles(Model model) {
+    public String mostrarRoles(Model model, Authentication authentication) {
         model.addAttribute("pageTitle", "Roles");
         var elemento = rolesService.listaRoles();
         var elementoPermiso = permisosService.listaPermisos();
-        
+        String username = authentication.getName();
+        Usuario usuario = usuarioService.encontrarUsername(username);
+        model.addAttribute("usuario", usuario);
         model.addAttribute("Roles", elemento);
         model.addAttribute("Permisos", elementoPermiso);
         return "/Roles/GestionarRoles";

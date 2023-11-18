@@ -246,5 +246,5 @@
 
 <%@ include file="../common/footer.jspf"%>
 
-<script src="${pageContext.request.contextPath}/js/pago.js"></script>
+<script src="${pageContext.request.contextPath}/js/Pago/Pago.js"></script>
 

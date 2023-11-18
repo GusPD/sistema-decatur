@@ -1,7 +1,6 @@
 package com.gl05.bad.servicio;
 
 import com.gl05.bad.domain.CuotaMantenimiento;
-import com.gl05.bad.domain.InformacionMantenimiento;
 import com.gl05.bad.domain.Pago;
 import com.gl05.bad.domain.Venta;
 
@@ -20,8 +19,6 @@ public interface CuotaMantenimientoService {
     public void agregar(CuotaMantenimiento cuotaMantenimiento);
         
     public void eliminar(CuotaMantenimiento cuotaMantenimiento);
-
-    public void eliminarInformacion(InformacionMantenimiento informacion);
     
     public CuotaMantenimiento encontrar(Long idCuotaMantenimiento);
 

@@ -136,4 +136,4 @@
 
 <%@ include file="../common/footer.jspf"%>
 
-<script src="${pageContext.request.contextPath}/js/ventas.js"></script>
+<script src="${pageContext.request.contextPath}/js/Proyecto/VentasTerreno.js"></script>

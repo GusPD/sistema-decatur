@@ -1,7 +1,6 @@
 package com.gl05.bad.servicio;
 
 import com.gl05.bad.domain.CuotaMantenimiento;
-import com.gl05.bad.domain.InformacionMantenimiento;
 import com.gl05.bad.domain.Pago;
 import com.gl05.bad.domain.Venta;
 
@@ -44,29 +43,6 @@ public class CuotaMantenimientoServiceImp implements CuotaMantenimientoService{
     @Transactional
     public void eliminar(CuotaMantenimiento cuotaMantenimiento) {
         cuotaMantenimientoDao.delete(cuotaMantenimiento);
-    }
-
-    @Override
-    @Transactional
-    public void eliminarInformacion(InformacionMantenimiento informacion) {
-        List<CuotaMantenimiento> listaCuotas = cuotaMantenimientoDao.findByInformacion(informacion);
-        int contador = 1;
-        Pago pago = null;
-        Pago pagoActual = null;
-        for(CuotaMantenimiento cuotaMantenimiento : listaCuotas) {
-            if(pago != null){
-                pagoActual = cuotaMantenimiento.getPago();
-                if(pago != pagoActual){
-                    pagoDao.delete(pago);
-                }
-            }
-            cuotaMantenimientoDao.deleteById(cuotaMantenimiento.getIdCuotaMantenimiento());
-            pago = cuotaMantenimiento.getPago();
-            if(contador == listaCuotas.size()){
-                pagoDao.delete(pagoActual);
-            }
-            contador++;
-        }
     }
 
     @Override
@@ -169,7 +145,7 @@ public class CuotaMantenimientoServiceImp implements CuotaMantenimientoService{
     public DataTablesOutput<CuotaMantenimiento> listarVenta(DataTablesInput input, Long idVenta) {
         Specification<CuotaMantenimiento> specification = (root, query, builder) -> {
             List<Predicate> predicates = new ArrayList<>();
-            predicates.add(builder.equal(root.get("informacion").get("venta").get("idVenta"), idVenta));
+            predicates.add(builder.equal(root.get("pago").get("venta").get("idVenta"), idVenta));
             predicates.add(builder.equal(root.get("pago").get("estado"), true));
             return builder.and(predicates.toArray(new Predicate[0]));
         };

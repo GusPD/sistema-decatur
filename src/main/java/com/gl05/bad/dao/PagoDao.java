@@ -16,4 +16,5 @@ public interface PagoDao extends DataTablesRepository<Pago, Long> {
     Pago findByTipoAndReciboAndVentaTerrenoProyectoAndComprobante(String tipo,Integer recibo, Proyecto proyecto, String comprobante);
     void deleteByTipoAndVentaAndFechaRegistroGreaterThanEqual(String tipo, Venta venta, LocalDateTime fechaRegistro);
     List<Pago> findByTipoAndVentaAndFechaRegistroAfter(String tipo, Venta venta, LocalDateTime fechaRegistro);
+    void deleteByTipoAndVenta(String tipo, Venta venta);
 }

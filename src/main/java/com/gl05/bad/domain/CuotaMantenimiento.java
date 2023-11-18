@@ -65,9 +65,6 @@ public class CuotaMantenimiento implements Serializable {
     @JoinColumn(name = "ID_PAGO", referencedColumnName = "ID_PAGO")
     @ManyToOne
     private Pago pago;
-    @JoinColumn(name = "ID_INFO_MANTENIMIENTO", referencedColumnName = "ID_INFO_MANTENIMIENTO")
-    @ManyToOne
-    private InformacionMantenimiento informacion;
 
     @Override
     public int hashCode() {

@@ -132,4 +132,4 @@
 
 <%@ include file="../common/footer.jspf"%>
 
-<script src="${pageContext.request.contextPath}/js/trabajador.js"></script>
+<script src="${pageContext.request.contextPath}/js/Trabajador/Trabajador.js"></script>

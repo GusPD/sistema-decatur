@@ -1,6 +1,6 @@
 -- Usuario
-INSERT INTO Usuario (username, password, email, habilitado, bloqueado, intentos) 
-VALUES ('gustavo', '$2a$10$AEMBf.4hcftpIAKcUuWpbeYRI5HYNZZlP7cDSTetbRyCSEyq0d1Nq', 'gustavopineda400@gmail.com', TRUE, FALSE, 0);
+INSERT INTO Usuario (nombre, username, password, email, habilitado, bloqueado, intentos) 
+VALUES ('Gustavo Pineda','gustavo', '$2a$10$AEMBf.4hcftpIAKcUuWpbeYRI5HYNZZlP7cDSTetbRyCSEyq0d1Nq', 'gustavopineda400@gmail.com', TRUE, FALSE, 0);
 
 -- Rol
 INSERT INTO Rol (nombre) VALUES ('ADMINISTRADOR');
@@ -110,7 +110,7 @@ INSERT INTO rol_permiso (id_rol, id_permiso) VALUES
 
 -- Configuración de correo
 INSERT INTO configuracion_correo (name, host, port, protocol, username, password, smtp_auth, start_tls)
-VALUES ('Sistema Decatur', 'smtp.gmail.com', '587', 'smtp', 'mail.projects.notification@gmail.com', 'imiowrxsfxzmaopa', 1, 1);
+VALUES ('Sistema Decatur', 'smtp.gmail.com', '587', 'smtp', 'mail.projects.notification@gmail.com', 'klqfenqcgqiaxhpg', 1, 1);
 
 CREATE ROLE decatur WITH LOGIN PASSWORD 'admin755';
 ALTER USER decatur WITH SUPERUSER;

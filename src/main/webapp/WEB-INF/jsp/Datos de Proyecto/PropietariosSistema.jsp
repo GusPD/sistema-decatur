@@ -143,4 +143,4 @@
 
 <%@ include file="../common/footer.jspf"%>
 
-<script src="${pageContext.request.contextPath}/js/propietario.js"></script>
+<script src="${pageContext.request.contextPath}/js/Propietario/Propietario.js"></script>

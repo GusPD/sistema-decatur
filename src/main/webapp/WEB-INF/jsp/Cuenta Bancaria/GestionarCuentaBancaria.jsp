@@ -130,5 +130,5 @@
 
 <%@ include file="../common/footer.jspf"%>
 
-<script src="${pageContext.request.contextPath}/js/cuentaBancaria.js"></script>
+<script src="${pageContext.request.contextPath}/js/Cuenta Bancaria/CuentaBancaria.js"></script>
 

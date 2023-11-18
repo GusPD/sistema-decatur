@@ -2,6 +2,7 @@ package com.gl05.bad.controller;
 
 import com.gl05.bad.domain.Proyecto;
 import com.gl05.bad.domain.ResetPassword;
+import com.gl05.bad.domain.Rol;
 import com.gl05.bad.domain.Usuario;
 import com.gl05.bad.servicio.CorreoServiceImp;
 import com.gl05.bad.servicio.EmpresaService;
@@ -9,10 +10,12 @@ import com.gl05.bad.servicio.ResetPasswordServiceImp;
 import com.gl05.bad.servicio.UserServiceImp;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -57,6 +60,9 @@ public class IndexController {
         var empresas = empresaService.listaEmpresas();    
         Proyecto proyecto=new Proyecto();
         proyecto.setIdProyecto(0L);
+        String username = authentication.getName();
+        Usuario usuario = usuarioService.encontrarUsername(username);
+        model.addAttribute("usuario", usuario);
         model.addAttribute("empresas", empresas);
         model.addAttribute("proyecto", proyecto);
         return "welcome";
@@ -66,8 +72,16 @@ public class IndexController {
     @GetMapping("/ObtenerUsuarioMenu")
     public ResponseEntity<Map<String, Object>> obtenerUsuarioMenu(Authentication authentication, HttpSession session) {
         String username = authentication.getName();
+        Usuario usuario = usuarioService.encontrarUsername(username);
+        Set<Rol> roles = usuario.getRoles();
+        List<String> rolesUsuario = new ArrayList<>();
+        for (Rol rol : roles) {
+            rolesUsuario.add(rol.getNombre());
+        }
+        String nombreRol=rolesUsuario.get(0);
         Map<String, Object> responseMap = new HashMap<>();
-        responseMap.put("username", username);
+        responseMap.put("nombre", usuario.getNombre());
+        responseMap.put("rol", nombreRol);
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(responseMap);

@@ -48,6 +48,12 @@ public class CuentaBancariaServiceImp implements CuentaBancariaService{
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public CuentaBancaria encontrarNombreEmpresa(String nombre, Empresa empresa) {
+        return cuentaDao.findByNombreAndEmpresa(nombre, empresa);
+    }
+
+    @Override
     @Transactional
     public void actualizar(CuentaBancaria cuenta) {
         if (cuentaDao.existsById(cuenta.getIdCuenta())) {

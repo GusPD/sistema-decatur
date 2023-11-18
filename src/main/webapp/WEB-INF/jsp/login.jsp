@@ -93,7 +93,7 @@
         <script type="text/javascript" src="${pageContext.request.contextPath}/recursosOnline/js/jquery.validate.js"></script>
         <script type="text/javascript" src="${pageContext.request.contextPath}/recursosOnline/js/bootstrap.bundle.min.js"></script>
         <script type="text/javascript" src="${pageContext.request.contextPath}/images/iconos/fontawesome-free-6.4.2-web/js/all.js"></script>
-        <script type="text/javascript" src="${pageContext.request.contextPath}/js/login.js"></script>
+        <script type="text/javascript" src="${pageContext.request.contextPath}/js/Login.js"></script>
     </body>
 </html>
 

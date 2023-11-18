@@ -20,7 +20,7 @@
     <script type="text/javascript" src="${pageContext.request.contextPath}/recursosOnline/js/toastr.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/recursosOnline/js/moment.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/recursosOnline/js/adminlte.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/js/plantilla.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/Plantilla.js"></script>
     
     <script>var csrfToken = '${_csrf.token}';</script>
     <script>$.fn.select2.defaults.set('language', 'es');</script>

@@ -54,4 +54,4 @@
 
 <%@ include file="../common/footer.jspf"%>
 
-<script src="${pageContext.request.contextPath}/js/trabajadorProyecto.js"></script>
+<script src="${pageContext.request.contextPath}/js/Proyecto/Trabajador.js"></script>

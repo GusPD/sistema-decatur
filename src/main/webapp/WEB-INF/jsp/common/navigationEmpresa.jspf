@@ -22,12 +22,13 @@
                         <div class="image">
                             <img src="${pageContext.request.contextPath}/images/img/usuario.png" class="img-circle-perfil" style="width: auto; height: 30px;">
                         </div>
-                        <div class="info align-items-center justify-content-center " style="margin-top: -10px; margin-left: -10px;">
-                            <a href="#" class="nav-link text-white dropdown-toggle"></a>
+                        <div class="info align-items-center justify-content-center " style="font-size: 13px; margin-top: -17px; margin-left: -10px;">
+                            <a href="#" class="nav-link text-white text-center dropdown-toggle"></a>
                         </div>
                     </div>
                 </div>
                 <ul id="user-dropdownMenu" class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <li><a class="dropdown-item small" href="/PerfilUsuario"><i class="fa-solid fa-user-pen text-blue"></i></i>&nbsp;Perfil</a></li>
                     <li><a class="dropdown-item small" href="#" onclick="logout()"><i class="fa-solid fa-power-off text-danger"></i>&nbsp;Salir</a></li>
                 </ul>
             </div>
