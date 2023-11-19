@@ -4,6 +4,7 @@ import com.gl05.bad.domain.AsignacionVisitante;
 import com.gl05.bad.domain.Documento;
 import com.gl05.bad.domain.Persona;
 import com.gl05.bad.domain.Proyecto;
+import com.gl05.bad.domain.TipoDocumento;
 import com.gl05.bad.domain.Usuario;
 import com.gl05.bad.domain.Visitante;
 import com.gl05.bad.domain.VistaTrabajadoresProyecto;
@@ -12,10 +13,12 @@ import com.gl05.bad.servicio.BitacoraServiceImp;
 import com.gl05.bad.servicio.DocumentoService;
 import com.gl05.bad.servicio.PersonaService;
 import com.gl05.bad.servicio.ProyectoService;
+import com.gl05.bad.servicio.TipoDocumentoService;
 import com.gl05.bad.servicio.UserService;
 import com.gl05.bad.servicio.VisitanteService;
 import com.gl05.bad.servicio.VistaTrabajadoresProyectoService;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
@@ -64,11 +67,16 @@ public class TrabajadorController {
     
     @Autowired
     private UserService usuarioService;
+
+    @Autowired
+    private TipoDocumentoService tipoDocumentoService;
     
     //Función que redirige a la vista de los trabajadores del sistema
     @GetMapping("/TrabajadoresSistema")
     public String mostrarProyecto(Model model, Proyecto proyecto) {
         model.addAttribute("pageTitle", "Trabajadores");
+        List<TipoDocumento> listaTipoDocumentos = tipoDocumentoService.listaTipoDocumentos();
+        model.addAttribute("tiposDocumento", listaTipoDocumentos);
         return "/Datos de Proyecto/TrabajadoresSistema";
     }
     
@@ -229,9 +237,9 @@ public class TrabajadorController {
     @PostMapping("/AgregarTrabajador")
     public ResponseEntity<String> AgregarTrabajador(Visitante visitante, Persona persona, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
-            if(personaService.encontrarDui(persona.getDui())== null){
+            if(personaService.encontrarNumero(persona.getNumero())== null){
                 personaService.agregar(persona);
-                Persona newPersona = personaService.encontrarDui(persona.getDui());
+                Persona newPersona = personaService.encontrarNumero(persona.getNumero());
                 visitante.setPersona(newPersona);
                 visitanteService.agregar(visitante);
                 String mensaje = "Se ha agregado un trabajador.";

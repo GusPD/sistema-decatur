@@ -68,8 +68,18 @@
                             <input type="hidden" id="idDocumento">
                             <input type="hidden" id="rol" value="TRABAJADOR">
                             <div class="form-group">
-                                <label for="dui" class="form-label">DUI:<strong class="text-danger"> *</strong></label>
-                                <input type="text" class="form-control" id="dui" name="dui" maxlength="9" placeholder="Ingrese el número de DUI sin guiones" required>
+                                <label for="tipoDocumento" class="form-label">Tipo documento:<strong class="text-danger"> *</strong></label>
+                                <select class="form-select" id="tipoDocumento" name="tipoDocumento" placeholder="Seleccione una opción" required>
+                                    <c:if test="${not empty tiposDocumento}">
+                                        <c:forEach items="${tiposDocumento}" var="eTipo">
+                                            <option value="${eTipo.idTipoDocumento}" data-mascara="${eTipo.mascara}">${eTipo.nombre}</option>
+                                        </c:forEach>
+                                    </c:if>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="numero" class="form-label">Número:<strong class="text-danger"> *</strong></label>
+                                <input type="text" class="form-control" id="numero" name="numero" maxlength="50" placeholder="Ingrese el número de documento" required>
                             </div>
                             <div class="form-group">
                                 <label for="nombre" class="form-label">Nombre:<strong class="text-danger"> *</strong></label>

@@ -20,7 +20,7 @@ $(document).ready(function() {
                 extend: 'copy',
                 text: 'Copiar',
                 exportOptions: {
-                  columns: [0, 1, 2, 3, 4, 5]
+                  columns: [0, 1, 2, 3, 4]
                 }
             },
             {
@@ -29,7 +29,7 @@ $(document).ready(function() {
                 title: 'Propietarios del proyecto',
                 filename: 'Propietarios ' + getCurrentDateTime(),
                 exportOptions: {
-                  columns: [0, 1, 2, 3, 4, 5]
+                  columns: [0, 1, 2, 3, 4]
                 }
             },
             {
@@ -38,7 +38,7 @@ $(document).ready(function() {
                 title: 'Propietarios del proyecto',
                 filename: 'Propietarios ' + getCurrentDateTime(),
                 exportOptions: {
-                  columns: [0, 1, 2, 3, 4, 5]
+                  columns: [0, 1, 2, 3, 4]
                 },
                 customize: function (doc) {
                   doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split('');
@@ -56,9 +56,8 @@ $(document).ready(function() {
                 },
                 width: '7%'
             },
-            { data: 'dui', title:'DUI', width: '10%' },
-            { data: 'nombre', title:'Nombre', width: '23%' },
-            { data: 'correos', title:'Correos', width: '20%' },
+            { data: 'nombre', title:'Nombre', width: '28%' },
+            { data: 'correos', title:'Correos', width: '25%' },
             { data: 'telefonos', title:'Teléfonos', width: '15%' },
             { data: 'lotes', title:'Lote', width: '15%' },
             {

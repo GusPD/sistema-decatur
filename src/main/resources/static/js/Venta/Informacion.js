@@ -176,58 +176,64 @@ document.addEventListener('DOMContentLoaded', function() {
         var formGuardar = $('#formGuardar');
         var validator = $('#formGuardar').validate({
             rules: {
-               nombre: {
-                   required: true,
-                   maxlength: 200
-               },
-               fecha: {
-                   required: true,
-                   maxlength: 10
-               },
-               precio: {
-                   required: true,
-                   validarPrecio: true,
-                   maxlength: 9
-               },
-               descuento:{
-                   required: true,
-                   validarDescuento: true,
-                   maxlength: 9
-               },
-               monto:{
-                   validarMonto: true
-               },
-               plazo:{
-                   required: true,
-                   validarPlazo: true,
-                   maxlength: 3
-               },
-               tasa: {
-                   required: true,
-                   validarTasa: true,
-                   maxlength: 6
-               },
-               cuotaKi:{
-                   validarMonto: true
-               },
-               cuotaMantenimiento: {
-                   required: true,
-                   validarCuotaMantenimiento: true,
-                   maxlength: 9
-               },
-               multaMantenimiento: {
-                   required: true,
-                   validarMultaMantenimiento: true,
-                   maxlength: 9
-               },
-               multaFinanciamiento: {
-                   required: true,
-                   validarMultaFinanciamiento: true,
-                   maxlength: 9
-               }
+                nombre: {
+                    required: true,
+                    maxlength: 200
+                },
+                terceros: {
+                        required: true
+                },
+                fecha: {
+                    required: true,
+                    maxlength: 10
+                },
+                precio: {
+                    required: true,
+                    validarPrecio: true,
+                    maxlength: 9
+                },
+                descuento:{
+                    required: true,
+                    validarDescuento: true,
+                    maxlength: 9
+                },
+                monto:{
+                    validarMonto: true
+                },
+                plazo:{
+                    required: true,
+                    validarPlazo: true,
+                    maxlength: 3
+                },
+                tasa: {
+                    required: true,
+                    validarTasa: true,
+                    maxlength: 6
+                },
+                cuotaKi:{
+                    validarMonto: true
+                },
+                cuotaMantenimiento: {
+                    required: true,
+                    validarCuotaMantenimiento: true,
+                    maxlength: 9
+                },
+                multaMantenimiento: {
+                    required: true,
+                    validarMultaMantenimiento: true,
+                    maxlength: 9
+                },
+                multaFinanciamiento: {
+                    required: true,
+                    validarMultaFinanciamiento: true,
+                    maxlength: 9
+                }
             },
             messages:{
                 nombre: {
+                    required: 'Este campo es requerido'
+                },
+                terceros: {
                     required: 'Este campo es requerido'
                 },
                 fecha: {
@@ -262,7 +268,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 $(element).removeClass('is-invalid');
             },
             errorPlacement: function(error, element) {
-                if (element.attr("name") === "nombre" || element.attr("name") === "fecha" || element.attr("name") === "precio" || element.attr("name") === "descuento" || element.attr("name") === "monto" || element.attr("name") === "plazo" || element.attr("name") === "tasa" || element.attr("name") === "cuotaKi" || element.attr("name") === "cuotaMantenimiento" || element.attr("name") === "multaFinanciamiento" || element.attr("name") === "multaMantenimiento") {
+                if (element.attr("name") === "nombre" || element.attr("name") === "terceros" || element.attr("name") === "fecha" || element.attr("name") === "precio" || element.attr("name") === "descuento" || element.attr("name") === "monto" || element.attr("name") === "plazo" || element.attr("name") === "tasa" || element.attr("name") === "cuotaKi" || element.attr("name") === "cuotaMantenimiento" || element.attr("name") === "multaFinanciamiento" || element.attr("name") === "multaMantenimiento") {
                     error.insertAfter(element);
                 }        
             },
@@ -565,6 +571,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         $('#nombre').val(response.nombre);
                         $('#fecha').val(response.fecha);
                         $('#precio').val(response.precio);
+                        $('#terceros').val(response.terceros.toString());
                         $('#descuento').val(response.descuento);
                         $('#monto').val(response.monto);
                         $('#plazo').val(response.plazo);

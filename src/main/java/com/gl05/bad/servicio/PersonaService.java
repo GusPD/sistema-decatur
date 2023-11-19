@@ -17,7 +17,7 @@ public interface PersonaService {
     
     public Persona encontrar(Long idPersona);
     
-    public Persona encontrarDui(String dui);
+    public Persona encontrarNumero(String numero);
     
     public void actualizar(Persona persona);
 }

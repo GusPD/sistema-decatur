@@ -109,8 +109,12 @@ INSERT INTO rol_permiso (id_rol, id_permiso) VALUES
 (1, 11);
 
 -- Configuración de correo
-INSERT INTO configuracion_correo (name, host, port, protocol, username, password, smtp_auth, start_tls)
-VALUES ('Sistema Decatur', 'smtp.gmail.com', '587', 'smtp', 'mail.projects.notification@gmail.com', 'klqfenqcgqiaxhpg', 1, 1);
+INSERT INTO configuracion_correo (name, host, port, protocol, username, password, smtp_auth, start_tls, servidor)
+VALUES ('Sistema Decatur', 'smtp.gmail.com', '587', 'smtp', 'mail.projects.notification@gmail.com', 'klqfenqcgqiaxhpg', 1, 1, TRUE);
+
+-- Tipo de documento
+INSERT INTO tipo_documento (nombre, mascara)
+VALUES ('DUI', '^\d{9}$');
 
 CREATE ROLE decatur WITH LOGIN PASSWORD 'admin755';
 ALTER USER decatur WITH SUPERUSER;

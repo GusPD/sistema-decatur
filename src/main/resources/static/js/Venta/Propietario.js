@@ -74,20 +74,28 @@ $(document).ready(function() {
         }
     });
     $.validator.addMethod(
-        "validarDui",
+        "validarDocumento",
         function(value, element) {
-            return this.optional(element) || /^\d{9}$/.test(value);
+            var mascara = $("#tipoDocumento option:selected").data("mascara");
+            if (mascara) {
+                var regex = new RegExp(mascara);
+                return this.optional(element) || regex.test(value);
+            } else {
+                return true;
+            }
         },
-        "Ingrese un número válido, verifique que deben de ser nueve dígitos"
+        "Ingrese un número válido para el tipo de documento"
     );
     //Formulario de agregar
     var formGuardar = $('#formGuardarPropietario');
     var validator = $('#formGuardarPropietario').validate({
         rules: {
-            dui: {
+            tipoDocumento: {
                 required: true,
-                validarDui: true,
-                maxlength: 9
+            },
+            numero: {
+                required: true,
+                validarDocumento: true,
             },
             nombreP: {
                 required: true,
@@ -113,7 +121,10 @@ $(document).ready(function() {
             } 
         },
         messages:{
-            dui:{
+            tipoDocumento:{
+                required: 'Este campo es requerido'
+            },
+            numero:{
                 required: 'Este campo es requerido'
             },
             nombreP:{
@@ -142,7 +153,7 @@ $(document).ready(function() {
             $(element).removeClass('is-invalid');
         },
         errorPlacement: function(error, element) {
-            if (element.attr("name") === "dui" || element.attr("name") === "nombreP" || element.attr("name") === "apellido" || element.attr("name") === "profesion" || element.attr("name") === "direccionCasa" || element.attr("name") === "lugarTrabajo" || element.attr("name") === "direccionTrabajo" || element.attr("name") === "estadoP") {
+            if (element.attr("name") === "tipoDocumento" || element.attr("name") === "numero" || element.attr("name") === "nombreP" || element.attr("name") === "apellido" || element.attr("name") === "profesion" || element.attr("name") === "direccionCasa" || element.attr("name") === "lugarTrabajo" || element.attr("name") === "direccionTrabajo" || element.attr("name") === "estadoP") {
                 error.insertAfter(element);
             }        
         },
@@ -213,7 +224,8 @@ $(document).ready(function() {
                 type: 'GET',
                 success: function (response) {
                     $('#idPersona').val(response.asignacion.propietario.persona.idPersona);
-                    $('#dui').val(response.asignacion.propietario.persona.dui);
+                    $('#tipoDocumento').val(response.persona.tipoDocumento.idTipoDocumento);
+                    $('#numero').val(response.persona.numero);
                     $('#nombreP').val(response.asignacion.propietario.persona.nombre);
                     $('#apellido').val(response.asignacion.propietario.persona.apellido);
                     $('#idPropietario').val(response.asignacion.propietario.idPropietario);

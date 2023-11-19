@@ -29,7 +29,8 @@ import lombok.Data;
     @NamedQuery(name = "ConfiguracionCorreo.findByUsername", query = "SELECT c FROM ConfiguracionCorreo c WHERE c.username = :username"),
     @NamedQuery(name = "ConfiguracionCorreo.findByPassword", query = "SELECT c FROM ConfiguracionCorreo c WHERE c.password = :password"),
     @NamedQuery(name = "ConfiguracionCorreo.findBySmtp_auth", query = "SELECT c FROM ConfiguracionCorreo c WHERE c.smtp_auth = :smtp_auth"),
-    @NamedQuery(name = "ConfiguracionCorreo.findByStar_tls", query = "SELECT c FROM ConfiguracionCorreo c WHERE c.start_tls = :start_tls")})
+    @NamedQuery(name = "ConfiguracionCorreo.findByStar_tls", query = "SELECT c FROM ConfiguracionCorreo c WHERE c.start_tls = :start_tls"),
+    @NamedQuery(name = "ConfiguracionCorreo.findByServidor", query = "SELECT c FROM ConfiguracionCorreo c WHERE c.servidor = :servidor")})
 public class ConfiguracionCorreo implements Serializable {
 
     @Id
@@ -59,6 +60,8 @@ public class ConfiguracionCorreo implements Serializable {
     private boolean smtp_auth;
     @Column(name = "START_TLS")
     private boolean start_tls;
+    @Column(name = "SERVIDOR")
+    private boolean servidor;
 
     public boolean getSmtp_auth(){
         return smtp_auth;
