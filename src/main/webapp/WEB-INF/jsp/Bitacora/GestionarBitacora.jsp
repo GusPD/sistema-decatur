@@ -56,5 +56,5 @@
 <!-- Script de la página -->
 <%@ include file="../common/footer.jspf"%>
 
-<script src="${pageContext.request.contextPath}/js/bitacora.js"></script>
+<script src="${pageContext.request.contextPath}/js/Bitacora/Bitacora.js"></script>
 

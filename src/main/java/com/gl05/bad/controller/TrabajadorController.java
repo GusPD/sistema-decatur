@@ -112,7 +112,7 @@ public class TrabajadorController {
         model.addAttribute("proyecto", newProyecto);
         model.addAttribute("trabajador", newTrabajador);
         model.addAttribute("persona", newPersona);
-        return "/Trabajador/InformacionGeneral/trabajadorInformacion";
+        return "/Trabajador/InformacionGeneral/Informacion";
     }
     
     //Función que obtiene los documentos del trabajador
@@ -139,7 +139,7 @@ public class TrabajadorController {
         model.addAttribute("proyecto", newProyecto);
         model.addAttribute("trabajador", newTrabajador);
         model.addAttribute("persona", newPersona);
-        return "/Trabajador/InformacionGeneral/trabajadorDocumentos";
+        return "/Trabajador/InformacionGeneral/Documentos";
     }
     
     //Función que agrega un documento al trabajador
@@ -222,7 +222,7 @@ public class TrabajadorController {
         model.addAttribute("proyecto", newProyecto);
         model.addAttribute("trabajador", newTrabajador);
         model.addAttribute("persona", newPersona);
-        return "/Trabajador/InformacionGeneral/trabajadorTerrenos";
+        return "/Trabajador/InformacionGeneral/Terrenos";
     }
 
     //Función que agrega un trabajador a la base de datos

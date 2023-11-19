@@ -2,9 +2,12 @@ package com.gl05.bad.controller;
 
 import com.gl05.bad.domain.CuentaBancaria;
 import com.gl05.bad.domain.Empresa;
+import com.gl05.bad.domain.Usuario;
 import com.gl05.bad.servicio.BitacoraServiceImp;
 import com.gl05.bad.servicio.CuentaBancariaService;
 import com.gl05.bad.servicio.EmpresaService;
+import com.gl05.bad.servicio.UserServiceImp;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +15,7 @@ import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,12 +36,18 @@ public class CuentaBancariaController {
     
     @Autowired
     private EmpresaService empresaService;
+
+    @Autowired
+    private UserServiceImp usuarioService;
     
     //Función para redigir a la vista de cuentas
     @GetMapping("/CuentasBancarias/{idEmpresa}")
-    public String mostrarCuentas(Model model, @PathVariable("idEmpresa") Long idEmpresa) {
+    public String mostrarCuentas(Model model, @PathVariable("idEmpresa") Long idEmpresa, Authentication authentication) {
         model.addAttribute("pageTitle", "Cuentas");
         Empresa newEmpresa = empresaService.encontrar(idEmpresa);
+         String username = authentication.getName();
+        Usuario usuario = usuarioService.encontrarUsername(username);
+        model.addAttribute("usuario", usuario);
         model.addAttribute("empresa", newEmpresa);
         return "/Cuenta Bancaria/GestionarCuentaBancaria";
     }

@@ -129,7 +129,7 @@ public class PropietarioController {
         model.addAttribute("proyecto", newProyecto);
         model.addAttribute("propietario", newPropietario);
         model.addAttribute("persona", newPersona);
-        return "/Propietario/InformacionGeneral/propietarioInformacion";
+        return "/Propietario/InformacionGeneral/Informacion";
     }
     
     //Función que obtiene los correos del propietario
@@ -158,7 +158,7 @@ public class PropietarioController {
         model.addAttribute("tiposCorreo", tiposCorreo);
         model.addAttribute("propietario", newPropietario);
         model.addAttribute("persona", newPersona);
-        return "/Propietario/InformacionGeneral/propietarioCorreos";
+        return "/Propietario/InformacionGeneral/Correos";
     }
     
     //Función que agrega un correo al propietario
@@ -227,7 +227,7 @@ public class PropietarioController {
         model.addAttribute("tiposTelefonos", tiposTelefono);
         model.addAttribute("propietario", newPropietario);
         model.addAttribute("persona", newPersona);
-        return "/Propietario/InformacionGeneral/propietarioTelefonos";
+        return "/Propietario/InformacionGeneral/Telefonos";
     }
     
     //Función que agrega un telefono al propietario
@@ -294,7 +294,7 @@ public class PropietarioController {
         model.addAttribute("proyecto", newProyecto);
         model.addAttribute("propietario", newPropietario);
         model.addAttribute("persona", newPersona);
-        return "/Propietario/InformacionGeneral/propietarioReferencias";
+        return "/Propietario/InformacionGeneral/Referencias";
     }
     
     //Función que agrega una referencia al propietario
@@ -360,7 +360,7 @@ public class PropietarioController {
         model.addAttribute("proyecto", newProyecto);
         model.addAttribute("propietario", newPropietario);
         model.addAttribute("persona", newPersona);
-        return "/Propietario/InformacionGeneral/propietarioDocumentos";
+        return "/Propietario/InformacionGeneral/Documentos";
     }
     
     //Función que agrega un documento al propietario
@@ -444,7 +444,7 @@ public class PropietarioController {
         model.addAttribute("proyecto", newProyecto);
         model.addAttribute("propietario", newPropietario);
         model.addAttribute("persona", newPersona);
-        return "/Propietario/InformacionGeneral/propietarioTerrenos";
+        return "/Propietario/InformacionGeneral/Terrenos";
     }
 
     //Función que agrega un propietario a la base de datos

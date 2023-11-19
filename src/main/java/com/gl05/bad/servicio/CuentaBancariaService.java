@@ -19,6 +19,8 @@ public interface CuentaBancariaService {
     public CuentaBancaria encontrar(Long idCuenta);
     
     public List<CuentaBancaria> encontrarEmpresa(Empresa empresa);
+
+    public CuentaBancaria encontrarNombreEmpresa(String nombre, Empresa empresa);
     
     public void actualizar(CuentaBancaria cuenta);
 }

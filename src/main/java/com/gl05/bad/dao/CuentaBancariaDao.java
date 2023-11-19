@@ -7,4 +7,5 @@ import org.springframework.data.jpa.datatables.repository.DataTablesRepository;
 
 public interface CuentaBancariaDao extends DataTablesRepository<CuentaBancaria, Long> {
     List<CuentaBancaria> findByEmpresa (Empresa empresa);
+    CuentaBancaria findByNombreAndEmpresa (String nombre, Empresa empresa);
 }

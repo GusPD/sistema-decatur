@@ -2,10 +2,12 @@ package com.gl05.bad.controller;
 
 import com.gl05.bad.domain.Proyecto;
 import com.gl05.bad.domain.Terreno;
+import com.gl05.bad.domain.Usuario;
 import com.gl05.bad.domain.VistaTerreno;
 import com.gl05.bad.servicio.BitacoraServiceImp;
 import com.gl05.bad.servicio.ProyectoService;
 import com.gl05.bad.servicio.TerrenoService;
+import com.gl05.bad.servicio.UserServiceImp;
 import com.gl05.bad.servicio.VistaTerrenoService;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +17,7 @@ import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,13 +40,19 @@ public class TerrenoController {
     
     @Autowired
     private ProyectoService proyectoService;
+
+    @Autowired
+    private UserServiceImp usuarioService;
     
     //Función que redirige a la vista de los terrenos del proyecto
     @GetMapping("/Terrenos/{idProyecto}")
-    public String mostrarTerrenoProyecto(Model model, Proyecto proyecto) {
+    public String mostrarTerrenoProyecto(Model model, Proyecto proyecto, Authentication authentication) {
         model.addAttribute("pageTitle", "Terrenos");
         Proyecto proyectoEncontrado = proyectoService.encontrar(proyecto.getIdProyecto());
         var listaProyectos = proyectoService.listaProyectos();
+        String username = authentication.getName();
+        Usuario usuario = usuarioService.encontrarUsername(username);
+        model.addAttribute("usuario", usuario);
         model.addAttribute("proyectos", listaProyectos);
         model.addAttribute("proyecto", proyectoEncontrado);
         return "/Proyecto/TerrenosProyecto";

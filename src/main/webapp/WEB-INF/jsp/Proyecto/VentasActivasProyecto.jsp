@@ -54,4 +54,4 @@
 
 <%@ include file="../common/footer.jspf"%>
 
-<script src="${pageContext.request.contextPath}/js/ventasActiva.js"></script>
+<script src="${pageContext.request.contextPath}/js/Proyecto/VentasActiva.js"></script>

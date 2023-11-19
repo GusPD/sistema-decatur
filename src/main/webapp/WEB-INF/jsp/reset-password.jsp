@@ -94,7 +94,7 @@
         <script type="text/javascript" src="${pageContext.request.contextPath}/recursosOnline/js/jquery.validate.js"></script>
         <script type="text/javascript" src="${pageContext.request.contextPath}/images/iconos/fontawesome-free-6.4.2-web/js/all.js"></script>
         <script type="text/javascript" src="${pageContext.request.contextPath}/recursosOnline/js/bootstrap.bundle.min.js"></script>
-        <script type="text/javascript" src="${pageContext.request.contextPath}/js/reset-password.js"></script>
+        <script type="text/javascript" src="${pageContext.request.contextPath}/js/ResetPassword.js"></script>
     </body>
 </html>
 

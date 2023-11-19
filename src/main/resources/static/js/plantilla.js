@@ -27,13 +27,15 @@ function logout() {
     form.submit();
 }
 //Función para mostrar el nombre de usuario en el header
+//Index Controler
 $(document).ready(function() {   
     var basePath = window.location.origin;
     $.ajax({
         url: "/ObtenerUsuarioMenu",
         method: "GET",
         success: function(response) {
-            $("#userPanel .info a").text(response.username);
+            var rolFormateado = response.rol.charAt(0).toUpperCase() + response.rol.slice(1).toLowerCase();
+            $("#userPanel .info a").html(response.nombre + "<br>" + rolFormateado);
         },
         error: function() {
             console.log("Error al obtener los datos del usuario");

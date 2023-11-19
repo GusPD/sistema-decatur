@@ -114,5 +114,5 @@
 
 <%@ include file="../common/footer.jspf"%>
 
-<script src="${pageContext.request.contextPath}/js/empresa.js"></script>
+<script src="${pageContext.request.contextPath}/js/Empresa/Empresa.js"></script>
 

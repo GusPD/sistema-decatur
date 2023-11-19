@@ -36,8 +36,11 @@ public class EmpresaController {
     
     //Función para redigir a la vista de empresas
     @GetMapping("/Empresas")
-    public String mostrarProyecto(Model model) {
+    public String mostrarProyecto(Model model, Authentication authentication) {
         model.addAttribute("pageTitle", "Empresas");
+        String username = authentication.getName();
+        Usuario usuario = userService.encontrarUsername(username);
+        model.addAttribute("usuario", usuario);
         return "/Empresa/GestionarEmpresa";
     }
     

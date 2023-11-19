@@ -23,6 +23,8 @@ public interface PagoService {
     public void agregar(Pago pago);
         
     public void eliminar(Pago pago);
+
+    public void eliminarVenta(String tipo, Venta venta);
     
     public Pago encontrar(Long idPago);
 

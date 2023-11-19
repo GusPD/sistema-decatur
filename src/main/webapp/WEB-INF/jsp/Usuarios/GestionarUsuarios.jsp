@@ -64,11 +64,15 @@
                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                             <input type="hidden" id="UsuarioId">
                             <div class="form-group">
-                                 <label for="username" class="form-label">Nombre de usuario:<strong class="text-danger"> *</strong></label>
-                                <input type="text" class="form-control" id="username" name="username" placeholder="Nombre de Usuario" required>
+                                <label for="nombre" class="form-label">Nombre:<strong class="text-danger"> *</strong></label>
+                               <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" required>
+                           </div>
+                            <div class="form-group">
+                                 <label for="username" class="form-label">Usuario:<strong class="text-danger"> *</strong></label>
+                                <input type="text" class="form-control" id="username" name="username" placeholder="Usuario" required>
                             </div>
                             <div class="form-group">
-                                <label for="email" class="form-label">Correo Electronico:<strong class="text-danger"> *</strong></label>
+                                <label for="email" class="form-label">Correo Electrónico:<strong class="text-danger"> *</strong></label>
                                 <input type="text" class="form-control" id="email" name="email" placeholder="Correo" required>
                             </div>
                             <div class="form-group">
@@ -84,16 +88,15 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="roles" class="form-label mb-0">Seleccione los roles:<strong class="text-danger"> *</strong></label>
-                                <div id="roles-error" name="roles-error" class="error-message mt-0 mb-1"></div>
-                                <c:forEach items="${roles}" var="elementoRol" varStatus="status" >
-                                    <div>
-                                        <li>
-                                            <input class="checkClean" type="checkbox" id="rol${elementoRol.idRol}" name="roles[]" value="${elementoRol.idRol}">
-                                            <label for="rol${elementoRol.idRol}">${elementoRol.nombre}</label>
-                                        </li>
-                                    </div>
-                                </c:forEach>
+                                <label for="roles" class="form-label">Seleccione los roles:<strong class="text-danger"> *</strong></label>
+                                <select class="form-select" id="roles" name="roles" placeholder="Seleccione una opción" required>
+                                    <option value="">Seleccione una opción</option>
+                                    <c:if test="${not empty roles}">
+                                        <c:forEach items="${roles}" var="eRol">
+                                            <option value="${eRol.idRol}">${eRol.nombre}</option>
+                                        </c:forEach>
+                                    </c:if>
+                                </select>
                             </div>
                             <div class="form-group">
                                 <label for="proyectos" class="form-label">Seleccione los proyectos: </label>
@@ -165,5 +168,5 @@
 
 <%@ include file="../common/footer.jspf"%>
 
-<script src="${pageContext.request.contextPath}/js/usuarios.js"></script>
+<script src="${pageContext.request.contextPath}/js/Usuario/Usuarios.js"></script>
 

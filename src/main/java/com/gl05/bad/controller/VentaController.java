@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.gl05.bad.domain.AsignacionPropietario;
 import com.gl05.bad.domain.AsignacionVisitante;
+import com.gl05.bad.domain.CuentaBancaria;
 import com.gl05.bad.domain.CuotaMantenimiento;
 import com.gl05.bad.domain.Documento;
 import com.gl05.bad.domain.Facturacion;
@@ -11,6 +12,7 @@ import com.gl05.bad.domain.Persona;
 import com.gl05.bad.domain.Propietario;
 import com.gl05.bad.domain.Proyecto;
 import com.gl05.bad.domain.Terreno;
+import com.gl05.bad.domain.Usuario;
 import com.gl05.bad.domain.Venta;
 import com.gl05.bad.domain.Pago;
 import com.gl05.bad.domain.Visitante;
@@ -20,6 +22,7 @@ import com.gl05.bad.domain.InformacionMantenimiento;
 import com.gl05.bad.servicio.AsigPropietarioVentaService;
 import com.gl05.bad.servicio.AsignacionVisitanteService;
 import com.gl05.bad.servicio.BitacoraServiceImp;
+import com.gl05.bad.servicio.CuentaBancariaService;
 import com.gl05.bad.servicio.CuotaMantenimientoService;
 import com.gl05.bad.servicio.DocumentoService;
 import com.gl05.bad.servicio.FacturacionService;
@@ -30,11 +33,21 @@ import com.gl05.bad.servicio.PersonaService;
 import com.gl05.bad.servicio.PropietarioService;
 import com.gl05.bad.servicio.ProyectoService;
 import com.gl05.bad.servicio.TerrenoService;
+import com.gl05.bad.servicio.UserServiceImp;
 import com.gl05.bad.servicio.VentaService;
 import com.gl05.bad.servicio.VisitanteService;
 import com.gl05.bad.servicio.VistaVentasActivaService;
+import com.opencsv.CSVReader;
+import com.opencsv.exceptions.CsvValidationException;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,6 +61,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -99,6 +113,9 @@ public class VentaController {
     
     @Autowired
     private FacturacionService facturacionService;
+
+    @Autowired
+    private CuentaBancariaService cuentaBancariaService;
     
     @Autowired
     private InformacionFinanciamientoService financiamientoService;
@@ -108,6 +125,9 @@ public class VentaController {
 
     @Autowired
     private CuotaMantenimientoService cuotaMantenimientoService;
+
+    @Autowired
+    private UserServiceImp usuarioService;
     
     //Función que redirige a la vista de las ventas del terreno
     @GetMapping("/Ventas/{idTerreno}")
@@ -147,7 +167,7 @@ public class VentaController {
     
     //Función que redirige a la vista de la información de la venta 
     @GetMapping("/InformacionVenta/{idVenta}")
-    public String mostrarInformacionVenta(Model model, Venta venta) {
+    public String mostrarInformacionVenta(Model model, Venta venta, Authentication authentication) {
         model.addAttribute("pageTitle", "Venta");
         Venta ventaEncontrada = ventaService.encontrar(venta.getIdVenta());
         Terreno terrenoEncontrado = ventaEncontrada.getTerreno();
@@ -167,7 +187,9 @@ public class VentaController {
         for (Pago prima : primas) {
             valorPrima += prima.getMonto();
         }
-        
+        String username = authentication.getName();
+        Usuario usuario = usuarioService.encontrarUsername(username);
+        model.addAttribute("usuario", usuario);
         model.addAttribute("financiamiento", financiamiento);
         model.addAttribute("financiamientos", financiamientos);
         model.addAttribute("mantenimiento", mantenimiento);
@@ -176,7 +198,7 @@ public class VentaController {
         model.addAttribute("terreno", terrenoEncontrado);
         model.addAttribute("venta", ventaEncontrada);
         model.addAttribute("valorPrima", valorPrima);
-        return "/Venta/InformacionGeneral/ventaInformacion";
+        return "/Venta/InformacionGeneral/Informacion";
     }
     
     //Función que agrega la información de financiamiento una venta de la base de datos
@@ -255,7 +277,6 @@ public class VentaController {
     @PostMapping("/EliminarMantenimientoVenta/{idAsignacion}")
     public ResponseEntity<String> EliminarMantenimientoVenta(InformacionMantenimiento mantenimiento) {
         try {
-            cuotaMantenimientoService.eliminarInformacion(mantenimiento);
             mantenimientoService.eliminar(mantenimiento);
             String mensaje = "Se ha eliminado la información del mantenimiento de la venta correctamente.";
             bitacoraService.registrarAccion("Eliminar información del mantenimiento de la venta");
@@ -318,7 +339,7 @@ public class VentaController {
         model.addAttribute("proyecto", proyecto);
         model.addAttribute("terreno", terrenoEncontrado);
         model.addAttribute("venta", ventaEncontrada);
-        return "/Venta/InformacionGeneral/ventaPropietarios";
+        return "/Venta/InformacionGeneral/Propietarios";
     }
     
     //Función para agregar un propietario a la venta
@@ -435,7 +456,7 @@ public class VentaController {
         model.addAttribute("proyecto", proyecto);
         model.addAttribute("terreno", terrenoEncontrado);
         model.addAttribute("venta", ventaEncontrada);
-        return "/Venta/InformacionGeneral/ventaTrabajadores";
+        return "/Venta/InformacionGeneral/Trabajadores";
     }
     
     //Función para agregar un trabajador a la venta
@@ -530,7 +551,7 @@ public class VentaController {
         model.addAttribute("proyecto", proyecto);
         model.addAttribute("terreno", terrenoEncontrado);
         model.addAttribute("venta", ventaEncontrada);
-        return "/Venta/InformacionGeneral/ventaDocumentos";
+        return "/Venta/InformacionGeneral/Documentos";
     }
     
     //Función que agrega un documento de la venta
@@ -619,7 +640,7 @@ public class VentaController {
         model.addAttribute("proyecto", proyecto);
         model.addAttribute("terreno", terrenoEncontrado);
         model.addAttribute("venta", ventaEncontrada);
-        return "/Venta/InformacionGeneral/ventaFacturacion";
+        return "/Venta/InformacionGeneral/Facturacion";
     }
     
     //Función para seleccionar los propietarios que apareceran en la factura de consumidor final de la venta    
@@ -728,7 +749,7 @@ public class VentaController {
         model.addAttribute("proyecto", proyecto);
         model.addAttribute("terreno", terrenoEncontrado);
         model.addAttribute("venta", ventaEncontrada);
-        return "/Venta/InformacionGeneral/ventaPagos";
+        return "/Venta/InformacionGeneral/Pagos";
     }
 
     //Función para obtener las pagos de la venta de la base de datos
@@ -749,7 +770,7 @@ public class VentaController {
         model.addAttribute("proyecto", proyecto);
         model.addAttribute("terreno", terrenoEncontrado);
         model.addAttribute("venta", ventaEncontrada);
-        return "/Venta/InformacionGeneral/ventaPrima";
+        return "/Venta/InformacionGeneral/Prima";
     }
 
     //Función para obtener la prima de la venta de la base de datos
@@ -770,7 +791,7 @@ public class VentaController {
         model.addAttribute("proyecto", proyecto);
         model.addAttribute("terreno", terrenoEncontrado);
         model.addAttribute("venta", ventaEncontrada);
-        return "/Venta/InformacionGeneral/ventaMantenimiento";
+        return "/Venta/InformacionGeneral/Mantenimiento";
     }
 
     //Función para obtener el mantenimiento de la venta de la base de datos
@@ -778,6 +799,240 @@ public class VentaController {
     @ResponseBody
     public DataTablesOutput<CuotaMantenimiento> GetMantenimientoVenta(@Valid DataTablesInput input,  @PathVariable Long idVenta){
         return cuotaMantenimientoService.listarVenta(input, idVenta);
+    }
+
+    //Función que agrega un estado de cuenta de mantenimiento de la venta
+    @PostMapping("/AgregarInformeMantenimientoVenta")
+    public ResponseEntity<String> agregarInformeMantenimientoVenta(HttpServletRequest request, RedirectAttributes redirectAttributes,
+            @RequestParam("documento") MultipartFile documento,
+            @RequestParam("idVenta") Long idVenta) {
+        try {            
+            byte[] fileBytes = documento.getBytes();
+            if (fileBytes != null && fileBytes.length > 0) {
+                Venta newVenta = ventaService.encontrar(idVenta);
+                //Lectura del archivo para iserción en la base de datos de las cuotas
+                try (
+                    CSVReader csvReader = new CSVReader(new InputStreamReader(new ByteArrayInputStream(fileBytes)))) {
+                    //Variables a utilizar en el manejo del archivo
+                    List<CuotaMantenimiento> listaCuotasPago = new ArrayList<>();
+                    String[] nextRecord;
+                    double montoPago = 0;
+                    double montoDescuento = 0;
+                    Date fechaPagoAnterior = null;
+                    Integer reciboAnterior = 0;
+                    String comprobanteAnterior = "";
+                    String cuentaAnterior = "";
+                    double otrosAterior = 0;
+                    int contadorRegistros = 0;
+
+                    //Validar que el archivo tenga el formato correcto
+                    String mensajeErrores = "";
+                    boolean existeError = false;
+                    while ((nextRecord = csvReader.readNext()) != null) {
+                        // Validar que el registro tenga el número correcto de campos
+                        if(contadorRegistros==0){
+                            if(!nextRecord[0].trim().equals("Fecha Pago") || !nextRecord[1].trim().equals("Recibo") || !nextRecord[2].trim().equals("Cuenta") || !nextRecord[3].trim().equals("Comprobante") || !nextRecord[4].trim().equals("Fecha Cuota") || !nextRecord[5].trim().equals("Cuota") || !nextRecord[6].trim().equals("Saldo Cuota") || !nextRecord[7].trim().equals("Recargo") || !nextRecord[8].trim().equals("Saldo Recargo") || !nextRecord[9].trim().equals("Descuento") || !nextRecord[10].trim().equals("Otros")){
+                                mensajeErrores += "El encabezado debe estar identificado en el formato y orden siguiente: Fecha Pago, Recibo, Cuenta, Comprobante, Fecha Cuota, Cuota, Saldo Cuota, Recargo, Saldo Recargo, Descuento, Otros";
+                                existeError = true;
+                            }
+                        }else{
+                            if (nextRecord.length != 11) {
+                                mensajeErrores += "\nEl registro N° "+contadorRegistros+", no contiene las 11 columnas del formato, deben estar separadas por una coma.";
+                                existeError = true;
+                                contadorRegistros++;
+                                continue;
+                            }
+                            try {
+                                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                                Date fecha = dateFormat.parse(nextRecord[0]);
+                            } catch (ParseException | NumberFormatException e) {
+                                mensajeErrores += "\nEl registro N° "+contadorRegistros+", el valor de la fecha pago no se encuentra en el formato: dd/MM/yyyy.";
+                                existeError = true;
+                            }
+                            try {
+                                int numero = Integer.parseInt(nextRecord[1]);
+                            } catch (NumberFormatException e) {
+                                mensajeErrores += "\nEl registro N° "+contadorRegistros+", el valor del recibo no es un número.";
+                                existeError = true;
+                            }
+                            CuentaBancaria verificacionCuenta = cuentaBancariaService.encontrarNombreEmpresa(nextRecord[2].trim(), newVenta.getTerreno().getProyecto().getEmpresa());
+                            if(verificacionCuenta==null){
+                                mensajeErrores += "\nEl registro N° "+contadorRegistros+", la cuenta no se encuentra registrada en el sistema.";
+                                existeError = true;
+                            }
+
+                            if(!nextRecord[3].trim().equals("Factura") && !nextRecord[3].trim().equals("Crédito Fiscal")){
+                                mensajeErrores += "\nEl registro N° "+contadorRegistros+", el comprobante no se encuentra en el formato: Factura ó Crédito Fiscal.";
+                                existeError = true;
+                            }
+                            try {
+                                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                                Date fecha = dateFormat.parse(nextRecord[4]);
+                            } catch (ParseException | NumberFormatException e) {
+                                mensajeErrores += "\nEl registro N° "+contadorRegistros+", el valor de la fecha de la cuota no se encuentra en el formato: dd/MM/yyyy.";
+                                existeError = true;
+                            }
+                            try {
+                                double numero = Double.parseDouble(nextRecord[5]);
+                            } catch (NumberFormatException e) {
+                                mensajeErrores += "\nEl registro N° "+contadorRegistros+", el valor de la cuota no es un número.";
+                                existeError = true;
+                            }
+                            try {
+                                double numero = Double.parseDouble(nextRecord[6]);
+                            } catch (NumberFormatException e) {
+                                mensajeErrores += "\nEl registro N° "+contadorRegistros+", el valor de saldo de la cuota no es un número.";
+                                existeError = true;
+                            }
+                            try {
+                                double numero = Double.parseDouble(nextRecord[7]);
+                            } catch (NumberFormatException e) {
+                                mensajeErrores += "\nEl registro N° "+contadorRegistros+", el valor de recargo no es un número.";
+                                existeError = true;
+                            }
+                            try {
+                                double numero = Double.parseDouble(nextRecord[8]);
+                            } catch (NumberFormatException e) {
+                                mensajeErrores += "\nEl registro N° "+contadorRegistros+", el valor de saldo de recargo no es un número.";
+                                existeError = true;
+                            }
+                            try {
+                                double numero = Double.parseDouble(nextRecord[9]);
+                            } catch (NumberFormatException e) {
+                                mensajeErrores += "\nEl registro N° "+contadorRegistros+", el valor de descuento no es un número.";
+                                existeError = true;
+                            }
+                            try {
+                                double numero = Double.parseDouble(nextRecord[10]);
+                            } catch (NumberFormatException e) {
+                                mensajeErrores += "\nEl registro N° "+contadorRegistros+", el valor de otros no es un número.";
+                                existeError = true;
+                            }
+                        }
+                        contadorRegistros++;
+                    }
+                    //Se envía el mensaje de errores
+                    if(existeError){
+                        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Errores en los registros:"+mensajeErrores);
+                    }
+
+                    //Registro de los pagos y las cuotas
+                    CSVReader csvReader2 = new CSVReader(new InputStreamReader(new ByteArrayInputStream(fileBytes)));
+                    csvReader2.readNext();
+                    contadorRegistros=0;
+                    while ((nextRecord = csvReader2.readNext()) != null) {
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                        Date fechaPago = dateFormat.parse(nextRecord[0]);
+                        Integer recibo = Integer.parseInt(nextRecord[1]);
+                        String cuenta = nextRecord[2];
+                        String comprobante = nextRecord[3];
+                        Date fechaCuota = dateFormat.parse(nextRecord[4]);
+                        double cuota = Double.parseDouble(nextRecord[5]);
+                        double saldoCuota = Double.parseDouble(nextRecord[6]);
+                        double recargo = Double.parseDouble(nextRecord[7]);
+                        double saldoRecargo = Double.parseDouble(nextRecord[8]);
+                        double descuento = Double.parseDouble(nextRecord[9]);
+                        double otros = Double.parseDouble(nextRecord[10]);
+                        // Registro del pago
+                        if (reciboAnterior != recibo && contadorRegistros > 0) {
+                            Pago pago = crearNuevoPago(newVenta, comprobante, cuentaAnterior, fechaPagoAnterior, reciboAnterior, montoPago, otrosAterior, montoDescuento);
+                            pagoService.agregar(pago);
+                            for (CuotaMantenimiento cuotaMantenimiento : listaCuotasPago) {
+                                cuotaMantenimiento.setPago(pago);
+                                cuotaMantenimiento.setFechaRegistro(LocalDateTime.now());
+                                cuotaMantenimientoService.agregar(cuotaMantenimiento);
+                            }
+                            listaCuotasPago.clear();
+                            montoPago = 0;
+                            montoDescuento = 0;
+                        }
+                        // Registro de las cuotas
+                        CuotaMantenimiento cuotaMantenimiento = crearNuevaCuota(fechaCuota, cuota, saldoCuota, recargo, saldoRecargo, descuento, otros);
+                        listaCuotasPago.add(cuotaMantenimiento);
+                        // Actualizar variables de control
+                        cuentaAnterior = cuenta;
+                        fechaPagoAnterior = fechaPago;
+                        montoPago += cuota + recargo;
+                        montoDescuento += descuento;
+                        reciboAnterior = recibo;
+                        comprobanteAnterior = comprobante;
+                        otrosAterior = otros;
+                        contadorRegistros++;
+                    }
+                    
+                    // Registro del último pago
+                    if (contadorRegistros > 0) {
+                        Pago pago = crearNuevoPago(newVenta, comprobanteAnterior, cuentaAnterior, fechaPagoAnterior, reciboAnterior, montoPago, otrosAterior, montoDescuento);
+                        pagoService.agregar(pago);
+                    
+                        for (CuotaMantenimiento cuotaMantenimiento : listaCuotasPago) {
+                            cuotaMantenimiento.setPago(pago);
+                            cuotaMantenimiento.setFechaRegistro(LocalDateTime.now());
+                            cuotaMantenimientoService.agregar(cuotaMantenimiento);
+                        }
+                    
+                        listaCuotasPago.clear();
+                    }
+
+                    String mensaje = "Se ha agregado el estado de cuenta de mantenimiento correctamente.";
+                    bitacoraService.registrarAccion("Agregar mantenimiento de la venta");
+                    return ResponseEntity.ok(mensaje);
+                } catch (CsvValidationException | IOException e) {
+                    e.printStackTrace();
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error durante el procesamiento del archivo CSV");
+                } 
+            }else{
+                String error = "Ha ocurrido un error al agregar el estado de cuenta de mantenimiento, documento vacío.";
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);        
+            }
+        } catch(Exception e) {
+            String error = "Ha ocurrido un error al agregar el estado de cuenta de mantenimiento.";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        }
+    }
+    //Método para crear instancias de Pago
+    private Pago crearNuevoPago(Venta newVenta, String comprobante, String cuenta, Date fechaPago, int recibo, double montoPago, double otros, double montoDescuento) {
+        Pago pago = new Pago();
+        pago.setTipo("Mantenimiento");
+        pago.setVenta(newVenta);
+        pago.setComprobante(comprobante);
+        pago.setEstado(true);
+        pago.setCuentaBancaria(cuentaBancariaService.encontrarNombreEmpresa(cuenta, newVenta.getTerreno().getProyecto().getEmpresa()));
+        pago.setFecha(fechaPago);
+        pago.setFechaRegistro(LocalDateTime.now());
+        pago.setRecibo(recibo);
+        pago.setMonto(montoPago);
+        pago.setOtros(otros);
+        pago.setDescuento(montoDescuento);
+        pago.setObservaciones("");
+        return pago;
+    }
+    //Método para crear instancias de CuotaMantenimiento
+    private CuotaMantenimiento crearNuevaCuota(Date fechaCuota, double cuota, double saldoCuota, double recargo, double saldoRecargo, double descuento, double otros) {
+        CuotaMantenimiento cuotaMantenimiento = new CuotaMantenimiento();
+        cuotaMantenimiento.setFechaCuota(fechaCuota);
+        cuotaMantenimiento.setCuota(cuota);
+        cuotaMantenimiento.setSaldoCuota(saldoCuota);
+        cuotaMantenimiento.setRecargo(recargo);
+        cuotaMantenimiento.setSaldoRecargo(saldoRecargo);
+        cuotaMantenimiento.setDescuento(descuento);
+        cuotaMantenimiento.setOtros(otros);
+        return cuotaMantenimiento;
+    }
+
+    //Función para eliminar el estado de cuenta de mantenimiento de la venta
+    @PostMapping("/EliminarInformeMantenimientoVenta/{idVenta}")
+    public ResponseEntity<String> EliminarInformeMantenimientoVenta(@PathVariable Long idVenta) {
+        try {
+            Venta venta = ventaService.encontrar(idVenta);
+            pagoService.eliminarVenta("Mantenimiento", venta);
+            String mensaje = "Se ha eliminado el estado de cuenta de mantenimiento correctamente.";
+            bitacoraService.registrarAccion("Eliminar estado de cuenta de mantenimiento de la venta ");
+            return ResponseEntity.ok(mensaje);
+        } catch (Exception e) {
+            String error = "Ha ocurrido un error al eliminar el estado de cuenta de mantenimiento de la venta.";
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
+        }
     }
 
     //Función que redirige a la vista del financiamiento de la venta
@@ -791,7 +1046,7 @@ public class VentaController {
         model.addAttribute("proyecto", proyecto);
         model.addAttribute("terreno", terrenoEncontrado);
         model.addAttribute("venta", ventaEncontrada);
-        return "/Venta/InformacionGeneral/ventaFinanciamiento";
+        return "/Venta/InformacionGeneral/Financiamiento";
     }
 
     //Función que agrega un venta a la base de datos
