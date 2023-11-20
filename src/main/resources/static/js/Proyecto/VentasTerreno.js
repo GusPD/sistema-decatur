@@ -20,7 +20,7 @@ $(document).ready(function() {
                 extend: 'copy',
                 text: 'Copiar',
                 exportOptions: {
-                  columns: [0, 1, 2, 3]
+                  columns: [0, 1, 2, 3, 4]
                 }
             },
             {
@@ -29,7 +29,7 @@ $(document).ready(function() {
                 title: 'Ventas del terreno',
                 filename: 'Ventas ' + getCurrentDateTime(),
                 exportOptions: {
-                  columns: [0, 1, 2, 3]
+                  columns: [0, 1, 2, 3, 4]
                 }
             },
             {
@@ -38,7 +38,7 @@ $(document).ready(function() {
                 title: 'Ventas del terreno',
                 filename: 'Ventas ' + getCurrentDateTime(),
                 exportOptions: {
-                  columns: [0, 1, 2, 3]
+                  columns: [0, 1, 2, 3, 4]
                 },
                 customize: function (doc) {
                   doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split('');
@@ -57,8 +57,43 @@ $(document).ready(function() {
                 width: '10%'
             },
             { data: 'nombre',title: 'Nombre'},
-            { data: 'estado',title: 'Estado', width: '15%' },
-            { data: 'fecha',title: 'Fecha', width: '15%' },
+            {
+                data: 'terceros', 
+                width: '10%', 
+                title: 'Tipo Venta',
+                searchable: false,
+                render: function(data, type, row) {
+                    if (type === 'display' || type === 'filter') {
+                        var tipoVenta;
+                        if(data){
+                            tipoVenta = "Terceros";
+                        }else{
+                            tipoVenta = "Empresa";
+                        }
+                        return tipoVenta;
+                    }
+                    return data;
+                }
+            },
+            { data: 'estado',title: 'Estado', width: '10%' },
+            {
+                data: 'fecha', 
+                width: '10%', 
+                title: 'Fecha',
+                searchable: false,
+                render: function(data, type, row) {
+                    if (type === 'display' || type === 'filter') {
+                        var date = new Date(data);
+                        var formattedDate = new Date(date.toLocaleString('en-US', { timeZone: 'UTC' }));
+                        var day = formattedDate.getDate();
+                        var month = formattedDate.getMonth() + 1;
+                        var year = formattedDate.getFullYear();
+                        var formattedDateString = day + "/" + month + "/" + year;
+                        return formattedDateString;
+                    }
+                    return data;
+                }
+            },
             {
                 data: null,
                 title: 'Acciones',
@@ -82,21 +117,6 @@ $(document).ready(function() {
                         actionsHtml += '<i class="far fa-trash-alt"></i></button>';
                     }
                     return actionsHtml || '';
-                }
-            }
-        ],
-        columnDefs: [
-            {
-                targets: [3],
-                render: function(data, type, row) {
-                    if (type === 'display' || type === 'filter') {
-                        var date = new Date(data);
-                        var day = date.getDate();
-                        var month = date.getMonth() + 1;
-                        var year = date.getFullYear();
-                        return day + '/' + month + '/' + year;
-                    }
-                    return data;
                 }
             }
         ],
@@ -216,6 +236,9 @@ $(document).ready(function() {
                 required: true,
                 maxlength: 200
             },
+            terceros: {
+                required: true
+            },
             fecha: {
                 required: true,
                 maxlength: 10
@@ -232,6 +255,9 @@ $(document).ready(function() {
         },
         messages:{
             nombre: {
+                required: 'Este campo es requerido'
+            },
+            terceros: {
                 required: 'Este campo es requerido'
             },
             fecha: {
@@ -251,7 +277,7 @@ $(document).ready(function() {
             $(element).removeClass('is-invalid');
         },
         errorPlacement: function(error, element) {
-            if (element.attr("name") === "nombre" || element.attr("name") === "fecha" || element.attr("name") === "precio" || element.attr("name") === "descuento") {
+            if (element.attr("name") === "nombre" || element.attr("name") === "terceros" || element.attr("name") === "fecha" || element.attr("name") === "precio" || element.attr("name") === "descuento") {
                 error.insertAfter(element);
             }        
         },
@@ -322,13 +348,10 @@ $(document).ready(function() {
                 url: '/ObtenerVenta/' + idVenta,
                 type: 'GET',
                 success: function (response) {
-                    var checkboxes = document.querySelectorAll(".checkClean");
-                    for (var i = 0; i < checkboxes.length; i++) {
-                        checkboxes[i].checked = false;
-                    }
                     $('#nombre').val(response.nombre);
                     $('#fecha').val(response.fecha);
                     $('#precio').val(response.precio);
+                    $('#terceros').val(response.terceros.toString());
                     $('#monto').val(response.monto);
                     $('#descuento').val(response.descuento);
                     $('#idListDocumento').val(response.idListDocumento);
@@ -341,7 +364,6 @@ $(document).ready(function() {
                 }
             });
         } else {
-            var checkboxes = document.querySelectorAll(".checkClean");
             tituloModal.text('Agregar Venta');
             form.attr('action', '/AgregarVenta/'+idTerreno);
             $('.form-control').val('');
@@ -358,6 +380,7 @@ $(document).ready(function() {
                         $('#nombre').prop('disabled', false);
                         $('#fecha').prop('disabled', false);
                         $('#precio').prop('disabled', false);
+                        $('#terceros').prop('disabled', false);
                         $('#monto').prop('disabled', true);
                         $('#descuento').prop('disabled', false);
                         $('#idListDocumento').prop('disabled', false);
@@ -365,9 +388,10 @@ $(document).ready(function() {
                         $('#terreno').prop('disabled', false);
                         $('#idVenta').prop('disabled', false);
                     }else{
-                        $('#nombre').prop('disabled', true);
+                        $('#nombre').prop('disabled', false);
                         $('#fecha').prop('disabled', true);
                         $('#precio').prop('disabled', true);
+                        $('#terceros').prop('disabled', false);
                         $('#monto').prop('disabled', true);
                         $('#descuento').prop('disabled', true);
                         $('#idListDocumento').prop('disabled', true);
@@ -401,7 +425,6 @@ $(document).ready(function() {
             data: $('#eliminarVentaForm').serialize(),
             success: function (response) {
                 $('#confirmarEliminarModal').modal('hide');
-                var table = $('#ventaTable').DataTable();
                 table.ajax.reload(null, false);
                 toastr.success(response);
             },

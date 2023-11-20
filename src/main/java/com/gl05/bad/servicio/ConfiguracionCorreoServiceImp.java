@@ -18,7 +18,12 @@ public class ConfiguracionCorreoServiceImp implements ConfiguracionCorreoService
     }
 
     @Override
+    public List<ConfiguracionCorreo> listarCorreosEnvio() {
+        return (List<ConfiguracionCorreo>) correoDao.findAllByServidorNot(true);
+    }
+
+    @Override
     public ConfiguracionCorreo obtenerConfiguracionCorreo() {
-        return correoDao.findById(1L).orElse(null);
+        return correoDao.findFirstByServidor(true);
     }
 }

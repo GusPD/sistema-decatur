@@ -19,9 +19,6 @@ public class VistaTrabajadoresProyecto implements Serializable{
     @Column(name = "ID_PROYECTO")
     private Long idProyecto;
     
-    @Column(name = "DUI")
-    private String dui;
-    
     @Column(name = "NOMBRE")
     private String nombre;
     

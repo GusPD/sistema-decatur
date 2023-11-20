@@ -32,6 +32,10 @@
                     <td><c:if test="${not empty venta.nombre}">${venta.nombre}</c:if></td>
                 </tr>
                 <tr>
+                    <td class="encabezado-tabla font-weight-bold">Tipo Venta</td>
+                    <td><c:if test="${not empty venta.terceros}"><c:choose><c:when test="${venta.terceros}">Terceros</c:when><c:when test="${not venta.terceros}">Empresa</c:when></c:choose></c:if></td>
+                </tr>
+                <tr>
                     <td class="encabezado-tabla font-weight-bold">Fecha Venta</td>
                     <td><c:if test="${not empty venta.fecha}"><fmt:formatDate value="${venta.fecha}" pattern="dd/MM/yyyy" /></c:if></td>
                 </tr>
@@ -101,7 +105,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="col-md-8 border p-3 rounded table-responsive columna-derecha page-scroll" style="height: 50vh;">
+        <div class="col-md-8 border p-3 rounded table-responsive columna-derecha page-scroll" style="height: 30vh;">
             <h6>Financiamientos Anteriores</h6>
             <table class="table table-bordered custom-fixed-header small" id="tabla-financiamientos">
                 <thead>
@@ -176,7 +180,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="col-md-8 border p-3 rounded table-responsive columna-derecha page-scroll" style="height: 45vh;">
+        <div class="col-md-8 border p-3 rounded table-responsive columna-derecha page-scroll" style="height: 30vh;">
             <h6>Mantenimientos Anteriores</h6>
             <table class="table table-bordered custom-fixed-header small" id="tabla-mantenimientos">
                 <thead>
@@ -236,6 +240,13 @@
                         <div class="form-group">
                             <label for="nombre" class="form-label">Nombre:<strong class="text-danger"> *</strong></label>
                             <input type="text" class="form-control" id="nombre" name="nombre" maxlength="200" placeholder="Ingrese el nombre de la venta" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="terceros" class="form-label">Tipo venta:<strong class="text-danger"> *</strong></label>
+                            <select class="form-select" id="terceros" name="terceros" placeholder="Seleccione una opción" required>
+                                <option value="true">Terceros</option>
+                                <option value="false">Empresa</option>
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="fecha" class="form-label">Fecha:<strong class="text-danger"> *</strong></label>

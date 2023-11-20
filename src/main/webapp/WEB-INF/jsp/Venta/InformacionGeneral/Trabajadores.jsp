@@ -50,8 +50,18 @@
                         <input type="hidden" id="rol">
                         <input type="hidden" id="idVenta" value="${venta.getIdVenta()}">
                         <div class="form-group">
-                            <label for="dui" class="form-label">DUI:<strong class="text-danger"> *</strong></label>
-                            <input type="text" class="form-control" id="dui" name="dui" maxlength="9" placeholder="Ingrese el número de DUI sin guiones" required>
+                            <label for="tipoDocumento" class="form-label">Tipo documento:<strong class="text-danger"> *</strong></label>
+                            <select class="form-select" id="tipoDocumento" name="tipoDocumento" placeholder="Seleccione una opción" required>
+                                <c:if test="${not empty tiposDocumento}">
+                                    <c:forEach items="${tiposDocumento}" var="eTipo">
+                                        <option value="${eTipo.idTipoDocumento}" data-mascara="${eTipo.mascara}">${eTipo.nombre}</option>
+                                    </c:forEach>
+                                </c:if>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="numero" class="form-label">Número:<strong class="text-danger"> *</strong></label>
+                            <input type="text" class="form-control" id="numero" name="numero" maxlength="50" placeholder="Ingrese el número de documento" required>
                         </div>
                         <div class="form-group">
                             <label for="nombre" class="form-label">Nombre:<strong class="text-danger"> *</strong></label>
@@ -95,11 +105,11 @@
                             <select class="form-select" id="trabajadores" name="trabajadores" placeholder="Seleccione un trabajador" data-live-search="true" multiple>
                                 <c:if test="${not empty trabajadoresNoVenta}">
                                     <c:forEach items="${trabajadoresNoVenta}" var="eTrabajador">
-                                        <option value="${eTrabajador.idVisitante}">${eTrabajador.persona.dui} ${eTrabajador.persona.nombre} ${eTrabajador.persona.apellido}</option>
+                                        <option value="${eTrabajador.idVisitante}">${eTrabajador.persona.numero} ${eTrabajador.persona.nombre} ${eTrabajador.persona.apellido}</option>
                                     </c:forEach>
                                 </c:if>
                             </select>
-                            <div id="span-trabajadores-error" class="mensaje-error d-none" style=""><span>Este campo es requerido</span></div>
+                            <div id="span-trabajadores-error" class="mensaje-error d-none"><span>Este campo es requerido</span></div>
                         </div>
                     </div>
                     <div class="modal-footer d-flex justify-content-between">

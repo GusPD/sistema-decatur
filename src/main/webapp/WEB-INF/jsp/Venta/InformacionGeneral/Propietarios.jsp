@@ -51,8 +51,18 @@
                         <input type="hidden" id="idDocumento">
                         <input type="hidden" id="idAsignacion">
                         <div class="form-group">
-                            <label for="dui" class="form-label">DUI:<strong class="text-danger"> *</strong></label>
-                            <input type="text" class="form-control" id="dui" name="dui" maxlength="9" placeholder="Ingrese el número de DUI sin guiones" required>
+                            <label for="tipoDocumento" class="form-label">Tipo documento:<strong class="text-danger"> *</strong></label>
+                            <select class="form-select" id="tipoDocumento" name="tipoDocumento" placeholder="Seleccione una opción" required>
+                                <c:if test="${not empty tiposDocumento}">
+                                    <c:forEach items="${tiposDocumento}" var="eTipo">
+                                        <option value="${eTipo.idTipoDocumento}" data-mascara="${eTipo.mascara}">${eTipo.nombre}</option>
+                                    </c:forEach>
+                                </c:if>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="numero" class="form-label">Número:<strong class="text-danger"> *</strong></label>
+                            <input type="text" class="form-control" id="numero" name="numero" maxlength="50" placeholder="Ingrese el número de documento" required>
                         </div>
                         <div class="form-group">
                             <label for="nombreP" class="form-label">Nombre:<strong class="text-danger"> *</strong></label>
@@ -108,7 +118,7 @@
                             <select class="form-select" id="propietarios" name="propietarios" placeholder="Seleccione un propietario" data-live-search="true" multiple>
                                 <c:if test="${not empty propietariosNoVenta}">
                                     <c:forEach items="${propietariosNoVenta}" var="ePropietario">
-                                        <option value="${ePropietario.idPropietario}">${ePropietario.persona.dui} ${ePropietario.persona.nombre} ${ePropietario.persona.apellido}</option>
+                                        <option value="${ePropietario.idPropietario}">${ePropietario.persona.numero} ${ePropietario.persona.nombre} ${ePropietario.persona.apellido}</option>
                                     </c:forEach>
                                 </c:if>
                             </select>

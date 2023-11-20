@@ -41,8 +41,8 @@ public class PersonaServiceImp implements PersonaService{
     
     @Override
     @Transactional(readOnly = true)
-    public Persona encontrarDui(String dui) {
-        return personaDao.findByDui(dui);
+    public Persona encontrarNumero(String numero) {
+        return personaDao.findByNumero(numero);
     }
 
     @Override

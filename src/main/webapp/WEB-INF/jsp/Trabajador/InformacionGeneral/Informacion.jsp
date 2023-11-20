@@ -20,8 +20,12 @@
         <table class="table small table-bordered m-0" id="tabla-informacion">
             <tbody>
                 <tr>
-                    <td width="20%" class="encabezado-tabla">DUI</td>
-                    <td><c:if test="${not empty persona.dui}">${persona.dui}</c:if></td>
+                    <td width="20%" class="encabezado-tabla">Tipo Documento</td>
+                    <td><c:if test="${not empty persona.tipoDocumento}">${persona.tipoDocumento.nombre}</c:if></td>
+                </tr>
+                <tr>
+                    <td class="encabezado-tabla">N° Documento</td>
+                    <td><c:if test="${not empty persona.numero}">${persona.numero}</c:if></td>
                 </tr>
                 <tr>
                     <td class="encabezado-tabla">Nombre</td>

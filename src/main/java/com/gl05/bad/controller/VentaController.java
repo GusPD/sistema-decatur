@@ -12,6 +12,7 @@ import com.gl05.bad.domain.Persona;
 import com.gl05.bad.domain.Propietario;
 import com.gl05.bad.domain.Proyecto;
 import com.gl05.bad.domain.Terreno;
+import com.gl05.bad.domain.TipoDocumento;
 import com.gl05.bad.domain.Usuario;
 import com.gl05.bad.domain.Venta;
 import com.gl05.bad.domain.Pago;
@@ -33,6 +34,7 @@ import com.gl05.bad.servicio.PersonaService;
 import com.gl05.bad.servicio.PropietarioService;
 import com.gl05.bad.servicio.ProyectoService;
 import com.gl05.bad.servicio.TerrenoService;
+import com.gl05.bad.servicio.TipoDocumentoService;
 import com.gl05.bad.servicio.UserServiceImp;
 import com.gl05.bad.servicio.VentaService;
 import com.gl05.bad.servicio.VisitanteService;
@@ -128,6 +130,9 @@ public class VentaController {
 
     @Autowired
     private UserServiceImp usuarioService;
+
+    @Autowired
+    private TipoDocumentoService tipoDocumentoService;
     
     //Función que redirige a la vista de las ventas del terreno
     @GetMapping("/Ventas/{idTerreno}")
@@ -301,6 +306,7 @@ public class VentaController {
         Venta ventaEncontrada = ventaService.encontrar(venta.getIdVenta());
         Terreno terrenoEncontrado = ventaEncontrada.getTerreno();
         Proyecto proyecto = terrenoEncontrado.getProyecto();
+        List<TipoDocumento> listaTipoDocumentos = tipoDocumentoService.listaTipoDocumentos();
         
         List<Propietario> listaPropietarios = propietarioService.listaPropietarios();
         List<AsignacionPropietario> listaAsignaciones = asigPropietarioVentaService.listaAsignacion();
@@ -333,6 +339,7 @@ public class VentaController {
             }
         }
         
+        model.addAttribute("tiposDocumento", listaTipoDocumentos);
         model.addAttribute("consumidorFinal", propietariosSeleccionados);
         model.addAttribute("propietariosAsignados", propietarios);
         model.addAttribute("propietariosNoVenta", propietariosNoVenta);
@@ -346,10 +353,10 @@ public class VentaController {
     @PostMapping("/AgregarPropietarioVenta")
     public ResponseEntity<String> AgregarPropietarioVenta(@RequestParam("idVenta") Long idVenta,  @RequestParam("nombreP") String nombre, Propietario propietario, Persona persona, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
-            if(personaService.encontrarDui(persona.getDui())== null){
+            if(personaService.encontrarNumero(persona.getNumero())== null){
                 persona.setNombre(nombre);
                 personaService.agregar(persona);
-                Persona newPersona = personaService.encontrarDui(persona.getDui());
+                Persona newPersona = personaService.encontrarNumero(persona.getNumero());
                 propietario.setPersona(newPersona);
                 propietarioService.agregar(propietario);
                 Venta venta= ventaService.encontrar(idVenta);
@@ -426,6 +433,7 @@ public class VentaController {
         Venta ventaEncontrada = ventaService.encontrar(venta.getIdVenta());
         Terreno terrenoEncontrado = ventaEncontrada.getTerreno();
         Proyecto proyecto = terrenoEncontrado.getProyecto();
+        List<TipoDocumento> listaTipoDocumentos = tipoDocumentoService.listaTipoDocumentos();
         
         List<Visitante> listaVisitantes = visitanteService.listaVisitantes();
         List<AsignacionVisitante> listaAsignacionesVisitante = asigVisitanteService.listaAsignacionVisitantes();
@@ -451,6 +459,7 @@ public class VentaController {
             }
         }
         
+        model.addAttribute("tiposDocumento", listaTipoDocumentos);
         model.addAttribute("trabajadoresAsignados", trabajadores);
         model.addAttribute("trabajadoresNoVenta", visitantesNoVenta);
         model.addAttribute("proyecto", proyecto);
@@ -463,9 +472,9 @@ public class VentaController {
     @PostMapping("/AgregarTrabajadorVenta")
     public ResponseEntity<String> AgregarTrabajadorVenta(@RequestParam("idVenta") Long idVenta, Visitante visitante, Persona persona, HttpServletRequest request, RedirectAttributes redirectAttributes) {
        try {
-            if(personaService.encontrarDui(persona.getDui())== null){
+            if(personaService.encontrarNumero(persona.getNumero())== null){
                 personaService.agregar(persona);
-                Persona newPersona = personaService.encontrarDui(persona.getDui());
+                Persona newPersona = personaService.encontrarNumero(persona.getNumero());
                 visitante.setPersona(newPersona);
                 visitanteService.agregar(visitante);
                 Venta venta= ventaService.encontrar(idVenta);

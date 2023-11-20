@@ -72,6 +72,13 @@
                                 <input type="text" class="form-control" id="nombre" name="nombre" maxlength="200" placeholder="Ingrese el nombre de la venta" required>
                             </div>
                             <div class="form-group">
+                                <label for="terceros" class="form-label">Tipo venta:<strong class="text-danger"> *</strong></label>
+                                <select class="form-select" id="terceros" name="terceros" placeholder="Seleccione una opción" required>
+                                    <option value="true">Terceros</option>
+                                    <option value="false">Empresa</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
                                 <label for="fecha" class="form-label">Fecha:<strong class="text-danger"> *</strong></label>
                                 <input type="date" class="form-control" id="fecha" name="fecha" maxlength="10" placeholder="Ingrese la fecha de la venta" required>
                             </div>

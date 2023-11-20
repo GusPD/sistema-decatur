@@ -55,7 +55,7 @@ $(document).ready(function() {
                 },
                 width: '7%'
             },
-            { data: 'persona.dui', title:'DUI', width: '13%' },
+            { data: 'persona.numero', title:'N° Documento', width: '13%' },
             { data: 'persona.nombre', title:'Nombre', width: '20%' },
             { data: 'persona.apellido', title:'Apellido', width: '20%' },
             { data: 'empleador', title:'Especialidad', width: '20%' },
@@ -148,19 +148,27 @@ $(document).ready(function() {
     }
     //Formulario de agregar
     $.validator.addMethod(
-        "validarDui",
+        "validarDocumento",
         function(value, element) {
-            return this.optional(element) || /^\d{9}$/.test(value);
+            var mascara = $("#tipoDocumento option:selected").data("mascara");
+            if (mascara) {
+                var regex = new RegExp(mascara);
+                return this.optional(element) || regex.test(value);
+            } else {
+                return true;
+            }
         },
-        "Ingrese un número válido, verifique que deben de ser nueve dígitos"
+        "Ingrese un número válido para el tipo de documento"
     );
     var formGuardar = $('#formGuardar');
     var validator = $('#formGuardar').validate({
         rules: {
-            dui: {
+            tipoDocumento: {
                 required: true,
-                validarDui: true,
-                maxlength: 9
+            },
+            numero: {
+                required: true,
+                validarDocumento: true,
             },
             nombre: {
                 required: true,
@@ -176,7 +184,10 @@ $(document).ready(function() {
             }  
         },
         messages:{
-            dui:{
+            tipoDocumento:{
+                required: 'Este campo es requerido'
+            },
+            numero:{
                 required: 'Este campo es requerido'
             },
             nombre:{
@@ -196,7 +207,7 @@ $(document).ready(function() {
             $(element).removeClass('is-invalid');
         },
         errorPlacement: function(error, element) {
-            if (element.attr("name") === "dui" || element.attr("name") === "nombre" || element.attr("name") === "apellido" || element.attr("name") === "empleador") {
+            if (element.attr("name") === "tipoDocumento" || element.attr("name") === "numero" || element.attr("name") === "nombre" || element.attr("name") === "apellido" || element.attr("name") === "empleador") {
                 error.insertAfter(element);
             }        
         },
@@ -248,7 +259,8 @@ $(document).ready(function() {
                 type: 'GET',
                 success: function (response) {
                     $('#idPersona').val(response.persona.idPersona);
-                    $('#dui').val(response.persona.dui);
+                    $('#tipoDocumento').val(response.persona.tipoDocumento.idTipoDocumento);
+                    $('#numero').val(response.persona.numero);
                     $('#nombre').val(response.persona.nombre);
                     $('#apellido').val(response.persona.apellido);
                     $('#idVisitante').val(response.trabajador.idVisitante);

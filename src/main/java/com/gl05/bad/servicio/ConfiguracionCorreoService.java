@@ -6,6 +6,8 @@ import java.util.List;
 public interface ConfiguracionCorreoService {
   
   public List<ConfiguracionCorreo> listarConfiguracionesCorreo();
+
+  public List<ConfiguracionCorreo> listarCorreosEnvio();
   
   public ConfiguracionCorreo obtenerConfiguracionCorreo();
 

@@ -8,6 +8,7 @@ import com.gl05.bad.domain.Proyecto;
 import com.gl05.bad.domain.Propietario;
 import com.gl05.bad.domain.Referencia;
 import com.gl05.bad.domain.Telefono;
+import com.gl05.bad.domain.TipoDocumento;
 import com.gl05.bad.domain.Usuario;
 import com.gl05.bad.domain.VistaPropietariosProyecto;
 import com.gl05.bad.servicio.AsigPropietarioVentaService;
@@ -19,6 +20,7 @@ import com.gl05.bad.servicio.PropietarioService;
 import com.gl05.bad.servicio.ProyectoService;
 import com.gl05.bad.servicio.ReferenciaService;
 import com.gl05.bad.servicio.TelefonoService;
+import com.gl05.bad.servicio.TipoDocumentoService;
 import com.gl05.bad.servicio.UserService;
 import com.gl05.bad.servicio.VistaPropietariosProyectoService;
 import java.util.Arrays;
@@ -81,11 +83,16 @@ public class PropietarioController {
     
     @Autowired
     private UserService usuarioService;
+
+    @Autowired
+    private TipoDocumentoService tipoDocumentoService;
     
     //Función que redirige a la visa de los propietarios del sistema
     @GetMapping("/PropietariosSistema")
     public String mostrarProyecto(Model model, Proyecto proyecto) {
         model.addAttribute("pageTitle", "Propietarios");
+        List<TipoDocumento> listaTipoDocumentos = tipoDocumentoService.listaTipoDocumentos();
+        model.addAttribute("tiposDocumento", listaTipoDocumentos);
         return "/Datos de Proyecto/PropietariosSistema";
     }
     
@@ -451,9 +458,9 @@ public class PropietarioController {
     @PostMapping("/AgregarPropietario")
     public ResponseEntity<String> AgregarPropietario(Propietario propietario, Persona persona, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
-            if(personaService.encontrarDui(persona.getDui())== null){
+            if(personaService.encontrarNumero(persona.getNumero())== null){
                 personaService.agregar(persona);
-                Persona newPersona = personaService.encontrarDui(persona.getDui());
+                Persona newPersona = personaService.encontrarNumero(persona.getNumero());
                 propietario.setPersona(newPersona);
                 propietarioService.agregar(propietario);
                 String mensaje = "Se ha agregado un propietario.";

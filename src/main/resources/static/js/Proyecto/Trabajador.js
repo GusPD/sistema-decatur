@@ -20,7 +20,7 @@ $(document).ready(function() {
                 extend: 'copy',
                 text: 'Copiar',
                 exportOptions: {
-                  columns: [0, 1, 2, 3, 4]
+                  columns: [0, 1, 2, 3]
                 }
             },
             {
@@ -29,7 +29,7 @@ $(document).ready(function() {
                 title: 'Trabajadores del proyecto',
                 filename: 'Trabajadores ' + getCurrentDateTime(),
                 exportOptions: {
-                  columns: [0, 1, 2, 3, 4]
+                  columns: [0, 1, 2, 3]
                 }
             },
             {
@@ -38,7 +38,7 @@ $(document).ready(function() {
                 title: 'Trabajadores del proyecto',
                 filename: 'Trabajadores ' + getCurrentDateTime(),
                 exportOptions: {
-                  columns: [0, 1, 2, 3, 4]
+                  columns: [0, 1, 2, 3]
                 },
                 customize: function (doc) {
                   doc.content[1].table.widths = Array(doc.content[1].table.body[0].length + 1).join('*').split('');
@@ -54,10 +54,9 @@ $(document).ready(function() {
                 render: function (data, type, row, meta) {
                     return meta.row + 1;
                 },
-                width: '7%'
+                width: '13%'
             },
-            { data: 'dui', title:'DUI', width: '10%' },
-            { data: 'nombre', title:'Nombre', width: '23%' },
+            { data: 'nombre', title:'Nombre', width: '28%' },
             { data: 'especialidad', title:'Especialidad', width: '30%' },
             { data: 'lotes', title:'Lote', width: '20%' },
             {
