@@ -113,12 +113,12 @@ $(document).ready(function() {
                 render: function (data, type, row) {
                     var actionsHtml = '';
                     if(hasPrivilegeEditarUsuario === true){
-                        actionsHtml = '<button title="Editar" type="button" class="btn btn-outline-primary abrirModal-btn btn-sm" data-bs-toggle="modal" ';
+                        actionsHtml = '<button title="Editar" type="button" class="btn font-size-small btn-outline-primary abrirModal-btn btn-sm" data-bs-toggle="modal" ';
                         actionsHtml += 'data-bs-target="#crearModal" data-tipo="editar" data-id="' + row.idUsuario + '" data-modo="actualizar">';
                         actionsHtml += '<i class="far fa-edit"></i></button>';
                     }
                     if(hasPrivilegeEliminarUsuario === true){
-                        actionsHtml += '<button title="Eliminar" type="button" class="btn btn-outline-danger eliminarModal-btn btn-sm" data-id="' + row.idUsuario + '" ';
+                        actionsHtml += '<button title="Eliminar" type="button" class="btn font-size-small btn-outline-danger eliminarModal-btn btn-sm" data-id="' + row.idUsuario + '" ';
                         actionsHtml += 'data-cod="' + row.idUsuario + '">';
                         actionsHtml += '<i class="far fa-trash-alt"></i></button>';
                     }
@@ -365,6 +365,8 @@ $(document).ready(function() {
             }
             tituloModal.text('Agregar Usuario');
             form.attr('action', '/AgregarUsuario');
+            $('#nombre').val('');
+            $('#roles').val('');
             $('#username').val('');
             $('#email').val('');
             $('#password').val('');

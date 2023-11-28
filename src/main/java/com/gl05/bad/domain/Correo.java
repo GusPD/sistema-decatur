@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -39,8 +40,9 @@ public class Correo implements Serializable {
     @Size(max = 150)
     @Column(name = "CORREO")
     private String correo;
-    @JoinColumn(name = "ID_PROPIETARIO", referencedColumnName = "ID_PROPIETARIO")
-    private Long idPropietario;
+    @ManyToOne
+    @JoinColumn(name = "ID_PROPIETARIO")
+    private Propietario propietario;
 
     @Override
     public int hashCode() {

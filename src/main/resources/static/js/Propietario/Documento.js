@@ -33,11 +33,11 @@ $(document).ready(function() {
                 render: function (data, type, row) {
                     var actionsHtml = '';
                     if(hasPrivilegeVerDocumento === true){
-                        actionsHtml = '<a title="Ver" type="button" class="btn btn-outline-secondary btn-sm" href="/DocumentoPropietario/' + row.idDocumento + '">';
+                        actionsHtml = '<a title="Ver" type="button" class="btn font-size-small btn-outline-secondary btn-sm" href="/DocumentoPropietario/' + row.idDocumento + '">';
                         actionsHtml += '<i class="far fa-eye"></i></a>';
                     }
                     if(hasPrivilegeEliminarDocumento === true){
-                        actionsHtml += '<button title="Eliminar" type="button" class="btn btn-outline-danger eliminarModalDocumento-btn btn-sm" data-id="' + row.idDocumento + '" ';
+                        actionsHtml += '<button title="Eliminar" type="button" class="btn font-size-small btn-outline-danger eliminarModalDocumento-btn btn-sm" data-id="' + row.idDocumento + '" ';
                         actionsHtml += 'data-cod="' + row.idDocumento + '">';
                         actionsHtml += '<i class="far fa-trash-alt"></i></button>';
                     }

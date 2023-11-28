@@ -20,7 +20,8 @@ import com.gl05.bad.domain.Visitante;
 import com.gl05.bad.domain.VistaVentasActiva;
 import com.gl05.bad.domain.InformacionFinanciamiento;
 import com.gl05.bad.domain.InformacionMantenimiento;
-import com.gl05.bad.servicio.AsigPropietarioVentaService;
+import com.gl05.bad.domain.InformeMantenimiento;
+import com.gl05.bad.servicio.AsignacionPropietarioService;
 import com.gl05.bad.servicio.AsignacionVisitanteService;
 import com.gl05.bad.servicio.BitacoraServiceImp;
 import com.gl05.bad.servicio.CuentaBancariaService;
@@ -29,6 +30,7 @@ import com.gl05.bad.servicio.DocumentoService;
 import com.gl05.bad.servicio.FacturacionService;
 import com.gl05.bad.servicio.InformacionFinanciamientoService;
 import com.gl05.bad.servicio.InformacionMantenimientoService;
+import com.gl05.bad.servicio.InformeMantenimientoService;
 import com.gl05.bad.servicio.PagoService;
 import com.gl05.bad.servicio.PersonaService;
 import com.gl05.bad.servicio.PropietarioService;
@@ -102,7 +104,7 @@ public class VentaController {
     private VisitanteService visitanteService;
     
     @Autowired
-    private AsigPropietarioVentaService asigPropietarioVentaService;
+    private AsignacionPropietarioService asigPropietarioService;
     
     @Autowired
     private AsignacionVisitanteService asigVisitanteService;
@@ -133,6 +135,9 @@ public class VentaController {
 
     @Autowired
     private TipoDocumentoService tipoDocumentoService;
+
+    @Autowired
+    private InformeMantenimientoService informeMantenimientoService;
     
     //Función que redirige a la vista de las ventas del terreno
     @GetMapping("/Ventas/{idTerreno}")
@@ -295,8 +300,8 @@ public class VentaController {
     //Función que obtiene los propietarios de la venta
     @GetMapping("/propietarioVenta/data/{idVenta}")
     @ResponseBody
-    public DataTablesOutput<AsignacionPropietario> GetPropietarios(@Valid DataTablesInput input, @PathVariable Long idVenta) {
-        return asigPropietarioVentaService.listarPropietariosVenta(input, idVenta);
+    public DataTablesOutput<Propietario> GetPropietarios(@Valid DataTablesInput input, @PathVariable Long idVenta) {
+        return propietarioService.listarPropietariosVenta(input, idVenta);
     }
     
     //Función que redirige a la vista de los propietarios de la venta
@@ -309,7 +314,7 @@ public class VentaController {
         List<TipoDocumento> listaTipoDocumentos = tipoDocumentoService.listaTipoDocumentos();
         
         List<Propietario> listaPropietarios = propietarioService.listaPropietarios();
-        List<AsignacionPropietario> listaAsignaciones = asigPropietarioVentaService.listaAsignacion();
+        List<AsignacionPropietario> listaAsignaciones = asigPropietarioService.listaAsignacion();
         List<Propietario> propietariosNoVenta = new ArrayList<Propietario>();
         boolean existePropietarioAsignado = false;
         for (var propietario : listaPropietarios) {
@@ -364,7 +369,7 @@ public class VentaController {
                 newAsignacionVenta.setPropietario(propietario);
                 newAsignacionVenta.setVenta(venta);
                 newAsignacionVenta.setEstado("No Seleccionado");
-                asigPropietarioVentaService.agregar(newAsignacionVenta);
+                asigPropietarioService.agregar(newAsignacionVenta);
                 String mensaje = "Se ha agregado un propietario a la venta.";
                 bitacoraService.registrarAccion("Agregar propietario venta");
                 return ResponseEntity.ok(mensaje);
@@ -390,7 +395,7 @@ public class VentaController {
                 newAsignacionVenta.setPropietario(propietario);
                 newAsignacionVenta.setVenta(venta);
                 newAsignacionVenta.setEstado("No Seleccionado");
-                asigPropietarioVentaService.agregar(newAsignacionVenta);
+                asigPropietarioService.agregar(newAsignacionVenta);
                 contar++;
             }
             String mensaje = "Se ha agregado un propietario a la venta.";
@@ -406,12 +411,14 @@ public class VentaController {
     }
 
     //Función para eliminar un propietario de la venta
-    @PostMapping("/EliminarPropietarioVenta/{idAsignacion}")
-    public ResponseEntity<String> EliminarPropietarioVenta(AsignacionPropietario asignacion) {
+    @PostMapping("/EliminarPropietarioVenta/{idPropietario}")
+    public ResponseEntity<String> EliminarPropietarioVenta(Propietario propietario) {
         try {
-             asigPropietarioVentaService.eliminar(asignacion);
-             String mensaje = "Se ha eliminado un propietario de la venta correctamente.";
-             bitacoraService.registrarAccion("Eliminar propietario venta");
+            Propietario propietarioEncontrado = propietarioService.encontrar(propietario.getIdPropietario());
+            AsignacionPropietario asignacion = asigPropietarioService.encontrarPropietario(propietarioEncontrado);
+            asigPropietarioService.eliminar(asignacion);
+            String mensaje = "Se ha eliminado un propietario de la venta correctamente.";
+            bitacoraService.registrarAccion("Eliminar propietario venta");
             return ResponseEntity.ok(mensaje);
         } catch (Exception e) {
             String error = "Ha ocurrido un error al eliminar el propietario de la venta.";
@@ -630,7 +637,7 @@ public class VentaController {
         Proyecto proyecto = terrenoEncontrado.getProyecto();
         Facturacion newFacturacion = facturacionService.encontrarVenta(ventaEncontrada);
         
-        List<AsignacionPropietario> listaAsignaciones = asigPropietarioVentaService.listaAsignacion();        
+        List<AsignacionPropietario> listaAsignaciones = asigPropietarioService.listaAsignacion();        
         List<AsignacionPropietario> propietarios = new ArrayList<AsignacionPropietario>();
         for (var propietario : listaAsignaciones) {
             if(Objects.equals(propietario.getVenta().getIdVenta(), venta.getIdVenta())){
@@ -661,10 +668,10 @@ public class VentaController {
             int contador=0;
             for (var idpropietario : propietarios) {
                 Propietario propietario = propietarioService.encontrar(idpropietario);
-                AsignacionPropietario newAsignacionVenta = asigPropietarioVentaService.encontrarPropietario(propietario);
+                AsignacionPropietario newAsignacionVenta = asigPropietarioService.encontrarPropietario(propietario);
                 if(Objects.equals(newAsignacionVenta.getVenta().getIdVenta(), venta.getIdVenta())){
                     newAsignacionVenta.setEstado(estado);
-                    asigPropietarioVentaService.actualizar(newAsignacionVenta);
+                    asigPropietarioService.actualizar(newAsignacionVenta);
                     contador++;
                 }
             }
@@ -854,12 +861,14 @@ public class VentaController {
                             try {
                                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                                 Date fecha = dateFormat.parse(nextRecord[0]);
+                                System.out.println(fecha);
                             } catch (ParseException | NumberFormatException e) {
                                 mensajeErrores += "\nEl registro N° "+contadorRegistros+", el valor de la fecha pago no se encuentra en el formato: dd/MM/yyyy.";
                                 existeError = true;
                             }
                             try {
                                 int numero = Integer.parseInt(nextRecord[1]);
+                                System.out.println(numero);
                             } catch (NumberFormatException e) {
                                 mensajeErrores += "\nEl registro N° "+contadorRegistros+", el valor del recibo no es un número.";
                                 existeError = true;
@@ -877,42 +886,49 @@ public class VentaController {
                             try {
                                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
                                 Date fecha = dateFormat.parse(nextRecord[4]);
+                                System.out.println(fecha);
                             } catch (ParseException | NumberFormatException e) {
                                 mensajeErrores += "\nEl registro N° "+contadorRegistros+", el valor de la fecha de la cuota no se encuentra en el formato: dd/MM/yyyy.";
                                 existeError = true;
                             }
                             try {
                                 double numero = Double.parseDouble(nextRecord[5]);
+                                System.out.println(numero);
                             } catch (NumberFormatException e) {
                                 mensajeErrores += "\nEl registro N° "+contadorRegistros+", el valor de la cuota no es un número.";
                                 existeError = true;
                             }
                             try {
                                 double numero = Double.parseDouble(nextRecord[6]);
+                                System.out.println(numero);
                             } catch (NumberFormatException e) {
                                 mensajeErrores += "\nEl registro N° "+contadorRegistros+", el valor de saldo de la cuota no es un número.";
                                 existeError = true;
                             }
                             try {
                                 double numero = Double.parseDouble(nextRecord[7]);
+                                System.out.println(numero);
                             } catch (NumberFormatException e) {
                                 mensajeErrores += "\nEl registro N° "+contadorRegistros+", el valor de recargo no es un número.";
                                 existeError = true;
                             }
                             try {
                                 double numero = Double.parseDouble(nextRecord[8]);
+                                System.out.println(numero);
                             } catch (NumberFormatException e) {
                                 mensajeErrores += "\nEl registro N° "+contadorRegistros+", el valor de saldo de recargo no es un número.";
                                 existeError = true;
                             }
                             try {
                                 double numero = Double.parseDouble(nextRecord[9]);
+                                System.out.println(numero);
                             } catch (NumberFormatException e) {
                                 mensajeErrores += "\nEl registro N° "+contadorRegistros+", el valor de descuento no es un número.";
                                 existeError = true;
                             }
                             try {
                                 double numero = Double.parseDouble(nextRecord[10]);
+                                System.out.println(numero);
                             } catch (NumberFormatException e) {
                                 mensajeErrores += "\nEl registro N° "+contadorRegistros+", el valor de otros no es un número.";
                                 existeError = true;
@@ -920,11 +936,11 @@ public class VentaController {
                         }
                         contadorRegistros++;
                     }
+                    csvReader.close();
                     //Se envía el mensaje de errores
                     if(existeError){
                         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Errores en los registros:"+mensajeErrores);
                     }
-
                     //Registro de los pagos y las cuotas
                     CSVReader csvReader2 = new CSVReader(new InputStreamReader(new ByteArrayInputStream(fileBytes)));
                     csvReader2.readNext();
@@ -982,7 +998,7 @@ public class VentaController {
                     
                         listaCuotasPago.clear();
                     }
-
+                    csvReader2.close();
                     String mensaje = "Se ha agregado el estado de cuenta de mantenimiento correctamente.";
                     bitacoraService.registrarAccion("Agregar mantenimiento de la venta");
                     return ResponseEntity.ok(mensaje);
@@ -1087,6 +1103,8 @@ public class VentaController {
     public ResponseEntity<String> EliminarVenta(Venta venta) {
         try {
             Venta newVenta = ventaService.encontrar(venta.getIdVenta());
+            InformeMantenimiento informeMantenimiento = informeMantenimientoService.encontrarVenta(newVenta);
+            informeMantenimientoService.eliminar(informeMantenimiento);
             ventaService.eliminar(newVenta);
             List<Venta> listadoVentas = ventaService.listaVentas();
             List<Venta> listadoVentasTerreno = new ArrayList<Venta>();

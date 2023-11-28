@@ -191,6 +191,24 @@
                         </ul>
                     </li>
                 </sec:authorize>
+                <sec:authorize access="hasAuthority('GESTIONAR_CONFIGURACION_CORREO_PRIVILAGE')">
+                    <li class="nav-item ${requestScope['javax.servlet.forward.request_uri'] == '/ConfiguracionCorreos' ? 'menu-open' : ''}">
+                        <a href="#" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == '/ConfiguracionCorreos' ? 'active' : ''}">
+                            <i class="nav-icon fa-solid fa-gear"></i>
+                            <p>Configuración<i class="right fas fa-angle-left"></i></p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <sec:authorize access="hasAuthority('GESTIONAR_CONFIGURACION_CORREO_PRIVILAGE')">
+                            <li class="nav-item">
+                                <a href="/ConfiguracionCorreos" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == '/ConfiguracionCorreos' ? 'active' : ''}">
+                                    <i class="fa-solid fa-envelope nav-icon text-blue"></i>
+                                    <p>Correos</p>
+                                </a>
+                            </li>
+                            </sec:authorize>
+                        </ul>
+                    </li>
+                </sec:authorize>
             </ul>
         </nav>
     </div>

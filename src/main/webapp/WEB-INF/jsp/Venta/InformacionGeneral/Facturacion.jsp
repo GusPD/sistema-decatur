@@ -1,5 +1,5 @@
 <%@ include file="../venta-header.jspf"%>
-<div class="row">
+<div class="row pb-3">
     <div class="col-12">
         <div class="card">
             <div class="card-header">
@@ -110,13 +110,13 @@
                 <h5 class="modal-title" id="crearModalLabel">Consumidor Final</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <form id='formSeleccionarPropietario' accept-charset="UTF-8">
+            <form id='formSeleccionarPropietario' accept-charset="UTF-8">
+                <div class="modal-body">
                     <div  class="overflow-auto">
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                         <div class="form-group">
                             <label for="propietarios">Seleccione los propietarios:<strong class="text-danger"> *</strong></label>
-                            <select class="form-select" id="propietarios" name="propietarios" placeholder="Seleccione un propietario" data-live-search="true" multiple>
+                            <select class="form-select form-select-sm" id="propietarios" name="propietarios" placeholder="Seleccione un propietario" data-live-search="true" multiple>
                                 <c:if test="${not empty propietariosAsignados}">
                                     <c:forEach items="${propietariosAsignados}" var="ePropietario">
                                         <option value="${ePropietario.propietario.idPropietario}">${ePropietario.propietario.persona.dui} ${ePropietario.propietario.persona.nombre} ${ePropietario.propietario.persona.apellido}</option>
@@ -127,22 +127,22 @@
                         </div>
                         <div class="form-group">
                             <label for="estadoS" class="form-label">Impresión Comprobante:<strong class="text-danger"> *</strong></label>
-                            <select class="form-select" id="estado" name="estado" required>
+                            <select class="form-select form-select-sm" id="estado" name="estado" required>
                                 <option value="">Seleccione el estado</option>
                                 <option value="Seleccionado">Seleccionado</option>
                                 <option value="No seleccionado">No seleccionado</option>
                             </select>
                         </div>
                     </div>
-                    <div class="modal-footer d-flex justify-content-between">
-                        <label for="monto" class="form-label text-danger mensaje-obligatorios">(*) Campos Obligatorios</label>
-                        <div>
-                            <button type="submit" id="btnGuardarSeleccionarPropietario" class="btn btn-outline-success btn-sm">Guardar</button>
-                            <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
-                        </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <label for="monto" class="form-label text-danger mensaje-obligatorios">(*) Campos Obligatorios</label>
+                    <div>
+                        <button type="submit" id="btnGuardarSeleccionarPropietario" class="btn btn-outline-success btn-sm">Guardar</button>
+                        <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -154,8 +154,8 @@
                 <h5 class="modal-title" id="crearModalLabel">Crédito Fiscal</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <form id="formGuardar" accept-charset="UTF-8" method="post" action="/AgregarFacturacionVenta">
+            <form id="formGuardar" accept-charset="UTF-8" method="post" action="/AgregarFacturacionVenta">
+                <div class="modal-body">
                     <div  class="overflow-auto">
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                         <input type="hidden" id="idVenta" value="${venta.getIdVenta()}">
@@ -163,11 +163,11 @@
                         <input type="hidden" id="idFacturacion" value="${facturacion.getIdFacturacion()}">
                         <div class="form-group">
                             <label for="registro" class="form-label">N° Registro:<strong class="text-danger"> *</strong></label>
-                            <input type="text" class="form-control" id="registro" name="registro" maxlength="12" placeholder="Ingrese el registro" required>
+                            <input type="text" class="form-control form-control-sm" id="registro" name="registro" maxlength="12" placeholder="Ingrese el registro" required>
                         </div>
                         <div class="form-group">
                             <label for="fiscal" class="form-label">Personería Jurídica:<strong class="text-danger"> *</strong></label>
-                            <select class="form-select" id="fiscal" name="fiscal" required>
+                            <select class="form-select form-select-sm" id="fiscal" name="fiscal" required>
                                 <option value="">Seleccione una opción</option>
                                 <option value="0">Persona</option>
                                 <option value="1">Empresa</option>
@@ -175,34 +175,34 @@
                         </div>
                         <div id="input-nit" class="form-group" style="display:none;">
                             <label for="nit" class="form-label">NIT:<strong class="text-danger"> *</strong></label>
-                            <input type="text" class="form-control" id="nit" name="nit" maxlength="14" placeholder="Ingrese el NIT">
+                            <input type="text" class="form-control form-control-sm" id="nit" name="nit" maxlength="14" placeholder="Ingrese el NIT">
                         </div>
                         <div id="input-dui" class="form-group" style="display:none;">
                             <label for="" class="form-label">DUI:<strong class="text-danger"> *</strong></label>
-                            <input type="dui" class="form-control" id="dui" name="dui" maxlength="9" placeholder="Ingrese el DUI">
+                            <input type="dui" class="form-control form-control-sm" id="dui" name="dui" maxlength="9" placeholder="Ingrese el DUI">
                         </div>
                         <div class="form-group">
                             <label for="nombre" class="form-label">Nombre:<strong class="text-danger"> *</strong></label>
-                            <input type="text" class="form-control" id="nombre" name="nombre" maxlength="200" placeholder="Ingrese el nombre" required>
+                            <input type="text" class="form-control form-control-sm" id="nombre" name="nombre" maxlength="200" placeholder="Ingrese el nombre" required>
                         </div>
                         <div class="form-group">
                             <label for="direccion" class="form-label">Dirección:<strong class="text-danger"> *</strong></label>
-                            <input type="text" class="form-control" id="direccion" name="direccion" maxlength="300" placeholder="Ingrese la dirección" required>
+                            <input type="text" class="form-control form-control-sm" id="direccion" name="direccion" maxlength="300" placeholder="Ingrese la dirección" required>
                         </div>
                         <div class="form-group">
                             <label for="giro" class="form-label">Giro:<strong class="text-danger"> *</strong></label>
-                            <input type="text" class="form-control" id="giro" name="giro" maxlength="200" placeholder="Ingrese el giro" required>
+                            <input type="text" class="form-control form-control-sm" id="giro" name="giro" maxlength="200" placeholder="Ingrese el giro" required>
                         </div>
                     </div>
-                    <div class="modal-footer d-flex justify-content-between">
-                        <label for="monto" class="form-label text-danger mensaje-obligatorios">(*) Campos Obligatorios</label>
-                        <div>
-                            <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
-                            <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
-                        </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <label for="monto" class="form-label text-danger mensaje-obligatorios">(*) Campos Obligatorios</label>
+                    <div>
+                        <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
+                        <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>

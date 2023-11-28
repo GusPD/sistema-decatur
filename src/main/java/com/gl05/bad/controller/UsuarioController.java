@@ -66,7 +66,7 @@ public class UsuarioController {
         model.addAttribute("usuarios", elemento);
         model.addAttribute("roles", elementoRol);
         model.addAttribute("usuario", new Usuario());
-        return "/Usuarios/GestionarUsuarios";
+        return "/Usuario/GestionarUsuarios";
     }
     
     //Función que obtiene los usuarios de la base de datos
@@ -172,7 +172,7 @@ public class UsuarioController {
         model.addAttribute("proyectos", proyectos);
         model.addAttribute("roles", rolesUsuario);
         model.addAttribute("usuario", newUsuario);
-        return "/Usuarios/PerfilUsuario";
+        return "/Usuario/PerfilUsuario";
     }
 
     //Función que actualiza un usuario de la base de datos

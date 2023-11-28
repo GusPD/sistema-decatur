@@ -1,6 +1,6 @@
 <%@ include file="../venta-header.jspf"%>
 <div class="row">
-    <div class="col-12 pb-0">
+    <div class="col-12 pb-3">
         <div class="card">
             <input type="hidden" id="idVenta" value="${venta.getIdVenta()}">
             <!-- Menú de los estados de cuenta -->
@@ -27,14 +27,16 @@
                                 Mantenimiento
                             </div>
                             <div class="col-sm-6 d-flex justify-content-end">
-                                <sec:authorize access="hasAuthority('EXPORTAR_PAGO_PRIVILAGE')">
-                                    <button id="export-copy" title="Copiar" class="btn btn-outline-secondary buttons-copy" type="button"><i class="fa-regular fa-copy"></i></button> 
-                                    <button id="export-excel" title="Exportar Excel" class="btn btn-outline-success buttons-excel ml-2" type="button"><i class="fa-solid fa-file-excel"></i></button> 
-                                    <button id="export-pdf" title="Exportar PDF" class="btn btn-outline-danger buttons-pdf ml-2" type="button"><i class="fa-regular fa-file-pdf"></i></button>
+                                <sec:authorize access="hasAuthority('EXPORTAR_ESTADO_CUENTA_MANTENIMIENTO_PRIVILAGE')">
+                                    <button id="export-copy" title="Copiar" class="btn btn-sm btn-outline-secondary buttons-copy" type="button"><i class="fa-regular fa-copy"></i></button> 
+                                    <button id="export-excel" title="Exportar Excel" class="btn btn-sm btn-outline-success buttons-excel ml-2" type="button"><i class="fa-solid fa-file-excel"></i></button> 
+                                    <button id="export-pdf" title="Exportar PDF" class="btn btn-sm btn-outline-danger buttons-pdf ml-2" type="button"><i class="fa-regular fa-file-pdf"></i></button>
                                 </sec:authorize>
-                                <sec:authorize access="hasAuthority('AGREGAR_PAGO_PRIVILAGE')">
-                                    <button title="Cargar Mantenimiento" id="SubirEstado" class="btn btn-blue" data-bs-toggle="modal" data-bs-target="#crearModal" data-tipo="subir"><i class="fa-solid fa-file-arrow-up"></i></button>
-                                    <button title="Eliminar Mantenimiento" type="button" class="btn btn-outline-danger eliminarModal-btn" data-bs-toggle="modal" data-bs-target="#confirmarEliminarModal" data-id="${venta.getIdVenta()}"><i class="far fa-trash-alt"></i></button>
+                                <sec:authorize access="hasAuthority('AGREGAR_ESTADO_CUENTA_MANTENIMIENTO_PRIVILAGE')">
+                                    <button title="Cargar Mantenimiento" id="SubirEstado" class="btn btn-sm btn-blue" data-bs-toggle="modal" data-bs-target="#crearModal" data-tipo="subir"><i class="fa-solid fa-file-arrow-up"></i></button>
+                                </sec:authorize>
+                                <sec:authorize access="hasAuthority('ELIMINAR_ESTADO_CUENTA_MANTENIMIENTO_PRIVILAGE')">
+                                    <button title="Eliminar Mantenimiento" type="button" class="btn btn-sm btn-outline-danger eliminarModal-btn" data-bs-toggle="modal" data-bs-target="#confirmarEliminarModal" data-id="${venta.getIdVenta()}"><i class="far fa-trash-alt"></i></button>
                                 </sec:authorize>
                             </div>
                         </div>
@@ -61,25 +63,25 @@
                 <h5 class="modal-title" id="crearModalLabel">Cargar Estado de Cuenta</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <form id='formGuardar' accept-charset="UTF-8" enctype="multipart/form-data">
+            <form id='formGuardar' accept-charset="UTF-8" enctype="multipart/form-data">
+                <div class="modal-body">
                     <div  class="overflow-auto">
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                         <input type="hidden" id="idVenta" value="${venta.getIdVenta()}">
                         <div class="form-group">
                             <label for="documento" class="form-label">Documento:<strong class="text-danger"> *</strong></label>
-                            <input type="file" class="form-control" id="documento" name="documento" aria-hidden="true" accept=".csv" required>
+                            <input type="file" class="form-control form-control-sm" id="documento" name="documento" aria-hidden="true" accept=".csv" required>
                         </div>
                     </div>
-                    <div class="modal-footer d-flex justify-content-between">
-                        <label for="monto" class="form-label text-danger mensaje-obligatorios">(*) Campos Obligatorios</label>
-                        <div>
-                            <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
-                            <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
-                        </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <label for="monto" class="form-label text-danger mensaje-obligatorios">(*) Campos Obligatorios</label>
+                    <div>
+                        <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
+                        <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>

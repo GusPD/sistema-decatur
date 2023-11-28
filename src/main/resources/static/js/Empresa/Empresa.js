@@ -62,16 +62,16 @@ $(document).ready(function() {
                 render: function (data, type, row) {
                     var actionsHtml = '';
                     if(hasPrivilegeVerEmpresa === true){
-                        actionsHtml = '<a title="Ver" type="button" class="btn btn-outline-secondary btn-sm" href="/CuentasBancarias/' + row.idEmpresa + '">';
+                        actionsHtml = '<a title="Ver" type="button" class="btn font-size-small btn-outline-secondary btn-sm" href="/CuentasBancarias/' + row.idEmpresa + '">';
                         actionsHtml += '<i class="far fa-eye"></i></a>';
                     }
                     if(hasPrivilegeEditarEmpresa === true){
-                        actionsHtml += '<button title="Editar" type="button" class="btn btn-outline-primary abrirModal-btn btn-sm" data-bs-toggle="modal" ';
+                        actionsHtml += '<button title="Editar" type="button" class="btn font-size-small btn-outline-primary abrirModal-btn btn-sm" data-bs-toggle="modal" ';
                         actionsHtml += 'data-bs-target="#crearModal" data-tipo="editar" data-id="' + row.idEmpresa + '" data-modo="actualizar">';
                         actionsHtml += '<i class="far fa-edit"></i></button>';
                     }
                     if(hasPrivilegeEliminarEmpresa === true){
-                        actionsHtml += '<button title="Eliminar" type="button" class="btn btn-outline-danger eliminarModal-btn btn-sm" data-id="' + row.idEmpresa + '" ';
+                        actionsHtml += '<button title="Eliminar" type="button" class="btn font-size-small btn-outline-danger eliminarModal-btn btn-sm" data-id="' + row.idEmpresa + '" ';
                         actionsHtml += 'data-cod="' + row.idEmpresa + '">';
                         actionsHtml += '<i class="far fa-trash-alt"></i></button>';
                     }

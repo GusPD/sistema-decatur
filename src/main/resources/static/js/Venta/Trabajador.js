@@ -33,11 +33,11 @@ $(document).ready(function() {
                 render: function (data, type, row) {
                     var actionsHtml = '';
                     if(hasPrivilegeVerTrabajador === true){
-                        actionsHtml = '<a title="Ver" title="Ver" type="button" class="btn btn-outline-secondary btn-sm" href="/InformacionTrabajador/' + row.venta.terreno.proyecto.idProyecto +'/'+ row.visitante.persona.idPersona + '' + '">';
+                        actionsHtml = '<a title="Ver" title="Ver" type="button" class="btn font-size-small btn-outline-secondary btn-sm" href="/InformacionTrabajador/' + row.venta.terreno.proyecto.idProyecto +'/'+ row.visitante.persona.idPersona + '' + '">';
                         actionsHtml += '<i class="far fa-eye"></i></a>';
                     }
                     if(hasPrivilegeEliminarTrabajador === true){
-                        actionsHtml += '<button title="Eliminar" title="Eliminar" type="button" class="btn btn-outline-danger eliminarModalTrabajador-btn btn-sm" data-id="' + row.idAsignacion + '" ';
+                        actionsHtml += '<button title="Eliminar" title="Eliminar" type="button" class="btn font-size-small btn-outline-danger eliminarModalTrabajador-btn btn-sm" data-id="' + row.idAsignacion + '" ';
                         actionsHtml += 'data-cod="' + row.idAsignacion + '">';
                         actionsHtml += '<i class="far fa-trash-alt"></i></button>';
                     }

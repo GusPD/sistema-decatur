@@ -1,6 +1,9 @@
 package com.gl05.bad.domain;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -8,6 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
@@ -15,6 +20,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+
 import lombok.Data;
 
 @Data
@@ -55,6 +61,22 @@ public class Propietario implements Serializable {
     @Size(max = 300)
     @Column(name = "DIRECCION_TRABAJO")
     private String direccionTrabajo;
+
+    @ManyToMany
+    @JoinTable(
+        name = "ASIGNACION_PROPIETARIO",
+        joinColumns = @JoinColumn(name = "ID_PROPIETARIO"),
+        inverseJoinColumns = @JoinColumn(name = "ID_VENTA")
+    )
+    private Set<Venta> ventas = new HashSet<>();
+
+    public void añadirVenta(Venta venta){
+        this.ventas.add(venta);
+    }
+    
+    public void eliminarVenta(Venta venta){
+        this.ventas.remove(venta);
+    }
 
     @Override
     public int hashCode() {

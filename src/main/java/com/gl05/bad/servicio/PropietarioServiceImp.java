@@ -3,10 +3,20 @@ package com.gl05.bad.servicio;
 import com.gl05.bad.dao.PropietarioDao;
 import com.gl05.bad.domain.Persona;
 import com.gl05.bad.domain.Propietario;
+import com.gl05.bad.domain.Proyecto;
+import com.gl05.bad.domain.Venta;
+
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
+import javax.persistence.criteria.Predicate;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +30,12 @@ public class PropietarioServiceImp implements PropietarioService{
     @Transactional(readOnly = true)
     public List<Propietario> listaPropietarios() {
         return (List<Propietario>) propietarioDao.findAll();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Propietario> listaPropietariosProyecto(Proyecto proyecto) {
+        return (List<Propietario>) propietarioDao.findPropietariosByProyecto(proyecto.getIdProyecto());
     }
 
     @Override
@@ -60,5 +76,17 @@ public class PropietarioServiceImp implements PropietarioService{
     @Transactional(readOnly = true)
     public DataTablesOutput<Propietario> listarPropietarios(DataTablesInput input) {
         return propietarioDao.findAll(input);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public DataTablesOutput<Propietario> listarPropietariosVenta(DataTablesInput input, Long idVenta) {
+        Specification<Propietario> specification = (root, query, builder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            Join<Propietario, Venta> joinVenta = root.join("ventas", JoinType.INNER);
+            predicates.add(builder.equal(joinVenta.get("idVenta"), idVenta));
+            return builder.and(predicates.toArray(new Predicate[0]));
+        };
+        return propietarioDao.findAll(input, specification);
     }
 }

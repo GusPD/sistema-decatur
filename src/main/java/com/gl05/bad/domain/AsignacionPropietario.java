@@ -4,16 +4,18 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
+
 import lombok.Data;
 
 @Data
@@ -32,11 +34,11 @@ public class AsignacionPropietario implements Serializable {
     @Column(name = "ID_ASIG_PROPIETARIO")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idAsignacion;
-    @JoinColumn(name = "ID_PROPIETARIO", referencedColumnName = "ID_PROPIETARIO")
-    @ManyToOne
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "ID_PROPIETARIO")
     private Propietario propietario;
-    @JoinColumn(name = "ID_VENTA", referencedColumnName = "ID_VENTA")
-    @ManyToOne
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "ID_VENTA")
     private Venta venta;
     @Column(name = "ESTADO")
     private String estado;

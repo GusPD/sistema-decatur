@@ -157,6 +157,13 @@ public class PagoController {
         model.addAttribute("proyecto", newProyecto);
         return "/Pago/Recibo";
     }
+
+    //Función para obtener el mantenimiento de la venta de la base de datos
+    @GetMapping("/cuotaMantenimientoPago/data/{idPago}")
+    @ResponseBody
+    public DataTablesOutput<CuotaMantenimiento> GetMantenimientoVenta(@Valid DataTablesInput input,  @PathVariable Long idPago){
+        return cuotaMantenimientoService.listarPago(input, idPago);
+    }
     
     //Función para agregar un pago en la base de datos
     @PostMapping("/AgregarPago")

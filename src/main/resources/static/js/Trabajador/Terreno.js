@@ -21,15 +21,51 @@ $(document).ready(function() {
                 render: function (data, type, row, meta) {
                     return meta.row + 1;
                 },
-                width: '10%'
+                width: '6%'
             },
-            { data: 'venta.terreno.proyecto.nombre', title: "Proyecto", width: '20%' },
-            { data: 'venta.terreno.poligono', title: "Poligono", width: '10%' },
-            { data: 'venta.terreno.numero', title: "Número", width: '10%' },
-            { data: 'venta.terreno.seccion', title: "Sección", width: '10%' },
-            { data: 'venta.terreno.matricula', title: "Matrícula", width: '20%' },
-            { data: 'venta.terreno.areaMetros', title: "Área (m²)", width: '10%' },
-            { data: 'venta.terreno.areaVaras', title: "Área (v²)", width: '10%' }
+            { data: 'venta.terreno.proyecto.nombre', title: "Proyecto", width: '20%'},
+            {
+                data: null, 
+                width: '15%', 
+                title: 'Lote',
+                sortable: false,
+                searchable: false,
+                render: function(data, type, row) {
+                    if (type === 'display' || type === 'filter') {
+                        var lote = "";
+                        lote += row.venta.terreno.poligono + "-" + row.venta.terreno.numero + row.venta.terreno.seccion;
+                        return lote;
+                    }
+                    return data;
+                }
+            },
+            { data: 'venta.terreno.matricula', title: "Matrícula", width: '29%', sortable: false, searchable: false},
+            {
+                data: 'venta.terreno.areaMetros',
+                title: 'Área (m²)',
+                width: '15%',
+                sortable: false,
+                searchable: false,
+                render: function (data, type, row) {
+                  if (type === 'display' || type === 'filter') {
+                    return '' + parseFloat(data).toFixed(2);
+                  }
+                  return data;
+                }
+            },
+            {
+                data: 'venta.terreno.areaVaras',
+                title: 'Área (m²)',
+                width: '15%',
+                sortable: false,
+                searchable: false,
+                render: function (data, type, row) {
+                  if (type === 'display' || type === 'filter') {
+                    return '' + parseFloat(data).toFixed(2);
+                  }
+                  return data;
+                }
+            },
         ],
         language: {
             "sProcessing": "Procesando...",

@@ -34,7 +34,7 @@ $(document).ready(function() {
                 render: function (data, type, row) {
                     var actionsHtml = '';
                     if(hasPrivilegeEliminarCorreo === true){
-                        actionsHtml += '<button title="Eliminar" type="button" class="btn btn-outline-danger eliminarModalCorreo-btn btn-sm" data-id="' + row.idCorreo + '" ';
+                        actionsHtml += '<button title="Eliminar" type="button" class="btn font-size-small btn-outline-danger eliminarModalCorreo-btn btn-sm" data-id="' + row.idCorreo + '" ';
                         actionsHtml += 'data-cod="' + row.idCorreo + '">';
                         actionsHtml += '<i class="far fa-trash-alt"></i></button>';
                     }

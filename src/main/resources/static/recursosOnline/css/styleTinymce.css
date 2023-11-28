@@ -1,0 +1,50 @@
+/* Estilo para reducir el grosor de la barra de desplazamiento */
+/* Para WebKit (Chrome, Safari) y Firefox */
+
+/* Barra de desplazamiento vertical */
+::-webkit-scrollbar {
+    width: 8px;
+}
+  
+::-webkit-scrollbar-thumb {
+    background-color: #a0a0a0;
+    border-radius: 4px;
+}
+  
+::-webkit-scrollbar-track {
+    background-color: #f0f0f0;
+}
+  
+/* Barra de desplazamiento horizontal */
+::-webkit-scrollbar {
+    height: 8px;
+}
+  
+::-webkit-scrollbar-thumb {
+    background-color: #a0a0a0;
+    border-radius: 4px;
+}
+  
+::-webkit-scrollbar-track {
+    background-color: #f0f0f0;
+}
+  
+/* Para Firefox */
+html {
+    scrollbar-width: thin;
+    scrollbar-color: #a0a0a0 #f0f0f0;
+}
+  
+/* Para navegadores que admiten el estándar básico */
+/* Ajusta los colores y estilos según tus preferencias */
+body {
+    scrollbar-width: thin;
+    scrollbar-color: #a0a0a0 #f0f0f0;
+}
+  
+/* Para Microsoft Edge y navegadores basados en Internet Explorer */
+/* Ajusta los colores y estilos según tus preferencias */
+body {
+    scrollbar-base-color: #a0a0a0;
+    scrollbar-arrow-color: #f0f0f0;
+}

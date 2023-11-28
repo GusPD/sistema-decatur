@@ -15,6 +15,10 @@ public interface CuotaMantenimientoService {
     public DataTablesOutput<CuotaMantenimiento> listarCuotaMantenimientos(DataTablesInput input, Long idPago);
 
     public DataTablesOutput<CuotaMantenimiento> listarVenta(DataTablesInput input, Long idVenta);
+
+    public DataTablesOutput<CuotaMantenimiento> listarPago(DataTablesInput input, Long idPago);
+
+    public double montoAdelantado(Venta venta);
    
     public void agregar(CuotaMantenimiento cuotaMantenimiento);
         

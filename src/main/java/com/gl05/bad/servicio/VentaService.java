@@ -11,6 +11,8 @@ public interface VentaService {
     public List<Venta> listaVentas();
     
     public DataTablesOutput<Venta> listarVentas(DataTablesInput input, Long idTerreno);
+
+    public List<Venta> listarVentas(String estado, Long idProyecto);
    
     public void agregar(Venta venta);
         

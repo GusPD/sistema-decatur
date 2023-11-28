@@ -1,6 +1,6 @@
 <%@ include file="../propietario-header.jspf"%>
 <input type="hidden" id="idPersona" value="${persona.getIdPersona()}">
-<div class="row">
+<div class="row pb-3">
     <div class="col-12">
         <div class="card">
             <div class="card-header">
@@ -39,38 +39,38 @@
                 <h5 class="modal-title" id="crearModalLabel">Agregar Referencia</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <form id='formGuardarReferencia' accept-charset="UTF-8">
+            <form id='formGuardarReferencia' accept-charset="UTF-8">
+                <div class="modal-body">
                     <div  class="overflow-auto">
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                         <input type="hidden" id="idPropietario" value="${propietario.getIdPropietario()}">
                         <input type="hidden" id="idReferencia">
                         <div class="form-group">
                             <label for="nombre" class="form-label">Nombre:<strong class="text-danger"> *</strong></label>
-                            <input type="text" class="form-control" id="nombre" name="nombre" maxlength="200" placeholder="Ingrese el nombre de la persona" required>
+                            <input type="text" class="form-control form-control-sm" id="nombre" name="nombre" maxlength="200" placeholder="Ingrese el nombre de la persona" required>
                         </div>
                         <div class="form-group">
                             <label for="apellido" class="form-label">Apellido:<strong class="text-danger"> *</strong></label>
-                            <input type="text" class="form-control" id="apellido" name="apellido" maxlength="200" placeholder="Ingrese el apellido de la persona" required>
+                            <input type="text" class="form-control form-control-sm" id="apellido" name="apellido" maxlength="200" placeholder="Ingrese el apellido de la persona" required>
                         </div>
                         <div class="form-group">
                             <label for="telefono" class="form-label">Teléfono:<strong class="text-danger"> *</strong></label>
-                            <input type="text" class="form-control" id="telefono" name="telefono" maxlength="12" placeholder="Ingrese el número de teléfono" required>
+                            <input type="text" class="form-control form-control-sm" id="telefono" name="telefono" maxlength="12" placeholder="Ingrese el número de teléfono" required>
                         </div>
                         <div class="form-group">
                             <label for="correo" class="form-label">Correo Eléctronico:</label>
-                            <input type="text" class="form-control" id="correo" name="correo" maxlength="150" placeholder="Ingrese el correo electrónico" required>
+                            <input type="text" class="form-control form-control-sm" id="correo" name="correo" maxlength="150" placeholder="Ingrese el correo electrónico" required>
                         </div>
                     </div>
-                    <div class="modal-footer d-flex justify-content-between">
-                        <label for="monto" class="form-label text-danger mensaje-obligatorios">(*) Campos Obligatorios</label>
-                        <div>
-                            <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
-                            <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
-                        </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <label for="monto" class="form-label text-danger mensaje-obligatorios">(*) Campos Obligatorios</label>
+                    <div>
+                        <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
+                        <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>

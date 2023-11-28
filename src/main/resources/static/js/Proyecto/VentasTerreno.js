@@ -59,7 +59,7 @@ $(document).ready(function() {
             { data: 'nombre',title: 'Nombre'},
             {
                 data: 'terceros', 
-                width: '10%', 
+                width: '15%', 
                 title: 'Tipo Venta',
                 searchable: false,
                 render: function(data, type, row) {
@@ -103,16 +103,16 @@ $(document).ready(function() {
                 render: function (data, type, row) {
                     var actionsHtml = '';
                     if(hasPrivilegeVerVenta === true){
-                        actionsHtml = '<a title="Ver" type="button" class="btn btn-outline-secondary btn-sm" href="/InformacionVenta/' + row.idVenta + '">';
+                        actionsHtml = '<a title="Ver" type="button" class="btn font-size-small btn-outline-secondary btn-sm" href="/InformacionVenta/' + row.idVenta + '">';
                         actionsHtml += '<i class="far fa-eye"></i></a>';
                     }
                     if(hasPrivilegeEditarVenta === true){
-                        actionsHtml += '<button title="Editar" type="button" class="btn btn-outline-primary abrirModal-btn btn-sm" data-bs-toggle="modal" ';
+                        actionsHtml += '<button title="Editar" type="button" class="btn font-size-small btn-outline-primary abrirModal-btn btn-sm" data-bs-toggle="modal" ';
                         actionsHtml += 'data-bs-target="#crearModal" data-tipo="editar" data-id="' + row.idVenta + '" data-modo="actualizar">';
                         actionsHtml += '<i class="far fa-edit"></i></button>';
                     }
                     if(hasPrivilegeEliminarVenta === true){
-                        actionsHtml += '<button  title="Eliminar" type="button" class="btn btn-outline-danger eliminarModal-btn btn-sm" data-id="' + row.idVenta + '" ';
+                        actionsHtml += '<button  title="Eliminar" type="button" class="btn font-size-small btn-outline-danger eliminarModal-btn btn-sm" data-id="' + row.idVenta + '" ';
                         actionsHtml += 'data-cod="' + row.idVenta + '">';
                         actionsHtml += '<i class="far fa-trash-alt"></i></button>';
                     }
@@ -229,6 +229,16 @@ $(document).ready(function() {
         },
         "Ingrese un número válido"
     );
+    $.validator.addMethod("validarDescuentoMenorIgualPrecio", function(value, element) {
+        var precio = parseFloat($("#precio").val());
+        var descuento = parseFloat(value);
+        return descuento <= precio;
+    }, "El descuento debe ser menor o igual al precio.");
+    $.validator.addMethod("fechaMayorIgual", function (value, element, params) {
+        var fecha = new Date($("#fecha").val());
+        var fechaCorte = new Date(value);
+        return fechaCorte >= fecha;
+    }, "La fecha de corte debe ser mayor o igual a la fecha.");
     var formGuardar = $('#formGuardar');
     var validator = $('#formGuardar').validate({
         rules: {
@@ -243,14 +253,24 @@ $(document).ready(function() {
                 required: true,
                 maxlength: 10
             },
+            fechaCorte: {
+                required: true,
+                fechaMayorIgual: true,
+                maxlength: 10
+            },
             precio: {
                 required: true,
                 validarPrecio: true,
-                maxlength: 9
+                maxlength: 10
             },
             descuento:{
                 validarDescuento: true,
-                maxlength: 9
+                validarDescuentoMenorIgualPrecio: true,
+                maxlength: 10
+            },
+            monto: {
+                validarPrecio: true,
+                maxlength: 10
             }
         },
         messages:{
@@ -261,6 +281,9 @@ $(document).ready(function() {
                 required: 'Este campo es requerido'
             },
             fecha: {
+                required: 'Este campo es requerido'
+            },
+            fechaCorte: {
                 required: 'Este campo es requerido'
             },
             precio: {
@@ -277,7 +300,7 @@ $(document).ready(function() {
             $(element).removeClass('is-invalid');
         },
         errorPlacement: function(error, element) {
-            if (element.attr("name") === "nombre" || element.attr("name") === "terceros" || element.attr("name") === "fecha" || element.attr("name") === "precio" || element.attr("name") === "descuento") {
+            if (element.attr("name") === "nombre" || element.attr("name") === "terceros" || element.attr("name") === "fecha" || element.attr("name") === "fechaCorte" || element.attr("name") === "precio" || element.attr("name") === "descuento" || element.attr("name") === "monto") {
                 error.insertAfter(element);
             }        
         },
@@ -295,13 +318,25 @@ $(document).ready(function() {
             const month = addLeadingZero(fechaLocal.getMonth() + 1);
             const year = fechaLocal.getFullYear();
             const formattedDate = `${day}/${month}/${year}`;
+            const fechaCorteInputValue = $('#fechaCorte').val();
+            const fechaCorteInput = new Date(fechaCorteInputValue);
+            const fechaCorteLocal = new Date(fechaCorteInput.getTime() + fechaCorteInput.getTimezoneOffset() * 60000);
+            function addLeadingZero(number) {
+                return number < 10 ? `0${number}` : number;
+            }
+            const dayCorte = addLeadingZero(fechaCorteLocal.getDate());
+            const monthCorte = addLeadingZero(fechaCorteLocal.getMonth() + 1);
+            const yearCorte = fechaCorteLocal.getFullYear();
+            const formattedDateCorte = `${dayCorte}/${monthCorte}/${yearCorte}`;
             var idVenta = $('#idVenta').val();
             var estado = $('#estado').val();
             var idTerreno = $('#idTerreno').val();
             var descuento = $('#descuento').val();
+            var monto = $("#monto").val();
             var idListDocumento = $('#idListDocumento').val();
             var formDataArray = formGuardar.serializeArray();
             formDataArray = formDataArray.filter(item => item.name !== 'fecha');
+            formDataArray = formDataArray.filter(item => item.name !== 'fechaCorte');
             formDataArray = formDataArray.filter(item => item.name !== 'descuento');
             var url;
             if(descuento===''){
@@ -309,10 +344,10 @@ $(document).ready(function() {
             }
             if (idVenta) {
                 url = '/ActualizarVenta/'+idTerreno;
-                formDataArray.push({name: 'idVenta', value: idVenta},{name: 'estado', value: estado},{name: 'fecha', value: formattedDate},{name: 'descuento', value: descuento}, {name: 'idListDocumento', value: idListDocumento});
+                formDataArray.push({name: 'idVenta', value: idVenta},{name: 'estado', value: estado},{name: 'fecha', value: formattedDate},{name: 'fechaCorte', value: formattedDateCorte},{name: 'descuento', value: descuento}, {name: 'idListDocumento', value: idListDocumento}, {name: 'monto', value: monto});
             } else {
                 url = '/AgregarVenta/'+idTerreno;
-                formDataArray.push({name: 'estado', value: estado},{name: 'fecha', value: formattedDate},{name: 'descuento', value: descuento});
+                formDataArray.push({name: 'estado', value: estado},{name: 'fecha', value: formattedDate},{name: 'fechaCorte', value: formattedDateCorte},{name: 'descuento', value: descuento}, {name: 'monto', value: monto});
             }
             $.ajax({
                 url: url,
@@ -350,10 +385,11 @@ $(document).ready(function() {
                 success: function (response) {
                     $('#nombre').val(response.nombre);
                     $('#fecha').val(response.fecha);
-                    $('#precio').val(response.precio);
+                    $('#fechaCorte').val(response.fechaCorte);
+                    $('#precio').val(parseFloat(response.precio).toFixed(2));
                     $('#terceros').val(response.terceros.toString());
-                    $('#monto').val(response.monto);
-                    $('#descuento').val(response.descuento);
+                    $('#monto').val(parseFloat(response.monto).toFixed(2));
+                    $('#descuento').val(parseFloat(response.descuento).toFixed(2));
                     $('#idListDocumento').val(response.idListDocumento);
                     $('#estado').val(response.estado);
                     $('#terreno').val(response.terreno.idTerreno);
@@ -367,7 +403,19 @@ $(document).ready(function() {
             tituloModal.text('Agregar Venta');
             form.attr('action', '/AgregarVenta/'+idTerreno);
             $('.form-control').val('');
+            $('.form-select').val('');
             $('#descuento').val('0.00');
+            $('#nombre').prop('disabled', false);
+            $('#fecha').prop('disabled', false);
+            $('#fechaCorte').prop('disabled', false);
+            $('#precio').prop('disabled', false);
+            $('#terceros').prop('disabled', false);
+            $('#monto').prop('disabled', true);
+            $('#descuento').prop('disabled', false);
+            $('#idListDocumento').prop('disabled', false);
+            $('#estado').prop('disabled', false);
+            $('#terreno').prop('disabled', false);
+            $('#idVenta').prop('disabled', false);
         }
         //Habilitar la edición solo si esta disponible en la venta
         if (idVenta) {
@@ -379,6 +427,7 @@ $(document).ready(function() {
                     if(habilitarEdicion){
                         $('#nombre').prop('disabled', false);
                         $('#fecha').prop('disabled', false);
+                        $('#fechaCorte').prop('disabled', false);
                         $('#precio').prop('disabled', false);
                         $('#terceros').prop('disabled', false);
                         $('#monto').prop('disabled', true);
@@ -390,6 +439,7 @@ $(document).ready(function() {
                     }else{
                         $('#nombre').prop('disabled', false);
                         $('#fecha').prop('disabled', true);
+                        $('#fechaCorte').prop('disabled', true);
                         $('#precio').prop('disabled', true);
                         $('#terceros').prop('disabled', false);
                         $('#monto').prop('disabled', true);

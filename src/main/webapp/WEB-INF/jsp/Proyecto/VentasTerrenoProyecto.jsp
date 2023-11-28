@@ -26,14 +26,14 @@
                             <h3 class="card-title d-flex justify-content-between">
                                 <div class="d-flex justify-content-estart">
                                     <sec:authorize access="hasAuthority('EXPORTAR_VENTA_PRIVILAGE')">
-                                        <button id="export-copy" title="Copiar" class="btn btn-outline-secondary buttons-copy" type="button"><i class="fa-regular fa-copy"></i></button> 
-                                        <button id="export-excel" title="Exportar Excel" class="btn btn-outline-success buttons-excel ml-2" type="button"><i class="fa-solid fa-file-csv"></i></button> 
-                                        <button id="export-pdf" title="Exportar PDF" class="btn btn-outline-danger buttons-pdf ml-2" type="button"><i class="fa-regular fa-file-pdf"></i></button>
+                                        <button id="export-copy" title="Copiar" class="btn btn-sm btn-outline-secondary buttons-copy" type="button"><i class="fa-regular fa-copy"></i></button> 
+                                        <button id="export-excel" title="Exportar Excel" class="btn btn-sm btn-outline-success buttons-excel ml-2" type="button"><i class="fa-solid fa-file-excel"></i></button> 
+                                        <button id="export-pdf" title="Exportar PDF" class="btn btn-sm btn-outline-danger buttons-pdf ml-2" type="button"><i class="fa-regular fa-file-pdf"></i></button>
                                     </sec:authorize>
                                 </div>
                                 <div class="d-flex justify-content-end">
                                     <sec:authorize access="hasAuthority('AGREGAR_VENTA_PRIVILAGE')"> 
-                                        <button type="button" title="Agregar Venta" class="btn-blue btn abrirModal-btn ml-2" data-bs-toggle="modal" data-bs-target="#crearModal" data-action="agregar"><i class="fa-solid fa-file-pen"></i></button>
+                                        <button type="button" title="Agregar Venta" class="btn-blue btn-sm btn abrirModal-btn ml-2" data-bs-toggle="modal" data-bs-target="#crearModal" data-action="agregar"><i class="fa-solid fa-file-pen"></i></button>
                                     </sec:authorize> 
                                 </div>
                             </h3>
@@ -59,8 +59,8 @@
                     <h5 class="modal-title" id="crearModalLabel">Agregar Terreno</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <form id='formGuardar' accept-charset="UTF-8">
+                <form id='formGuardar' accept-charset="UTF-8">
+                    <div class="modal-body">
                         <div  class="overflow-auto">
                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                             <input type="hidden" id="idVenta">
@@ -69,41 +69,46 @@
                             <input type="hidden" id="estado" value="Activo">
                             <div class="form-group">
                                 <label for="nombre" class="form-label">Nombre:<strong class="text-danger"> *</strong></label>
-                                <input type="text" class="form-control" id="nombre" name="nombre" maxlength="200" placeholder="Ingrese el nombre de la venta" required>
+                                <input type="text" class="form-control form-control-sm" id="nombre" name="nombre" maxlength="200" placeholder="Ingrese el nombre de la venta" required>
                             </div>
                             <div class="form-group">
                                 <label for="terceros" class="form-label">Tipo venta:<strong class="text-danger"> *</strong></label>
-                                <select class="form-select" id="terceros" name="terceros" placeholder="Seleccione una opción" required>
+                                <select class="form-select form-select-sm" id="terceros" name="terceros" placeholder="Seleccione una opción" required>
+                                    <option value="">Seleccione una opción</option>
                                     <option value="true">Terceros</option>
                                     <option value="false">Empresa</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label for="fecha" class="form-label">Fecha:<strong class="text-danger"> *</strong></label>
-                                <input type="date" class="form-control" id="fecha" name="fecha" maxlength="10" placeholder="Ingrese la fecha de la venta" required>
+                                <input type="date" class="form-control form-control-sm" id="fecha" name="fecha" maxlength="10" placeholder="Ingrese la fecha de la venta" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="fechaCorte" class="form-label">Fecha Corte:<strong class="text-danger"> *</strong></label>
+                                <input type="date" class="form-control form-control-sm" id="fechaCorte" name="fechaCorte" maxlength="10" placeholder="Ingrese la fecha de corte" required>
                             </div>
                             <div class="form-group">
                                 <label for="precio" class="form-label">Precio:<strong class="text-danger"> *</strong></label>
-                                <input type="text" class="form-control" id="precio" name="precio" maxlength="10" placeholder="Ingrese el precio" required>
+                                <input type="text" class="form-control form-control-sm" id="precio" name="precio" maxlength="10" placeholder="Ingrese el precio" required>
                             </div>
                             <div class="form-group">
                                 <label for="descuento" class="form-label">Descuento:</label>
-                                <input type="text" class="form-control" id="descuento" name="descuento" maxlength="10" value="0.00">
+                                <input type="text" class="form-control form-control-sm" id="descuento" name="descuento" maxlength="10" value="0.00">
                             </div>
                             <div class="form-group">
                                 <label for="monto" class="form-label">Monto:</label>
-                                <input type="text" class="form-control" id="monto" name="monto" maxlength="10" placeholder="0.00" readonly>
+                                <input type="text" class="form-control form-control-sm" id="monto" name="monto" maxlength="10" placeholder="0.00" readonly>
                             </div>
                         </div>
-                        <div class="modal-footer d-flex justify-content-between">
-                            <label for="monto" class="form-label text-danger mensaje-obligatorios">(*) Campos Obligatorios</label>
-                            <div>
-                                <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
-                                <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
-                            </div>
+                    </div>
+                    <div class="modal-footer d-flex justify-content-between">
+                        <label for="monto" class="form-label text-danger mensaje-obligatorios">(*) Campos Obligatorios</label>
+                        <div>
+                            <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
+                            <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
                         </div>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

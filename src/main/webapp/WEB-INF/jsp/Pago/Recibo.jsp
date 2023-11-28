@@ -39,6 +39,7 @@
                             <div id="table_wrapper" class="dataTables_wrapper dt-bootstrap4">
                                 <div class="col-sm-12 table-responsive pt-1" style="padding:4px;">
                                     <table id="tabla-informacion" class="table small table-bordered">
+                                        <input type="hidden" id="idPago" value="${pago.getIdPago()}">
                                         <tbody>
                                             <tr>
                                                 <td width="20%" class="encabezado-tabla font-weight-bold">Fecha Pago</td>
@@ -75,36 +76,11 @@
                                 </div>
                                 </c:if>
                                 <c:if test="${not empty listaCuotaMantenimientos}">
-                                <div class="col-sm-12 table-responsive" style="height: 40vh; padding:4px;">
-                                    <table id="mantenimientoTable" class="table table-bordered table-striped dataTable dtr-inline mt-1">
-                                        <thead>
-                                            <tr>
-                                                <th>N°</th>
-                                                <th>Fecha Cuota</th>
-                                                <th>Cuota</th>
-                                                <th>Recargo</th>
-                                                <th>Descuento</th>
-                                                <th>Otros</th>
-                                                <th>Abonado</th>
-                                                <th>Pendiente</th>
-                                            </tr>
-                                        </thead>
-                                        <body>
-                                            <c:forEach items="${listaCuotaMantenimientos}" var="eCuota" varStatus="numero">
-                                                <tr>
-                                                    <td>${numero.index+1}</td>
-                                                    <td style="text-transform:capitalize;"><fmt:formatDate value="${eCuota.fechaCuota}" pattern="MMMM/yyyy" /></td>
-                                                    <td>$ <c:out value="${String.format('%.2f', eCuota.cuota)}"/></td>
-                                                    <td>$ <c:out value="${String.format('%.2f', eCuota.recargo)}"/></td>
-                                                    <td>$ <c:out value="${String.format('%.2f', eCuota.descuento)}"/></td>
-                                                    <td>$ <c:out value="${String.format('%.2f', eCuota.otros)}"/></td>
-                                                    <td>$ <c:out value="${String.format('%.2f', eCuota.cuota + eCuota.recargo - eCuota.descuento + eCuota.otros)}"/></td>
-                                                    <td>$ <c:out value="${String.format('%.2f', eCuota.saldoCuota + eCuota.saldoRecargo)}"/></td>
-                                                </tr>
-                                            </c:forEach>
-                                        </body>
-                                    </table>
-                                </div>
+                                    <div id="table_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                                        <div class="col-sm-12 table-responsive" style="height: 48vh; padding:4px;">
+                                            <table id="cuotaMantenimientoTable" class="table table-bordered table-striped dataTable dtr-inline"></table>
+                                        </div>
+                                    </div>
                                 </c:if>
                             </div>
                         </div>
@@ -117,4 +93,6 @@
 
 <!-- Script de la página -->
 <%@ include file="../common/footer.jspf"%>
+
+<script src="${pageContext.request.contextPath}/js/Pago/Recibo.js"></script>
 

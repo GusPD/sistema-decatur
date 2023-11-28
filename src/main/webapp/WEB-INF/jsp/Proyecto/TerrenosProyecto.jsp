@@ -26,14 +26,14 @@
                             <h3 class="card-title d-flex justify-content-between">
                                 <div class="d-flex justify-content-estart">
                                     <sec:authorize access="hasAuthority('EXPORTAR_TERRENO_PRIVILAGE')">
-                                        <button id="export-copy" title="Copiar" class="btn btn-outline-secondary buttons-copy" type="button"><i class="fa-regular fa-copy"></i></button> 
-                                        <button id="export-excel" title="Exportar Excel" class="btn btn-outline-success buttons-excel ml-2" type="button"><i class="fa-solid fa-file-csv"></i></button> 
-                                        <button id="export-pdf" title="Exportar PDF" class="btn btn-outline-danger buttons-pdf ml-2" type="button"><i class="fa-regular fa-file-pdf"></i></button>
+                                        <button id="export-copy" title="Copiar" class="btn btn-sm btn-outline-secondary buttons-copy" type="button"><i class="fa-regular fa-copy"></i></button> 
+                                        <button id="export-excel" title="Exportar Excel" class="btn btn-sm btn-outline-success buttons-excel ml-2" type="button"><i class="fa-solid fa-file-excel"></i></button> 
+                                        <button id="export-pdf" title="Exportar PDF" class="btn btn-sm btn-outline-danger buttons-pdf ml-2" type="button"><i class="fa-regular fa-file-pdf"></i></button>
                                     </sec:authorize>
                                 </div>
                                 <div class="d-flex justify-content-end">
                                     <sec:authorize access="hasAuthority('AGREGAR_TERRENO_PRIVILAGE')"> 
-                                        <button type="button" title="Agregar Terreno" class="btn-blue btn abrirModal-btn ml-2" data-bs-toggle="modal" data-bs-target="#crearModal" data-action="agregar"><i class="fa-solid fa-file-pen"></i></button>
+                                        <button type="button" title="Agregar Terreno" class="btn-blue btn-sm btn abrirModal-btn ml-2" data-bs-toggle="modal" data-bs-target="#crearModal" data-action="agregar"><i class="fa-solid fa-file-pen"></i></button>
                                     </sec:authorize> 
                                 </div>
                             </h3>
@@ -59,46 +59,46 @@
                     <h5 class="modal-title" id="crearModalLabel">Agregar Terreno</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <form id='formGuardar' accept-charset="UTF-8">
+                <form id='formGuardar' accept-charset="UTF-8">
+                    <div class="modal-body">
                         <div  class="overflow-auto">
                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                             <input type="hidden" id="idTerreno">
                             <input type="hidden" id="proyecto" value="${proyecto.getIdProyecto()}">
                             <div class="form-group">
                                 <label for="matricula" class="form-label">Matrícula:<strong class="text-danger"> *</strong></label>
-                                <input type="text" class="form-control" id="matricula" name="matricula" maxlength="18" placeholder="Ingrese la matrícula del terreno" required>
+                                <input type="text" class="form-control form-control-sm" id="matricula" name="matricula" maxlength="18" placeholder="Ingrese la matrícula del terreno" required>
                             </div>
                             <div class="form-group">
                                 <label for="poligono" class="form-label">Polígono:<strong class="text-danger"> *</strong></label>
-                                <input type="text" class="form-control" id="poligono" name="poligono" maxlength="1" placeholder="Ingrese el polígono del terreno" required>
+                                <input type="text" class="form-control form-control-sm" id="poligono" name="poligono" maxlength="1" placeholder="Ingrese el polígono del terreno" required>
                             </div>
                             <div class="form-group">
                                 <label for="numero" class="form-label">Número de terreno:<strong class="text-danger"> *</strong></label>
-                                <input type="text" class="form-control" id="numero" name="numero" maxlength="3" placeholder="Ingrese el número del terreno" required>
+                                <input type="text" class="form-control form-control-sm" id="numero" name="numero" maxlength="3" placeholder="Ingrese el número del terreno" required>
                             </div>
                             <div class="form-group">
                                 <label for="seccion" class="form-label">Sección del terreno:</label>
-                                <input type="text" class="form-control" id="seccion" name="seccion" maxlength="1" placeholder="Ingrese la sección del terreno">
+                                <input type="text" class="form-control form-control-sm" id="seccion" name="seccion" maxlength="1" placeholder="Ingrese la sección del terreno">
                             </div>
                             <div class="form-group">
                                 <label for="areaMetros" class="form-label">Área (m²):<strong class="text-danger"> *</strong></label>
-                                <input type="text" class="form-control" id="areaMetros" name="areaMetros" maxlength="18" placeholder="Ingrese el área en metros cuadrados del terreno" required>
+                                <input type="text" class="form-control form-control-sm" id="areaMetros" name="areaMetros" maxlength="18" placeholder="Ingrese el área en metros cuadrados del terreno" required>
                             </div>
                             <div class="form-group">
                                 <label for="areaVaras" class="form-label">Área (v²):</label>
-                                <input type="text" class="form-control" id="areaVaras" name="areaVaras" placeholder="Ingrese el área en varas cuadradas del terreno" readonly>
+                                <input type="text" class="form-control form-control-sm" id="areaVaras" name="areaVaras" placeholder="Ingrese el área en varas cuadradas del terreno" readonly>
                             </div>
                         </div>
-                        <div class="modal-footer d-flex justify-content-between">
-                            <label for="monto" class="form-label text-danger mensaje-obligatorios">(*) Campos Obligatorios</label>
-                            <div>
-                                <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
-                                <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
-                            </div>
+                    </div>
+                    <div class="modal-footer d-flex justify-content-between">
+                        <label for="monto" class="form-label text-danger mensaje-obligatorios">(*) Campos Obligatorios</label>
+                        <div>
+                            <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
+                            <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
                         </div>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

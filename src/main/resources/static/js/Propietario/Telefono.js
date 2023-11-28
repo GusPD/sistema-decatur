@@ -34,7 +34,7 @@ $(document).ready(function() {
                 render: function (data, type, row) {
                     var actionsHtml = '';
                     if(hasPrivilegeEliminarTelefono === true){
-                        actionsHtml += '<button  title="Eliminar" type="button" class="btn btn-outline-danger eliminarModalTelefono-btn btn-sm" data-id="' + row.idTelefono + '" ';
+                        actionsHtml += '<button  title="Eliminar" type="button" class="btn font-size-small btn-outline-danger eliminarModalTelefono-btn btn-sm" data-id="' + row.idTelefono + '" ';
                         actionsHtml += 'data-cod="' + row.idTelefono + '">';
                         actionsHtml += '<i class="far fa-trash-alt"></i></button>';
                     }

@@ -11,7 +11,7 @@ import com.gl05.bad.domain.Telefono;
 import com.gl05.bad.domain.TipoDocumento;
 import com.gl05.bad.domain.Usuario;
 import com.gl05.bad.domain.VistaPropietariosProyecto;
-import com.gl05.bad.servicio.AsigPropietarioVentaService;
+import com.gl05.bad.servicio.AsignacionPropietarioService;
 import com.gl05.bad.servicio.BitacoraServiceImp;
 import com.gl05.bad.servicio.CorreoService;
 import com.gl05.bad.servicio.DocumentoService;
@@ -77,9 +77,9 @@ public class PropietarioController {
     
     @Autowired
     private ProyectoService proyectoService;
-    
+
     @Autowired
-    private AsigPropietarioVentaService asigPropietarioService;
+    private AsignacionPropietarioService asigPropietarioService;
     
     @Autowired
     private UserService usuarioService;
@@ -133,6 +133,8 @@ public class PropietarioController {
         if (!proyectosPropietario.contains(newProyecto) && newProyecto!=null) {
             return "accesodenegado";
         }
+        List<TipoDocumento> listaTipoDocumentos = tipoDocumentoService.listaTipoDocumentos();
+        model.addAttribute("tiposDocumento", listaTipoDocumentos);
         model.addAttribute("proyecto", newProyecto);
         model.addAttribute("propietario", newPropietario);
         model.addAttribute("persona", newPersona);
@@ -176,10 +178,11 @@ public class PropietarioController {
             @RequestParam("idPropietario") Long idPropietario) {
         try {
             if(correoService.encontrarCorreo(correo)== null){
+                Propietario newPropietario = propietarioService.encontrar(idPropietario);
                 Correo newCorreo = new Correo();
                 newCorreo.setTipo(tipoCorreo);
                 newCorreo.setCorreo(correo);
-                newCorreo.setIdPropietario(idPropietario);
+                newCorreo.setPropietario(newPropietario);
                 correoService.agregar(newCorreo);
                 String mensaje = "Se ha agregado el correo correctamente.";
                 bitacoraService.registrarAccion("Agregar correo del propietario");

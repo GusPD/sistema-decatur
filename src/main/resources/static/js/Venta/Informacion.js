@@ -151,28 +151,16 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             "Ingrese un número válido"
         );
-        $.validator.addMethod(
-            "fechaMayorFinanciamiento", 
-            function(value, element) {
-                var fechaIngresada = new Date(value);
-                var fechaFinanciamiento = new Date($("#fechaAplicacionFinanciamiento").val());
-                var mesIngresada = fechaIngresada.getMonth();
-                var mesFinanciamiento = fechaFinanciamiento.getMonth();
-                return fechaIngresada >= fechaFinanciamiento || (fechaIngresada.getFullYear() > fechaFinanciamiento.getFullYear() && mesIngresada >= mesFinanciamiento);
-            }, 
-            "La fecha debe ser mayor al mes de la fecha de aplicación anterior."
-        );
-        $.validator.addMethod(
-            "fechaMayorMantenimiento", 
-            function(value, element) {
-                var fechaIngresada = new Date(value);
-                var fechaMantenimiento = new Date($("#fechaAplicacionMantenimiento").val());
-                var mesIngresada = fechaIngresada.getMonth();
-                var mesMantenimiento = fechaMantenimiento.getMonth();
-                return fechaIngresada >= fechaMantenimiento || (fechaIngresada.getFullYear() > fechaMantenimiento.getFullYear() && mesIngresada >= mesMantenimiento);
-            }, 
-            "La fecha debe ser mayor al mes de la fecha aplicación anterior."
-        );
+        $.validator.addMethod("validarDescuentoMenorIgualPrecio", function(value, element) {
+            var precio = parseFloat($("#precio").val());
+            var descuento = parseFloat(value);
+            return descuento <= precio;
+        }, "El descuento debe ser menor o igual al precio.");
+        $.validator.addMethod("fechaMayorIgual", function (value, element, params) {
+            var fecha = new Date($("#fecha").val());
+            var fechaCorte = new Date(value);
+            return fechaCorte >= fecha;
+        }, "La fecha de corte debe ser mayor o igual a la fecha.");
         var formGuardar = $('#formGuardar');
         var validator = $('#formGuardar').validate({
             rules: {
@@ -187,6 +175,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     required: true,
                     maxlength: 10
                 },
+                fechaCorte: {
+                    required: true,
+                    fechaMayorIgual: true,
+                    maxlength: 10
+                },
                 precio: {
                     required: true,
                     validarPrecio: true,
@@ -195,6 +188,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 descuento:{
                     required: true,
                     validarDescuento: true,
+                    validarDescuentoMenorIgualPrecio: true,
                     maxlength: 9
                 },
                 monto:{
@@ -239,6 +233,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 fecha: {
                     required: 'Este campo es requerido'
                 },
+                fechaCorte: {
+                    required: 'Este campo es requerido'
+                },
                 precio: {
                     required: 'Este campo es requerido'
                 },
@@ -268,7 +265,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 $(element).removeClass('is-invalid');
             },
             errorPlacement: function(error, element) {
-                if (element.attr("name") === "nombre" || element.attr("name") === "terceros" || element.attr("name") === "fecha" || element.attr("name") === "precio" || element.attr("name") === "descuento" || element.attr("name") === "monto" || element.attr("name") === "plazo" || element.attr("name") === "tasa" || element.attr("name") === "cuotaKi" || element.attr("name") === "cuotaMantenimiento" || element.attr("name") === "multaFinanciamiento" || element.attr("name") === "multaMantenimiento") {
+                if (element.attr("name") === "nombre" || element.attr("name") === "terceros" || element.attr("name") === "fecha" || element.attr("name") === "fechaCorte" || element.attr("name") === "precio" || element.attr("name") === "descuento" || element.attr("name") === "monto" || element.attr("name") === "plazo" || element.attr("name") === "tasa" || element.attr("name") === "cuotaKi" || element.attr("name") === "cuotaMantenimiento" || element.attr("name") === "multaFinanciamiento" || element.attr("name") === "multaMantenimiento") {
                     error.insertAfter(element);
                 }        
             },
@@ -287,20 +284,31 @@ document.addEventListener('DOMContentLoaded', function() {
                 const month = addLeadingZero(fechaLocal.getMonth() + 1);
                 const year = fechaLocal.getFullYear();
                 const formattedDate = `${day}/${month}/${year}`;
+                const fechaCorteInputValue = $('#fechaCorte').val();
+                const fechaCorteInput = new Date(fechaCorteInputValue);
+                const fechaCorteLocal = new Date(fechaCorteInput.getTime() + fechaCorteInput.getTimezoneOffset() * 60000);
+
+                function addLeadingZero(number) {
+                    return number < 10 ? `0${number}` : number;
+                }
+                const dayCorte = addLeadingZero(fechaCorteLocal.getDate());
+                const monthCorte = addLeadingZero(fechaCorteLocal.getMonth() + 1);
+                const yearCorte = fechaCorteLocal.getFullYear();
+                const formattedDateCorte = `${dayCorte}/${monthCorte}/${yearCorte}`;
                 var idVenta = $('#idVenta').val();
                 var idListDocumento = $('#idListDocumento').val();
                 var estado = $('#estado').val();
                 var idTerreno = $('#idTerreno').val();
                 var formDataArray = formGuardar.serializeArray();
-                var fechaIndex = formDataArray.findIndex(item => item.name === 'fecha');
-                formDataArray[fechaIndex].value = formattedDate;
+                formDataArray = formDataArray.filter(item => item.name !== 'fecha');
+                formDataArray = formDataArray.filter(item => item.name !== 'fechaCorte');
                 var url;
                 if (idVenta) {
                     url = '/ActualizarVenta/'+idTerreno;
-                    formDataArray.push({name: 'idVenta', value: idVenta},{name: 'estado', value: estado},{name: 'idListDocumento', value: idListDocumento});
+                    formDataArray.push({name: 'idVenta', value: idVenta},{name: 'estado', value: estado},{name: 'idListDocumento', value: idListDocumento},{name: 'fecha', value: formattedDate},{name: 'fechaCorte', value: formattedDateCorte});
                 } else {
                     url = '/AgregarVenta/'+idTerreno;
-                    formDataArray.push({name: 'estado', value: estado},{name: 'idListDocumento', value: idListDocumento});
+                    formDataArray.push({name: 'estado', value: estado},{name: 'idListDocumento', value: idListDocumento},{name: 'fecha', value: formattedDate},{name: 'fechaCorte', value: formattedDateCorte});
                 }
                 $.ajax({
                     url: url,
@@ -317,6 +325,10 @@ document.addEventListener('DOMContentLoaded', function() {
                                 $('#page-informacion').html(elementoActualizable.html());
                                 var elementoActualizable2 = $(nuevosDatos).find('#formGuardar');
                                 $('#formGuardar').html(elementoActualizable2.html());
+                                var elementoActualizable3 = $(nuevosDatos).find('#formGuardarFinanciamiento');
+                                $('#formGuardarFinanciamiento').html(elementoActualizable3.html());
+                                var elementoActualizable4 = $(nuevosDatos).find('#formGuardarMantenimiento');
+                                $('#formGuardarMantenimiento').html(elementoActualizable4.html());
                                 actualizarEventos();
                             },
                             error: function () {
@@ -332,6 +344,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             }
         });
+        $.validator.addMethod(
+            "fechaMayorFinanciamiento", 
+            function(value, element) {
+                var fechaIngresada = new Date(value);
+                var fechaFinanciamiento = new Date($("#fechaAplicacionFinanciamiento").val());
+                var mesIngresada = fechaIngresada.getMonth();
+                var mesFinanciamiento = fechaFinanciamiento.getMonth();
+                return fechaIngresada >= fechaFinanciamiento || (fechaIngresada.getFullYear() > fechaFinanciamiento.getFullYear() && mesIngresada >= mesFinanciamiento);
+            }, 
+            "La fecha debe ser mayor al mes de la fecha de aplicación anterior."
+        );
         var formGuardarFinanciamiento = $('#formGuardarFinanciamiento');
         var validatorFinanciamiento = $('#formGuardarFinanciamiento').validate({
             rules: {
@@ -442,8 +465,12 @@ document.addEventListener('DOMContentLoaded', function() {
                             success: function (nuevosDatos) {
                                 var elementoActualizable = $(nuevosDatos).find('#page-informacion');
                                 $('#page-informacion').html(elementoActualizable.html());
-                                var elementoActualizable2 = $(nuevosDatos).find('#formGuardarFinanciamiento');
-                                $('#formGuardarFinanciamiento').html(elementoActualizable2.html());
+                                var elementoActualizable2 = $(nuevosDatos).find('#formGuardar');
+                                $('#formGuardar').html(elementoActualizable2.html());
+                                var elementoActualizable3 = $(nuevosDatos).find('#formGuardarFinanciamiento');
+                                $('#formGuardarFinanciamiento').html(elementoActualizable3.html());
+                                var elementoActualizable4 = $(nuevosDatos).find('#formGuardarMantenimiento');
+                                $('#formGuardarMantenimiento').html(elementoActualizable4.html());
                                 actualizarEventos();
                             },
                             error: function () {
@@ -459,6 +486,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             }
         });
+        $.validator.addMethod(
+            "fechaMayorMantenimiento", 
+            function(value, element) {
+                var fechaIngresada = new Date(value);
+                var fechaMantenimiento = new Date($("#fechaAplicacionMantenimiento").val());
+                var mesIngresada = fechaIngresada.getMonth();
+                var mesMantenimiento = fechaMantenimiento.getMonth();
+                return fechaIngresada >= fechaMantenimiento || (fechaIngresada.getFullYear() > fechaMantenimiento.getFullYear() && mesIngresada >= mesMantenimiento);
+            }, 
+            "La fecha debe ser mayor al mes de la fecha aplicación anterior."
+        );
         var formGuardarMantenimiento = $('#formGuardarMantenimiento');
         var validatorMantenimiento = $('#formGuardarMantenimiento').validate({
             rules: {
@@ -536,8 +574,12 @@ document.addEventListener('DOMContentLoaded', function() {
                             success: function (nuevosDatos) {
                                 var elementoActualizable = $(nuevosDatos).find('#page-informacion');
                                 $('#page-informacion').html(elementoActualizable.html());
-                                var elementoActualizable2 = $(nuevosDatos).find('#formGuardarMantenimiento');
-                                $('#formGuardarMantenimiento').html(elementoActualizable2.html());
+                                var elementoActualizable2 = $(nuevosDatos).find('#formGuardar');
+                                $('#formGuardar').html(elementoActualizable2.html());
+                                var elementoActualizable3 = $(nuevosDatos).find('#formGuardarFinanciamiento');
+                                $('#formGuardarFinanciamiento').html(elementoActualizable3.html());
+                                var elementoActualizable4 = $(nuevosDatos).find('#formGuardarMantenimiento');
+                                $('#formGuardarMantenimiento').html(elementoActualizable4.html());
                                 actualizarEventos();
                             },
                             error: function () {
@@ -570,16 +612,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     success: function (response) {
                         $('#nombre').val(response.nombre);
                         $('#fecha').val(response.fecha);
-                        $('#precio').val(response.precio);
+                        $('#fechaCorte').val(response.fechaCorte);
+                        $('#precio').val(parseFloat(response.precio).toFixed(2));
                         $('#terceros').val(response.terceros.toString());
-                        $('#descuento').val(response.descuento);
-                        $('#monto').val(response.monto);
-                        $('#plazo').val(response.plazo);
-                        $('#tasa').val(response.tasa);
-                        $('#cuotaKi').val(response.cuotaKi);
-                        $('#cuotaMantenimiento').val(response.cuotaMantenimiento);
-                        $('#multaMantenimiento').val(response.multaMantenimiento);
-                        $('#multaFinanciamiento').val(response.multaFinanciamiento);
+                        $('#descuento').val(parseFloat(response.descuento).toFixed(2));
+                        $('#monto').val(parseFloat(response.monto).toFixed(2));
                         $('#estado').val(response.estado);
                         $('#terreno').val(response.terreno.idTerreno);
                         $('#idVenta').val(response.idVenta);
@@ -612,11 +649,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     };
                     var fechaFormateada = fechaAplicacion.toLocaleDateString(undefined, opcionesFormato);
                     $('#fecha-aplicacion-financiamiento').html(fechaFormateada);
-                    $('#monto-financiamiento').html('$ '+response.financiamiento.monto.toFixed(2));
+                    $('#monto-financiamiento').html('$ '+parseFloat(response.financiamiento.monto).toFixed(2));
                     $('#plazo-financiamiento').html(response.financiamiento.plazo);
                     $('#tasa-financiamiento').html(response.financiamiento.tasa.toFixed(2)+' %');
-                    $('#cuota-financiamiento').html('$ '+response.financiamiento.cuota.toFixed(2));
-                    $('#multa-financiamiento').html('$ '+response.financiamiento.multa.toFixed(2));
+                    $('#cuota-financiamiento').html('$ '+parseFloat(response.financiamiento.cuota).toFixed(2));
+                    $('#multa-financiamiento').html('$ '+parseFloat(response.financiamiento.multa).toFixed(2));
                 },
                 error: function () {
                     alert('Error al obtener los datos del financimaiento de la venta.');

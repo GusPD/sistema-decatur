@@ -117,6 +117,8 @@ public class TrabajadorController {
         if (!proyectosPropietario.contains(newProyecto) && newProyecto!=null) {
             return "accesodenegado";
         }
+        List<TipoDocumento> listaTipoDocumentos = tipoDocumentoService.listaTipoDocumentos();
+        model.addAttribute("tiposDocumento", listaTipoDocumentos);
         model.addAttribute("proyecto", newProyecto);
         model.addAttribute("trabajador", newTrabajador);
         model.addAttribute("persona", newPersona);

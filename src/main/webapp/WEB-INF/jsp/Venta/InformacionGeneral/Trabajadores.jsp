@@ -1,5 +1,5 @@
 <%@ include file="../venta-header.jspf"%>
-<div class="row">
+<div class="row pb-3">
     <div class="col-12">
         <div class="card">
             <div class="card-header">
@@ -41,8 +41,8 @@
                 <h5 class="modal-title" id="crearModalLabel">Agregar Trabajador</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <form id='formGuardarTrabajador' accept-charset="UTF-8">
+            <form id='formGuardarTrabajador' accept-charset="UTF-8">
+                <div class="modal-body">
                     <div  class="overflow-auto">
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                         <input type="hidden" id="idVisitante">
@@ -51,7 +51,8 @@
                         <input type="hidden" id="idVenta" value="${venta.getIdVenta()}">
                         <div class="form-group">
                             <label for="tipoDocumento" class="form-label">Tipo documento:<strong class="text-danger"> *</strong></label>
-                            <select class="form-select" id="tipoDocumento" name="tipoDocumento" placeholder="Seleccione una opción" required>
+                            <select class="form-select form-select-sm" id="tipoDocumento" name="tipoDocumento" placeholder="Seleccione una opción" required>
+                                <option value="" data-mascara="">Seleccione una opción</option>
                                 <c:if test="${not empty tiposDocumento}">
                                     <c:forEach items="${tiposDocumento}" var="eTipo">
                                         <option value="${eTipo.idTipoDocumento}" data-mascara="${eTipo.mascara}">${eTipo.nombre}</option>
@@ -61,30 +62,30 @@
                         </div>
                         <div class="form-group">
                             <label for="numero" class="form-label">Número:<strong class="text-danger"> *</strong></label>
-                            <input type="text" class="form-control" id="numero" name="numero" maxlength="50" placeholder="Ingrese el número de documento" required>
+                            <input type="text" class="form-control form-control-sm" id="numero" name="numero" maxlength="50" placeholder="Ingrese el número de documento" required>
                         </div>
                         <div class="form-group">
                             <label for="nombre" class="form-label">Nombre:<strong class="text-danger"> *</strong></label>
-                            <input type="text" class="form-control" id="nombre" name="nombre" maxlength="200" placeholder="Ingrese el nombre" required>
+                            <input type="text" class="form-control form-control-sm" id="nombre" name="nombre" maxlength="200" placeholder="Ingrese el nombre" required>
                         </div>
                         <div class="form-group">
                             <label for="apellido" class="form-label">Apellido:<strong class="text-danger"> *</strong></label>
-                            <input type="text" class="form-control" id="apellido" name="apellido" maxlength="200" placeholder="Ingrese el apellido" required>
+                            <input type="text" class="form-control form-control-sm" id="apellido" name="apellido" maxlength="200" placeholder="Ingrese el apellido" required>
                         </div>
                         <div class="form-group">
                             <label for="apellido" class="form-label">Especialidad:<strong class="text-danger"> *</strong></label>
-                            <input type="text" class="form-control" id="empleador" name="empleador" maxlength="200" placeholder="Ingrese la especialidad" required>
+                            <input type="text" class="form-control form-control-sm" id="empleador" name="empleador" maxlength="200" placeholder="Ingrese la especialidad" required>
                         </div>
                     </div>
-                    <div class="modal-footer d-flex justify-content-between">
-                        <label for="monto" class="form-label text-danger mensaje-obligatorios">(*) Campos Obligatorios</label>
-                        <div>
-                            <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
-                            <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
-                        </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <label for="monto" class="form-label text-danger mensaje-obligatorios">(*) Campos Obligatorios</label>
+                    <div>
+                        <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
+                        <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -96,13 +97,13 @@
                 <h5 class="modal-title" id="crearModalLabel">Seleccionar Trabajador</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <form id='formSeleccionarTrabajador' accept-charset="UTF-8">
+            <form id='formSeleccionarTrabajador' accept-charset="UTF-8">
+                <div class="modal-body">
                     <div  class="overflow-auto">
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                         <div class="form-group">
                             <label for="trabajadores">Seleccione los trabajadores:<strong class="text-danger"> *</strong></label>
-                            <select class="form-select" id="trabajadores" name="trabajadores" placeholder="Seleccione un trabajador" data-live-search="true" multiple>
+                            <select class="form-select form-select-sm" id="trabajadores" name="trabajadores" placeholder="Seleccione un trabajador" data-live-search="true" multiple>
                                 <c:if test="${not empty trabajadoresNoVenta}">
                                     <c:forEach items="${trabajadoresNoVenta}" var="eTrabajador">
                                         <option value="${eTrabajador.idVisitante}">${eTrabajador.persona.numero} ${eTrabajador.persona.nombre} ${eTrabajador.persona.apellido}</option>
@@ -112,15 +113,15 @@
                             <div id="span-trabajadores-error" class="mensaje-error d-none"><span>Este campo es requerido</span></div>
                         </div>
                     </div>
-                    <div class="modal-footer d-flex justify-content-between">
-                        <label for="monto" class="form-label text-danger mensaje-obligatorios">(*) Campos Obligatorios</label>
-                        <div>
-                            <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
-                            <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
-                        </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <label for="monto" class="form-label text-danger mensaje-obligatorios">(*) Campos Obligatorios</label>
+                    <div>
+                        <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
+                        <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>

@@ -94,16 +94,16 @@ $(document).ready(function() {
                 render: function (data, type, row) {
                     var actionsHtml = '';
                     if(hasPrivilegeVerTerreno === true){
-                        actionsHtml = '<a title="Ver" type="button" class="btn btn-outline-secondary btn-sm" href="/Ventas/' + row.idTerreno + '">';
+                        actionsHtml = '<a title="Ver" type="button" class="btn font-size-small btn-outline-secondary btn-sm" href="/Ventas/' + row.idTerreno + '">';
                         actionsHtml += '<i class="far fa-eye"></i></a>';
                     }
                     if(hasPrivilegeEditarTerreno === true){
-                        actionsHtml += '<button  title="Editar" type="button" class="btn btn-outline-primary abrirModal-btn btn-sm" data-bs-toggle="modal" ';
+                        actionsHtml += '<button  title="Editar" type="button" class="btn font-size-small btn-outline-primary abrirModal-btn btn-sm" data-bs-toggle="modal" ';
                         actionsHtml += 'data-bs-target="#crearModal" data-tipo="editar" data-id="' + row.idTerreno + '" data-modo="actualizar">';
                         actionsHtml += '<i class="far fa-edit"></i></button>';
                     }
                     if(hasPrivilegeEliminarTerreno === true){
-                        actionsHtml += '<button  title="Eliminar" type="button" class="btn btn-outline-danger eliminarModal-btn btn-sm" data-id="' + row.idTerreno + '" ';
+                        actionsHtml += '<button  title="Eliminar" type="button" class="btn font-size-small btn-outline-danger eliminarModal-btn btn-sm" data-id="' + row.idTerreno + '" ';
                         actionsHtml += 'data-cod="' + row.idTerreno + '">';
                         actionsHtml += '<i class="far fa-trash-alt"></i></button>';
                     }
@@ -321,8 +321,8 @@ $(document).ready(function() {
                     $('#poligono').val(response.poligono);
                     $('#numero').val(response.numero);
                     $('#seccion').val(response.seccion);
-                    $('#areaMetros').val(response.areaMetros);
-                    $('#areaVaras').val(response.areaVaras);
+                    $('#areaMetros').val(parseFloat(response.areaMetros).toFixed(2));
+                    $('#areaVaras').val(parseFloat(response.areaVaras).toFixed(2));
                     $('#proyecto').val(response.proyecto.idProyecto);
                     $('#idTerreno').val(response.idTerreno);
                 },

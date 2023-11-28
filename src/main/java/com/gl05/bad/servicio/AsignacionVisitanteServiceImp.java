@@ -74,7 +74,7 @@ public class AsignacionVisitanteServiceImp implements AsignacionVisitanteService
         Specification<AsignacionVisitante> specification = (root, query, builder) -> {
             Predicate ventaIdEqual = builder.equal(root.get("venta").get("idVenta"), idVenta);
             Predicate rolTrabajador = builder.equal(root.get("visitante").get("rol"), "TRABAJADOR");
-            return builder.or(ventaIdEqual, rolTrabajador);
+            return builder.and(ventaIdEqual, rolTrabajador);
         };
         return asignacionDao.findAll(input, specification);
     }

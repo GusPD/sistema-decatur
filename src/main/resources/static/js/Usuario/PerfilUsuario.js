@@ -1,3 +1,30 @@
+//Función de ver o no la contraseña
+function togglePasswordVisibility() {
+    var passwordInput = document.getElementById("password");
+    var eyeIcon = document.getElementById("icono-ver");
+    if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        eyeIcon.classList.remove("fa-eye");
+        eyeIcon.classList.add("fa-eye-slash");
+    } else {
+        passwordInput.type = "password";
+        eyeIcon.classList.remove("fa-eye-slash");
+        eyeIcon.classList.add("fa-eye");
+    }
+}
+function togglePasswordVisibilityConfirm() {
+    var passwordInput = document.getElementById("confirm_password");
+    var eyeIcon = document.getElementById("icono-ver-confirm");
+    if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        eyeIcon.classList.remove("fa-eye");
+        eyeIcon.classList.add("fa-eye-slash");
+    } else {
+        passwordInput.type = "password";
+        eyeIcon.classList.remove("fa-eye-slash");
+        eyeIcon.classList.add("fa-eye");
+    }
+}
 $(document).ready(function() {
     //Formulario de agregar
     $.validator.addMethod("validarPassword",
@@ -36,6 +63,9 @@ $(document).ready(function() {
                 },
                 validarPassword: true
             },
+            confirm_password: {
+                equalTo: "#password"
+            },
         },
         messages:{
             nombre:{
@@ -51,6 +81,10 @@ $(document).ready(function() {
                 required: 'Este campo es requerido',
                 validarPassword: 'La contraseña debe contener al menos una mayúscula, una minúscula, un número, un carácter especial y tener un mínimo de 8 caracteres'
             },
+            confirm_password:{
+                required: 'Este campo es requerido',
+                equalTo: "Las contraseñas no coinciden"
+            },
         },
         highlight: function(element) {
             $(element).addClass('is-invalid');
@@ -59,7 +93,7 @@ $(document).ready(function() {
             $(element).removeClass('is-invalid');
         },
         errorPlacement: function(error, element) {
-            if (element.attr("name") === "nombre" || element.attr("name") === "username" || element.attr("name") === "email" || element.attr("name") === "password") {
+            if (element.attr("name") === "nombre" || element.attr("name") === "username" || element.attr("name") === "email" || element.attr("name") === "password" || element.attr("name") === "confirm_password") {
                 error.insertAfter(element);
             }
         },
@@ -119,6 +153,7 @@ $(document).ready(function() {
                     $('#username').val(response.username);
                     $('#email').val(response.email);
                     $('#password').val('');
+                    $('#confirm_password').val('');
                     $('#UsuarioId').val(idUsuario);
                 },
                 error: function () {

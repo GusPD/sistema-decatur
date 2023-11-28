@@ -49,7 +49,7 @@ public class RolesController {
         model.addAttribute("usuario", usuario);
         model.addAttribute("Roles", elemento);
         model.addAttribute("Permisos", elementoPermiso);
-        return "/Roles/GestionarRoles";
+        return "/Rol/GestionarRoles";
     }
     
     //Función que obtiene los roles de la base de datos

@@ -94,7 +94,7 @@ $(document).ready(function() {
                 render: function (data, type, row) {
                     var actionsHtml = '';
                     if(hasPrivilegeVerVenta === true){
-                        actionsHtml = '<a  title="Ver" type="button" class="btn btn-outline-secondary btn-sm" href="/InformacionVenta/' + row.idTerreno + '">';
+                        actionsHtml = '<a  title="Ver" type="button" class="btn font-size-small btn-outline-secondary btn-sm" href="/InformacionVenta/' + row.idTerreno + '">';
                         actionsHtml += '<i class="far fa-eye"></i></a>';
                     }
                     return actionsHtml || '';

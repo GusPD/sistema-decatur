@@ -69,7 +69,7 @@ $(document).ready(function() {
                 render: function (data, type, row) {
                     var actionsHtml = '';
                     if(hasPrivilegeVerPropietarioProyecto === true){
-                        actionsHtml = '<a  title="Ver" type="button" class="btn btn-outline-secondary btn-sm" href="/InformacionPropietario/'+ row.idProyecto + '/' + row.idPersona + '">';
+                        actionsHtml = '<a  title="Ver" type="button" class="btn font-size-small btn-outline-secondary btn-sm" href="/InformacionPropietario/'+ row.idProyecto + '/' + row.idPersona + '">';
                         actionsHtml += '<i class="far fa-eye"></i></a>';
                     }
                     return actionsHtml || '';

@@ -137,27 +137,27 @@ $(document).ready(function() {
                 render: function (data, type, row) {
                     var actionsHtml = '';
                     if(hasPrivilegeVerPago === true){
-                        actionsHtml = '<a  title="Ver" type="button" class="btn btn-outline-secondary btn-sm" href="/Recibo/' + row.idPago + '">';
+                        actionsHtml = '<a  title="Ver" type="button" class="btn font-size-small btn-outline-secondary btn-sm" href="/Recibo/' + row.idPago + '">';
                         actionsHtml += '<i class="far fa-eye"></i></a>';
                     }
                     if(hasPrivilegeEditarPago === true){
-                        actionsHtml += '<button  title="Editar" type="button" class="btn btn-outline-primary abrirModal-btn btn-sm" data-bs-toggle="modal" ';
+                        actionsHtml += '<button  title="Editar" type="button" class="btn font-size-small btn-outline-primary abrirModal-btn btn-sm" data-bs-toggle="modal" ';
                         actionsHtml += 'data-bs-target="#crearModalGuardar" data-tipo="editar" data-id="' + row.idPago + '" data-modo="actualizar">';
                         actionsHtml += '<i class="far fa-edit"></i></button>';
                     }
                     if(hasPrivilegeEliminarPago === true){
-                        actionsHtml += '<button  title="Eliminar" type="button" class="btn btn-outline-danger eliminarModal-btn btn-sm" data-id="' + row.idPago + '" ';
+                        actionsHtml += '<button  title="Eliminar" type="button" class="btn font-size-small btn-outline-danger eliminarModal-btn btn-sm" data-id="' + row.idPago + '" ';
                         actionsHtml += 'data-cod="' + row.idTerreno + '">';
                         actionsHtml += '<i class="far fa-trash-alt"></i></button>';
                     }
                     if(row.estado === true){
                         if(hasPrivilegeEditarPago === true){
-                            actionsHtml += '<a  title="Anular" type="button" class="btn btn-outline-dark btn-sm btn-anular" data-id="' + row.idPago + '" data-estado="false">';
+                            actionsHtml += '<a  title="Anular" type="button" class="btn font-size-small btn-outline-dark btn-sm btn-anular" data-id="' + row.idPago + '" data-estado="false">';
                             actionsHtml += '<i class="fa-solid fa-ban"></i></a>';
                         }
                     }else{
                         if(hasPrivilegeEditarPago === true){
-                            actionsHtml += '<a  title="Desanular" type="button" class="btn btn-outline-success btn-sm btn-anular" data-id="' + row.idPago + '" data-estado="true">';
+                            actionsHtml += '<a  title="Desanular" type="button" class="btn font-size-small btn-outline-success btn-sm btn-anular" data-id="' + row.idPago + '" data-estado="true">';
                             actionsHtml += '<i class="fa-solid fa-check"></i></a>';
                         }
                     }   
@@ -174,7 +174,7 @@ $(document).ready(function() {
             "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
             "sInfoFiltered": "",
             "sInfoPostFix": "",
-            "sSearch": "Buscar:",
+            "sSearch": "Buscar recibo:",
             "sUrl": "",
             "sInfoThousands": ",",
             "sLoadingRecords": "Cargando...",
@@ -307,19 +307,23 @@ $(document).ready(function() {
             var descuentoIngresado = parseFloat(value);
             var descuentoCalculado = 0;
             var isValid = false;
-            $.ajax({
-                url: '/ObtenerDescuento/' + $("#venta").val() + '?monto=' + $("#monto").val() + '&otros=' + $("#otros").val() + '&fecha=' + $("#fecha").val(),
-                method: 'GET',
-                dataType: 'json',
-                async: false,
-                success: function(response) {
-                    descuentoCalculado = parseFloat(response.descuentoCalculado) || 0;
-                    isValid = descuentoIngresado >= 0 && descuentoIngresado <= descuentoCalculado;
-                },
-                error: function() {
-                    isValid = descuentoIngresado == 0;
-                }
-            });
+            if($("#venta").val() != "" && $("#monto").val() != "" && $("#otros").val() != "" && $("#fecha").val() != ""){
+                $.ajax({
+                    url: '/ObtenerDescuento/' + $("#venta").val() + '?monto=' + $("#monto").val() + '&otros=' + $("#otros").val() + '&fecha=' + $("#fecha").val(),
+                    method: 'GET',
+                    dataType: 'json',
+                    async: false,
+                    success: function(response) {
+                        descuentoCalculado = parseFloat(response.descuentoCalculado) || 0;
+                        isValid = descuentoIngresado >= 0 && descuentoIngresado <= descuentoCalculado;
+                    },
+                    error: function() {
+                        isValid = descuentoIngresado == 0;
+                    }
+                });
+            }else{
+                isValid = true;
+            }
             $.validator.messages.descuentoMenorCalculado = "El valor en 'Descuento' debe ser menor o igual a " + descuentoCalculado;
             return isValid;
         },
@@ -563,9 +567,9 @@ $(document).ready(function() {
                     $('#fecha').val(response.fecha);
                     $('#recibo').val(response.recibo);
                     $('#estado').val(response.estado);
-                    $('#monto').val(response.monto);
-                    $('#otros').val(response.otros);
-                    $('#descuento').val(response.descuento);
+                    $('#monto').val(parseFloat(response.monto).toFixed(2));
+                    $('#otros').val(parseFloat(response.otros).toFixed(2));
+                    $('#descuento').val(parseFloat(response.descuento).toFixed(2));
                     $('#observaciones').val(response.observaciones);
                     $('#cuenta').val(response.cuentaBancaria.idCuenta);
                     $('#venta').val(response.idVenta);
@@ -612,6 +616,7 @@ $(document).ready(function() {
             $('#fecha').val('');
             $('#recibo').val('');
             $('#monto').val('');
+            $('#comprobante').val('');
             $('#otros').val('0.00');
             $('#descuento').val('0.00');
             $('#observaciones').val('');
@@ -735,7 +740,12 @@ $(document).ready(function() {
         width: $(this).data('width') ? $(this).data('width') : $(this).hasClass('w-100') ? '100%' : 'style',
         placeholder: $(this).data('placeholder'),
         dropdownParent: $('#crearModalGuardar .modal-body'),
-        closeOnSelect: false
+        closeOnSelect: false,
+        sorter: function (data) {
+            return data.sort(function (a, b) {
+                return a.text.localeCompare(b.text);
+            });
+        }
     });
     //Función para definir el uso de la libreria selec2
     var $select = $( '#b_lote' ).select2( {

@@ -9,7 +9,7 @@
                 <div class="col-12">
                     <div class="titulo-page">
                         <div class="container">
-                            <h1>Trabajadores de Proyectos en el Sistema</h1>
+                            <h1>Trabajadores de Proyectos</h1>
                         </div>
                     </div>
                 </div>
@@ -26,14 +26,14 @@
                             <h3 class="card-title d-flex justify-content-between">
                                 <div class="d-flex justify-content-estart">
                                     <sec:authorize access="hasAuthority('EXPORTAR_TRABAJADOR_PRIVILAGE')">
-                                        <button id="export-copy" title="Copiar" class="btn btn-outline-secondary buttons-copy" type="button"><i class="fa-regular fa-copy"></i></button> 
-                                        <button id="export-excel" title="Exportar Excel" class="btn btn-outline-success buttons-excel ml-2" type="button"><i class="fa-solid fa-file-csv"></i></button> 
-                                        <button id="export-pdf" title="Exportar PDF" class="btn btn-outline-danger buttons-pdf ml-2" type="button"><i class="fa-regular fa-file-pdf"></i></button>
+                                        <button id="export-copy" title="Copiar" class="btn btn-sm btn-outline-secondary buttons-copy" type="button"><i class="fa-regular fa-copy"></i></button> 
+                                        <button id="export-excel" title="Exportar Excel" class="btn btn-sm btn-outline-success buttons-excel ml-2" type="button"><i class="fa-solid fa-file-excel"></i></button> 
+                                        <button id="export-pdf" title="Exportar PDF" class="btn btn-sm btn-outline-danger buttons-pdf ml-2" type="button"><i class="fa-regular fa-file-pdf"></i></button>
                                     </sec:authorize>
                                 </div>
                                 <div class="d-flex justify-content-end">
                                     <sec:authorize access="hasAuthority('AGREGAR_TRABAJADOR_PRIVILAGE')"> 
-                                        <button type="button" title="Agregar Trabajador" class="btn-blue btn abrirModal-btn ml-2" data-bs-toggle="modal" data-bs-target="#crearModal" data-action="agregar"><i class="fa-solid fa-file-pen"></i></button>
+                                        <button type="button" title="Agregar Trabajador" class="btn-blue btn-sm btn abrirModal-btn ml-2" data-bs-toggle="modal" data-bs-target="#crearModal" data-action="agregar"><i class="fa-solid fa-file-pen"></i></button>
                                     </sec:authorize> 
                                 </div>
                             </h3>
@@ -59,8 +59,8 @@
                     <h5 class="modal-title" id="crearModalLabel">Agregar Trabajador</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <form id='formGuardar' accept-charset="UTF-8">
+                <form id='formGuardar' accept-charset="UTF-8">
+                    <div class="modal-body">
                         <div  class="overflow-auto">
                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                             <input type="hidden" id="idVisitante">
@@ -69,7 +69,8 @@
                             <input type="hidden" id="rol" value="TRABAJADOR">
                             <div class="form-group">
                                 <label for="tipoDocumento" class="form-label">Tipo documento:<strong class="text-danger"> *</strong></label>
-                                <select class="form-select" id="tipoDocumento" name="tipoDocumento" placeholder="Seleccione una opción" required>
+                                <select class="form-select form-select-sm" id="tipoDocumento" name="tipoDocumento" placeholder="Seleccione una opción" required>
+                                    <option value="" data-mascara="">Seleccione una opción</option>
                                     <c:if test="${not empty tiposDocumento}">
                                         <c:forEach items="${tiposDocumento}" var="eTipo">
                                             <option value="${eTipo.idTipoDocumento}" data-mascara="${eTipo.mascara}">${eTipo.nombre}</option>
@@ -79,30 +80,30 @@
                             </div>
                             <div class="form-group">
                                 <label for="numero" class="form-label">Número:<strong class="text-danger"> *</strong></label>
-                                <input type="text" class="form-control" id="numero" name="numero" maxlength="50" placeholder="Ingrese el número de documento" required>
+                                <input type="text" class="form-control form-control-sm" id="numero" name="numero" maxlength="50" placeholder="Ingrese el número de documento" required>
                             </div>
                             <div class="form-group">
                                 <label for="nombre" class="form-label">Nombre:<strong class="text-danger"> *</strong></label>
-                                <input type="text" class="form-control" id="nombre" name="nombre" maxlength="200" placeholder="Ingrese el nombre" required>
+                                <input type="text" class="form-control form-control-sm" id="nombre" name="nombre" maxlength="200" placeholder="Ingrese el nombre" required>
                             </div>
                             <div class="form-group">
                                 <label for="apellido" class="form-label">Apellido:<strong class="text-danger"> *</strong></label>
-                                <input type="text" class="form-control" id="apellido" name="apellido" maxlength="200" placeholder="Ingrese el apellido" required>
+                                <input type="text" class="form-control form-control-sm" id="apellido" name="apellido" maxlength="200" placeholder="Ingrese el apellido" required>
                             </div>
                             <div class="form-group">
                                 <label for="empleador" class="form-label">Especialidad:<strong class="text-danger"> *</strong></label>
-                                <input type="text" class="form-control" id="empleador" name="empleador" maxlength="200" placeholder="Ingrese la especialidad" required>
+                                <input type="text" class="form-control form-control-sm" id="empleador" name="empleador" maxlength="200" placeholder="Ingrese la especialidad" required>
                             </div>
                         </div>
-                        <div class="modal-footer d-flex justify-content-between">
-                            <label for="monto" class="form-label text-danger mensaje-obligatorios">(*) Campos Obligatorios</label>
-                            <div>
-                                <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
-                                <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
-                            </div>
+                    </div>
+                    <div class="modal-footer d-flex justify-content-between">
+                        <label for="monto" class="form-label text-danger mensaje-obligatorios">(*) Campos Obligatorios</label>
+                        <div>
+                            <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
+                            <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
                         </div>
-                    </form>
-                </div>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

@@ -36,7 +36,7 @@ $(document).ready(function() {
                 render: function (data, type, row) {
                     var actionsHtml = '';
                     if(hasPrivilegeEliminarReferencia === true){
-                        actionsHtml += '<button  title="Eliminar" type="button" class="btn btn-outline-danger eliminarModalReferencia-btn btn-sm" data-id="' + row.idReferencia + '" ';
+                        actionsHtml += '<button  title="Eliminar" type="button" class="btn font-size-small btn-outline-danger eliminarModalReferencia-btn btn-sm" data-id="' + row.idReferencia + '" ';
                         actionsHtml += 'data-cod="' + row.idReferencia + '">';
                         actionsHtml += '<i class="far fa-trash-alt"></i></button>';
                     }

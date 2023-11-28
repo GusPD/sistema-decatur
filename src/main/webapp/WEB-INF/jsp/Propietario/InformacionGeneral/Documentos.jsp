@@ -1,6 +1,6 @@
 <%@ include file="../propietario-header.jspf"%>
 <input type="hidden" id="idDocumento" value="${propietario.getIdDocumento()}">
-<div class="row">
+<div class="row pb-3">
     <div class="col-12">
         <div class="card">
             <div class="card-header">
@@ -39,30 +39,30 @@
                 <h5 class="modal-title" id="crearModalLabel">Agregar Documento</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <form id='formGuardarDocumento' accept-charset="UTF-8" enctype="multipart/form-data">
+            <form id='formGuardarDocumento' accept-charset="UTF-8" enctype="multipart/form-data">
+                <div class="modal-body">
                     <div  class="overflow-auto">
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                         <input type="hidden" id="idPropietario" value="${propietario.getIdPropietario()}">
                         <input type="hidden" id="idDocumento">
                         <div class="form-group">
                             <label for="nombre" class="form-label">Nombre:<strong class="text-danger"> *</strong></label>
-                            <input type="text" class="form-control" id="nombre" name="nombre" maxlength="200" placeholder="Ingrese el nombre del documento" required>
+                            <input type="text" class="form-control form-control-sm" id="nombre" name="nombre" maxlength="200" placeholder="Ingrese el nombre del documento" required>
                         </div>
                         <div class="form-group">
                             <label for="documento" class="form-label">Documento:<strong class="text-danger"> *</strong></label>
-                            <input type="file" class="form-control" id="documento" name="documento" aria-hidden="true" accept=".pdf" required>
+                            <input type="file" class="form-control form-control-sm" id="documento" name="documento" aria-hidden="true" accept=".pdf" required>
                         </div>
                     </div>
-                    <div class="modal-footer d-flex justify-content-between">
-                        <label for="monto" class="form-label text-danger mensaje-obligatorios">(*) Campos Obligatorios</label>
-                        <div>
-                            <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
-                            <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
-                        </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <label for="monto" class="form-label text-danger mensaje-obligatorios">(*) Campos Obligatorios</label>
+                    <div>
+                        <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
+                        <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>

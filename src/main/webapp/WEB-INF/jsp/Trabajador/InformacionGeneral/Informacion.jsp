@@ -51,8 +51,8 @@
                 <h5 class="modal-title" id="crearModalLabel">Agregar Trabajador</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <form id='formGuardar' accept-charset="UTF-8">
+            <form id='formGuardar' accept-charset="UTF-8">
+                <div class="modal-body">
                     <div  class="overflow-auto">
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                         <input type="hidden" id="idPersona" value="${persona.getIdPersona()}">
@@ -60,31 +60,42 @@
                         <input type="hidden" id="idDocumento" value="${visitante.getIdDocumento()}">
                         <input type="hidden" id="rol" value="${visitante.getRol()}">
                         <div class="form-group">
-                            <label for="dui" class="form-label">DUI:<strong class="text-danger"> *</strong></label>
-                            <input type="text" class="form-control" id="dui" name="dui" maxlength="9" placeholder="Ingrese el número de DUI sin guiones" required>
+                            <label for="tipoDocumento" class="form-label">Tipo documento:<strong class="text-danger"> *</strong></label>
+                            <select class="form-select form-select-sm" id="tipoDocumento" name="tipoDocumento" placeholder="Seleccione una opción" required>
+                                <option value="" data-mascara="">Seleccione una opción</option>
+                                <c:if test="${not empty tiposDocumento}">
+                                    <c:forEach items="${tiposDocumento}" var="eTipo">
+                                        <option value="${eTipo.idTipoDocumento}" data-mascara="${eTipo.mascara}">${eTipo.nombre}</option>
+                                    </c:forEach>
+                                </c:if>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="numero" class="form-label">Número:<strong class="text-danger"> *</strong></label>
+                            <input type="text" class="form-control form-control-sm" id="numero" name="numero" maxlength="50" placeholder="Ingrese el número de documento" required>
                         </div>
                         <div class="form-group">
                             <label for="nombre" class="form-label">Nombre:<strong class="text-danger"> *</strong></label>
-                            <input type="text" class="form-control" id="nombre" name="nombre" maxlength="200" placeholder="Ingrese el nombre" required>
+                            <input type="text" class="form-control form-control-sm" id="nombre" name="nombre" maxlength="200" placeholder="Ingrese el nombre" required>
                         </div>
                         <div class="form-group">
                             <label for="apellido" class="form-label">Apellido:<strong class="text-danger"> *</strong></label>
-                            <input type="text" class="form-control" id="apellido" name="apellido" maxlength="200" placeholder="Ingrese el apellido" required>
+                            <input type="text" class="form-control form-control-sm" id="apellido" name="apellido" maxlength="200" placeholder="Ingrese el apellido" required>
                         </div>
                         <div class="form-group">
                             <label for="apellido" class="form-label">Especialidad:<strong class="text-danger"> *</strong></label>
-                            <input type="text" class="form-control" id="empleador" name="empleador" maxlength="200" placeholder="Ingrese la especialidad" required>
+                            <input type="text" class="form-control form-control-sm" id="empleador" name="empleador" maxlength="200" placeholder="Ingrese la especialidad" required>
                         </div>
                     </div>
-                    <div class="modal-footer d-flex justify-content-between">
-                        <label for="monto" class="form-label text-danger mensaje-obligatorios">(*) Campos Obligatorios</label>
-                        <div>
-                            <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
-                            <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
-                        </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <label for="monto" class="form-label text-danger mensaje-obligatorios">(*) Campos Obligatorios</label>
+                    <div>
+                        <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
+                        <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>

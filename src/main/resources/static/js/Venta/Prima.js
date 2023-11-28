@@ -131,7 +131,7 @@ $(document).ready(function() {
                 render: function (data, type, row) {
                     var actionsHtml = '';
                     if(hasPrivilegeVerPago === true){
-                        actionsHtml = '<a title="Ver" type="button" class="btn btn-outline-secondary btn-sm" href="/Recibo/' + row.idPago + '">';
+                        actionsHtml = '<a title="Ver" type="button" class="btn font-size-small btn-outline-secondary btn-sm" href="/Recibo/' + row.idPago + '">';
                         actionsHtml += '<i class="far fa-eye"></i></a>';
                     }  
                     return actionsHtml || '';

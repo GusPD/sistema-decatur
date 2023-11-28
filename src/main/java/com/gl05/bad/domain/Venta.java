@@ -1,7 +1,9 @@
 package com.gl05.bad.domain;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -20,6 +23,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Data
 @Entity
 @Table(name = "VENTA")
@@ -29,6 +34,7 @@ import org.springframework.format.annotation.DateTimeFormat;
     @NamedQuery(name = "Venta.findByIdVenta", query = "SELECT v FROM Venta v WHERE v.idVenta = :idVenta"),
     @NamedQuery(name = "Venta.findByNombre", query = "SELECT v FROM Venta v WHERE v.nombre = :nombre"),
     @NamedQuery(name = "Venta.findByFecha", query = "SELECT v FROM Venta v WHERE v.fecha = :fecha"),
+    @NamedQuery(name = "Venta.findByFechaCorte", query = "SELECT v FROM Venta v WHERE v.fechaCorte = :fechaCorte"),
     @NamedQuery(name = "Venta.findByPrecio", query = "SELECT v FROM Venta v WHERE v.precio = :precio"),
     @NamedQuery(name = "Venta.findByDescuento", query = "SELECT v FROM Venta v WHERE v.descuento = :descuento"),
     @NamedQuery(name = "Venta.findByMonto", query = "SELECT v FROM Venta v WHERE v.monto = :monto"),
@@ -48,6 +54,10 @@ public class Venta implements Serializable {
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date fecha;
+    @Column(name = "FECHA_CORTE")
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private Date fechaCorte;
     @Column(name = "PRECIO")
     private double precio;
     @Column(name = "DESCUENTO")
@@ -63,6 +73,10 @@ public class Venta implements Serializable {
     @ManyToOne
     @JoinColumn(name = "ID_TERRENO", referencedColumnName = "ID_TERRENO")
     private Terreno terreno;
+    
+    @ManyToMany(mappedBy = "ventas")
+    @JsonBackReference
+    private Collection<Propietario> propietarios;
     
     @Override
     public int hashCode() {

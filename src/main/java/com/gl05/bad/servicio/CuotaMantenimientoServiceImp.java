@@ -34,6 +34,17 @@ public class CuotaMantenimientoServiceImp implements CuotaMantenimientoService{
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public double montoAdelantado(Venta venta) {
+        List<CuotaMantenimiento> cuotasMantenimiento = cuotaMantenimientoDao.findByVentaAndFechaCuotaGreaterThan(venta); 
+        double montoAdelantado = 0;
+        for (CuotaMantenimiento cuotaMantenimiento : cuotasMantenimiento) {
+            montoAdelantado += cuotaMantenimiento.getCuota();
+        }
+        return montoAdelantado;
+    }
+
+    @Override
     @Transactional
     public void agregar(CuotaMantenimiento cuotaMantenimiento) {
         cuotaMantenimientoDao.save(cuotaMantenimiento);
@@ -63,20 +74,20 @@ public class CuotaMantenimientoServiceImp implements CuotaMantenimientoService{
                 if (!listaCuotas.isEmpty()) {
                     return ultimaCuota = listaCuotas.get(listaCuotas.size() - 1);
                 } else {
-                    ultimaCuota.setFechaCuota(venta.getFecha());
+                    ultimaCuota.setFechaCuota(venta.getFechaCorte());
                     ultimaCuota.setSaldoCuota(0);
                     ultimaCuota.setSaldoRecargo(0);
                     return ultimaCuota;
                 }
             }else {
-                ultimaCuota.setFechaCuota(venta.getFecha());
+                ultimaCuota.setFechaCuota(venta.getFechaCorte());
                 ultimaCuota.setSaldoCuota(0);
                 ultimaCuota.setSaldoRecargo(0);
                 return ultimaCuota;
             }
             
         } else {
-            ultimaCuota.setFechaCuota(venta.getFecha());
+            ultimaCuota.setFechaCuota(venta.getFechaCorte());
             ultimaCuota.setSaldoCuota(0);
             ultimaCuota.setSaldoRecargo(0);
             return ultimaCuota;
@@ -95,20 +106,20 @@ public class CuotaMantenimientoServiceImp implements CuotaMantenimientoService{
                 if (!listaCuotas.isEmpty()) {
                     return ultimaCuota = listaCuotas.get(listaCuotas.size() - 1);
                 } else {
-                    ultimaCuota.setFechaCuota(venta.getFecha());
+                    ultimaCuota.setFechaCuota(venta.getFechaCorte());
                     ultimaCuota.setSaldoCuota(0);
                     ultimaCuota.setSaldoRecargo(0);
                     return ultimaCuota;
                 }
             }else {
-                ultimaCuota.setFechaCuota(venta.getFecha());
+                ultimaCuota.setFechaCuota(venta.getFechaCorte());
                 ultimaCuota.setSaldoCuota(0);
                 ultimaCuota.setSaldoRecargo(0);
                 return ultimaCuota;
             }
             
         } else {
-            ultimaCuota.setFechaCuota(venta.getFecha());
+            ultimaCuota.setFechaCuota(venta.getFechaCorte());
             ultimaCuota.setSaldoCuota(0);
             ultimaCuota.setSaldoRecargo(0);
             return ultimaCuota;
@@ -147,6 +158,17 @@ public class CuotaMantenimientoServiceImp implements CuotaMantenimientoService{
             List<Predicate> predicates = new ArrayList<>();
             predicates.add(builder.equal(root.get("pago").get("venta").get("idVenta"), idVenta));
             predicates.add(builder.equal(root.get("pago").get("estado"), true));
+            return builder.and(predicates.toArray(new Predicate[0]));
+        };
+        return cuotaMantenimientoDao.findAll(input, specification);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public DataTablesOutput<CuotaMantenimiento> listarPago(DataTablesInput input, Long idPago) {
+        Specification<CuotaMantenimiento> specification = (root, query, builder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            predicates.add(builder.equal(root.get("pago").get("idPago"), idPago));
             return builder.and(predicates.toArray(new Predicate[0]));
         };
         return cuotaMantenimientoDao.findAll(input, specification);

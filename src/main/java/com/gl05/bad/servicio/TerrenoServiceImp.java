@@ -1,7 +1,9 @@
 package com.gl05.bad.servicio;
 
 import com.gl05.bad.domain.Terreno;
+
 import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
@@ -57,5 +59,5 @@ public class TerrenoServiceImp implements TerrenoService{
             return builder.equal(root.get("proyecto").get("idProyecto"), idProyecto);
         };
         return terrenoDao.findAll(input, specification);
-    }
+    }    
 }

@@ -1,6 +1,7 @@
 $(document).ready(function() {
     //Tabla
     var idVenta=$("#idVenta").val();
+    var idProyecto=$("#idProyecto").val();
     var table = $('#propietariosTable').DataTable({
         ajax: '/propietarioVenta/data/'+idVenta,
         processing: true,
@@ -23,7 +24,8 @@ $(document).ready(function() {
                 },
                 width: '10%'
             },
-            { data: 'propietario.persona.nombre', title: 'Nombre', width: '35%' },
+            { data: 'persona.nombre', title: 'Nombre', width: '30%' },
+            { data: 'persona.apellido', title: 'Nombre', width: '30%' },
             {
                 data: null,
                 title: 'Acciones',
@@ -33,12 +35,12 @@ $(document).ready(function() {
                 render: function (data, type, row) {
                     var actionsHtml = '';
                     if(hasPrivilegeVerPropietario === true){
-                        actionsHtml = '<a title="Ver" type="button" class="btn btn-outline-secondary btn-sm" href="/InformacionPropietario/' + row.venta.terreno.proyecto.idProyecto +'/'+ row.propietario.persona.idPersona + '' + '">';
+                        actionsHtml = '<a title="Ver" type="button" class="btn font-size-small btn-outline-secondary btn-sm" href="/InformacionPropietario/' + idProyecto +'/'+ row.persona.idPersona + '' + '">';
                         actionsHtml += '<i class="far fa-eye"></i></a>';
                     }
                     if(hasPrivilegeEliminarPropietario === true){
-                        actionsHtml += '<button title="Eliminar" type="button" class="btn btn-outline-danger eliminarModalPropietario-btn btn-sm" data-id="' + row.idAsignacion + '" ';
-                        actionsHtml += 'data-cod="' + row.idAsignacion + '">';
+                        actionsHtml += '<button title="Eliminar" type="button" class="btn font-size-small btn-outline-danger eliminarModalPropietario-btn btn-sm" data-id="' + row.idPropietario + '" ';
+                        actionsHtml += 'data-cod="' + row.idPropietario + '">';
                         actionsHtml += '<i class="far fa-trash-alt"></i></button>';
                     }
                     return actionsHtml || '';

@@ -97,11 +97,55 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
         .authorizeRequests(authorizeRequests -> authorizeRequests
-            // Aquí se deben definir todas las restricciones de acceso
+            //Aquí se deben definir todas las restricciones de acceso
+            //Login
             .antMatchers("/", "/logout").authenticated()
-            .antMatchers("/GestionarUsuarios").hasAuthority("GESTIONAR_USUARIO_PRIVILAGE")
-            .antMatchers("/GestionarRoles").hasAuthority("GESTIONAR_ROL_PRIVILAGE")
-            .antMatchers("/GestionarBitacora").hasAuthority("GESTIONAR_BITACORA_PRIVILAGE")
+            //Proyectos
+            .antMatchers("/Proyectos").hasAuthority("GESTIONAR_PROYECTO_PRIVILAGE")
+            //Envío de correspondencia de proyecto
+            .antMatchers("/EnviarNotificacion/**").hasAuthority("GESTIONAR_ENVIO_CORREO_ELECTRONICO_PRIVILAGE")
+            .antMatchers("/Contactos/**").hasAuthority("GESTIONAR_CONTACTO_PRIVILAGE")
+            //Facturación de proyecto
+            .antMatchers("/Pagos/**").hasAuthority("GESTIONAR_PAGO_PRIVILAGE")
+            .antMatchers("/Recibo/**").hasAuthority("VER_PAGO_PRIVILAGE")
+            .antMatchers("/InformeMantenimiento/**").hasAuthority("GESTIONAR_MONITOREO_PAGO_PRIVILAGE")
+            //Administración de proyecto
+            .antMatchers("/VentasActivas/**").hasAuthority("VER_VENTA_PRIVILAGE")
+            .antMatchers("/Terrenos/**").hasAuthority("GESTIONAR_TERRENO_PRIVILAGE")
+            .antMatchers("/Ventas/**").hasAuthority("GESTIONAR_VENTA_PRIVILAGE")
+            .antMatchers("/Propietarios/**").hasAuthority("GESTIONAR_PROPIETARIO_PRIVILAGE")
+            .antMatchers("/Trabajadores/**").hasAuthority("GESTIONAR_TRABAJADOR_PRIVILAGE")
+            //Venta de proyecto
+            .antMatchers("/InformacionVenta/**").hasAuthority("VER_VENTA_PRIVILAGE")
+            .antMatchers("/PropietariosVenta/**").hasAuthority("VER_VENTA_PRIVILAGE")
+            .antMatchers("/TrabajadoresVenta/**").hasAuthority("VER_VENTA_PRIVILAGE")
+            .antMatchers("/DocumentosVenta/**").hasAuthority("VER_VENTA_PRIVILAGE")
+            .antMatchers("/FacturacionVenta/**").hasAuthority("VER_VENTA_PRIVILAGE")
+            .antMatchers("/PagosVenta/**").hasAuthority("VER_VENTA_PRIVILAGE")
+            .antMatchers("/PrimaVenta/**").hasAuthority("VER_VENTA_PRIVILAGE")
+            .antMatchers("/MantenimientoVenta/**").hasAuthority("VER_VENTA_PRIVILAGE")
+            //Propietarios de proyectos
+            .antMatchers("/PropietariosSistema").hasAuthority("GESTIONAR_DATOS_PROYECTO_PRIVILAGE")
+            .antMatchers("/InformacionPropietario/**").hasAuthority("VER_PROPIETARIO_PRIVILAGE")
+            .antMatchers("/TelefonosPropietario/**").hasAuthority("VER_PROPIETARIO_PRIVILAGE")
+            .antMatchers("/CorreosPropietario/**").hasAuthority("VER_PROPIETARIO_PRIVILAGE")
+            .antMatchers("/ReferenciasPropietario/**").hasAuthority("VER_PROPIETARIO_PRIVILAGE")
+            .antMatchers("/DocumentosPropietario/**").hasAuthority("VER_PROPIETARIO_PRIVILAGE")
+            .antMatchers("/TerrenosPropietario/**").hasAuthority("VER_PROPIETARIO_PRIVILAGE")
+            //Trabajadores del proyecto
+            .antMatchers("/TrabajadoresSistema").hasAuthority("GESTIONAR_DATOS_PROYECTO_PRIVILAGE")
+            .antMatchers("/InformacionTrabajador/**").hasAuthority("VER_TRABAJADOR_PRIVILAGE")
+            .antMatchers("/DocumentosTrabajador/**").hasAuthority("VER_TRABAJADOR_PRIVILAGE")
+            .antMatchers("/TerrenosTrabajador/**").hasAuthority("VER_TRABAJADOR_PRIVILAGE")
+            //Empresas
+            .antMatchers("/Empresas").hasAuthority("GESTIONAR_EMPRESA_PRIVILAGE")
+            .antMatchers("/CuetasBancarias/**").hasAuthority("GESTIONAR_CUENTA_BANCARIA_PRIVILAGE")
+            //Seguridad del sistema
+            .antMatchers("/Usuarios").hasAuthority("GESTIONAR_USUARIO_PRIVILAGE")
+            .antMatchers("/Roles").hasAuthority("GESTIONAR_ROL_PRIVILAGE")
+            .antMatchers("/Bitacora").hasAuthority("GESTIONAR_BITACORA_PRIVILAGE")
+            //Configuración del sistema
+            .antMatchers("/ConfiguracionCorreos").hasAuthority("GESTIONAR_CONFIGURACION_CORREO_PRIVILAGE")
         )
         .formLogin(formLogin -> formLogin
             .loginPage("/login")

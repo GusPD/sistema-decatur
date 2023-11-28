@@ -68,16 +68,16 @@ $(document).ready(function() {
                 render: function (data, type, row) {
                     var actionsHtml = '';
                     if(hasPrivilegeVerTrabajador === true){
-                        actionsHtml = '<a  title="Ver" type="button" class="btn btn-outline-secondary btn-sm" href="/InformacionTrabajador/0/' + row.persona.idPersona + '">';
+                        actionsHtml = '<a  title="Ver" type="button" class="btn font-size-small btn-outline-secondary btn-sm" href="/InformacionTrabajador/0/' + row.persona.idPersona + '">';
                         actionsHtml += '<i class="far fa-eye"></i></a>';
                     }
                     if(hasPrivilegeEditarTrabajador === true){
-                        actionsHtml += '<button  title="Editar" type="button" class="btn btn-outline-primary abrirModal-btn btn-sm" data-bs-toggle="modal" ';
+                        actionsHtml += '<button  title="Editar" type="button" class="btn font-size-small btn-outline-primary abrirModal-btn btn-sm" data-bs-toggle="modal" ';
                         actionsHtml += 'data-bs-target="#crearModal" data-tipo="editar" data-id="' + row.persona.idPersona + '" data-modo="actualizar">';
                         actionsHtml += '<i class="far fa-edit"></i></button>';
                     }
                     if(hasPrivilegeEliminarTrabajador === true){
-                        actionsHtml += '<button title="Eliminar" type="button" class="btn btn-outline-danger eliminarModal-btn btn-sm" data-id="' + row.persona.idPersona + '" ';
+                        actionsHtml += '<button title="Eliminar" type="button" class="btn font-size-small btn-outline-danger eliminarModal-btn btn-sm" data-id="' + row.persona.idPersona + '" ';
                         actionsHtml += 'data-cod="' + row.persona.idPersona + '">';
                         actionsHtml += '<i class="far fa-trash-alt"></i></button>';
                     }
@@ -276,6 +276,7 @@ $(document).ready(function() {
             tituloModal.text('Agregar Trabajador');
             form.attr('action', '/AgregarTrabajador');
             $('.form-control').val('');
+            $('.form-select').val('');
         }
         modal.modal('show');
     });

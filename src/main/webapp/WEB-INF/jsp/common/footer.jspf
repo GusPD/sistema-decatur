@@ -19,6 +19,10 @@
     <script type="text/javascript" src="${pageContext.request.contextPath}/recursosOnline/js/es.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/recursosOnline/js/toastr.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/recursosOnline/js/moment.min.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/recursosOnline/js/tinymce/tinymce.min.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/recursosOnline/js/filepond/dist/filepond.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/recursosOnline/js/filepond/locale/es-es.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/recursosOnline/js/filepond/plugins/filepond-plugin-file-validate-size.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/recursosOnline/js/adminlte.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/Plantilla.js"></script>
     

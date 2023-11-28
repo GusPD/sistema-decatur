@@ -7,6 +7,6 @@ import java.util.List;
 import org.springframework.data.jpa.datatables.repository.DataTablesRepository;
 
 public interface ConfiguracionCorreoDao extends DataTablesRepository<ConfiguracionCorreo, Long> {
-    ConfiguracionCorreo findFirstByServidor(Boolean servidor);
-    List<ConfiguracionCorreo> findAllByServidorNot(Boolean servidor);
+    ConfiguracionCorreo findFirstByServidorAndVerificado(Boolean servidor, Boolean verificado);
+    List<ConfiguracionCorreo> findAllByServidorNotAndVerificado(Boolean servidor, Boolean verificado);
 }

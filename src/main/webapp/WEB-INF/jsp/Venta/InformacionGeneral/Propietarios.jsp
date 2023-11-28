@@ -1,5 +1,5 @@
 <%@ include file="../venta-header.jspf"%>
-<div class="row">
+<div class="row pb-3">
     <div class="col-12">
         <div class="card">
             <div class="card-header">
@@ -41,18 +41,20 @@
                 <h5 class="modal-title" id="crearModalLabel">Agregar Propietario</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <form id='formGuardarPropietario' accept-charset="UTF-8">
+            <form id='formGuardarPropietario' accept-charset="UTF-8">
+                <div class="modal-body">
                     <div  class="overflow-auto">
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                         <input type="hidden" id="idVenta" value="${venta.getIdVenta()}">
+                        <input type="hidden" id="idProyecto" value="${venta.terreno.proyecto.getIdProyecto()}">
                         <input type="hidden" id="idPropietario">
                         <input type="hidden" id="idPersona">
                         <input type="hidden" id="idDocumento">
                         <input type="hidden" id="idAsignacion">
                         <div class="form-group">
                             <label for="tipoDocumento" class="form-label">Tipo documento:<strong class="text-danger"> *</strong></label>
-                            <select class="form-select" id="tipoDocumento" name="tipoDocumento" placeholder="Seleccione una opción" required>
+                            <select class="form-select form-select-sm" id="tipoDocumento" name="tipoDocumento" placeholder="Seleccione una opción" required>
+                                <option value="" data-mascara="">Seleccione una opción</option>
                                 <c:if test="${not empty tiposDocumento}">
                                     <c:forEach items="${tiposDocumento}" var="eTipo">
                                         <option value="${eTipo.idTipoDocumento}" data-mascara="${eTipo.mascara}">${eTipo.nombre}</option>
@@ -62,42 +64,42 @@
                         </div>
                         <div class="form-group">
                             <label for="numero" class="form-label">Número:<strong class="text-danger"> *</strong></label>
-                            <input type="text" class="form-control" id="numero" name="numero" maxlength="50" placeholder="Ingrese el número de documento" required>
+                            <input type="text" class="form-control form-control-sm" id="numero" name="numero" maxlength="50" placeholder="Ingrese el número de documento" required>
                         </div>
                         <div class="form-group">
                             <label for="nombreP" class="form-label">Nombre:<strong class="text-danger"> *</strong></label>
-                            <input type="text" class="form-control" id="nombreP" name="nombreP" maxlength="200" placeholder="Ingrese el nombre" required>
+                            <input type="text" class="form-control form-control-sm" id="nombreP" name="nombreP" maxlength="200" placeholder="Ingrese el nombre" required>
                         </div>
                         <div class="form-group">
                             <label for="apellido" class="form-label">Apellido:<strong class="text-danger"> *</strong></label>
-                            <input type="text" class="form-control" id="apellido" name="apellido" maxlength="200" placeholder="Ingrese el apellido" required>
+                            <input type="text" class="form-control form-control-sm" id="apellido" name="apellido" maxlength="200" placeholder="Ingrese el apellido" required>
                         </div>
                         <div class="form-group">
                             <label for="profesion" class="form-label">Profesión:<strong class="text-danger"> *</strong></label>
-                            <input type="text" class="form-control" id="profesion" name="profesion" maxlength="200" placeholder="Ingrese la profesión" required>
+                            <input type="text" class="form-control form-control-sm" id="profesion" name="profesion" maxlength="200" placeholder="Ingrese la profesión" required>
                         </div>
                         <div class="form-group">
                             <label for="direccionCasa" class="form-label">Dirección Casa:<strong class="text-danger"> *</strong></label>
-                            <input type="text" class="form-control" id="direccionCasa" name="direccionCasa" maxlength="300" placeholder="Ingrese la dirección de casa" required>
+                            <input type="text" class="form-control form-control-sm" id="direccionCasa" name="direccionCasa" maxlength="300" placeholder="Ingrese la dirección de casa" required>
                         </div>
                         <div class="form-group">
                             <label for="lugarTrabajo" class="form-label">Lugar de Trabajo:</label>
-                            <input type="text" class="form-control" id="lugarTrabajo" name="lugarTrabajo" placeholder="Ingrese el lugar de trabajo">
+                            <input type="text" class="form-control form-control-sm" id="lugarTrabajo" name="lugarTrabajo" placeholder="Ingrese el lugar de trabajo">
                         </div>
                         <div class="form-group">
                             <label for="direccionTrabajo" class="form-label">Dirección de Trabajo:</label>
-                            <input type="text" class="form-control" id="direccionTrabajo" name="direccionTrabajo" placeholder="Ingrese la dirección del trabajo">
+                            <input type="text" class="form-control form-control-sm" id="direccionTrabajo" name="direccionTrabajo" placeholder="Ingrese la dirección del trabajo">
                         </div>
                     </div>
-                    <div class="modal-footer d-flex justify-content-between">
-                        <label for="monto" class="form-label text-danger mensaje-obligatorios">(*) Campos Obligatorios</label>
-                        <div>
-                            <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
-                            <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
-                        </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <label for="monto" class="form-label text-danger mensaje-obligatorios">(*) Campos Obligatorios</label>
+                    <div>
+                        <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
+                        <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -109,13 +111,13 @@
                 <h5 class="modal-title" id="crearModalLabel">Seleccionar Propietario</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">
-                <form id='formSeleccionarPropietario' accept-charset="UTF-8">
+            <form id='formSeleccionarPropietario' accept-charset="UTF-8">
+                <div class="modal-body">
                     <div  class="overflow-auto">
                         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                         <div class="form-group">
                             <label for="propietarios">Seleccione los propietarios:<strong class="text-danger"> *</strong></label>
-                            <select class="form-select" id="propietarios" name="propietarios" placeholder="Seleccione un propietario" data-live-search="true" multiple>
+                            <select class="form-select form-select-sm" id="propietarios" name="propietarios" placeholder="Seleccione un propietario" data-live-search="true" multiple>
                                 <c:if test="${not empty propietariosNoVenta}">
                                     <c:forEach items="${propietariosNoVenta}" var="ePropietario">
                                         <option value="${ePropietario.idPropietario}">${ePropietario.persona.numero} ${ePropietario.persona.nombre} ${ePropietario.persona.apellido}</option>
@@ -125,15 +127,15 @@
                             <div id="span-propietarios-error" class="mensaje-error d-none"><span>Este campo es requerido</span></div>
                         </div>
                     </div>
-                    <div class="modal-footer d-flex justify-content-between">
-                        <label for="monto" class="form-label text-danger mensaje-obligatorios">(*) Campos Obligatorios</label>
-                        <div>
-                            <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
-                            <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
-                        </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <label for="monto" class="form-label text-danger mensaje-obligatorios">(*) Campos Obligatorios</label>
+                    <div>
+                        <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
+                        <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
                     </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -146,7 +148,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <strong>¿Estás seguro de eliminar la propietario seleccionada?</strong>
+                <strong>¿Estás seguro de eliminar la propietario seleccionado?</strong>
                 <p>Ten en cuenta que se eliminarán los datos relacionados a la propietario.</p>
             </div>
             <div class="modal-footer">

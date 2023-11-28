@@ -26,10 +26,19 @@ public class VentaServiceImp implements VentaService{
     @Autowired
     private InformacionMantenimientoServiceImp mantenimientoService;
 
+    @Autowired
+    private ProyectoServiceImp proyectoService;
+
     @Override
     @Transactional(readOnly = true)
     public List<Venta> listaVentas() {
         return (List<Venta>) ventaDao.findAll();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Venta> listarVentas(String estado, Long idProyecto){
+        return (List<Venta>) ventaDao.findByEstadoAndTerrenoProyecto("Activo", proyectoService.encontrar(idProyecto));
     }
 
     @Override

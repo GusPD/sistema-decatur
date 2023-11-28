@@ -62,19 +62,40 @@
                         <p>&nbsp;Proyecto<br>&nbsp;${proyecto.nombre}</p>
                     </a>
                 </li>
-                <sec:authorize access="hasAuthority('ENVIO_CORREO_PRIVILAGE')">
-                    <li class="nav-item">  
-                        <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#notificacionModal">
-                            <i class="nav-icon fas fa-envelope"></i>
-                            <p>&nbsp;Notificaciones</p>
+                <sec:authorize access="hasAuthority('GESTIONAR_ENVIO_CORREO_ELECTRONICO_PRIVILAGE') or hasAuthority('GESTIONAR_CONTACTO_PRIVILAGE')">
+                    <c:set var="urlEnviarNotificacion" value="/EnviarNotificacion/${proyecto.idProyecto}"/>
+                    <c:set var="urlContactos" value="/Contactos/${proyecto.idProyecto}"/>
+                    <li class="nav-item ${requestScope['javax.servlet.forward.request_uri'] == urlEnviarNotificacion || requestScope['javax.servlet.forward.request_uri'] == urlContactos ? 'menu-open' : ''}">
+                        <a href="#" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlEnviarNotificacion || requestScope['javax.servlet.forward.request_uri'] == urlContactos ? 'active' : ''}">
+                            <i class="nav-icon fa-solid fa-envelope"></i>
+                            <p>Correspondencia<i class="right fas fa-angle-left"></i></p>
                         </a>
+                        <ul class="nav nav-treeview">
+                            <sec:authorize access="hasAuthority('GESTIONAR_ENVIO_CORREO_ELECTRONICO_PRIVILAGE')">
+                                <li class="nav-item">
+                                    <a href="/EnviarNotificacion/${proyecto.idProyecto}" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlEnviarNotificacion ? 'active' : ''}">
+                                        <i class="fa-solid fa-solid fa-envelope-open-text nav-icon text-blue"></i>
+                                        <p>&nbsp;Notificaciones</p>
+                                    </a>
+                                </li>
+                            </sec:authorize>
+                            <sec:authorize access="hasAuthority('GESTIONAR_CONTACTO_PRIVILAGE')">
+                                <li class="nav-item">
+                                    <a href="/Contactos/${proyecto.idProyecto}" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlContactos ? 'active' : ''}">
+                                        <i class="fa-solid fa-address-book nav-icon text-blue"></i>
+                                        <p>Contactos</p>
+                                    </a>
+                                </li>
+                            </sec:authorize>
+                        </ul>
                     </li>
                 </sec:authorize>
                 <sec:authorize access="hasAuthority('GESTIONAR_PAGO_PRIVILAGE') or hasAuthority('GESTIONAR_MONITOREO_PAGO_PRIVILAGE')">
                     <c:set var="urlPagos" value="/Pagos/${proyecto.idProyecto}" />
+                    <c:set var="urlMonitoreoMantenimiento" value="/InformeMantenimiento/${proyecto.idProyecto}" />
                     <c:set var="urlRecibo" value="/Recibo/${pago.idPago}" />
-                    <li class="nav-item ${requestScope['javax.servlet.forward.request_uri'] == urlPagos || requestScope['javax.servlet.forward.request_uri'] == urlRecibo || requestScope['javax.servlet.forward.request_uri'] == '/MonitoreoPagos' ? 'menu-open' : ''}">
-                        <a href="#" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlPagos || requestScope['javax.servlet.forward.request_uri'] == urlRecibo || requestScope['javax.servlet.forward.request_uri'] == '/MonitoreoPagos' ? 'active' : ''}">
+                    <li class="nav-item ${requestScope['javax.servlet.forward.request_uri'] == urlPagos || requestScope['javax.servlet.forward.request_uri'] == urlRecibo || requestScope['javax.servlet.forward.request_uri'] == urlMonitoreoMantenimiento ? 'menu-open' : ''}">
+                        <a href="#" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlPagos || requestScope['javax.servlet.forward.request_uri'] == urlRecibo || requestScope['javax.servlet.forward.request_uri'] == urlMonitoreoMantenimiento ? 'active' : ''}">
                             <i class="nav-icon fas fa-coins"></i>
                             <p>Facturación<i class="right fas fa-angle-left"></i></p>
                         </a>
@@ -89,8 +110,8 @@
                             </sec:authorize>
                             <sec:authorize access="hasAuthority('GESTIONAR_MONITOREO_PAGO_PRIVILAGE')">
                                 <li class="nav-item">
-                                    <a href="/MonitoreoPagos"class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == '/MonitoreoPagos' ? 'active' : ''}">
-                                        <i class="fa-solid fa-chart-line nav-icon text-blue"></i>
+                                    <a href="/InformeMantenimiento/${proyecto.idProyecto}" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlMonitoreoMantenimiento ? 'active' : ''}">
+                                        <i class="fa-solid fa-chart-column nav-icon text-blue"></i>
                                         <p>Monitoreo de Pagos</p>
                                     </a>
                                 </li>
@@ -257,43 +278,4 @@
         </nav>
     </div>
 </aside>
-<!-- Modal de enviar notificaciones -->
-<div class="modal fade" id="notificacionModal" tabindex="-1" aria-labelledby="crearModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="crearModalLabel">Enviar Notificación</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form action="/enviarNotificacion" method="post" accept-charset="UTF-8">
-                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
-                    <div class="form-group">
-                        <label for="destino">Destinatarios:</label>
-                        <select type="text" class="form-select" id="destino" name="destino" required>
-                            <option value="">Seleccione una opción</option>
-                            <option value="Todos">Todos</option>
-                            <option value="Estudiantes">Estudiantes</option>
-                            <option value="Aspirantes a Profesores">Aspirantes a Profesores</option>
-                            <option value="Profesores">Profesores</option>
-                            <option value="Coordinadores Académicos">Coordinadores Académicos</option>
-                        </select>
-                    </div>  
-                    <div class="form-group">
-                        <label for="asunto">Asunto:</label>
-                        <input type="text" class="form-control" id="asunto" name="asunto" maxlength="100" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="mensaje">Mensaje:</label>
-                        <textarea class="form-control" id="mensaje" name="mensaje" rows="7" required></textarea>
-                    </div>        
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-outline-success">Guardar</button>
-                        <button class="btn btn-outline-danger" data-bs-dismiss="modal">Cancelar</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
 <div id="EspacioEncabezado"></div>
