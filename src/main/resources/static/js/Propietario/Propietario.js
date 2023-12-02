@@ -5,7 +5,7 @@ $(document).ready(function() {
             url: '/propietarios/data',
             dataSrc: 'data'
         },
-        order: [[1, 'asc'],[2, 'asc']],
+        order: [[2, 'asc']],
         processing: true,
         serverSide: true,
         dom: "<'row w-100'<'col-sm-12 mb-4'B>>" +

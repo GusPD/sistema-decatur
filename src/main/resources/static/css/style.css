@@ -231,6 +231,9 @@ pre{
 }
 
 /*Configuración de las tablas*/
+table.dataTable thead th, table.dataTable thead td, table.dataTable tfoot th, table.dataTable tfoot td {
+    text-align: center;
+}
 div.row.w-100:has(div.dt-buttons) {
     display: none;
 }
@@ -273,6 +276,7 @@ table.dataTable {
     margin: 0px !important;
     width: 100% !important;
     background-color: white;
+    vertical-align: middle;
 }
 .encabezado-tabla{
     background-color: #DCDAE9!important;
@@ -390,7 +394,9 @@ th {
 }
 .select2-selection__choice{
     width: 100% !important;
-    margin-top: 15px !important;
+}
+.select2-selection__rendered li:not(.select2-search):not(:empty):first-child {
+    margin-top: 10px;
 }
 
 /*Pantalla de carga de correos*/

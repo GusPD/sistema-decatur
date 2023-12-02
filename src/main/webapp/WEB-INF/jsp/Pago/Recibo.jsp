@@ -28,9 +28,11 @@
                                     <div class="col-sm-6">
                                         Recibo de ${pago.tipo} N° ${pago.recibo}
                                     </div>
-                                    <sec:authorize access="hasAuthority('IMPRIMIR_PAGO_PRIVILAGE')"> 
-                                        <button type="button" title="Imprimir Pago" class=" btn btn-outline-dark abrirModal-btn ml-2"><i class="fa-solid fa-print"></i></button>
-                                    </sec:authorize>
+                                    <div class="col-sm-6 d-flex justify-content-end">
+                                        <sec:authorize access="hasAuthority('EXPORTAR_PAGO_PRIVILAGE')"> 
+                                            <button id="btn-imprimir" title="Imprimir Recibo" type="button" class="btn btn-sm btn-outline-dark" data-bs-toggle="modal"><i class="fa-solid fa-print"></i></button>
+                                        </sec:authorize>
+                                    </div>
                                 </div>
                             </h3>
                         </div>
@@ -42,7 +44,11 @@
                                         <input type="hidden" id="idPago" value="${pago.getIdPago()}">
                                         <tbody>
                                             <tr>
-                                                <td width="20%" class="encabezado-tabla font-weight-bold">Fecha Pago</td>
+                                                <td width="20%" class="encabezado-tabla font-weight-bold">Lote</td>
+                                                <td><c:if test="${not empty pago.venta.terreno.poligono}">${pago.venta.terreno.poligono}-${pago.venta.terreno.numero}${pago.venta.terreno.seccion}</c:if></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="encabezado-tabla font-weight-bold">Fecha Pago</td>
                                                 <td><c:if test="${not empty pago.fecha}"><fmt:formatDate value="${pago.fecha}" pattern="dd/MM/yyyy" /></c:if></td>
                                             </tr>
                                             <tr>
@@ -78,7 +84,7 @@
                                 <c:if test="${not empty listaCuotaMantenimientos}">
                                     <div id="table_wrapper" class="dataTables_wrapper dt-bootstrap4">
                                         <div class="col-sm-12 table-responsive" style="height: 48vh; padding:4px;">
-                                            <table id="cuotaMantenimientoTable" class="table table-bordered table-striped dataTable dtr-inline"></table>
+                                            <table id="cuotaMantenimientoTable" class="table table-bordered table-striped text-center dataTable dtr-inline"></table>
                                         </div>
                                     </div>
                                 </c:if>
@@ -89,6 +95,36 @@
             </div>
         </div>
     </section>                   
+</div>
+
+<!-- Modal Reporte Impresión -->
+<div class="modal fade" id="reporteModal" tabindex="-1" aria-labelledby="reporteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="reporteModalLabel">Vista Previa de Impresión</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="overflow-auto">
+                    <div id="contenedorDePagina" class="bg-white m-0 p-0"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btnImprimir" type="button" class="btn btn-sm btn-outline-dark" data-bs-dismiss="modal">Imprimir</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Pantalla de carga --> 
+<div id="loadingOverlay">
+    <div class="loading-spinner">
+        <div class="spinner-border" role="status">
+            <span class="sr-only">Cargando...</span>
+        </div>
+        <p>Generando reporte...</p>
+    </div>
 </div>
 
 <!-- Script de la página -->

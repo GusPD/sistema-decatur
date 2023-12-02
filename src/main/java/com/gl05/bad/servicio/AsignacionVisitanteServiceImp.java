@@ -2,6 +2,7 @@ package com.gl05.bad.servicio;
 
 import com.gl05.bad.dao.AsignacionVisitanteDao;
 import com.gl05.bad.domain.AsignacionVisitante;
+import com.gl05.bad.domain.Venta;
 import com.gl05.bad.domain.Visitante;
 import java.util.List;
 import javax.persistence.criteria.Predicate;
@@ -44,8 +45,8 @@ public class AsignacionVisitanteServiceImp implements AsignacionVisitanteService
     
     @Override
     @Transactional(readOnly = true)
-    public AsignacionVisitante encontrarVisitante(Visitante visitante) {
-        return asignacionDao.findByVisitante(visitante);
+    public AsignacionVisitante encontrarVisitanteVenta(Visitante visitante, Venta venta) {
+        return asignacionDao.findByVisitanteAndVenta(visitante, venta);
     }
 
 

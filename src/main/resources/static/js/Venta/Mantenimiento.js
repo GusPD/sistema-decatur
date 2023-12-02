@@ -234,9 +234,6 @@ $(document).ready(function() {
         }
     });
     table.columns.adjust();
-    $('#export-pdf').on('click', function() {
-        table.button('.buttons-pdf').trigger();
-    });
     $('#export-excel').on('click', function() {
         table.button('.buttons-excel').trigger();
     });
@@ -349,5 +346,72 @@ $(document).ready(function() {
                 toastr.error(errorMessage);
             }
         });
+    });
+    //Función para mostrar la vista de impresión del estado de cuenta
+    document.getElementById('btn-imprimir').addEventListener('click', function () {
+        $("#loadingOverlay").show();
+        $.ajax({
+            url: '/EstadoCuentaMantenimiento/' + idVenta,
+            method: 'GET',
+            success: function (data) {
+                document.getElementById('contenedorDePagina').innerHTML=data;
+                var table = $('#estadoCuentaTable').DataTable({
+                    pageLength: -1,
+                    paging: false,
+                    lengthChange: false,
+                    info: false,
+                    searching: false,
+                    ordering: false,
+                    columnDefs: [
+                        {
+                            targets: 'center',
+                            className: 'dt-center'
+                        }
+                    ],
+                    language: {
+                        "sProcessing": "Procesando...",
+                        "sLengthMenu": "Mostrar _MENU_ registros",
+                        "sZeroRecords": "No se encontraron resultados",
+                        "sEmptyTable": "Ningún dato disponible en esta tabla",
+                        "sInfo": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                        "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                        "sInfoFiltered": "",
+                        "sInfoPostFix": "",
+                        "sSearch": "Buscar:",
+                        "sUrl": "",
+                        "sInfoThousands": ",",
+                        "sLoadingRecords": "Cargando...",
+                        "oPaginate": {
+                            "sFirst": "Primero",
+                            "sLast": "Último",
+                            "sNext": "Siguiente",
+                            "sPrevious": "Anterior"
+                        },
+                        "oAria": {
+                            "sSortAscending": ": Activar para ordenar la columna de manera ascendente",
+                            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                        },
+                        "buttons": {
+                            "copy": "Copiar",
+                            "copyTitle": "Copiar al portapapeles",
+                            copySuccess: {
+                              _: "%d filas copiadas al portapapeles",
+                              1: "1 fila copiada al portapapeles"
+                            }
+                        }
+                    }
+                });
+                $("#loadingOverlay").hide();
+                $("#reporteModal").modal('show');
+            },
+            error: function () {
+                console.error('Error al cargar la página.');
+            }
+        });
+    });
+    //Función para imprimir el estado de cuenta
+    document.getElementById('btnImprimir').addEventListener('click', function () {
+        var divParaImprimir = $("#contenedorDePagina");
+        divParaImprimir.printThis();
     });
 });

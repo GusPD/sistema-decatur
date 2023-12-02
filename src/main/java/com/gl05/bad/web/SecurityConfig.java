@@ -108,6 +108,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             //Facturación de proyecto
             .antMatchers("/Pagos/**").hasAuthority("GESTIONAR_PAGO_PRIVILAGE")
             .antMatchers("/Recibo/**").hasAuthority("VER_PAGO_PRIVILAGE")
+            .antMatchers("/ComprobantePago/**").hasAuthority("EXPORTAR_PAGO_PRIVILAGE")
             .antMatchers("/InformeMantenimiento/**").hasAuthority("GESTIONAR_MONITOREO_PAGO_PRIVILAGE")
             //Administración de proyecto
             .antMatchers("/VentasActivas/**").hasAuthority("VER_VENTA_PRIVILAGE")
@@ -124,6 +125,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/PagosVenta/**").hasAuthority("VER_VENTA_PRIVILAGE")
             .antMatchers("/PrimaVenta/**").hasAuthority("VER_VENTA_PRIVILAGE")
             .antMatchers("/MantenimientoVenta/**").hasAuthority("VER_VENTA_PRIVILAGE")
+            .antMatchers("/EstadoCuentaMantenimiento/**").hasAuthority("EXPORTAR_ESTADO_CUENTA_MANTENIMIENTO_PRIVILAGE")
             //Propietarios de proyectos
             .antMatchers("/PropietariosSistema").hasAuthority("GESTIONAR_DATOS_PROYECTO_PRIVILAGE")
             .antMatchers("/InformacionPropietario/**").hasAuthority("VER_PROPIETARIO_PRIVILAGE")

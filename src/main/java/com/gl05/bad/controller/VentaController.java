@@ -412,10 +412,11 @@ public class VentaController {
 
     //Función para eliminar un propietario de la venta
     @PostMapping("/EliminarPropietarioVenta/{idPropietario}")
-    public ResponseEntity<String> EliminarPropietarioVenta(Propietario propietario) {
+    public ResponseEntity<String> EliminarPropietarioVenta(Propietario propietario, @RequestParam("idVenta") Long idVenta) {
         try {
             Propietario propietarioEncontrado = propietarioService.encontrar(propietario.getIdPropietario());
-            AsignacionPropietario asignacion = asigPropietarioService.encontrarPropietario(propietarioEncontrado);
+            Venta venta = ventaService.encontrar(idVenta);
+            AsignacionPropietario asignacion = asigPropietarioService.encontrarPropietarioVenta(propietarioEncontrado, venta);
             asigPropietarioService.eliminar(asignacion);
             String mensaje = "Se ha eliminado un propietario de la venta correctamente.";
             bitacoraService.registrarAccion("Eliminar propietario venta");
@@ -635,21 +636,9 @@ public class VentaController {
         Venta ventaEncontrada = ventaService.encontrar(venta.getIdVenta());
         Terreno terrenoEncontrado = ventaEncontrada.getTerreno();
         Proyecto proyecto = terrenoEncontrado.getProyecto();
-        Facturacion newFacturacion = facturacionService.encontrarVenta(ventaEncontrada);
-        
-        List<AsignacionPropietario> listaAsignaciones = asigPropietarioService.listaAsignacion();        
-        List<AsignacionPropietario> propietarios = new ArrayList<AsignacionPropietario>();
-        for (var propietario : listaAsignaciones) {
-            if(Objects.equals(propietario.getVenta().getIdVenta(), venta.getIdVenta())){
-                propietarios.add(propietario);
-            }
-        }
-        List<AsignacionPropietario> propietariosSeleccionados = new ArrayList<AsignacionPropietario>();
-        for (var propietario : propietarios) {
-            if(Objects.equals(propietario.getEstado(), "Seleccionado")){
-                propietariosSeleccionados.add(propietario);
-            }
-        }
+        Facturacion newFacturacion = facturacionService.encontrarVenta(ventaEncontrada);     
+        List<AsignacionPropietario> propietarios = asigPropietarioService.listaAsignacion(ventaEncontrada);
+        List<AsignacionPropietario> propietariosSeleccionados = asigPropietarioService.listaAsignacionPropietarioSeleccionado(ventaEncontrada);
         model.addAttribute("facturacion", newFacturacion);
         model.addAttribute("propietariosAsignados", propietarios);
         model.addAttribute("consumidorFinal", propietariosSeleccionados);
@@ -666,13 +655,14 @@ public class VentaController {
             Venta venta= ventaService.encontrar(idVenta);
             String mensaje="";
             int contador=0;
-            for (var idpropietario : propietarios) {
-                Propietario propietario = propietarioService.encontrar(idpropietario);
-                AsignacionPropietario newAsignacionVenta = asigPropietarioService.encontrarPropietario(propietario);
-                if(Objects.equals(newAsignacionVenta.getVenta().getIdVenta(), venta.getIdVenta())){
-                    newAsignacionVenta.setEstado(estado);
-                    asigPropietarioService.actualizar(newAsignacionVenta);
-                    contador++;
+            List<AsignacionPropietario> listaAsignaciones = asigPropietarioService.listaAsignacion(venta);
+            for (AsignacionPropietario asignacionPropietario : listaAsignaciones) {
+                for (Long idpropietario : propietarios) {
+                    if(asignacionPropietario.getPropietario().getIdPropietario().equals(idpropietario)){
+                        asignacionPropietario.setEstado(estado);
+                        //asigPropietarioService.actualizar(asignacionPropietario);
+                        contador++;
+                    }
                 }
             }
             if("Seleccionado".equals(estado)){

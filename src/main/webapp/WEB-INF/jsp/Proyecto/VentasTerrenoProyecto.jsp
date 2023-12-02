@@ -42,7 +42,7 @@
                         <div class="card-body">
                             <div id="table_wrapper" class="dataTables_wrapper dt-bootstrap4">
                                 <div class="col-sm-12 table-responsive pt-1" style="height: 60vh; padding:4px;">
-                                    <table id="ventaTable" class="table table-bordered table-striped dataTable dtr-inline mt-1"></table>
+                                    <table id="ventaTable" class="table table-bordered table-striped text-center dataTable dtr-inline mt-1"></table>
                                 </div>
                             </div>
                         </div>

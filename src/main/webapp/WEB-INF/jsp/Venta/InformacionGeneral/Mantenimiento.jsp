@@ -30,7 +30,7 @@
                                 <sec:authorize access="hasAuthority('EXPORTAR_ESTADO_CUENTA_MANTENIMIENTO_PRIVILAGE')">
                                     <button id="export-copy" title="Copiar" class="btn btn-sm btn-outline-secondary buttons-copy" type="button"><i class="fa-regular fa-copy"></i></button> 
                                     <button id="export-excel" title="Exportar Excel" class="btn btn-sm btn-outline-success buttons-excel ml-2" type="button"><i class="fa-solid fa-file-excel"></i></button> 
-                                    <button id="export-pdf" title="Exportar PDF" class="btn btn-sm btn-outline-danger buttons-pdf ml-2" type="button"><i class="fa-regular fa-file-pdf"></i></button>
+                                    <button id="btn-imprimir" title="Imprimir Estado de Cuenta" type="button" class="btn btn-sm btn-outline-dark" data-bs-toggle="modal"><i class="fa-solid fa-print"></i></button>
                                 </sec:authorize>
                                 <sec:authorize access="hasAuthority('AGREGAR_ESTADO_CUENTA_MANTENIMIENTO_PRIVILAGE')">
                                     <button title="Cargar Mantenimiento" id="SubirEstado" class="btn btn-sm btn-blue" data-bs-toggle="modal" data-bs-target="#crearModal" data-tipo="subir"><i class="fa-solid fa-file-arrow-up"></i></button>
@@ -47,7 +47,7 @@
             <div class="card-body">
                 <div id="table_wrapper" class="dataTables_wrapper dt-bootstrap4">
                     <div class="col-sm-12 table-responsive pt-1" style="height: 48vh; padding:4px;">
-                        <table id="mantenimientoTable" class="table table-bordered table-striped dataTable dtr-inline mt-1"></table>
+                        <table id="mantenimientoTable" class="table table-bordered table-striped text-center dataTable dtr-inline mt-1"></table>
                     </div>
                 </div>
             </div>
@@ -126,6 +126,37 @@
         </div>
     </div>
 </div>
+
+<!-- Modal Reporte Impresión -->
+<div class="modal fade" id="reporteModal" tabindex="-1" aria-labelledby="reporteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="reporteModalLabel">Vista Previa de Impresión</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="overflow-auto">
+                    <div id="contenedorDePagina" class="bg-white m-0 p-0"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btnImprimir" type="button" class="btn btn-sm btn-outline-dark" data-bs-dismiss="modal">Imprimir</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Pantalla de carga --> 
+<div id="loadingOverlay">
+    <div class="loading-spinner">
+        <div class="spinner-border" role="status">
+            <span class="sr-only">Cargando...</span>
+        </div>
+        <p>Generando reporte...</p>
+    </div>
+</div>
+
 <!-- Script de la página -->  
 
 <%@ include file="../venta-footer.jspf"%>

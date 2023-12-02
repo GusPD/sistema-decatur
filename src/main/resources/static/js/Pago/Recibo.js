@@ -172,4 +172,25 @@ $(document).ready(function() {
         }
     });
     table.columns.adjust();
+    //Función para mostrar la vista de impresión del estado de cuenta
+    document.getElementById('btn-imprimir').addEventListener('click', function () {
+      $("#loadingOverlay").show();
+      $.ajax({
+          url: '/ComprobantePago/' + idPago,
+          method: 'GET',
+          success: function (data) {
+              document.getElementById('contenedorDePagina').innerHTML=data;
+              $("#loadingOverlay").hide();
+              $("#reporteModal").modal('show');
+          },
+          error: function () {
+              console.error('Error al cargar la página.');
+          }
+      });
+    });
+  //Función para imprimir el estado de cuenta
+  document.getElementById('btnImprimir').addEventListener('click', function () {
+    var divParaImprimir = $("#contenedorDePagina");
+    divParaImprimir.printThis();
+  });
 });

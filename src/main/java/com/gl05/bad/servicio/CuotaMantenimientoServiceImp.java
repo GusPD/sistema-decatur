@@ -35,6 +35,12 @@ public class CuotaMantenimientoServiceImp implements CuotaMantenimientoService{
 
     @Override
     @Transactional(readOnly = true)
+    public List<CuotaMantenimiento> listaCuotaMantenimientos(Venta venta) {
+        return (List<CuotaMantenimiento>) cuotaMantenimientoDao.findByPagoVenta(venta);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
     public double montoAdelantado(Venta venta) {
         List<CuotaMantenimiento> cuotasMantenimiento = cuotaMantenimientoDao.findByVentaAndFechaCuotaGreaterThan(venta); 
         double montoAdelantado = 0;

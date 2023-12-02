@@ -14,7 +14,7 @@
                 <div id="table_wrapper" class="dataTables_wrapper dt-bootstrap4">
                     <div class="col-sm-12 table-responsive pt-1" style="height: 55vh; padding:4px;">
                         <input type="hidden" id="idPropietario" value="${propietario.getIdPropietario()}">
-                        <table id="terrenoTable" class="table table-bordered table-striped dataTable dtr-inline mt-1"></table>
+                        <table id="terrenoTable" class="table table-bordered table-striped text-center dataTable dtr-inline mt-1"></table>
                     </div>
                 </div>
             </div>

@@ -24,7 +24,7 @@
             <div class="card-body">
                 <div id="table_wrapper" class="dataTables_wrapper dt-bootstrap4">
                     <div class="col-sm-12 table-responsive pt-1" style="height: 55vh; padding:4px;">
-                        <table id="documentoTable" class="table table-bordered table-striped dataTable dtr-inline mt-1"></table>
+                        <table id="documentoTable" class="table table-bordered table-striped text-center dataTable dtr-inline mt-1"></table>
                     </div>
                 </div>
             </div>
@@ -88,6 +88,16 @@
 <form id="eliminarDocumentoForm" method="post" action="/EliminarDocumento/{idDocumento}">
     <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 </form>
+
+<!-- Pantalla de carga --> 
+<div id="loadingOverlay">
+    <div class="loading-spinner">
+        <div class="spinner-border" role="status">
+            <span class="sr-only">Cargando...</span>
+        </div>
+        <p>Guardando documento...</p>
+    </div>
+</div>
 
 <!-- Script de la página -->
 <sec:authorize access="hasAuthority('VER_DOCUMENTO_PROPIETARIO_PRIVILAGE')" var="hasPrivilegeVerDocumento"></sec:authorize>

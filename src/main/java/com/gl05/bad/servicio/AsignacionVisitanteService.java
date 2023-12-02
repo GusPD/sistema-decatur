@@ -1,6 +1,7 @@
 package com.gl05.bad.servicio;
 
 import com.gl05.bad.domain.AsignacionVisitante;
+import com.gl05.bad.domain.Venta;
 import com.gl05.bad.domain.Visitante;
 import java.util.List;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
@@ -16,7 +17,7 @@ public interface AsignacionVisitanteService {
     
     public AsignacionVisitante encontrar(Long idAsignacion);
     
-    public AsignacionVisitante encontrarVisitante(Visitante visitante);
+    public AsignacionVisitante encontrarVisitanteVenta(Visitante visitante, Venta venta);
     
     public void actualizar(AsignacionVisitante asignacion);
     

@@ -96,7 +96,7 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-12 table-responsive pt-1" style="height: 43vh; padding:4px;">
-                                    <table id="pagoTable" class="table table-bordered table-striped dataTable dtr-inline mt-1"></table>
+                                    <table id="pagoTable" class="table table-bordered table-striped text-center dataTable dtr-inline mt-1"></table>
                                 </div>
                             </div>
                         </div>

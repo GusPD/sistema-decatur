@@ -11,6 +11,8 @@ import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 public interface CuotaMantenimientoService {
     
     public List<CuotaMantenimiento> listaCuotaMantenimientos();
+
+    public List<CuotaMantenimiento> listaCuotaMantenimientos(Venta venta);
     
     public DataTablesOutput<CuotaMantenimiento> listarCuotaMantenimientos(DataTablesInput input, Long idPago);
 

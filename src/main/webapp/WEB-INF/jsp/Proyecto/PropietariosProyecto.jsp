@@ -38,7 +38,7 @@
                             <div id="table_wrapper" class="dataTables_wrapper dt-bootstrap4">
                                 <div class="col-sm-12 table-responsive pt-1" style="height: 60vh; padding:4px;">
                                 <!--Sección de tabla-->
-                                    <table id="propietarioTable" class="table table-bordered table-striped dataTable dtr-inline mt-1 table-head-fixed text-nowrap"></table>
+                                    <table id="propietarioTable" class="table table-bordered table-striped text-center dataTable dtr-inline mt-1 table-head-fixed text-nowrap"></table>
                                 </div>
                             </div>
                         </div>

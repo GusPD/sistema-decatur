@@ -119,7 +119,7 @@
                             <select class="form-select form-select-sm" id="propietarios" name="propietarios" placeholder="Seleccione un propietario" data-live-search="true" multiple>
                                 <c:if test="${not empty propietariosAsignados}">
                                     <c:forEach items="${propietariosAsignados}" var="ePropietario">
-                                        <option value="${ePropietario.propietario.idPropietario}">${ePropietario.propietario.persona.dui} ${ePropietario.propietario.persona.nombre} ${ePropietario.propietario.persona.apellido}</option>
+                                        <option value="${ePropietario.propietario.idPropietario}">${ePropietario.propietario.persona.numero} ${ePropietario.propietario.persona.nombre} ${ePropietario.propietario.persona.apellido}</option>
                                     </c:forEach>
                                 </c:if>
                             </select>

@@ -122,6 +122,8 @@ $(document).ready(function() {
             var url = '/AgregarDocumentoVenta';
             formDataArray.append('idDocumento', idDocumento);
             formDataArray.append('idVenta', idVenta);
+            $('#crearModalDocumento').modal('hide');
+            $("#loadingOverlay").show();
             $.ajax({
                 url: url,
                 type: 'POST',
@@ -129,12 +131,12 @@ $(document).ready(function() {
                 processData: false,
                 contentType: false,
                 success: function (response) {
-                    $('#crearModalDocumento').modal('hide');
+                    $("#loadingOverlay").hide();
                     toastr.success(response);
                     table.ajax.reload();
                 },
                 error: function (xhr, status, error) {
-                    $('#crearModalDocumento').modal('hide');
+                    $("#loadingOverlay").hide();
                     var errorMessage = xhr.responseText || 'Error al actualizar el documento.';
                     toastr.error(errorMessage);
                 }

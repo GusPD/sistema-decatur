@@ -334,12 +334,14 @@ $(document).ready(function() {
    //Método para enviar la solicitud de eliminar
     $(document).on('click', '#eliminarPropietarioBtn', function () {
         var idVenta = $('#idVenta').val();
-        var idPersona = $(this).data('id');
-        $('#eliminarPropietarioForm').attr('action', '/EliminarPropietarioVenta/' + idPersona);
+        var idPropietario = $(this).data('id');
+        var formDataArray = $('#eliminarPropietarioForm').serializeArray();
+        formDataArray.push({name: 'idVenta', value: idVenta});
+        $('#eliminarPropietarioForm').attr('action', '/EliminarPropietarioVenta/' + idPropietario);
         $.ajax({
             url: $('#eliminarPropietarioForm').attr('action'),
             type: 'POST',
-            data: $('#eliminarPropietarioForm').serialize(),
+            data: formDataArray,
             success: function (response) {
                 $('#confirmarEliminarModalPropietario').modal('hide');
                 table.ajax.reload();
