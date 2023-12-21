@@ -26,7 +26,7 @@ import com.google.api.services.drive.model.FileList;
 import com.google.auth.http.HttpCredentialsAdapter;
 import com.google.auth.oauth2.GoogleCredentials;
 
-public class BackupJob implements Job {
+public class Backup implements Job {
 
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {

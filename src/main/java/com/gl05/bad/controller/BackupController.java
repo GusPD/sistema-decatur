@@ -1,7 +1,7 @@
 package com.gl05.bad.controller;
 
 import com.gl05.bad.servicio.BitacoraService;
-import com.gl05.bad.web.BackupJob;
+import com.gl05.bad.web.Backup;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.model.FileList;
 
@@ -63,7 +63,7 @@ public class BackupController {
     @ResponseBody
     public DataTablesOutput<Map<String, String>> getBackupLocal(@Valid DataTablesInput input) throws Exception {
         DataTablesOutput<Map<String, String>> output = new DataTablesOutput<>();
-        BackupJob backupJob = new BackupJob();
+        Backup backupJob = new Backup();
         try {
             // Verificar y crear el directorio si no existe
             File backupDirectory = new File("C:\\BackupSistemaDecatur");
@@ -96,7 +96,7 @@ public class BackupController {
     @ResponseBody
     public DataTablesOutput<Map<String, String>> getBackupNube(@Valid DataTablesInput input) throws Exception {
         DataTablesOutput<Map<String, String>> output = new DataTablesOutput<>();
-        BackupJob backupJob = new BackupJob();
+        Backup backupJob = new Backup();
         try {
             // Verificar y crear el directorio si no existe
             File backupDirectory = new File("C:\\BackupSistemaDecatur");
@@ -129,7 +129,7 @@ public class BackupController {
     @PostMapping("/CrearBackup")
     public ResponseEntity<String> CrearBackup(HttpServletRequest request, RedirectAttributes redirectAttributes) {
         try {
-            BackupJob backupJob = new BackupJob();
+            Backup backupJob = new Backup();
             backupJob.realizarCopiaDeSeguridad();
             String mensaje = "Se ha creado el backup correctamente.";
             bitacoraService.registrarAccion("Crear backup");
@@ -145,7 +145,7 @@ public class BackupController {
     @PostMapping("/RestaurarBackup")
     public ResponseEntity<String> RestaurarBackup(@RequestParam("nombre") String nombre, HttpServletRequest request, RedirectAttributes redirectAttributes) throws JobExecutionException {
         try {
-            BackupJob backupJob = new BackupJob();
+            Backup backupJob = new Backup();
             backupJob.restaurarCopiaDeSeguridad(nombre);
             String mensaje = "Se ha restaurado el backup correctamente.";
             bitacoraService.registrarAccion("Restaurar backup");
@@ -160,7 +160,7 @@ public class BackupController {
     //Función para descargar un backup del sistema
     @PostMapping("/DescargarBackup")
     public ResponseEntity<String> DescargarBackup(@RequestParam("nombre") String nombre, HttpServletRequest request, RedirectAttributes redirectAttributes) throws Exception {
-        BackupJob backupJob = new BackupJob();
+        Backup backupJob = new Backup();
         try {
             // Verificar y crear el directorio si no existe
             File backupDirectory = new File("C:\\BackupSistemaDecatur");
@@ -190,7 +190,7 @@ public class BackupController {
     @PostMapping("/ExportarBackup")
     public ResponseEntity<String> ExportarBackup(@RequestParam("nombre") String nombre, HttpServletRequest request, RedirectAttributes redirectAttributes) {
         String fullPath = "C:\\BackupSistemaDecatur" + File.separator + nombre;
-        BackupJob backupJob = new BackupJob();
+        Backup backupJob = new Backup();
         try {
             Drive driveService = backupJob.initializeDriveService();
             String sistemaDecaturFolderId = backupJob.getFolderId(driveService, "SistemaDecatur");
@@ -273,7 +273,7 @@ public class BackupController {
 
     // Método para listar archivos locales
     public List<Map<String, String>> listarArchivosLocales(String rutaLocal) throws IOException {
-        BackupJob backupJob = new BackupJob();
+        Backup backupJob = new Backup();
         try (Stream<Path> paths = Files.walk(Paths.get(rutaLocal)).filter(Files::isRegularFile).filter(path -> path.toString().endsWith(".sql"))) {
             return paths.map(path -> {
                 Map<String, String> detallesArchivo = new HashMap<>();
@@ -291,7 +291,7 @@ public class BackupController {
         FileList result = service.files().list().setQ("'" + folderId + "' in parents and trashed = false")
                 .setFields("files(id, name, size)").execute();
         List<Map<String, String>> resultados = new ArrayList<>(result.getFiles().size());
-        BackupJob backupJob = new BackupJob();
+        Backup backupJob = new Backup();
         for (com.google.api.services.drive.model.File file : result.getFiles()) {
             Map<String, String> detallesArchivo = new HashMap<>();
             detallesArchivo.put("nombre", file.getName());

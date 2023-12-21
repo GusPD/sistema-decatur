@@ -17,7 +17,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 
-import com.gl05.bad.web.BackupJob;
+import com.gl05.bad.web.Backup;
 
 @SpringBootApplication
 @EnableWebSocketMessageBroker
@@ -31,14 +31,14 @@ public class SistemaDecatur {
 	// Configurar la tarea programada utilizando la anotación @Scheduled
     @Scheduled(cron = "0 0 17 * * ?") // Ejecutar diariamente a las 5:00 PM
     public void realizarCopiaDeSeguridad() throws JobExecutionException {
-        BackupJob backupJob = new BackupJob();
+        Backup backupJob = new Backup();
         backupJob.execute(null);
     }
 
     // Configurar Quartz Scheduler
     @Bean
     public JobDetail backupJobDetail() {
-        return JobBuilder.newJob(BackupJob.class)
+        return JobBuilder.newJob(Backup.class)
                 .withIdentity("backupJob", "backupGroup")
                 .storeDurably()
                 .build();
