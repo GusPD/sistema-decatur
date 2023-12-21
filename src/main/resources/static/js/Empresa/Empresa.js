@@ -62,7 +62,7 @@ $(document).ready(function() {
                 render: function (data, type, row) {
                     var actionsHtml = '';
                     if(hasPrivilegeVerEmpresa === true){
-                        actionsHtml = '<a title="Ver" type="button" class="btn font-size-small btn-outline-secondary btn-sm" href="/CuentasBancarias/' + row.idEmpresa + '">';
+                        actionsHtml = '<a title="Ver" type="button" class="btn font-size-small btn-outline-secondary btn-sm" href="/Empresa/' + row.idEmpresa + '">';
                         actionsHtml += '<i class="far fa-eye"></i></a>';
                     }
                     if(hasPrivilegeEditarEmpresa === true){
@@ -111,9 +111,7 @@ $(document).ready(function() {
                 }
             }
         },
-        search: {
-            return: true
-        }
+        search: true
     });
     table.columns.adjust();
     $('#export-pdf').on('click', function() {

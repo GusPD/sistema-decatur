@@ -84,8 +84,12 @@
                                 <input type="date" class="form-control form-control-sm" id="fecha" name="fecha" maxlength="10" placeholder="Ingrese la fecha de la venta" required>
                             </div>
                             <div class="form-group">
-                                <label for="fechaCorte" class="form-label">Fecha Corte:<strong class="text-danger"> *</strong></label>
-                                <input type="date" class="form-control form-control-sm" id="fechaCorte" name="fechaCorte" maxlength="10" placeholder="Ingrese la fecha de corte" required>
+                                <label for="fechaCorteFinanciamiento" class="form-label">Fecha Corte Financiamiento:<strong class="text-danger"> *</strong></label>
+                                <input type="date" class="form-control form-control-sm" id="fechaCorteFinanciamiento" name="fechaCorteFinanciamiento" maxlength="10" placeholder="Ingrese la fecha de corte" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="fechaCorteMantenimiento" class="form-label">Fecha Corte Mantenimiento:<strong class="text-danger"> *</strong></label>
+                                <input type="date" class="form-control form-control-sm" id="fechaCorteMantenimiento" name="fechaCorteMantenimiento" maxlength="10" placeholder="Ingrese la fecha de corte" required>
                             </div>
                             <div class="form-group">
                                 <label for="precio" class="form-label">Precio:<strong class="text-danger"> *</strong></label>
@@ -137,8 +141,35 @@
 </div>
 
 <!-- Script de la página -->
-<sec:authorize access="hasAuthority('VER_VENTA_PRIVILAGE')" var="hasPrivilegeVerVenta"></sec:authorize>
-<script>var hasPrivilegeVerVenta = <c:out value='${hasPrivilegeVerVenta}' />;</script>    
+<sec:authorize access="hasAuthority('GESTIONAR_INFORMACION_VENTA_PRIVILAGE') || hasAuthority('GESTIONAR_PROPIETARIOS_VENTA_PRIVILAGE') || hasAuthority('GESTIONAR_TRABAJADORES_VENTA_PRIVILAGE') || hasAuthority('GESTIONAR_DOCUMENTO_VENTA_PRIVILAGE') || hasAuthority('GESTIONAR_FACTURACION_VENTA_PRIVILAGE') || hasAuthority('GESTIONAR_PAGOS_VENTA_PRIVILAGE') || hasAuthority('GESTIONAR_PRIMA_VENTA_PRIVILAGE') || hasAuthority('GESTIONAR_MANTENIMIENTO_VENTA_PRIVILAGE')" var="hasPrivilegeVerVenta"></sec:authorize>
+<script>var hasPrivilegeVerVenta = <c:out value='${hasPrivilegeVerVenta}' />;</script>
+
+<c:set var="url" value="" />
+<sec:authorize access="hasAuthority('GESTIONAR_MANTENIMIENTO_VENTA_PRIVILAGE')">
+    <c:set var="url" value="'/MantenimientoVenta/'" />
+</sec:authorize>
+<sec:authorize access="hasAuthority('GESTIONAR_PRIMA_VENTA_PRIVILAGE')">
+    <c:set var="url" value="'/PrimaVenta/'" />
+</sec:authorize>    
+<sec:authorize access="hasAuthority('GESTIONAR_PAGOS_VENTA_PRIVILAGE')">
+    <c:set var="url" value="'/PagosVenta/'" />
+</sec:authorize>
+<sec:authorize access="hasAuthority('GESTIONAR_FACTURACION_VENTA_PRIVILAGE')">
+    <c:set var="url" value="'/FacturacionVenta/'" />
+</sec:authorize> 
+<sec:authorize access="hasAuthority('GESTIONAR_DOCUMENTO_VENTA_PRIVILAGE')">
+    <c:set var="url" value="'/DocumentosVenta/'" />
+</sec:authorize> 
+<sec:authorize access="hasAuthority('GESTIONAR_TRABAJADORES_VENTA_PRIVILAGE')">
+    <c:set var="url" value="'/TrabajadoresVenta/'" />
+</sec:authorize> 
+<sec:authorize access="hasAuthority('GESTIONAR_PROPIETARIOS_VENTA_PRIVILAGE')">
+    <c:set var="url" value="'/PropietariosVenta/'" />
+</sec:authorize>
+<sec:authorize access="hasAuthority('GESTIONAR_INFORMACION_VENTA_PRIVILAGE')">
+    <c:set var="url" value="'/InformacionVenta/'" />
+</sec:authorize>
+<script>var urlVerVenta = <c:out value='${url}' escapeXml="false"/>;</script>
         
 <sec:authorize access="hasAuthority('EDITAR_VENTA_PRIVILAGE')" var="hasPrivilegeEditarVenta"></sec:authorize>
 <script>var hasPrivilegeEditarVenta = <c:out value='${hasPrivilegeEditarVenta}' />;</script>

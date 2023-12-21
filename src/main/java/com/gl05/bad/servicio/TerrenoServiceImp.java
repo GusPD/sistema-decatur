@@ -1,5 +1,6 @@
 package com.gl05.bad.servicio;
 
+import com.gl05.bad.domain.Proyecto;
 import com.gl05.bad.domain.Terreno;
 
 import java.util.List;
@@ -40,6 +41,18 @@ public class TerrenoServiceImp implements TerrenoService{
     @Transactional(readOnly = true)
     public Terreno encontrar(Long idTerreno) {
         return terrenoDao.findById(idTerreno).orElse(null);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Terreno encontrarLote(String poligono, Long numero, String seccion, Proyecto proyecto) {
+        return terrenoDao.findByPoligonoAndNumeroAndSeccionAndProyecto(poligono, numero, seccion, proyecto);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Terreno encontrarMatricula(String matricula) {
+        return terrenoDao.findByMatricula(matricula);
     }
 
     @Override

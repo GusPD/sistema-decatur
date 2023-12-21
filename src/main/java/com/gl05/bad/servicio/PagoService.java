@@ -14,7 +14,7 @@ public interface PagoService {
     
     public List<Pago> listaPagos();
     
-    public DataTablesOutput<Pago> listarPagos(DataTablesInput input, Long idProyecto, Date fechaInicio, Date fechaFin, String comprobante, Boolean estado, Integer tipoPago, Venta venta);
+    public DataTablesOutput<Pago> listarPagos(DataTablesInput input, Long idProyecto, Date fechaInicio, Date fechaFin, String tipo, Boolean estado, Integer cuenta, String comprobante);
    
     public DataTablesOutput<Pago> listarPagosVenta(DataTablesInput input, Long idVenta);
 
@@ -28,7 +28,11 @@ public interface PagoService {
     
     public Pago encontrar(Long idPago);
 
-    public List<Pago> encontrarPago(Boolean estado, String tipo,Venta venta);
+    public List<Pago> encontrarPago(Boolean estado, String tipo, Venta venta);
+
+    public List<Pago> encontrarPago(Boolean estado, String tipo, String comprobante, Venta venta);
+
+    public Pago encontrarUlitmoPago(Boolean estado, String tipo, Venta venta);
 
     public List<Pago> encontrarMayores(String tipo,Venta venta, LocalDateTime fechaRegistro);
 

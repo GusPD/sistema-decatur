@@ -1,6 +1,7 @@
 package com.gl05.bad.servicio;
 
 import com.gl05.bad.domain.Proyecto;
+import com.gl05.bad.domain.Terreno;
 import com.gl05.bad.domain.Venta;
 import java.util.List;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
@@ -12,15 +13,17 @@ public interface VentaService {
     
     public DataTablesOutput<Venta> listarVentas(DataTablesInput input, Long idTerreno);
 
-    public List<Venta> listarVentas(String estado, Long idProyecto);
+    public List<Venta> listarVentas(String estado, Proyecto proyecto);
    
+    public List<Venta> listarVentas(Terreno terreno);
+
     public void agregar(Venta venta);
         
     public void eliminar(Venta venta);
     
     public Venta encontrar(Long idVenta);
     
-    public Venta encontrarDocumento(Integer idDocumento);
+    public Venta encontrarDocumento(Integer idListDocumento);
 
     public List<Venta> encontrarActivas(Proyecto proyecto);
     

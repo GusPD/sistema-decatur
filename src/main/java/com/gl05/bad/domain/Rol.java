@@ -44,9 +44,9 @@ public class Rol implements Serializable {
     @Column(name = "NOMBRE")
     private String nombre;
     
-    @ManyToMany(mappedBy = "roles")
     @JsonIgnore
-    private Collection<Usuario> users;
+    @ManyToMany(mappedBy = "roles")
+    private Collection<Usuario> usuarios;
 
     @ManyToMany
     @JoinTable(

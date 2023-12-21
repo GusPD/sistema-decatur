@@ -6,6 +6,9 @@ import com.gl05.bad.servicio.BitacoraServiceImp;
 import com.gl05.bad.servicio.EmpresaService;
 import com.gl05.bad.servicio.ProyectoService;
 import com.gl05.bad.servicio.UserService;
+
+import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,10 +60,26 @@ public class ProyectoController {
     }
     
     //Función para obtener los proyectos de la base de datos
-    @GetMapping("/proyectos/data")
+    @GetMapping(value="/proyectos/data", produces = "application/json; charset=UTF-8")
     @ResponseBody
     public DataTablesOutput<Proyecto> GetProyectos(@Valid DataTablesInput input) {
         return proyectoService.listarProyectos(input);
+    }
+
+    //Función para redirigir a la vista del proyecto
+    @GetMapping("/Proyecto/{idProyecto}")
+    public String MostrarProyecto(Model model, @PathVariable Long idProyecto, Authentication authentication) {
+        model.addAttribute("pageTitle", "Inicio");
+        Proyecto proyecto= proyectoService.encontrar(idProyecto);
+        String username = authentication.getName();
+        Usuario usuario = userService.encontrarUsername(username);
+        Set<Proyecto> listaProyectosAsignados = usuario.getProyectos();
+        if(!listaProyectosAsignados.contains(proyecto)){
+            return "accesodenegado";
+        }
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("proyecto", proyecto);
+        return "Proyecto/Proyecto";
     }
 
     //Función para agregar proyectos a la base de datos
@@ -101,7 +120,7 @@ public class ProyectoController {
     }
 
     //Función para obtener un proyecto de la base de datos
-    @GetMapping("/ObtenerProyecto/{id}")
+    @GetMapping(value="/ObtenerProyecto/{id}", produces = "application/json; charset=UTF-8")
     public ResponseEntity<Proyecto> ObtenerProyecto(@PathVariable Long id) {
         Proyecto proyecto = proyectoService.encontrar(id);
         if (proyecto != null) {

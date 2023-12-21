@@ -41,7 +41,28 @@
                         <!-- Datos -->
                         <div class="card-body">
                             <div id="table_wrapper" class="dataTables_wrapper dt-bootstrap4">
-                                <div class="col-sm-12 table-responsive pt-1" style="height: 60vh; padding:4px;">
+                                <div class="col-sm-12 d-flex display-alineacion border-bottom mb-3" style="padding:4px;">
+                                    <div class="col-sm-2 form-group" style="padding-left: 0%!Important; padding-right: 1%!Important;">
+                                        <label for="b_fecha_inicio" class="form-label">Fecha Inicio:</label>
+                                        <input type="date" class="form-control form-control-sm" id="b_fecha_inicio" name="b_fecha_inicio" maxlength="10">
+                                    </div>
+                                    <div class="col-sm-2 form-group" style="padding-left: 0%!Important; padding-right: 1%!Important;">
+                                        <label for="b_fecha_fin" class="form-label">Fecha Fin:</label>
+                                        <input type="date" class="form-control form-control-sm" id="b_fecha_fin" name="b_fecha_fin" maxlength="10">
+                                    </div>
+                                    <div class="col-sm-2 form-group" style="padding-left: 0%!Important; padding-right: 1%!Important;">
+                                        <label for="b_usuario" class="form-label">Usuario:</label>
+                                        <select class="form-select form-select-sm" id="b_usuario" name="b_usuario" placeholder="Seleccione una opción">
+                                            <option value="">Seleccione una opción</option>
+                                            <c:if test="${not empty usuarios}">
+                                                <c:forEach items="${usuarios}" var="eUsuario">
+                                                    <option value="${eUsuario.username}">${eUsuario.nombre}</option>
+                                                </c:forEach>
+                                            </c:if>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 table-responsive pt-1" style="height: 43vh; padding:4px;">
                                     <table id="bitacoraTable" class="table table-bordered table-striped text-center dataTable dtr-inline mt-1"></table>
                                 </div>
                             </div>

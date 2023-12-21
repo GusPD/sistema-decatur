@@ -38,9 +38,9 @@ public class Empresa implements Serializable {
     @Column(name = "NOMBRE")
     private String nombre;
     
-    @ManyToMany(mappedBy = "empresas")
     @JsonIgnore
-    private Collection<Usuario> users;
+    @ManyToMany(mappedBy = "empresas")
+    private Collection<Usuario> usuariosEmpresa;
 
     @Override
     public int hashCode() {

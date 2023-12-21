@@ -49,8 +49,20 @@
 </div>
 
 <!-- Script de la página -->
-<sec:authorize access="hasAuthority('VER_TRABAJADOR_PRIVILAGE')" var="hasPrivilegeVerTrabajadorProyecto"></sec:authorize>
+<sec:authorize access="hasAuthority('GESTIONAR_INFORMACION_TRABAJADOR_PRIVILAGE') || hasAuthority('GESTIONAR_DOCUMENTO_TRABAJADOR_PRIVILAGE') || hasAuthority('GESTIONAR_TERRENOS_TRABAJADOR_PRIVILAGE')" var="hasPrivilegeVerTrabajadorProyecto"></sec:authorize>
 <script>var hasPrivilegeVerTrabajadorProyecto = <c:out value='${hasPrivilegeVerTrabajadorProyecto}' />;</script>    
+
+<c:set var="url" value="" /> 
+<sec:authorize access="hasAuthority('GESTIONAR_TERRENOS_TRABAJADOR_PRIVILAGE')">
+    <c:set var="url" value="'/TerrenosTrabajador/'" />
+</sec:authorize>
+<sec:authorize access="hasAuthority('GESTIONAR_DOCUMENTO_TRABAJADOR_PRIVILAGE')">
+    <c:set var="url" value="'/DocumentosTrabajador/'" />
+</sec:authorize> 
+<sec:authorize access="hasAuthority('GESTIONAR_INFORMACION_TRABAJADOR_PRIVILAGE')">
+    <c:set var="url" value="'/InformacionTrabajador/'" />
+</sec:authorize>
+<script>var urlVerTrabajador = <c:out value='${url}' escapeXml="false"/>;</script>
 
 <%@ include file="../common/footer.jspf"%>
 

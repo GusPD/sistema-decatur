@@ -69,7 +69,7 @@ $(document).ready(function() {
                 render: function (data, type, row) {
                     var actionsHtml = '';
                     if(hasPrivilegeVerPropietarioProyecto === true){
-                        actionsHtml = '<a  title="Ver" type="button" class="btn font-size-small btn-outline-secondary btn-sm" href="/InformacionPropietario/'+ row.idProyecto + '/' + row.idPersona + '">';
+                        actionsHtml = '<a  title="Ver" type="button" class="btn font-size-small btn-outline-secondary btn-sm" href="' + urlVerPropietario + row.idProyecto + "/" + row.idPersona + '">';
                         actionsHtml += '<i class="far fa-eye"></i></a>';
                     }
                     return actionsHtml || '';
@@ -108,12 +108,8 @@ $(document).ready(function() {
                 }
             }
         },
-        search: {
-            return: true
-        },
-        ordering: {
-            return: true
-        }
+        search: true,
+        ordering: true
     });
     table.columns.adjust();
     $('#export-pdf').on('click', function() {

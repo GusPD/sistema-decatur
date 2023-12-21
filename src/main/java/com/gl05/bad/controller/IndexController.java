@@ -69,7 +69,7 @@ public class IndexController {
     }
     
     //Función para obtener el menú del usuario
-    @GetMapping("/ObtenerUsuarioMenu")
+    @GetMapping(value="/ObtenerUsuarioMenu", produces = "application/json; charset=UTF-8")
     public ResponseEntity<Map<String, Object>> obtenerUsuarioMenu(Authentication authentication, HttpSession session) {
         String username = authentication.getName();
         Usuario usuario = usuarioService.encontrarUsername(username);

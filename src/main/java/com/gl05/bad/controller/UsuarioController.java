@@ -70,7 +70,7 @@ public class UsuarioController {
     }
     
     //Función que obtiene los usuarios de la base de datos
-    @GetMapping("/usuarios/data")
+    @GetMapping(value="/usuarios/data", produces = "application/json; charset=UTF-8")
     @ResponseBody
     public DataTablesOutput<Usuario> getUsuarios(@Valid DataTablesInput input) {
         return userService.listarUsuarios(input);
@@ -108,7 +108,7 @@ public class UsuarioController {
     }
 
     //Función que obtiene un usuario de la base de datos
-    @GetMapping("/ObtenerUsuario/{id}")
+    @GetMapping(value="/ObtenerUsuario/{id}", produces = "application/json; charset=UTF-8")
     public ResponseEntity<Usuario> obtenerUsuario(@PathVariable Long id) {
         Usuario usuario = userService.encontrar(id);
         if (usuario != null) {

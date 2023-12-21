@@ -71,8 +71,22 @@ public class PagoServiceImp implements PagoService{
 
     @Override
     @Transactional(readOnly = true)
-    public List<Pago> encontrarPago(Boolean estado, String tipo,Venta venta) {
+    public List<Pago> encontrarPago(Boolean estado, String tipo, String comprobante, Venta venta) {
+        return pagoDao.findByEstadoAndTipoAndVentaAndComprobanteNotEqual(estado, tipo, venta, comprobante);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Pago> encontrarPago(Boolean estado, String tipo, Venta venta) {
         return pagoDao.findByEstadoAndTipoAndVenta(estado, tipo, venta);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public Pago encontrarUlitmoPago(Boolean estado, String tipo, Venta venta) {
+        List<Pago> listaPagos = pagoDao.findByEstadoAndTipoAndVenta(estado, tipo, venta);
+        Pago pago = listaPagos.get(listaPagos.size()-1);
+        return pago;
     }
 
     @Override
@@ -99,7 +113,7 @@ public class PagoServiceImp implements PagoService{
     
     @Override
     @Transactional(readOnly = true)
-    public DataTablesOutput<Pago> listarPagos(DataTablesInput input, Long idProyecto, Date fechaInicio, Date fechaFin, String comprobante, Boolean estado, Integer tipoPago, Venta venta) {
+    public DataTablesOutput<Pago> listarPagos(DataTablesInput input, Long idProyecto, Date fechaInicio, Date fechaFin, String tipo, Boolean estado, Integer cuenta, String comprobante) {
         Specification<Pago> specification = (root, query, builder) -> {
             List<Predicate> predicates = new ArrayList<>();
             predicates.add(builder.equal(root.get("venta").get("terreno").get("proyecto").get("idProyecto"), idProyecto));
@@ -109,17 +123,17 @@ public class PagoServiceImp implements PagoService{
             if (fechaFin != null) {
                 predicates.add(builder.lessThanOrEqualTo(root.get("fecha"), fechaFin));
             }
-            if (!comprobante.isEmpty()) {
-                predicates.add(builder.equal(root.get("tipo"), comprobante));
+            if (!tipo.isEmpty()) {
+                predicates.add(builder.equal(root.get("tipo"), tipo));
             }
             if (estado != null) {
                 predicates.add(builder.equal(root.get("estado"), estado));
             }
-            if (tipoPago > 0) {
-                predicates.add(builder.equal(root.get("cuentaBancaria").get("idCuenta"), tipoPago));
+            if (cuenta > 0) {
+                predicates.add(builder.equal(root.get("cuentaBancaria").get("idCuenta"), cuenta));
             }
-            if (venta != null) {
-                predicates.add(builder.equal(root.get("venta").get("idVenta"), venta.getIdVenta()));
+            if (!comprobante.isEmpty()) {
+                predicates.add(builder.equal(root.get("comprobante"), comprobante));
             }
             return builder.and(predicates.toArray(new Predicate[0]));
         };

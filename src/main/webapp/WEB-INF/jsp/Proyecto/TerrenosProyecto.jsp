@@ -32,7 +32,8 @@
                                     </sec:authorize>
                                 </div>
                                 <div class="d-flex justify-content-end">
-                                    <sec:authorize access="hasAuthority('AGREGAR_TERRENO_PRIVILAGE')"> 
+                                    <sec:authorize access="hasAuthority('AGREGAR_TERRENO_PRIVILAGE')">
+                                        <button title="Cargar Terrenos" id="SubirTerreno" class="btn btn-sm btn-blue" data-bs-toggle="modal" data-bs-target="#crearModalArchivo" data-tipo="subir"><i class="fa-solid fa-file-arrow-up"></i></button> 
                                         <button type="button" title="Agregar Terreno" class="btn-blue btn-sm btn abrirModal-btn ml-2" data-bs-toggle="modal" data-bs-target="#crearModal" data-action="agregar"><i class="fa-solid fa-file-pen"></i></button>
                                     </sec:authorize> 
                                 </div>
@@ -124,6 +125,65 @@
     <form id="eliminarTerrenoForm" method="post" action="/EliminarTerreno/{idTerreno}">
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
     </form>
+    <!-- Modal de agregar -->
+    <div class="modal fade" id="crearModalArchivo" tabindex="-1" aria-labelledby="crearModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="crearModalLabel">Cargar Listado de Terrenos</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id='formGuardarArchivo' accept-charset="UTF-8" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <div  class="overflow-auto">
+                            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+                            <input type="hidden" id="idProyecto" value="${proyecto.getIdProyecto()}">
+                            <div class="form-group">
+                                <label for="documento" class="form-label">Documento:<strong class="text-danger"> *</strong></label>
+                                <input type="file" class="form-control form-control-sm" id="documento" name="documento" aria-hidden="true" accept=".csv" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer d-flex justify-content-between">
+                        <label for="monto" class="form-label text-danger mensaje-obligatorios">(*) Campos Obligatorios</label>
+                        <div>
+                            <button type="submit" class="btn btn-outline-success btn-sm">Guardar</button>
+                            <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cancelar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Modal de mensaje de errores -->
+    <div class="modal fade" id="mensajeErrores" tabindex="-1" aria-labelledby="mensajeErrores" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Errores en el archivo .csv</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div  class="overflow-auto">
+                        <p id="listaMensajesError"></p>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="btn btn-outline-dark btn-sm" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Pantalla de carga --> 
+<div id="loadingOverlay">
+    <div class="loading-spinner">
+        <div class="spinner-border" role="status">
+            <span class="sr-only">Cargando...</span>
+        </div>
+        <p>Agregando Terrenos...</p>
+    </div>
 </div>
 
 <!-- Script de la página -->

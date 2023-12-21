@@ -11,8 +11,10 @@ import org.springframework.data.jpa.datatables.repository.DataTablesRepository;
 import org.springframework.data.jpa.repository.Query;
 
 public interface PagoDao extends DataTablesRepository<Pago, Long> {
-    @Query("SELECT p FROM Pago p WHERE p.estado = :estado AND p.tipo = :tipo AND p.venta = :venta AND p.monto > p.otros ORDER BY p.fechaRegistro ASC")
     List<Pago> findByEstadoAndTipoAndVenta(Boolean estado, String tipo,Venta venta);
+    //@Query("SELECT p FROM Pago p WHERE p.estado = :estado AND p.tipo = :tipo AND p.venta = :venta AND p.monto > p.otros ORDER BY p.fechaRegistro ASC")
+    @Query("SELECT p FROM Pago p WHERE p.estado = :estado AND p.tipo = :tipo AND p.venta = :venta AND p.monto > p.otros AND p.comprobante <> :comprobante ORDER BY p.fechaRegistro ASC")
+    List<Pago> findByEstadoAndTipoAndVentaAndComprobanteNotEqual(Boolean estado, String tipo,Venta venta, String comprobante);
     Pago findByTipoAndReciboAndVentaTerrenoProyectoAndComprobante(String tipo,Integer recibo, Proyecto proyecto, String comprobante);
     void deleteByTipoAndVentaAndFechaRegistroGreaterThanEqual(String tipo, Venta venta, LocalDateTime fechaRegistro);
     List<Pago> findByTipoAndVentaAndFechaRegistroAfter(String tipo, Venta venta, LocalDateTime fechaRegistro);

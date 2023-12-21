@@ -5,6 +5,9 @@ import com.gl05.bad.domain.Usuario;
 import com.gl05.bad.servicio.BitacoraServiceImp;
 import com.gl05.bad.servicio.EmpresaService;
 import com.gl05.bad.servicio.UserService;
+
+import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +39,7 @@ public class EmpresaController {
     
     //Función para redigir a la vista de empresas
     @GetMapping("/Empresas")
-    public String mostrarProyecto(Model model, Authentication authentication) {
+    public String mostrarEmpresas(Model model, Authentication authentication) {
         model.addAttribute("pageTitle", "Empresas");
         String username = authentication.getName();
         Usuario usuario = userService.encontrarUsername(username);
@@ -45,10 +48,26 @@ public class EmpresaController {
     }
     
     //Función para obtener las empresas de la base de datos
-    @GetMapping("/empresas/data")
+    @GetMapping(value="/empresas/data", produces = "application/json; charset=UTF-8")
     @ResponseBody
     public DataTablesOutput<Empresa> GetEmpresas(@Valid DataTablesInput input) {
         return empresaService.listarEmpresas(input);
+    }
+
+    //Función para redigir a la vista de la empresa
+    @GetMapping("/Empresa/{idEmpresa}")
+    public String mostrarEmpresa(Model model, @PathVariable Long idEmpresa, Authentication authentication) {
+        model.addAttribute("pageTitle", "Empresas");
+        String username = authentication.getName();
+        Usuario usuario = userService.encontrarUsername(username);
+        Empresa empresa = empresaService.encontrar(idEmpresa);
+        Set<Empresa> listaEmpresasAsignadas = usuario.getEmpresas();
+        if(!listaEmpresasAsignadas.contains(empresa)){
+            return "accesodenegado";
+        }
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("empresa", empresa);
+        return "/Empresa/Empresa";
     }
 
     //Función para agregar una empresa en la base de datos
@@ -89,7 +108,7 @@ public class EmpresaController {
     }
 
     //Función para obtener una empresa de la base de datos
-    @GetMapping("/ObtenerEmpresa/{id}")
+    @GetMapping(value="/ObtenerEmpresa/{id}", produces = "application/json; charset=UTF-8")
     public ResponseEntity<Empresa> ObtenerEmpresa(@PathVariable Long id) {
         Empresa empresa = empresaService.encontrar(id);
         if (empresa != null) {

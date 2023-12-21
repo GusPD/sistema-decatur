@@ -54,24 +54,36 @@
                                         <c:set var="urlReferencias" value="/ReferenciasPropietario/${proyectoId}/${persona.idPersona}" />
                                         <c:set var="urlDocumentos" value="/DocumentosPropietario/${proyectoId}/${persona.idPersona}" />
                                         <c:set var="urlTerrenos" value="/TerrenosPropietario/${proyectoId}/${persona.idPersona}" />
+                                        <sec:authorize access="hasAuthority('GESTIONAR_INFORMACION_PROPIETARIO_PRIVILAGE')">
                                         <a class="tab-perfil list-group-item list-group-item-info btn-info text-center ${requestScope['javax.servlet.forward.request_uri'] == urlInformacion ? 'active' : ''}" href="/InformacionPropietario/${proyectoId}/${persona.idPersona}" type="button">
                                             Información
                                         </a>
+                                        </sec:authorize>
+                                        <sec:authorize access="hasAuthority('GESTIONAR_TELEFONO_PROPIETARIO_PRIVILAGE')">
                                         <a class="tab-perfil list-group-item list-group-item-info text-center btn-info ${requestScope['javax.servlet.forward.request_uri'] == urlTelefonos ? 'active' : ''}" href="/TelefonosPropietario/${proyectoId}/${persona.idPersona}" type="button">
                                             Telefonos
                                         </a>
+                                        </sec:authorize>
+                                        <sec:authorize access="hasAuthority('GESTIONAR_CORREO_PROPIETARIO_PRIVILAGE')">
                                         <a class="tab-perfil list-group-item list-group-item-info text-center btn-info ${requestScope['javax.servlet.forward.request_uri'] == urlCorreos ? 'active' : ''}" href="/CorreosPropietario/${proyectoId}/${persona.idPersona}" type="button">
                                             Correos
                                         </a>
+                                        </sec:authorize>
+                                        <sec:authorize access="hasAuthority('GESTIONAR_REFERENCIA_PROPIETARIO_PRIVILAGE')">
                                         <a class="tab-perfil list-group-item list-group-item-info text-center btn-info ${requestScope['javax.servlet.forward.request_uri'] == urlReferencias ? 'active' : ''}" href="/ReferenciasPropietario/${proyectoId}/${persona.idPersona}" type="button">
                                             Referencias
                                         </a>
+                                        </sec:authorize>
+                                        <sec:authorize access="hasAuthority('GESTIONAR_DOCUMENTO_PROPIETARIO_PRIVILAGE')">
                                         <a class="tab-perfil list-group-item list-group-item-info text-center btn-info ${requestScope['javax.servlet.forward.request_uri'] == urlDocumentos ? 'active' : ''}" href="/DocumentosPropietario/${proyectoId}/${persona.idPersona}" type="button">
                                             Documentos
                                         </a>
+                                        </sec:authorize>
+                                        <sec:authorize access="hasAuthority('GESTIONAR_TERRENOS_PROPIETARIO_PRIVILAGE')">
                                         <a class="tab-perfil list-group-item list-group-item-info text-center btn-info ${requestScope['javax.servlet.forward.request_uri'] == urlTerrenos ? 'active' : ''}" href="/TerrenosPropietario/${proyectoId}/${persona.idPersona}" type="button">
                                             Terrenos
                                         </a>
+                                        </sec:authorize>
                                     </div>
                                 </div>
                             </div>

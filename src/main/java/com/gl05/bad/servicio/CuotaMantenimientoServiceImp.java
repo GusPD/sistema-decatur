@@ -5,6 +5,7 @@ import com.gl05.bad.domain.Pago;
 import com.gl05.bad.domain.Venta;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.criteria.Predicate;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.gl05.bad.dao.CuotaMantenimientoDao;
 import com.gl05.bad.dao.PagoDao;
+import com.gl05.bad.dao.VentaDao;
 
 @Service
 public class CuotaMantenimientoServiceImp implements CuotaMantenimientoService{
@@ -26,6 +28,9 @@ public class CuotaMantenimientoServiceImp implements CuotaMantenimientoService{
 
     @Autowired
     private PagoDao pagoDao;
+
+    @Autowired
+    private VentaDao ventaDao;
 
     @Override
     @Transactional(readOnly = true)
@@ -41,8 +46,8 @@ public class CuotaMantenimientoServiceImp implements CuotaMantenimientoService{
 
     @Override
     @Transactional(readOnly = true)
-    public double montoAdelantado(Venta venta) {
-        List<CuotaMantenimiento> cuotasMantenimiento = cuotaMantenimientoDao.findByVentaAndFechaCuotaGreaterThan(venta); 
+    public double montoAdelantado(Boolean estado, Venta venta) {
+        List<CuotaMantenimiento> cuotasMantenimiento = cuotaMantenimientoDao.findByPagoEstadoAndVentaAndFechaCuotaGreaterThan(true, venta); 
         double montoAdelantado = 0;
         for (CuotaMantenimiento cuotaMantenimiento : cuotasMantenimiento) {
             montoAdelantado += cuotaMantenimiento.getCuota();
@@ -71,8 +76,17 @@ public class CuotaMantenimientoServiceImp implements CuotaMantenimientoService{
     @Override
     @Transactional(readOnly = true)
     public CuotaMantenimiento encontrarPenultimaCuota(Venta venta) {
+        List<Venta> listaVentasTerreno = ventaDao.findByTerreno(venta.getTerreno());
         CuotaMantenimiento ultimaCuota=new CuotaMantenimiento();
-        List<Pago> listaPagos = pagoDao.findByEstadoAndTipoAndVenta(true, "Mantenimiento",venta);
+        List<Pago> listaPagos = pagoDao.findByEstadoAndTipoAndVentaAndComprobanteNotEqual(true, "Mantenimiento",venta, "Ticket");
+        if(listaVentasTerreno.size()>1 && listaPagos.isEmpty()){
+            Venta ventaAnterior = listaVentasTerreno.get(listaVentasTerreno.size()-2);
+            List<Pago> listaPagosVentaAnteior = pagoDao.findByEstadoAndTipoAndVentaAndComprobanteNotEqual(true, "Mantenimiento",ventaAnterior, "Ticket");
+            if(!listaPagosVentaAnteior.isEmpty()){
+                venta = ventaAnterior;
+                listaPagos = listaPagosVentaAnteior;
+            }
+        }
         if (!listaPagos.isEmpty()) {
             if(listaPagos.size()>=2){
                 Pago ultimoPago = listaPagos.get(listaPagos.size() - 2);
@@ -80,20 +94,19 @@ public class CuotaMantenimientoServiceImp implements CuotaMantenimientoService{
                 if (!listaCuotas.isEmpty()) {
                     return ultimaCuota = listaCuotas.get(listaCuotas.size() - 1);
                 } else {
-                    ultimaCuota.setFechaCuota(venta.getFechaCorte());
+                    ultimaCuota.setFechaCuota(venta.getFechaCorteMantenimiento());
                     ultimaCuota.setSaldoCuota(0);
                     ultimaCuota.setSaldoRecargo(0);
                     return ultimaCuota;
                 }
             }else {
-                ultimaCuota.setFechaCuota(venta.getFechaCorte());
+                ultimaCuota.setFechaCuota(venta.getFechaCorteMantenimiento());
                 ultimaCuota.setSaldoCuota(0);
                 ultimaCuota.setSaldoRecargo(0);
                 return ultimaCuota;
             }
-            
         } else {
-            ultimaCuota.setFechaCuota(venta.getFechaCorte());
+            ultimaCuota.setFechaCuota(venta.getFechaCorteMantenimiento());
             ultimaCuota.setSaldoCuota(0);
             ultimaCuota.setSaldoRecargo(0);
             return ultimaCuota;
@@ -103,8 +116,17 @@ public class CuotaMantenimientoServiceImp implements CuotaMantenimientoService{
     @Override
     @Transactional(readOnly = true)
     public CuotaMantenimiento encontrarUltimaCuota(Venta venta) {
+        List<Venta> listaVentasTerreno = ventaDao.findByTerreno(venta.getTerreno());
         CuotaMantenimiento ultimaCuota=new CuotaMantenimiento();
-        List<Pago> listaPagos = pagoDao.findByEstadoAndTipoAndVenta(true,"Mantenimiento",venta);
+        List<Pago> listaPagos = pagoDao.findByEstadoAndTipoAndVentaAndComprobanteNotEqual(true,"Mantenimiento",venta, "Ticket");
+        if(listaVentasTerreno.size()>1 && listaPagos.isEmpty()){
+            Venta ventaAnterior = listaVentasTerreno.get(listaVentasTerreno.size()-2);
+            List<Pago> listaPagosVentaAnteior = pagoDao.findByEstadoAndTipoAndVentaAndComprobanteNotEqual(true, "Mantenimiento",ventaAnterior, "Ticket");
+            if(!listaPagosVentaAnteior.isEmpty()){
+                venta = ventaAnterior;
+                listaPagos = listaPagosVentaAnteior;
+            }
+        }
         if (!listaPagos.isEmpty()) {
             if(listaPagos.size()>=1){
                 Pago ultimoPago = listaPagos.get(listaPagos.size() - 1);
@@ -112,20 +134,20 @@ public class CuotaMantenimientoServiceImp implements CuotaMantenimientoService{
                 if (!listaCuotas.isEmpty()) {
                     return ultimaCuota = listaCuotas.get(listaCuotas.size() - 1);
                 } else {
-                    ultimaCuota.setFechaCuota(venta.getFechaCorte());
+                    ultimaCuota.setFechaCuota(venta.getFechaCorteMantenimiento());
                     ultimaCuota.setSaldoCuota(0);
                     ultimaCuota.setSaldoRecargo(0);
                     return ultimaCuota;
                 }
             }else {
-                ultimaCuota.setFechaCuota(venta.getFechaCorte());
+                ultimaCuota.setFechaCuota(venta.getFechaCorteMantenimiento());
                 ultimaCuota.setSaldoCuota(0);
                 ultimaCuota.setSaldoRecargo(0);
                 return ultimaCuota;
             }
             
         } else {
-            ultimaCuota.setFechaCuota(venta.getFechaCorte());
+            ultimaCuota.setFechaCuota(venta.getFechaCorteMantenimiento());
             ultimaCuota.setSaldoCuota(0);
             ultimaCuota.setSaldoRecargo(0);
             return ultimaCuota;
@@ -136,6 +158,18 @@ public class CuotaMantenimientoServiceImp implements CuotaMantenimientoService{
     @Transactional(readOnly = true)
     public List<CuotaMantenimiento> encontrarPago(Pago pago) {
         return cuotaMantenimientoDao.findByPago(pago);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<CuotaMantenimiento> encontrarFechaCuotaVenta(Date fechaCuota, Venta venta) {
+        return cuotaMantenimientoDao.findByFechaCuotaAndPagoVenta(fechaCuota, venta);
+    }
+    
+    @Override
+    @Transactional(readOnly = true)
+    public List<CuotaMantenimiento> encontrarMayoresFechaCuotaVenta(Date fechaCuota, Venta venta) {
+        return cuotaMantenimientoDao.findByFechaCuotaGreaterThanEqualAndPagoVenta(fechaCuota, venta);
     }
 
     @Override

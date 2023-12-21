@@ -52,22 +52,28 @@
                                                 <td><c:if test="${not empty pago.fecha}"><fmt:formatDate value="${pago.fecha}" pattern="dd/MM/yyyy" /></c:if></td>
                                             </tr>
                                             <tr>
-                                                <td class="encabezado-tabla font-weight-bold">Tipo Pago</td>
+                                                <td class="encabezado-tabla font-weight-bold">Cuenta Bancaria</td>
                                                 <td><c:if test="${not empty pago.cuentaBancaria.nombre}">${pago.cuentaBancaria.nombre}</c:if></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="encabezado-tabla font-weight-bold">Referencia</td>
+                                                <td><c:if test="${not empty pago.referencia}">${pago.referencia}</c:if></td>
                                             </tr>
                                             <tr>
                                                 <td class="encabezado-tabla font-weight-bold">Monto</td>
                                                 <td><c:if test="${not empty pago.monto}">$ <c:out value="${String.format('%.2f', pago.monto)}"/></c:if></td>
                                             </tr>
                                             <c:if test="${pago.tipo != 'Prima'}">
-                                                <tr>
-                                                    <td class="encabezado-tabla font-weight-bold">Descuento</td>
-                                                    <td><c:if test="${not empty pago.descuento}">$ <c:out value="${String.format('%.2f', pago.descuento)}"/></c:if></td>
-                                                </tr>
-                                                <tr>
-                                                    <td class="encabezado-tabla font-weight-bold">Otros</td>
-                                                    <td><c:if test="${not empty pago.otros}">$ <c:out value="${String.format('%.2f', pago.otros)}"/></c:if></td>
-                                                </tr>
+                                                <c:if test="${pago.comprobante != 'Ticket'}">
+                                                    <tr>
+                                                        <td class="encabezado-tabla font-weight-bold">Descuento</td>
+                                                        <td><c:if test="${not empty pago.descuento}">$ <c:out value="${String.format('%.2f', pago.descuento)}"/></c:if></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td class="encabezado-tabla font-weight-bold">Otros</td>
+                                                        <td><c:if test="${not empty pago.otros}">$ <c:out value="${String.format('%.2f', pago.otros)}"/></c:if></td>
+                                                    </tr>
+                                                </c:if>
                                             </c:if>
                                             <tr>
                                                 <td class="encabezado-tabla font-weight-bold">Observaciones</td>
@@ -76,17 +82,19 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <c:if test="${not empty listaCuotaMantenimientos or not empty listaCuotaFinanciamientos}">
-                                <div class="col-sm-12" style="padding:4px;">
-                                    <h5 class="p-0 m-0">Cuotas Canceladas</h5>
-                                </div>
-                                </c:if>
-                                <c:if test="${not empty listaCuotaMantenimientos}">
-                                    <div id="table_wrapper" class="dataTables_wrapper dt-bootstrap4">
-                                        <div class="col-sm-12 table-responsive" style="height: 48vh; padding:4px;">
-                                            <table id="cuotaMantenimientoTable" class="table table-bordered table-striped text-center dataTable dtr-inline"></table>
-                                        </div>
+                                <c:if test="${pago.comprobante != 'Ticket'}">
+                                    <c:if test="${not empty listaCuotaMantenimientos or not empty listaCuotaFinanciamientos}">
+                                    <div class="col-sm-12" style="padding:4px;">
+                                        <h5 class="p-0 m-0">Cuotas Canceladas</h5>
                                     </div>
+                                    </c:if>
+                                    <c:if test="${not empty listaCuotaMantenimientos}">
+                                        <div id="table_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                                            <div class="col-sm-12 table-responsive" style="height: 48vh; padding:4px;">
+                                                <table id="cuotaMantenimientoTable" class="table table-bordered table-striped text-center dataTable dtr-inline"></table>
+                                            </div>
+                                        </div>
+                                    </c:if>
                                 </c:if>
                             </div>
                         </div>

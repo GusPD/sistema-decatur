@@ -28,8 +28,10 @@
                     </div>
                 </div>
                 <ul id="user-dropdownMenu" class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <sec:authorize access="hasAuthority('VER_USUARIO_PRIVILAGE')">
                     <li><a class="dropdown-item small" href="/PerfilUsuario"><i class="fa-solid fa-user-pen text-blue"></i></i>&nbsp;Perfil</a></li>
-                    <li><a class="dropdown-item small" href="#" onclick="logout()"><i class="fa-solid fa-power-off text-danger"></i>&nbsp;Salir</a></li>
+                    </sec:authorize>
+                    <li><a id="btn-logout" class="dropdown-item small" href="#"><i class="fa-solid fa-power-off text-danger"></i>&nbsp;Salir</a></li>
                 </ul>
             </div>
         </li>
@@ -54,228 +56,256 @@
     </div>
     <!-- Opciones de menú -->
     <div class="sidebar">
-        <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                <li class="nav-item">  
-                    <a href="#" class="nav-link" style="background-color: #E3E7EA;">
-                        <i class="fa-solid fa-earth-oceania nav-icon text-blue"></i>
-                        <p>&nbsp;Proyecto<br>&nbsp;${proyecto.nombre}</p>
-                    </a>
-                </li>
-                <sec:authorize access="hasAuthority('GESTIONAR_ENVIO_CORREO_ELECTRONICO_PRIVILAGE') or hasAuthority('GESTIONAR_CONTACTO_PRIVILAGE')">
-                    <c:set var="urlEnviarNotificacion" value="/EnviarNotificacion/${proyecto.idProyecto}"/>
-                    <c:set var="urlContactos" value="/Contactos/${proyecto.idProyecto}"/>
-                    <li class="nav-item ${requestScope['javax.servlet.forward.request_uri'] == urlEnviarNotificacion || requestScope['javax.servlet.forward.request_uri'] == urlContactos ? 'menu-open' : ''}">
-                        <a href="#" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlEnviarNotificacion || requestScope['javax.servlet.forward.request_uri'] == urlContactos ? 'active' : ''}">
-                            <i class="nav-icon fa-solid fa-envelope"></i>
-                            <p>Correspondencia<i class="right fas fa-angle-left"></i></p>
-                        </a>
-                        <ul class="nav nav-treeview">
-                            <sec:authorize access="hasAuthority('GESTIONAR_ENVIO_CORREO_ELECTRONICO_PRIVILAGE')">
+        <div class="nav nav-pills nav-sidebar flex-column mt-2 mb-2">
+            <div class="nav-item">
+                <c:set var="urlProyecto" value="/Proyecto/${proyecto.idProyecto}"/>
+                <a href="/Proyecto/${proyecto.idProyecto}" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlProyecto ? 'active' : ''}" style="${requestScope['javax.servlet.forward.request_uri'] != urlProyecto ? 'background-color: #E3E7EA;' : ''}">
+                    <i class="fa-solid fa-earth-oceania nav-icon ${requestScope['javax.servlet.forward.request_uri'] != urlProyecto ? 'text-blue' : ''}"></i>
+                    <p>Proyecto<br>${proyecto.nombre}</p>
+                </a>
+            </div>  
+        </div>
+        <div class="overflow-opciones-menu">
+            <nav>
+                <ul class="nav nav-pills nav-sidebar" data-widget="treeview" role="menu" data-accordion="false">
+                    <sec:authorize access="hasAuthority('GESTIONAR_ENVIO_CORREO_ELECTRONICO_PRIVILAGE') or hasAuthority('GESTIONAR_CONTACTO_PRIVILAGE')">
+                        <c:set var="urlEnviarNotificacion" value="/EnviarNotificacion/${proyecto.idProyecto}"/>
+                        <c:set var="urlContactos" value="/Contactos/${proyecto.idProyecto}"/>
+                        <li class="nav-item ${requestScope['javax.servlet.forward.request_uri'] == urlEnviarNotificacion || requestScope['javax.servlet.forward.request_uri'] == urlContactos ? 'menu-open' : ''}">
+                            <a href="#" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlEnviarNotificacion || requestScope['javax.servlet.forward.request_uri'] == urlContactos ? 'active' : ''}">
+                                <i class="nav-icon fa-solid fa-envelope"></i>
+                                <p>Correspondencia<i class="right fas fa-angle-left"></i></p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <sec:authorize access="hasAuthority('GESTIONAR_ENVIO_CORREO_ELECTRONICO_PRIVILAGE')">
+                                    <li class="nav-item">
+                                        <a href="/EnviarNotificacion/${proyecto.idProyecto}" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlEnviarNotificacion ? 'active' : ''}">
+                                            <i class="fa-solid fa-solid fa-envelope-open-text nav-icon text-blue"></i>
+                                            <p>&nbsp;Notificaciones</p>
+                                        </a>
+                                    </li>
+                                </sec:authorize>
+                                <sec:authorize access="hasAuthority('GESTIONAR_CONTACTO_PRIVILAGE')">
+                                    <li class="nav-item">
+                                        <a href="/Contactos/${proyecto.idProyecto}" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlContactos ? 'active' : ''}">
+                                            <i class="fa-solid fa-address-book nav-icon text-blue"></i>
+                                            <p>Contactos</p>
+                                        </a>
+                                    </li>
+                                </sec:authorize>
+                            </ul>
+                        </li>
+                    </sec:authorize>
+                    <sec:authorize access="hasAuthority('GESTIONAR_PAGO_PRIVILAGE') or hasAuthority('GESTIONAR_MONITOREO_MANTENIMIENTO_PRIVILAGE')">
+                        <c:set var="urlPagos" value="/Pagos/${proyecto.idProyecto}" />
+                        <c:set var="urlMonitoreoMantenimiento" value="/InformeMantenimiento/${proyecto.idProyecto}" />
+                        <c:set var="urlRecibo" value="/Recibo/${pago.idPago}" />
+                        <li class="nav-item ${requestScope['javax.servlet.forward.request_uri'] == urlPagos || requestScope['javax.servlet.forward.request_uri'] == urlRecibo || requestScope['javax.servlet.forward.request_uri'] == urlMonitoreoMantenimiento ? 'menu-open' : ''}">
+                            <a href="#" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlPagos || requestScope['javax.servlet.forward.request_uri'] == urlRecibo || requestScope['javax.servlet.forward.request_uri'] == urlMonitoreoMantenimiento ? 'active' : ''}">
+                                <i class="nav-icon fas fa-coins"></i>
+                                <p>Facturación<i class="right fas fa-angle-left"></i></p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <sec:authorize access="hasAuthority('GESTIONAR_PAGO_PRIVILAGE')">
                                 <li class="nav-item">
-                                    <a href="/EnviarNotificacion/${proyecto.idProyecto}" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlEnviarNotificacion ? 'active' : ''}">
-                                        <i class="fa-solid fa-solid fa-envelope-open-text nav-icon text-blue"></i>
-                                        <p>&nbsp;Notificaciones</p>
+                                    <a href="/Pagos/${proyecto.idProyecto}" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlPagos || requestScope['javax.servlet.forward.request_uri'] == urlRecibo ? 'active' : ''}">
+                                        <i class="fa-solid fa-cash-register nav-icon text-blue"></i>
+                                        <p>Registro de Pagos</p>
                                     </a>
                                 </li>
-                            </sec:authorize>
-                            <sec:authorize access="hasAuthority('GESTIONAR_CONTACTO_PRIVILAGE')">
+                                </sec:authorize>
+                                <sec:authorize access="hasAuthority('GESTIONAR_MONITOREO_MANTENIMIENTO_PRIVILAGE')">
+                                    <li class="nav-item">
+                                        <a href="/InformeMantenimiento/${proyecto.idProyecto}" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlMonitoreoMantenimiento ? 'active' : ''}">
+                                            <i class="fa-solid fa-chart-column nav-icon text-blue"></i>
+                                            <p>Monitoreo de Pagos</p>
+                                        </a>
+                                    </li>
+                                </sec:authorize>
+                            </ul>
+                        </li>
+                    </sec:authorize>
+                    <sec:authorize access="hasAuthority('GESTIONAR_TERRENO_PRIVILAGE') or hasAuthority('GESTIONAR_VENTA_PRIVILAGE') or hasAuthority('GESTIONAR_PROPIETARIO_PRIVILAGE') or hasAuthority('GESTIONAR_TRABAJADOR_PRIVILAGE')">
+                        <c:set var="urlVentasActivas" value="/VentasActivas/${proyecto.idProyecto}" />
+                        
+                        <c:set var="urlTerreno" value="" />
+                        <c:set var="urlActual" value="/Terrenos/${proyecto.idProyecto}" />
+                        <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
+                            <c:set var="urlTerreno" value="/Terrenos/${proyecto.idProyecto}" />
+                        </c:if>
+                        <c:set var="urlActual" value="/Ventas/${terreno.idTerreno}" />
+                        <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
+                            <c:set var="urlTerreno" value="/Ventas/${terreno.idTerreno}" />
+                        </c:if>
+                        <c:set var="urlActual" value="/InformacionVenta/${venta.idVenta}" />
+                        <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
+                            <c:set var="urlTerreno" value="/InformacionVenta/${venta.idVenta}" />
+                        </c:if>
+                        <c:set var="urlActual" value="/PropietariosVenta/${venta.idVenta}" />
+                        <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
+                            <c:set var="urlTerreno" value="/PropietariosVenta/${venta.idVenta}" />
+                        </c:if>
+                        <c:set var="urlActual" value="/TrabajadoresVenta/${venta.idVenta}" />
+                        <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
+                            <c:set var="urlTerreno" value="/TrabajadoresVenta/${venta.idVenta}" />
+                        </c:if>
+                        <c:set var="urlActual" value="/DocumentosVenta/${venta.idVenta}" />
+                        <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
+                            <c:set var="urlTerreno" value="/DocumentosVenta/${venta.idVenta}" />
+                        </c:if>
+                        <c:set var="urlActual" value="/FacturacionVenta/${venta.idVenta}" />
+                        <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
+                            <c:set var="urlTerreno" value="/FacturacionVenta/${venta.idVenta}" />
+                        </c:if>
+                        <c:set var="urlActual" value="/PagosVenta/${venta.idVenta}" />
+                        <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
+                            <c:set var="urlTerreno" value="/PagosVenta/${venta.idVenta}" />
+                        </c:if>
+                        <c:set var="urlActual" value="/PrimaVenta/${venta.idVenta}" />
+                        <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
+                            <c:set var="urlTerreno" value="/PrimaVenta/${venta.idVenta}" />
+                        </c:if>
+                        <c:set var="urlActual" value="/MantenimientoVenta/${venta.idVenta}" />
+                        <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
+                            <c:set var="urlTerreno" value="/MantenimientoVenta/${venta.idVenta}" />
+                        </c:if>
+                        <c:set var="urlActual" value="/FinanciamientoVenta/${venta.idVenta}" />
+                        <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
+                            <c:set var="urlTerreno" value="/FinanciamientoVenta/${venta.idVenta}" />
+                        </c:if>
+                        
+                        <c:set var="urlPropietario" value="" />
+                        <c:set var="urlActual" value="/Propietarios/${proyecto.idProyecto}" />
+                        <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
+                            <c:set var="urlPropietario" value="/Propietarios/${proyecto.idProyecto}" />
+                        </c:if>
+                        <c:set var="urlActual" value="/InformacionPropietario/${proyecto.idProyecto}/${persona.idPersona}" />
+                        <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
+                            <c:set var="urlPropietario" value="/InformacionPropietario/${proyecto.idProyecto}/${persona.idPersona}" />
+                        </c:if>
+                        <c:set var="urlActual" value="/CorreosPropietario/${proyecto.idProyecto}/${persona.idPersona}" />
+                        <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
+                            <c:set var="urlPropietario" value="/CorreosPropietario/${proyecto.idProyecto}/${persona.idPersona}" />
+                        </c:if>
+                        <c:set var="urlActual" value="/TelefonosPropietario/${proyecto.idProyecto}/${persona.idPersona}" />
+                        <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
+                            <c:set var="urlPropietario" value="/TelefonosPropietario/${proyecto.idProyecto}/${persona.idPersona}" />
+                        </c:if>
+                        <c:set var="urlActual" value="/DocumentosPropietario/${proyecto.idProyecto}/${persona.idPersona}" />
+                        <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
+                            <c:set var="urlPropietario" value="/DocumentosPropietario/${proyecto.idProyecto}/${persona.idPersona}" />
+                        </c:if>
+                        <c:set var="urlActual" value="/ReferenciasPropietario/${proyecto.idProyecto}/${persona.idPersona}" />
+                        <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
+                            <c:set var="urlPropietario" value="/ReferenciasPropietario/${proyecto.idProyecto}/${persona.idPersona}" />
+                        </c:if>
+                        <c:set var="urlActual" value="/TerrenosPropietario/${proyecto.idProyecto}/${persona.idPersona}" />
+                        <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
+                            <c:set var="urlPropietario" value="/TerrenosPropietario/${proyecto.idProyecto}/${persona.idPersona}" />
+                        </c:if>
+                        
+                        <c:set var="urlTrabajador" value="" />
+                        <c:set var="urlActual" value="/Trabajadores/${proyecto.idProyecto}" />
+                        <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
+                            <c:set var="urlTrabajador" value="/Trabajadores/${proyecto.idProyecto}" />
+                        </c:if>
+                        <c:set var="urlActual" value="/InformacionTrabajador/${proyecto.idProyecto}/${persona.idPersona}" />
+                        <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
+                            <c:set var="urlTrabajador" value="/InformacionTrabajador/${proyecto.idProyecto}/${persona.idPersona}" />
+                        </c:if>
+                        <c:set var="urlActual" value="/DocumentosTrabajador/${proyecto.idProyecto}/${persona.idPersona}" />
+                        <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
+                            <c:set var="urlTrabajador" value="/DocumentosTrabajador/${proyecto.idProyecto}/${persona.idPersona}" />
+                        </c:if>
+                        <c:set var="urlActual" value="/TerrenosTrabajador/${proyecto.idProyecto}/${persona.idPersona}" />
+                        <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
+                            <c:set var="urlTrabajador" value="/TerrenosTrabajador/${proyecto.idProyecto}/${persona.idPersona}" />
+                        </c:if>
+                        <li class="nav-item ${requestScope['javax.servlet.forward.request_uri'] == urlTerreno || requestScope['javax.servlet.forward.request_uri'] == urlVentasActivas || requestScope['javax.servlet.forward.request_uri'] == urlPropietario || requestScope['javax.servlet.forward.request_uri'] == urlTrabajador ? 'menu-open' : ''}">
+                            <a href="#" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlTerreno || requestScope['javax.servlet.forward.request_uri'] == urlVentasActivas || requestScope['javax.servlet.forward.request_uri'] == urlPropietario || requestScope['javax.servlet.forward.request_uri'] == urlTrabajador ? 'active' : ''}">
+                                <i class="nav-icon fa-solid fa-folder-closed"></i>
+                                <p>Administración<i class="right fas fa-angle-left"></i></p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <sec:authorize access="hasAuthority('GESTIONAR_VENTA_PRIVILAGE')">
                                 <li class="nav-item">
-                                    <a href="/Contactos/${proyecto.idProyecto}" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlContactos ? 'active' : ''}">
-                                        <i class="fa-solid fa-address-book nav-icon text-blue"></i>
-                                        <p>Contactos</p>
+                                    <a href="/VentasActivas/${proyecto.idProyecto}" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlVentasActivas ? 'active' : ''}">
+                                        <i class="fa-solid fa-file-signature nav-icon text-blue"></i>
+                                        <p>Ventas Activas</p>
                                     </a>
                                 </li>
-                            </sec:authorize>
-                        </ul>
-                    </li>
-                </sec:authorize>
-                <sec:authorize access="hasAuthority('GESTIONAR_PAGO_PRIVILAGE') or hasAuthority('GESTIONAR_MONITOREO_PAGO_PRIVILAGE')">
-                    <c:set var="urlPagos" value="/Pagos/${proyecto.idProyecto}" />
-                    <c:set var="urlMonitoreoMantenimiento" value="/InformeMantenimiento/${proyecto.idProyecto}" />
-                    <c:set var="urlRecibo" value="/Recibo/${pago.idPago}" />
-                    <li class="nav-item ${requestScope['javax.servlet.forward.request_uri'] == urlPagos || requestScope['javax.servlet.forward.request_uri'] == urlRecibo || requestScope['javax.servlet.forward.request_uri'] == urlMonitoreoMantenimiento ? 'menu-open' : ''}">
-                        <a href="#" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlPagos || requestScope['javax.servlet.forward.request_uri'] == urlRecibo || requestScope['javax.servlet.forward.request_uri'] == urlMonitoreoMantenimiento ? 'active' : ''}">
-                            <i class="nav-icon fas fa-coins"></i>
-                            <p>Facturación<i class="right fas fa-angle-left"></i></p>
-                        </a>
-                        <ul class="nav nav-treeview">
-                            <sec:authorize access="hasAuthority('GESTIONAR_PAGO_PRIVILAGE')">
-                            <li class="nav-item">
-                                <a href="/Pagos/${proyecto.idProyecto}" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlPagos || requestScope['javax.servlet.forward.request_uri'] == urlRecibo ? 'active' : ''}">
-                                    <i class="fa-solid fa-cash-register nav-icon text-blue"></i>
-                                    <p>Registro de Pagos</p>
-                                </a>
-                            </li>
-                            </sec:authorize>
-                            <sec:authorize access="hasAuthority('GESTIONAR_MONITOREO_PAGO_PRIVILAGE')">
+                                </sec:authorize>
+                                <sec:authorize access="hasAuthority('GESTIONAR_TERRENO_PRIVILAGE')">
                                 <li class="nav-item">
-                                    <a href="/InformeMantenimiento/${proyecto.idProyecto}" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlMonitoreoMantenimiento ? 'active' : ''}">
-                                        <i class="fa-solid fa-chart-column nav-icon text-blue"></i>
-                                        <p>Monitoreo de Pagos</p>
+                                    <a href="/Terrenos/${proyecto.idProyecto}" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlTerreno ? 'active' : ''}">
+                                        <i class="fa-solid fa-globe-americas nav-icon text-blue"></i>
+                                        <p>Terrenos</p>
                                     </a>
                                 </li>
-                            </sec:authorize>
-                        </ul>
-                    </li>
-                </sec:authorize>
-                <sec:authorize access="hasAuthority('GESTIONAR_TERRENO_PRIVILAGE') or hasAuthority('GESTIONAR_VENTA_PRIVILAGE') or hasAuthority('GESTIONAR_PROPIETARIO_PRIVILAGE') or hasAuthority('GESTIONAR_TRABAJADOR_PRIVILAGE')">
-                    <c:set var="urlVentasActivas" value="/VentasActivas/${proyecto.idProyecto}" />
-                    
-                    <c:set var="urlTerreno" value="" />
-                    <c:set var="urlActual" value="/Terrenos/${proyecto.idProyecto}" />
-                    <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
-                        <c:set var="urlTerreno" value="/Terrenos/${proyecto.idProyecto}" />
-                    </c:if>
-                    <c:set var="urlActual" value="/Ventas/${terreno.idTerreno}" />
-                    <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
-                        <c:set var="urlTerreno" value="/Ventas/${terreno.idTerreno}" />
-                    </c:if>
-                    <c:set var="urlActual" value="/InformacionVenta/${venta.idVenta}" />
-                    <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
-                        <c:set var="urlTerreno" value="/InformacionVenta/${venta.idVenta}" />
-                    </c:if>
-                    <c:set var="urlActual" value="/PropietariosVenta/${venta.idVenta}" />
-                    <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
-                        <c:set var="urlTerreno" value="/PropietariosVenta/${venta.idVenta}" />
-                    </c:if>
-                    <c:set var="urlActual" value="/TrabajadoresVenta/${venta.idVenta}" />
-                    <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
-                        <c:set var="urlTerreno" value="/TrabajadoresVenta/${venta.idVenta}" />
-                    </c:if>
-                    <c:set var="urlActual" value="/DocumentosVenta/${venta.idVenta}" />
-                    <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
-                        <c:set var="urlTerreno" value="/DocumentosVenta/${venta.idVenta}" />
-                    </c:if>
-                    <c:set var="urlActual" value="/FacturacionVenta/${venta.idVenta}" />
-                    <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
-                        <c:set var="urlTerreno" value="/FacturacionVenta/${venta.idVenta}" />
-                    </c:if>
-                    <c:set var="urlActual" value="/PagosVenta/${venta.idVenta}" />
-                    <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
-                        <c:set var="urlTerreno" value="/PagosVenta/${venta.idVenta}" />
-                    </c:if>
-                    <c:set var="urlActual" value="/PrimaVenta/${venta.idVenta}" />
-                    <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
-                        <c:set var="urlTerreno" value="/PrimaVenta/${venta.idVenta}" />
-                    </c:if>
-                    <c:set var="urlActual" value="/MantenimientoVenta/${venta.idVenta}" />
-                    <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
-                        <c:set var="urlTerreno" value="/MantenimientoVenta/${venta.idVenta}" />
-                    </c:if>
-                    <c:set var="urlActual" value="/FinanciamientoVenta/${venta.idVenta}" />
-                    <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
-                        <c:set var="urlTerreno" value="/FinanciamientoVenta/${venta.idVenta}" />
-                    </c:if>
-                    
-                    <c:set var="urlPropietario" value="" />
-                    <c:set var="urlActual" value="/Propietarios/${proyecto.idProyecto}" />
-                    <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
-                        <c:set var="urlPropietario" value="/Propietarios/${proyecto.idProyecto}" />
-                    </c:if>
-                    <c:set var="urlActual" value="/InformacionPropietario/${proyecto.idProyecto}/${persona.idPersona}" />
-                    <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
-                        <c:set var="urlPropietario" value="/InformacionPropietario/${proyecto.idProyecto}/${persona.idPersona}" />
-                    </c:if>
-                    <c:set var="urlActual" value="/CorreosPropietario/${proyecto.idProyecto}/${persona.idPersona}" />
-                    <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
-                        <c:set var="urlPropietario" value="/CorreosPropietario/${proyecto.idProyecto}/${persona.idPersona}" />
-                    </c:if>
-                    <c:set var="urlActual" value="/TelefonosPropietario/${proyecto.idProyecto}/${persona.idPersona}" />
-                    <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
-                        <c:set var="urlPropietario" value="/TelefonosPropietario/${proyecto.idProyecto}/${persona.idPersona}" />
-                    </c:if>
-                    <c:set var="urlActual" value="/DocumentosPropietario/${proyecto.idProyecto}/${persona.idPersona}" />
-                    <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
-                        <c:set var="urlPropietario" value="/DocumentosPropietario/${proyecto.idProyecto}/${persona.idPersona}" />
-                    </c:if>
-                    <c:set var="urlActual" value="/ReferenciasPropietario/${proyecto.idProyecto}/${persona.idPersona}" />
-                    <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
-                        <c:set var="urlPropietario" value="/ReferenciasPropietario/${proyecto.idProyecto}/${persona.idPersona}" />
-                    </c:if>
-                    <c:set var="urlActual" value="/TerrenosPropietario/${proyecto.idProyecto}/${persona.idPersona}" />
-                    <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
-                        <c:set var="urlPropietario" value="/TerrenosPropietario/${proyecto.idProyecto}/${persona.idPersona}" />
-                    </c:if>
-                    
-                    <c:set var="urlTrabajador" value="" />
-                    <c:set var="urlActual" value="/Trabajadores/${proyecto.idProyecto}" />
-                    <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
-                        <c:set var="urlTrabajador" value="/Trabajadores/${proyecto.idProyecto}" />
-                    </c:if>
-                    <c:set var="urlActual" value="/InformacionTrabajador/${proyecto.idProyecto}/${persona.idPersona}" />
-                    <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
-                        <c:set var="urlTrabajador" value="/InformacionTrabajador/${proyecto.idProyecto}/${persona.idPersona}" />
-                    </c:if>
-                    <c:set var="urlActual" value="/DocumentosTrabajador/${proyecto.idProyecto}/${persona.idPersona}" />
-                    <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
-                        <c:set var="urlTrabajador" value="/DocumentosTrabajador/${proyecto.idProyecto}/${persona.idPersona}" />
-                    </c:if>
-                    <c:set var="urlActual" value="/TerrenosTrabajador/${proyecto.idProyecto}/${persona.idPersona}" />
-                    <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
-                        <c:set var="urlTrabajador" value="/TerrenosTrabajador/${proyecto.idProyecto}/${persona.idPersona}" />
-                    </c:if>
-                    <li class="nav-item ${requestScope['javax.servlet.forward.request_uri'] == urlTerreno || requestScope['javax.servlet.forward.request_uri'] == urlVentasActivas || requestScope['javax.servlet.forward.request_uri'] == urlPropietario || requestScope['javax.servlet.forward.request_uri'] == urlTrabajador ? 'menu-open' : ''}">
-                        <a href="#" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlTerreno || requestScope['javax.servlet.forward.request_uri'] == urlVentasActivas || requestScope['javax.servlet.forward.request_uri'] == urlPropietario || requestScope['javax.servlet.forward.request_uri'] == urlTrabajador ? 'active' : ''}">
-                            <i class="nav-icon fa-solid fa-folder-closed"></i>
-                            <p>Administración<i class="right fas fa-angle-left"></i></p>
-                        </a>
-                        <ul class="nav nav-treeview">
-                            <sec:authorize access="hasAuthority('GESTIONAR_VENTA_PRIVILAGE')">
-                            <li class="nav-item">
-                                <a href="/VentasActivas/${proyecto.idProyecto}" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlVentasActivas ? 'active' : ''}">
-                                    <i class="fa-solid fa-file-signature nav-icon text-blue"></i>
-                                    <p>Ventas Activas</p>
-                                </a>
-                            </li>
-                            </sec:authorize>
-                            <sec:authorize access="hasAuthority('GESTIONAR_TERRENO_PRIVILAGE')">
-                            <li class="nav-item">
-                                <a href="/Terrenos/${proyecto.idProyecto}" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlTerreno ? 'active' : ''}">
-                                    <i class="fa-solid fa-globe-americas nav-icon text-blue"></i>
-                                    <p>Terrenos</p>
-                                </a>
-                            </li>
-                            </sec:authorize>
-                            <sec:authorize access="hasAuthority('GESTIONAR_PROPIETARIO_PRIVILAGE')">
-                            <li class="nav-item">
-                                <a href="/Propietarios/${proyecto.idProyecto}" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlPropietario ? 'active' : ''}">
-                                    <i class="fa-solid fa-user-tie nav-icon text-blue"></i>
-                                    <p>Propietarios</p>
-                                </a>
-                            </li>
-                            </sec:authorize>
-                            <sec:authorize access="hasAuthority('GESTIONAR_TRABAJADOR_PRIVILAGE')">
-                            <li class="nav-item">
-                                <a href="/Trabajadores/${proyecto.idProyecto}" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlTrabajador ? 'active' : ''}">
-                                    <i class="fa-solid fa-users nav-icon text-blue"></i>
-                                    <p>Trabajadores</p>
-                                </a>
-                            </li>
-                            </sec:authorize>
-                        </ul>
-                    </li>
-                </sec:authorize>
-                <sec:authorize access="hasAuthority('GESTIONAR_VISITAS_PROYECTO_PRIVILAGE')">
-                    <li class="nav-item ${requestScope['javax.servlet.forward.request_uri'] == '/Visitas' ? 'menu-open' : ''}">
-                        <a href="#" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == '/Visitas' ? 'active' : ''}">
-                            <i class="nav-icon fas fa-map-marked-alt"></i>
-                            <p>Visitas al Proyecto<i class="right fas fa-angle-left"></i></p>
-                        </a>
-                        <ul class="nav nav-treeview">
-                            <sec:authorize access="hasAuthority('GESTIONAR_VISITAS_PROYECTO_PRIVILAGE')">
-                            <li class="nav-item">
-                                <a href="/Visitas" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == '/Visitas' ? 'active' : ''}">
-                                    <i class="fa-solid fa-street-view nav-icon text-blue"></i>
-                                    <p>Registro de Visitas</p>
-                                </a>
-                            </li>
-                            </sec:authorize>
-                        </ul>
-                    </li>
-                </sec:authorize>
-            </ul>
-        </nav>
+                                </sec:authorize>
+                                <sec:authorize access="hasAuthority('GESTIONAR_PROPIETARIO_PRIVILAGE')">
+                                <li class="nav-item">
+                                    <a href="/Propietarios/${proyecto.idProyecto}" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlPropietario ? 'active' : ''}">
+                                        <i class="fa-solid fa-user-tie nav-icon text-blue"></i>
+                                        <p>Propietarios</p>
+                                    </a>
+                                </li>
+                                </sec:authorize>
+                                <sec:authorize access="hasAuthority('GESTIONAR_TRABAJADOR_PRIVILAGE')">
+                                <li class="nav-item">
+                                    <a href="/Trabajadores/${proyecto.idProyecto}" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlTrabajador ? 'active' : ''}">
+                                        <i class="fa-solid fa-users nav-icon text-blue"></i>
+                                        <p>Trabajadores</p>
+                                    </a>
+                                </li>
+                                </sec:authorize>
+                            </ul>
+                        </li>
+                    </sec:authorize>
+                    <sec:authorize access="hasAuthority('GESTIONAR_VISITAS_PROYECTO_PRIVILAGE')">
+                        <li class="nav-item ${requestScope['javax.servlet.forward.request_uri'] == '/Visitas' ? 'menu-open' : ''}">
+                            <a href="#" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == '/Visitas' ? 'active' : ''}">
+                                <i class="nav-icon fas fa-map-marked-alt"></i>
+                                <p>Visitas al Proyecto<i class="right fas fa-angle-left"></i></p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <sec:authorize access="hasAuthority('GESTIONAR_VISITAS_PROYECTO_PRIVILAGE')">
+                                <li class="nav-item">
+                                    <a href="/Visitas" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == '/Visitas' ? 'active' : ''}">
+                                        <i class="fa-solid fa-street-view nav-icon text-blue"></i>
+                                        <p>Registro de Visitas</p>
+                                    </a>
+                                </li>
+                                </sec:authorize>
+                            </ul>
+                        </li>
+                    </sec:authorize>
+                    <sec:authorize access="hasAuthority('GESTIONAR_CONFIGURACION_CORREO_PRIVILAGE')">
+                        <c:set var="urlFinanciero" value="" />
+                        <c:set var="urlActual" value="/Financiero/${proyecto.idProyecto}" />
+                        <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
+                            <c:set var="urlFinanciero" value="/Financiero/${proyecto.idProyecto}" />
+                        </c:if>
+                        <li class="nav-item ${requestScope['javax.servlet.forward.request_uri'] == urlFinanciero ? 'menu-open' : ''}">
+                            <a href="#" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlFinanciero ? 'active' : ''}">
+                                <i class="nav-icon fa-solid fa-gear"></i>
+                                <p>Configuración<i class="right fas fa-angle-left"></i></p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <sec:authorize access="hasAuthority('GESTIONAR_CONFIGURACION_CORREO_PRIVILAGE')">
+                                <li class="nav-item">
+                                    <a href="/Financiero/${proyecto.idProyecto}" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlFinanciero ? 'active' : ''}">
+                                        <i class="fa-solid fa-file-invoice-dollar nav-icon text-blue"></i>
+                                        <p>Financiero</p>
+                                    </a>
+                                </li>
+                                </sec:authorize>
+                            </ul>
+                        </li>
+                    </sec:authorize>
+                </ul>
+            </nav>
+        </div>    
     </div>
 </aside>
 <div id="EspacioEncabezado"></div>

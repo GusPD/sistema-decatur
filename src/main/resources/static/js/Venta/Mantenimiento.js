@@ -87,10 +87,13 @@ $(document).ready(function() {
                 width: '10.3%',
                 render: function (data, type, row) {
                     var claseCSS = '';
-                    if(row.pago.estado === false){
+                    var claseCSS = '';
+                    if(row.estado === false){
                         claseCSS = 'badge bg-danger';
-                    }else if(row.pago.comprobante=="Factura"){
+                    }else if(row.comprobante=="Recibo"){
                         claseCSS = 'badge bg-azul';
+                    }else if(row.comprobante=="Factura"){
+                        claseCSS = 'badge bg-amarillo';
                     }else{
                         claseCSS = 'badge bg-verde';
                     }
@@ -203,7 +206,7 @@ $(document).ready(function() {
             "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
             "sInfoFiltered": "",
             "sInfoPostFix": "",
-            "sSearch": "Buscar:",
+            "sSearch": "Buscar recibo:",
             "sUrl": "",
             "sInfoThousands": ",",
             "sLoadingRecords": "Cargando...",
@@ -226,12 +229,8 @@ $(document).ready(function() {
                 }
             }
         },
-        search: {
-            return: true
-        },
-        ordering: {
-            return: true
-        }
+        search: true,
+        ordering: true
     });
     table.columns.adjust();
     $('#export-excel').on('click', function() {
@@ -257,7 +256,7 @@ $(document).ready(function() {
         function(value, element) {
             return this.optional(element) || /\.csv$/i.test(value);
         },
-        "Ingrese un documento en formato .pdf"
+        "Ingrese un documento en formato .csv"
     );
     var formGuardar = $('#formGuardar');
     var validator = $('#formGuardar').validate({
@@ -291,6 +290,9 @@ $(document).ready(function() {
             var formDataArray = new FormData(formGuardar[0]);
             var url = '/AgregarInformeMantenimientoVenta';
             formDataArray.append('idVenta', idVenta);
+            $('#crearModal').modal('hide');
+            document.getElementById("contenido-pagina-carga").innerHTML = "Agregando cuotas...";
+            $("#loadingOverlay").show();
             $.ajax({
                 url: url,
                 type: 'POST',
@@ -298,17 +300,17 @@ $(document).ready(function() {
                 processData: false,
                 contentType: false,
                 success: function (response) {
-                    $('#crearModal').modal('hide');
+                    $("#loadingOverlay").hide();
                     $(".form-control").val("");
                     toastr.success(response);
                     table.ajax.reload();
                 },
                 error: function (xhr, status, error) {
-                    $('#crearModal').modal('hide');
+                    $("#loadingOverlay").hide();
                     var errorMessage = xhr.responseText || 'Error al agregar el estado de cuenta.';
                     if (errorMessage.includes('Errores en los registros:')) {
                         errorMessage = errorMessage.replace("Errores en los registros:", "");
-                        var lineas = errorMessage.split('\n');
+                        var lineas = errorMessage.trim().split('\n');
                         var lista = document.createElement("ul");
                         for (var i = 0; i < lineas.length; i++) {
                             var li = document.createElement("li");
@@ -349,6 +351,7 @@ $(document).ready(function() {
     });
     //Función para mostrar la vista de impresión del estado de cuenta
     document.getElementById('btn-imprimir').addEventListener('click', function () {
+        document.getElementById("contenido-pagina-carga").innerHTML = "Generando reporte...";
         $("#loadingOverlay").show();
         $.ajax({
             url: '/EstadoCuentaMantenimiento/' + idVenta,

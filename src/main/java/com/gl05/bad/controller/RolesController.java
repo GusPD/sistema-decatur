@@ -1,19 +1,27 @@
 package com.gl05.bad.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.gl05.bad.domain.Rol;
 import com.gl05.bad.domain.Usuario;
 import com.gl05.bad.servicio.BitacoraServiceImp;
 import com.gl05.bad.servicio.PermisosService;
 import com.gl05.bad.servicio.RolesService;
 import com.gl05.bad.servicio.UserServiceImp;
+import com.gl05.bad.web.HttpSessionCollector;
+
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,6 +46,16 @@ public class RolesController {
     @Autowired
     private UserServiceImp usuarioService;
 
+    @Autowired
+    private SimpMessagingTemplate messagingTemplate;
+
+    public void sendNotification(String mensaje) {
+        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectNode responseJson = objectMapper.createObjectNode();
+        responseJson.put("mensaje", mensaje);
+        messagingTemplate.convertAndSend("/topic/notificaciones", responseJson);
+    }
+
     //Función que redirige a la vista de los roles
     @GetMapping("/Roles")
     public String mostrarRoles(Model model, Authentication authentication) {
@@ -53,7 +71,7 @@ public class RolesController {
     }
     
     //Función que obtiene los roles de la base de datos
-    @GetMapping("/roles/data")
+    @GetMapping(value="/roles/data", produces = "application/json; charset=UTF-8")
     @ResponseBody
     public DataTablesOutput<Rol> getRoles(@Valid DataTablesInput input) {
         return rolesService.listarRoles(input);
@@ -89,7 +107,7 @@ public class RolesController {
     }
 
     //Función que obtiene un rol de la base de datos
-    @GetMapping("/ObtenerRol/{id}")
+    @GetMapping(value="/ObtenerRol/{id}", produces = "application/json; charset=UTF-8")
     public ResponseEntity<Rol> obtenerRol(@PathVariable Long id) {
         Rol rol = rolesService.encontrar(id);
         if (rol != null) {
@@ -101,9 +119,18 @@ public class RolesController {
     
     //Fucción que actualiza un rol de la base de datos
     @PostMapping("/ActualizarRol")
-    public ResponseEntity<String> ActualizarRol(Rol rol, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<String> ActualizarRol(Rol rol, HttpServletRequest request, RedirectAttributes redirectAttributes, Authentication authentication) {
         try {
             rolesService.actualizar(rol);
+            //Cerrar las sesiones de los usuarios
+            List<HttpSession> listaSesiones = HttpSessionCollector.getSesionesActivas();
+            for (HttpSession sesion : listaSesiones) {
+                if(!sesion.getId().equals(request.getSession().getId())){
+                    sesion.invalidate();
+                }
+            }
+            HttpSessionCollector.eliminarSesiones(request.getSession());
+            sendNotification("Se cerrará la sesión");
             String mensaje = "Se ha actualizado el rol correctamente.";
             bitacoraService.registrarAccion("Actualizar rol");
             return ResponseEntity.ok(mensaje);

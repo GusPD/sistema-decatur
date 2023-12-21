@@ -2,12 +2,17 @@ package com.gl05.bad.servicio;
 
 import com.gl05.bad.dao.BitacoraDao;
 import com.gl05.bad.domain.Bitacora;
+
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.persistence.criteria.Predicate;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
@@ -61,7 +66,6 @@ public class BitacoraServiceImp implements BitacoraService{
         bitacora.setEvento(accion);
         bitacora.setHora(LocalDateTime.now());
         
-        
         String ip = obtenerDireccionIP();
         bitacora.setIpEquipo(ip);
 
@@ -70,8 +74,21 @@ public class BitacoraServiceImp implements BitacoraService{
     
     @Override
     @Transactional(readOnly=true)
-    public DataTablesOutput<Bitacora> listarBitacora(DataTablesInput input) {
-        return (DataTablesOutput<Bitacora>)bitacoraDao.findAll(input);
+    public DataTablesOutput<Bitacora> listarBitacora(DataTablesInput input, LocalDateTime fechaInicio, LocalDateTime fechaFin, String usuario) {
+        Specification<Bitacora> specification = (root, query, builder) -> {
+            List<Predicate> predicates = new ArrayList<>();
+            if (fechaInicio != null) {
+                predicates.add(builder.greaterThanOrEqualTo(root.get("hora"), fechaInicio));
+            }
+            if (fechaFin != null) {
+                predicates.add(builder.lessThanOrEqualTo(root.get("hora"), fechaFin));
+            }
+            if (!usuario.isEmpty()) {
+                predicates.add(builder.equal(root.get("username"), usuario));
+            }
+            return builder.and(predicates.toArray(new Predicate[0]));
+        };
+        return (DataTablesOutput<Bitacora>)bitacoraDao.findAll(input, specification);
     }
     
     private String obtenerDireccionIP() {

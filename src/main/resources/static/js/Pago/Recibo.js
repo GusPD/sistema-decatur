@@ -164,15 +164,11 @@ $(document).ready(function() {
         paging: false,
         info: false,
         searching: false,
-        search: {
-            return: true
-        },
-        ordering: {
-            return: true
-        }
+        search: true,
+        ordering: true
     });
     table.columns.adjust();
-    //Función para mostrar la vista de impresión del estado de cuenta
+    //Función para mostrar la vista de impresión del comprobante
     document.getElementById('btn-imprimir').addEventListener('click', function () {
       $("#loadingOverlay").show();
       $.ajax({
@@ -188,9 +184,9 @@ $(document).ready(function() {
           }
       });
     });
-  //Función para imprimir el estado de cuenta
-  document.getElementById('btnImprimir').addEventListener('click', function () {
-    var divParaImprimir = $("#contenedorDePagina");
-    divParaImprimir.printThis();
-  });
+    //Función para imprimir el estado de cuenta
+    document.getElementById('btnImprimir').addEventListener('click', function () {
+      var divParaImprimir = $("#contenedorDePagina");
+      divParaImprimir.printThis();
+    });
 });

@@ -26,6 +26,7 @@ import javax.mail.Session;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -102,52 +103,100 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/", "/logout").authenticated()
             //Proyectos
             .antMatchers("/Proyectos").hasAuthority("GESTIONAR_PROYECTO_PRIVILAGE")
+            .antMatchers("/proyectos/data").hasAuthority("GESTIONAR_PROYECTO_PRIVILAGE")
+            .antMatchers("/ObtenerProyecto/**").hasAuthority("EDITAR_PROYECTO_PRIVILAGE")
             //Envío de correspondencia de proyecto
             .antMatchers("/EnviarNotificacion/**").hasAuthority("GESTIONAR_ENVIO_CORREO_ELECTRONICO_PRIVILAGE")
             .antMatchers("/Contactos/**").hasAuthority("GESTIONAR_CONTACTO_PRIVILAGE")
+            .antMatchers("/correosProyecto/data/**").hasAuthority("GESTIONAR_CONTACTO_PRIVILAGE")
             //Facturación de proyecto
             .antMatchers("/Pagos/**").hasAuthority("GESTIONAR_PAGO_PRIVILAGE")
+            .antMatchers("/pagos/data/**").hasAuthority("GESTIONAR_PAGO_PRIVILAGE")
+            .antMatchers("/ObtenerPago/**").hasAuthority("EDITAR_PAGO_PRIVILAGE")
             .antMatchers("/Recibo/**").hasAuthority("VER_PAGO_PRIVILAGE")
             .antMatchers("/ComprobantePago/**").hasAuthority("EXPORTAR_PAGO_PRIVILAGE")
-            .antMatchers("/InformeMantenimiento/**").hasAuthority("GESTIONAR_MONITOREO_PAGO_PRIVILAGE")
+            .antMatchers("/InformeMantenimiento/**").hasAuthority("GESTIONAR_MONITOREO_MANTENIMIENTO_PRIVILAGE")
             //Administración de proyecto
             .antMatchers("/VentasActivas/**").hasAuthority("VER_VENTA_PRIVILAGE")
+            .antMatchers("/ventasActiva/data/**").hasAuthority("VER_VENTA_PRIVILAGE")
             .antMatchers("/Terrenos/**").hasAuthority("GESTIONAR_TERRENO_PRIVILAGE")
+            .antMatchers("/terrenos/data/**").hasAuthority("GESTIONAR_TERRENO_PRIVILAGE")
             .antMatchers("/Ventas/**").hasAuthority("GESTIONAR_VENTA_PRIVILAGE")
+            .antMatchers("/ventas/data/**").hasAuthority("GESTIONAR_VENTA_PRIVILAGE")
+            .antMatchers("/ObtenerVenta/**").hasAuthority("EDITAR_FINANCIAMIENTO_VENTA_PRIVILAGE")
             .antMatchers("/Propietarios/**").hasAuthority("GESTIONAR_PROPIETARIO_PRIVILAGE")
+            .antMatchers("/propietariosProyecto/data/**").hasAuthority("GESTIONAR_PROPIETARIO_PRIVILAGE")
             .antMatchers("/Trabajadores/**").hasAuthority("GESTIONAR_TRABAJADOR_PRIVILAGE")
+            .antMatchers("/trabajadoresProyecto/data/**").hasAuthority("GESTIONAR_TRABAJADOR_PRIVILAGE")
             //Venta de proyecto
-            .antMatchers("/InformacionVenta/**").hasAuthority("VER_VENTA_PRIVILAGE")
-            .antMatchers("/PropietariosVenta/**").hasAuthority("VER_VENTA_PRIVILAGE")
-            .antMatchers("/TrabajadoresVenta/**").hasAuthority("VER_VENTA_PRIVILAGE")
-            .antMatchers("/DocumentosVenta/**").hasAuthority("VER_VENTA_PRIVILAGE")
-            .antMatchers("/FacturacionVenta/**").hasAuthority("VER_VENTA_PRIVILAGE")
-            .antMatchers("/PagosVenta/**").hasAuthority("VER_VENTA_PRIVILAGE")
-            .antMatchers("/PrimaVenta/**").hasAuthority("VER_VENTA_PRIVILAGE")
-            .antMatchers("/MantenimientoVenta/**").hasAuthority("VER_VENTA_PRIVILAGE")
+            .antMatchers("/InformacionVenta/**").hasAuthority("GESTIONAR_INFORMACION_VENTA_PRIVILAGE")
+            .antMatchers("/ObtenerFinanciamientoVenta/**").hasAuthority("GESTIONAR_INFORMACION_VENTA_PRIVILAGE")
+            .antMatchers("/ObtenerMantenimientoVenta/**").hasAuthority("GESTIONAR_INFORMACION_VENTA_PRIVILAGE")
+            .antMatchers("/PropietariosVenta/**").hasAuthority("GESTIONAR_PROPIETARIOS_VENTA_PRIVILAGE")
+            .antMatchers("/propietarioVenta/data/**").hasAuthority("GESTIONAR_PROPIETARIOS_VENTA_PRIVILAGE")
+            .antMatchers("/TrabajadoresVenta/**").hasAuthority("GESTIONAR_TRABAJADORES_VENTA_PRIVILAGE")
+            .antMatchers("/trabajadorVenta/data/**").hasAuthority("GESTIONAR_TRABAJADORES_VENTA_PRIVILAGE")
+            .antMatchers("/DocumentosVenta/**").hasAuthority("GESTIONAR_DOCUMENTO_VENTA_PRIVILAGE")
+            .antMatchers("/documentoVenta/data/**").hasAuthority("GESTIONAR_DOCUMENTO_VENTA_PRIVILAGE")
+            .antMatchers("/DocumentoVenta/**").hasAuthority("VER_DOCUMENTO_VENTA_PRIVILAGE")
+            .antMatchers("/FacturacionVenta/**").hasAuthority("GESTIONAR_FACTURACION_VENTA_PRIVILAGE")
+            .antMatchers("/ObtenerFacturacion/**").hasAuthority("EDITAR_FACTURACION_PRIVILAGE")
+            .antMatchers("/PagosVenta/**").hasAuthority("GESTIONAR_PAGOS_VENTA_PRIVILAGE")
+            .antMatchers("/pagoVenta/data/**").hasAuthority("GESTIONAR_PAGOS_VENTA_PRIVILAGE")
+            .antMatchers("/PrimaVenta/**").hasAuthority("GESTIONAR_PRIMA_VENTA_PRIVILAGE")
+            .antMatchers("/primaVenta/data/**").hasAuthority("GESTIONAR_PRIMA_VENTA_PRIVILAGE")
+            .antMatchers("/MantenimientoVenta/**").hasAuthority("GESTIONAR_MANTENIMIENTO_VENTA_PRIVILAGE")
+             .antMatchers("/mantenimientoVenta/data/**").hasAuthority("GESTIONAR_MANTENIMIENTO_VENTA_PRIVILAGE")
             .antMatchers("/EstadoCuentaMantenimiento/**").hasAuthority("EXPORTAR_ESTADO_CUENTA_MANTENIMIENTO_PRIVILAGE")
             //Propietarios de proyectos
             .antMatchers("/PropietariosSistema").hasAuthority("GESTIONAR_DATOS_PROYECTO_PRIVILAGE")
-            .antMatchers("/InformacionPropietario/**").hasAuthority("VER_PROPIETARIO_PRIVILAGE")
-            .antMatchers("/TelefonosPropietario/**").hasAuthority("VER_PROPIETARIO_PRIVILAGE")
-            .antMatchers("/CorreosPropietario/**").hasAuthority("VER_PROPIETARIO_PRIVILAGE")
-            .antMatchers("/ReferenciasPropietario/**").hasAuthority("VER_PROPIETARIO_PRIVILAGE")
-            .antMatchers("/DocumentosPropietario/**").hasAuthority("VER_PROPIETARIO_PRIVILAGE")
-            .antMatchers("/TerrenosPropietario/**").hasAuthority("VER_PROPIETARIO_PRIVILAGE")
+            .antMatchers("/propietarios/data/**").hasAuthority("GESTIONAR_DATOS_PROYECTO_PRIVILAGE")
+            .antMatchers("/InformacionPropietario/**").hasAuthority("GESTIONAR_INFORMACION_PROPIETARIO_PRIVILAGE")
+            .antMatchers("/TelefonosPropietario/**").hasAuthority("GESTIONAR_TELEFONO_PROPIETARIO_PRIVILAGE")
+            .antMatchers("/telefonoPropietario/data/**").hasAuthority("GESTIONAR_TELEFONO_PROPIETARIO_PRIVILAGE")
+            .antMatchers("/CorreosPropietario/**").hasAuthority("GESTIONAR_CORREO_PROPIETARIO_PRIVILAGE")
+            .antMatchers("/correoPropietario/data/**").hasAuthority("GESTIONAR_CORREO_PROPIETARIO_PRIVILAGE")
+            .antMatchers("/ReferenciasPropietario/**").hasAuthority("GESTIONAR_REFERENCIA_PROPIETARIO_PRIVILAGE")
+            .antMatchers("/referenciaPropietario/data/**").hasAuthority("GESTIONAR_REFERENCIA_PROPIETARIO_PRIVILAGE")
+            .antMatchers("/DocumentosPropietario/**").hasAuthority("GESTIONAR_DOCUMENTO_PROPIETARIO_PRIVILAGE")
+            .antMatchers("/documentoPropietario/data/**").hasAuthority("GESTIONAR_DOCUMENTO_PROPIETARIO_PRIVILAGE")
+            .antMatchers("/DocumentoPropietario/**").hasAuthority("VER_DOCUMENTO_PROPIETARIO_PRIVILAGE")
+            .antMatchers("/TerrenosPropietario/**").hasAuthority("GESTIONAR_TERRENOS_PROPIETARIO_PRIVILAGE")
+            .antMatchers("/terrenosPropietario/data/**").hasAuthority("GESTIONAR_TERRENOS_PROPIETARIO_PRIVILAGE")
             //Trabajadores del proyecto
             .antMatchers("/TrabajadoresSistema").hasAuthority("GESTIONAR_DATOS_PROYECTO_PRIVILAGE")
-            .antMatchers("/InformacionTrabajador/**").hasAuthority("VER_TRABAJADOR_PRIVILAGE")
-            .antMatchers("/DocumentosTrabajador/**").hasAuthority("VER_TRABAJADOR_PRIVILAGE")
-            .antMatchers("/TerrenosTrabajador/**").hasAuthority("VER_TRABAJADOR_PRIVILAGE")
+            .antMatchers("/trabajadores/data/**").hasAuthority("GESTIONAR_DATOS_PROYECTO_PRIVILAGE")
+            .antMatchers("/InformacionTrabajador/**").hasAuthority("GESTIONAR_INFORMACION_TRABAJADOR_PRIVILAGE")
+            .antMatchers("/DocumentosTrabajador/**").hasAuthority("GESTIONAR_DOCUMENTO_TRABAJADOR_PRIVILAGE")
+            .antMatchers("/documentoTrabajador/data/**").hasAuthority("GESTIONAR_DOCUMENTO_TRABAJADOR_PRIVILAGE")
+            .antMatchers("/DocumentoTrabajador/**").hasAuthority("VER_DOCUMENTO_TRABAJADOR_PRIVILAGE")
+            .antMatchers("/TerrenosTrabajador/**").hasAuthority("GESTIONAR_TERRENOS_TRABAJADOR_PRIVILAGE")
+            .antMatchers("/terrenosTrabajador/data/**").hasAuthority("GESTIONAR_TERRENOS_TRABAJADOR_PRIVILAGE")
             //Empresas
             .antMatchers("/Empresas").hasAuthority("GESTIONAR_EMPRESA_PRIVILAGE")
-            .antMatchers("/CuetasBancarias/**").hasAuthority("GESTIONAR_CUENTA_BANCARIA_PRIVILAGE")
+            .antMatchers("/empresas/data/**").hasAuthority("GESTIONAR_EMPRESA_PRIVILAGE")
+            .antMatchers("/ObtenerEmpresa/**").hasAuthority("EDITAR_EMPRESA_PRIVILAGE")
+            .antMatchers("/CuentasBancarias/**").hasAuthority("GESTIONAR_CUENTA_BANCARIA_PRIVILAGE")
+            .antMatchers("/cuentas/data/**").hasAuthority("GESTIONAR_CUENTA_BANCARIA_PRIVILAGE")
+            .antMatchers("/ObtenerCuenta/**").hasAuthority("EDITAR_CUENTA_BANCARIA_PRIVILAGE")
             //Seguridad del sistema
             .antMatchers("/Usuarios").hasAuthority("GESTIONAR_USUARIO_PRIVILAGE")
+            .antMatchers("/usuarios/data/**").hasAuthority("GESTIONAR_USUARIO_PRIVILAGE")
+            .antMatchers("/ObtenerUsuario/**").hasAuthority("EDITAR_USUARIO_PRIVILAGE")
+            .antMatchers("/PerfilUsuario").hasAuthority("VER_USUARIO_PRIVILAGE")
             .antMatchers("/Roles").hasAuthority("GESTIONAR_ROL_PRIVILAGE")
+            .antMatchers("/roles/data/**").hasAuthority("GESTIONAR_ROL_PRIVILAGE")
+            .antMatchers("/ObtenerRol/**").hasAuthority("EDITAR_ROL_PRIVILAGE")
             .antMatchers("/Bitacora").hasAuthority("GESTIONAR_BITACORA_PRIVILAGE")
+            .antMatchers("/bitacora/data/**").hasAuthority("GESTIONAR_BITACORA_PRIVILAGE")
             //Configuración del sistema
             .antMatchers("/ConfiguracionCorreos").hasAuthority("GESTIONAR_CONFIGURACION_CORREO_PRIVILAGE")
+            .antMatchers("/configuracionCorreo/data").hasAuthority("GESTIONAR_CONFIGURACION_CORREO_PRIVILAGE")
+            .antMatchers("/ObtenerConfiguracionCorreo/**").hasAuthority("EDITAR_CONFIGURACION_CORREO_PRIVILAGE")
+            .antMatchers("/BackupLocal").hasAuthority("GESTIONAR_BACKUP_PRIVILAGE")
+            .antMatchers("/backuplocal/data").hasAuthority("GESTIONAR_BACKUP_PRIVILAGE")
+            .antMatchers("/BackupNube").hasAuthority("GESTIONAR_BACKUP_PRIVILAGE")
+            .antMatchers("/backupnube/data").hasAuthority("GESTIONAR_BACKUP_PRIVILAGE")
         )
         .formLogin(formLogin -> formLogin
             .loginPage("/login")
@@ -182,7 +231,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         @Override
         public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
             String username = authentication.getName();
-            
+            //HttpSession session = request.getSession();
+            //HttpSessionCollector.agregarSesion(session);
             Usuario usuario = usuarioDao.findByUsername(username);
             usuario.setIntentos(0);
             usuarioDao.save(usuario);
@@ -193,11 +243,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     
     private class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
 
-      @Override
-      public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-          String username = authentication.getName();
-          bitacoraService.registrarCerrarSesion(username);
-          response.sendRedirect("/");
-      }
+        @Override
+        public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+            String username = authentication.getName();
+            //HttpSession session = request.getSession();
+            //HttpSessionCollector.eliminarSesion(session);
+            bitacoraService.registrarCerrarSesion(username);
+            response.sendRedirect("/");
+        }
     }
 }

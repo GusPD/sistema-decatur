@@ -4,6 +4,7 @@ import com.gl05.bad.domain.CuotaMantenimiento;
 import com.gl05.bad.domain.Pago;
 import com.gl05.bad.domain.Venta;
 
+import java.util.Date;
 import java.util.List;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
@@ -20,7 +21,7 @@ public interface CuotaMantenimientoService {
 
     public DataTablesOutput<CuotaMantenimiento> listarPago(DataTablesInput input, Long idPago);
 
-    public double montoAdelantado(Venta venta);
+    public double montoAdelantado(Boolean estado, Venta venta);
    
     public void agregar(CuotaMantenimiento cuotaMantenimiento);
         
@@ -33,6 +34,10 @@ public interface CuotaMantenimientoService {
     public CuotaMantenimiento encontrarPenultimaCuota(Venta venta);
 
     public List<CuotaMantenimiento> encontrarPago(Pago pago);
+
+    public List<CuotaMantenimiento> encontrarFechaCuotaVenta(Date fechaCuota, Venta venta);
+
+    public List<CuotaMantenimiento> encontrarMayoresFechaCuotaVenta(Date fechaCuota, Venta venta);
     
     public void actualizar(CuotaMantenimiento cuotaMantenimiento);
 }

@@ -20,6 +20,7 @@ import com.gl05.bad.servicio.ProyectoService;
 import com.gl05.bad.servicio.UserServiceImp;
 import com.gl05.bad.servicio.VentaService;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
@@ -27,8 +28,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.datatables.mapping.DataTablesInput;
 import org.springframework.data.jpa.datatables.mapping.DataTablesOutput;
@@ -85,6 +89,10 @@ public class PagoController {
         List<Venta> ventas = ventaService.encontrarActivas(newProyecto);
         String username = authentication.getName();
         Usuario usuario = usuarioService.encontrarUsername(username);
+        Set<Proyecto> listaProyectosAsignados = usuario.getProyectos();
+        if(!listaProyectosAsignados.contains(newProyecto)){
+            return "accesodenegado";
+        }
         model.addAttribute("usuario", usuario);
         model.addAttribute("ventas", ventas);
         model.addAttribute("cuentas", cuentas);
@@ -117,13 +125,13 @@ public class PagoController {
     }
     
     //Función para obtener las pagos del proyecto de la base de datos
-    @GetMapping("/pagos/data/{idProyecto}")
+    @GetMapping(value="/pagos/data/{idProyecto}", produces = "application/json; charset=UTF-8")
     @ResponseBody
     public DataTablesOutput<Pago> GetPagos(
         @Valid DataTablesInput input,  @PathVariable Long idProyecto, 
         @RequestParam("fecha_inicio") String fechaInicio, @RequestParam("fecha_fin") String fechaFin,
-        @RequestParam("comprobante") String comprobante, @RequestParam("estado") String estado,
-        @RequestParam("tipo_pago") Integer tipoPago, @RequestParam("lote") Long venta) throws ParseException {
+        @RequestParam("tipo") String tipo, @RequestParam("estado") String estado,
+        @RequestParam("cuenta") Integer cuenta, @RequestParam("comprobante") String comprobante) throws ParseException {
         Date fechaInicioDate = null;
         if(!fechaInicio.equals("")){
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -138,20 +146,22 @@ public class PagoController {
         if(!estado.equals("")){
             estadoBoolean = Boolean.valueOf(estado);
         }
-        Venta ventaObj = null;
-        if(venta > 0){
-            ventaObj = ventaService.encontrar(venta);
-        }
-        return pagoService.listarPagos(input, idProyecto, fechaInicioDate, fechaFinDate, comprobante, estadoBoolean, tipoPago, ventaObj);
+        return pagoService.listarPagos(input, idProyecto, fechaInicioDate, fechaFinDate, tipo, estadoBoolean, cuenta, comprobante);
     }
 
     //Función para ver el pago
     @GetMapping("/Recibo/{idPago}")
-    public String mostrarPago(Model model, @PathVariable("idPago") Long idPago) {
+    public String mostrarPago(Model model, @PathVariable("idPago") Long idPago, Authentication authentication) {
         model.addAttribute("pageTitle", "Recibo Pago");
         Pago newPago = pagoService.encontrar(idPago);
         Proyecto newProyecto = proyectoService.encontrar(newPago.getVenta().getTerreno().getProyecto().getIdProyecto());
         List<CuotaMantenimiento> listaCuotaMantenimientos = cuotaMantenimientoService.encontrarPago(newPago);
+        String username = authentication.getName();
+        Usuario usuario = usuarioService.encontrarUsername(username);
+        Set<Proyecto> listaProyectosAsignados = usuario.getProyectos();
+        if(!listaProyectosAsignados.contains(newProyecto)){
+            return "accesodenegado";
+        }
         model.addAttribute("listaCuotaMantenimientos", listaCuotaMantenimientos);
         model.addAttribute("pago", newPago);
         model.addAttribute("proyecto", newProyecto);
@@ -159,7 +169,7 @@ public class PagoController {
     }
 
     //Función para obtener el mantenimiento de la venta de la base de datos
-    @GetMapping("/cuotaMantenimientoPago/data/{idPago}")
+    @GetMapping(value="/cuotaMantenimientoPago/data/{idPago}", produces = "application/json; charset=UTF-8")
     @ResponseBody
     public DataTablesOutput<CuotaMantenimiento> GetMantenimientoVenta(@Valid DataTablesInput input,  @PathVariable Long idPago){
         return cuotaMantenimientoService.listarPago(input, idPago);
@@ -180,7 +190,9 @@ public class PagoController {
             }else if(pago.getTipo().equals("Mantenimiento")){
                 if(pagoService.encontrarRecibo("Mantenimiento", pago.getRecibo(), pago.getVenta().getTerreno().getProyecto(), pago.getComprobante())==null){
                     pagoService.agregar(pago);
-                    RegistroCuotaMantenimiento(pago);
+                    if(!pago.getComprobante().equals("Ticket")){
+                        RegistroCuotaMantenimiento(pago);
+                    }
                 }else{
                     String error = "Ocurrió un error al agregar el pago, el recibo ya se encuentra registrado.";
                     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
@@ -211,7 +223,7 @@ public class PagoController {
     }
 
     //Función para obtener un pago de la base de datos
-    @GetMapping("/ObtenerPago/{id}")
+    @GetMapping(value="/ObtenerPago/{id}", produces = "application/json; charset=UTF-8")
     public ResponseEntity<Pago> ObtenerPago(@PathVariable Long id) {
         Pago pago = pagoService.encontrar(id);
         if (pago != null) {
@@ -289,8 +301,40 @@ public class PagoController {
         }
     }
 
+    //Función para verificar si el pago no se encuentra con el comprobante duplicado
+    @GetMapping(value="/VerificarPago", produces = "application/json; charset=UTF-8")
+    public ResponseEntity<ObjectNode> VerificarPago(@RequestParam String tipo, @RequestParam String recibo, @RequestParam String idVenta, @RequestParam String comprobante, @RequestParam String idPago, HttpServletRequest request, RedirectAttributes redirectAttributes) {
+        Boolean valor = false;
+        Venta venta = ventaService.encontrar(Long.parseLong(idVenta));
+        if(idPago.isEmpty()){
+            if(tipo.equals("Prima")){
+                if(!(pagoService.encontrarRecibo("Financiamiento", Integer.parseInt(recibo), venta.getTerreno().getProyecto(), comprobante)==null)){
+                    valor = true;
+                }
+            }else if(tipo.equals("Mantenimiento")){
+                if(!(pagoService.encontrarRecibo("Mantenimiento", Integer.parseInt(recibo), venta.getTerreno().getProyecto(), comprobante)==null)){
+                    valor = true;
+                }
+            }
+        }else{
+            if(tipo.equals("Prima")){
+                if(!(pagoService.encontrarRecibo("Financiamiento", Integer.parseInt(recibo), venta.getTerreno().getProyecto(), comprobante)==null || pagoService.encontrarRecibo(tipo, Integer.parseInt(recibo), venta.getTerreno().getProyecto(), comprobante).getIdPago()==Long.parseLong(idPago))){
+                    valor = true;
+                }
+            }else if(tipo.equals("Mantenimiento")){
+                if(!(pagoService.encontrarRecibo("Mantenimiento", Integer.parseInt(recibo), venta.getTerreno().getProyecto(), comprobante)==null || pagoService.encontrarRecibo(tipo, Integer.parseInt(recibo), venta.getTerreno().getProyecto(), comprobante).getIdPago()==Long.parseLong(idPago))){
+                    valor = true;
+                }
+            }
+        }
+        ObjectMapper objectMapper = new ObjectMapper();
+        ObjectNode responseJson = objectMapper.createObjectNode();
+        responseJson.put("existe", valor);
+        return ResponseEntity.ok(responseJson);
+    }
+
     //Función para obtener el descuento disponible del pago
-    @GetMapping("/ObtenerDescuento/{id}")
+    @GetMapping(value="/ObtenerDescuento/{id}", produces = "application/json; charset=UTF-8")
     public ResponseEntity<ObjectNode> ObtenerDescuentoPago(@PathVariable Long id, @RequestParam double monto, @RequestParam double otros, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date fecha) throws ParseException {
         Venta venta = ventaService.encontrar(id);
         CuotaMantenimiento ultimaCuota = cuotaMantenimientoService.encontrarUltimaCuota(venta);
@@ -298,10 +342,65 @@ public class PagoController {
         Date fechaPago = fecha;
         Date fechaCorte = ultimaCuota.getFechaCuota();
         double descuentoCalculado = 0;
-        monto = monto - otros - ultimaCuota.getSaldoCuota() - ultimaCuota.getSaldoRecargo();
+
+        //Obtener el excedente o lo pendiente de acuerdo al ajuste de las cuotas
+        List<InformacionMantenimiento> listaInformacionMantenimiento = informacionMantenimientoService.encontrarVenta(venta);
+        //Definicion de variables a utilizar
+        Double excedenteCuotaAjuste = 0.0;
+        Double pendienteCuotaAjuste = 0.0;
+        Double excedenteRecargoAjuste = 0.0;
+        Double pendienteRecargoAjuste = 0.0;
+        Double valorCuotaEvaluada = 0.0;
+        Double valorRecargoEvaluado = 0.0;
+        Date fechaUltimaCuotaEvaluada = new Date();
+        Date fechaCuotaEvaluada = new Date();
+        Date fechaAnteriorEvaluada = null;
+        for (InformacionMantenimiento informacionEvaluada : listaInformacionMantenimiento) {
+            //Obtener la lista de cuotas para el periodo de aplicación de las cuotas de mantenimiento
+            List<CuotaMantenimiento> cuotasMantenimientoAjuste = cuotaMantenimientoService.encontrarMayoresFechaCuotaVenta(informacionEvaluada.getFechaAplicacion(), venta);                   
+            //Verificar si existen cuotas para la fecha de aplicación
+            if(!cuotasMantenimientoAjuste.isEmpty()){
+                //Obtener el rango de aplicación para la cuota
+                fechaUltimaCuotaEvaluada = cuotasMantenimientoAjuste.get(cuotasMantenimientoAjuste.size()-1).getFechaCuota();
+                fechaCuotaEvaluada = cuotasMantenimientoAjuste.get(0).getFechaCuota();
+                if(fechaAnteriorEvaluada != null){
+                    fechaUltimaCuotaEvaluada = fechaAnteriorEvaluada;
+                    Calendar calendarFechaAnteriorEvaluada = Calendar.getInstance();
+                    calendarFechaAnteriorEvaluada.setTime(fechaUltimaCuotaEvaluada);
+                    calendarFechaAnteriorEvaluada.add(Calendar.DAY_OF_MONTH, -1);
+                    fechaUltimaCuotaEvaluada = calendarFechaAnteriorEvaluada.getTime();
+                }
+                //Obtener el excedente o lo pendiente para cada cuota aplicada
+                while (fechaCuotaEvaluada.before(fechaUltimaCuotaEvaluada) || fechaCuotaEvaluada.equals(fechaUltimaCuotaEvaluada)) {
+                    List<CuotaMantenimiento> listaCuotasMes = cuotaMantenimientoService.encontrarFechaCuotaVenta(fechaCuotaEvaluada, venta);
+                    for (CuotaMantenimiento cuotaMesEvaluada : listaCuotasMes) {
+                        valorCuotaEvaluada += cuotaMesEvaluada.getCuota();
+                        valorRecargoEvaluado += cuotaMesEvaluada.getRecargo();
+                    }
+                    if(valorCuotaEvaluada>informacionEvaluada.getCuota() && valorCuotaEvaluada>0){
+                        excedenteCuotaAjuste += valorCuotaEvaluada-informacionEvaluada.getCuota();
+                    }else if(valorCuotaEvaluada<informacionEvaluada.getCuota() && valorCuotaEvaluada>0){
+                        pendienteCuotaAjuste += informacionEvaluada.getCuota()-valorCuotaEvaluada;
+                    }
+                    if(valorRecargoEvaluado>informacionEvaluada.getMulta() && valorRecargoEvaluado>0){
+                        excedenteRecargoAjuste += valorRecargoEvaluado-informacionEvaluada.getMulta();
+                    }else if(valorRecargoEvaluado<informacionEvaluada.getMulta() && valorRecargoEvaluado>0){
+                        pendienteRecargoAjuste += informacionEvaluada.getMulta()-valorRecargoEvaluado;
+                    }
+                    valorCuotaEvaluada = 0.0;
+                    valorRecargoEvaluado = 0.0;
+                    fechaCuotaEvaluada = SiguienteMes(fechaCuotaEvaluada, venta, 1);
+                }
+            }
+            //Actualizar rango para la fecha de aplicación de las cuotas de mantenimiento
+            fechaAnteriorEvaluada = informacionEvaluada.getFechaAplicacion();
+        }
+
+        double montoAjuste = excedenteCuotaAjuste + excedenteRecargoAjuste - pendienteCuotaAjuste - pendienteRecargoAjuste;
+        monto = monto - otros - montoAjuste;
         //Se utiliza la misma logica para registrar la cuota de mantenimiento
         //Control del cobro del recargo para el abono para las cuotas con mora o sin mora
-        boolean cobroRecargo = true;
+        boolean cobroRecargo = false;
         //Registro de las cuotas
         if(monto >= informacionCuota.getCuota()){
             while (monto >= informacionCuota.getCuota()){
@@ -325,7 +424,7 @@ public class PagoController {
         //Registro de abono a cuota en caso de que exista
         if(monto>0){
             informacionCuota = InformacionCuotaMantenimiento(venta, fechaCorte);
-            if(cobroRecargo){
+            if(cobroRecargo && fechaCorte.before(fechaPago)){
                 if(monto>=informacionCuota.getMulta()){
                     descuentoCalculado+=informacionCuota.getMulta();
                     monto-=informacionCuota.getMulta();
@@ -452,6 +551,117 @@ public class PagoController {
                         }
                     }
                 }
+            }
+        }
+
+        //Ajuste de cuotas en caso de que existan abonos adelantados en un cambio de fecha aplicación
+        if(monto>0){
+            List<InformacionMantenimiento> listaInformacionMantenimiento = informacionMantenimientoService.encontrarVenta(venta);
+            //Definicion de variables a utilizar
+            Double valorSumaAjusteAnterior = 0.0;
+            Double excedenteAjuste = 0.0;
+            Double pendienteAjuste = 0.0;
+            Double valorCuotaEvaluada = 0.0;
+            Date fechaUltimaCuotaEvaluada = new Date();
+            Date fechaCuotaEvaluada = new Date();
+            Date fechaAnteriorEvaluada = null;
+            Date fechaInicioAjuste = new Date();
+            Date fechaInicioAjusteAuxiliar = new Date();
+            Date fechaFinalAjuste = null;
+            Date fechaFinalAjusteAuxiliar = new Date();
+            for (InformacionMantenimiento informacionEvaluada : listaInformacionMantenimiento) {
+                //Obtener la lista de cuotas para el periodo de aplicación de las cuotas de mantenimiento
+                List<CuotaMantenimiento> cuotasMantenimientoAjuste = cuotaMantenimientoService.encontrarMayoresFechaCuotaVenta(informacionEvaluada.getFechaAplicacion(), venta);                   
+                //Verificar si existen cuotas para la fecha de aplicación
+                if(!cuotasMantenimientoAjuste.isEmpty()){
+                    //Obtener el rango de aplicación para la cuota
+                    fechaUltimaCuotaEvaluada = cuotasMantenimientoAjuste.get(cuotasMantenimientoAjuste.size()-1).getFechaCuota();
+                    fechaCuotaEvaluada = cuotasMantenimientoAjuste.get(0).getFechaCuota();
+                    if(fechaAnteriorEvaluada != null){
+                        fechaUltimaCuotaEvaluada = fechaAnteriorEvaluada;
+                        Calendar calendarFechaAnteriorEvaluada = Calendar.getInstance();
+                        calendarFechaAnteriorEvaluada.setTime(fechaUltimaCuotaEvaluada);
+                        calendarFechaAnteriorEvaluada.add(Calendar.DAY_OF_MONTH, -1);
+                        fechaUltimaCuotaEvaluada = calendarFechaAnteriorEvaluada.getTime();
+                    }
+                    //Obtener la ultima fecha del ajuste
+                    if(fechaFinalAjuste == null){
+                        fechaFinalAjusteAuxiliar = fechaUltimaCuotaEvaluada;
+                    }
+                    //Obtener la primera fecha del ajuste con una variable auxiliar, para verificar posteriormente si existe ajuste. 
+                    fechaInicioAjusteAuxiliar = fechaCuotaEvaluada;
+                    //Obtener el excedente o lo pendiente para cada cuota aplicada
+                    while (fechaCuotaEvaluada.before(fechaUltimaCuotaEvaluada) || fechaCuotaEvaluada.equals(fechaUltimaCuotaEvaluada)) {
+                        List<CuotaMantenimiento> listaCuotasMes = cuotaMantenimientoService.encontrarFechaCuotaVenta(fechaCuotaEvaluada, venta);
+                        for (CuotaMantenimiento cuotaMesEvaluada : listaCuotasMes) {
+                            valorCuotaEvaluada += cuotaMesEvaluada.getCuota();
+                        }
+                        if(valorCuotaEvaluada>informacionEvaluada.getCuota() && valorCuotaEvaluada>0.0){
+                            excedenteAjuste += valorCuotaEvaluada-informacionEvaluada.getCuota();
+                        }else if(valorCuotaEvaluada<informacionEvaluada.getCuota() && valorCuotaEvaluada>0.0){
+                            pendienteAjuste += informacionEvaluada.getCuota()-valorCuotaEvaluada;
+                        }
+                        valorCuotaEvaluada = 0.0;
+                        fechaCuotaEvaluada = SiguienteMes(fechaCuotaEvaluada, venta, 1);
+                    }
+                    //Obtener la primera fecha del ajuste
+                    if((excedenteAjuste+pendienteAjuste)>valorSumaAjusteAnterior){
+                        fechaInicioAjuste = fechaInicioAjusteAuxiliar;
+                        fechaFinalAjuste = fechaFinalAjusteAuxiliar;
+                    }
+                    valorSumaAjusteAnterior = excedenteAjuste + pendienteAjuste;
+                }
+                //Actualizar rango para la fecha de aplicación de las cuotas de mantenimiento
+                fechaAnteriorEvaluada = informacionEvaluada.getFechaAplicacion();
+            }
+            //Realizar el ajuste de las cuotas
+            SimpleDateFormat sdf = new SimpleDateFormat("MMM/yy");
+            DecimalFormat formato = new DecimalFormat("#,##0.00");
+            String observacionesAjuste = "";
+            if((pendienteAjuste+excedenteAjuste)>0){
+                observacionesAjuste = "Ajuste de cuotas de " + capitalize(sdf.format(fechaInicioAjuste)) + " a " + capitalize(sdf.format(fechaFinalAjuste));
+            }
+            if(pendienteAjuste>0){
+                if(monto>=pendienteAjuste){
+                    CuotaMantenimiento cuota = new CuotaMantenimiento();
+                    cuota.setFechaRegistro(LocalDateTime.now());
+                    cuota.setRecargo(0.0);
+                    cuota.setDescuento(0.0);
+                    cuota.setSaldoRecargo(0.0);
+                    cuota.setFechaCuota(fechaFinalAjuste);
+                    cuota.setCuota(pendienteAjuste);
+                    cuota.setSaldoCuota(0.0);
+                    cuota.setPago(pago);
+                    cuotaMantenimientoService.agregar(cuota);
+                    monto-=pendienteAjuste;
+                    //Actualizar la información del pago
+                    observacionesAjuste +=".\nCon un monto pendiente de $ " + formato.format(pendienteAjuste);
+                }else{
+                    CuotaMantenimiento cuota = new CuotaMantenimiento();
+                    cuota.setFechaRegistro(LocalDateTime.now());
+                    cuota.setRecargo(0.0);
+                    cuota.setDescuento(0.0);
+                    cuota.setSaldoRecargo(0.0);
+                    cuota.setFechaCuota(fechaFinalAjuste);
+                    cuota.setCuota(monto);
+                    cuota.setSaldoCuota(pendienteAjuste-monto);
+                    cuota.setPago(pago);
+                    cuotaMantenimientoService.agregar(cuota);
+                    monto-=monto;
+                    //Actualizar la información del pago
+                    observacionesAjuste +=".\nCon un monto pendiente de $ " + formato.format(pendienteAjuste);
+                }
+            }
+            if(excedenteAjuste>0){
+                monto += excedenteAjuste;
+                //Actualizar la información del pago
+                observacionesAjuste +=".\nCon un monto excedente de $ " + formato.format(excedenteAjuste);
+            }
+            if((excedenteAjuste+pendienteAjuste)>0){
+                //Actualizar la información del pago
+                observacionesAjuste +=".\n" + pago.getObservaciones();
+                pago.setObservaciones(observacionesAjuste);
+                pagoService.actualizar(pago);
             }
         }
         
@@ -645,5 +855,12 @@ public class PagoController {
         }
 
         return calCorte.getTime();
+    }
+
+    private static String capitalize(String input) {
+        if (input == null || input.isEmpty()) {
+            return input;
+        }
+        return Character.toUpperCase(input.charAt(0)) + input.substring(1);
     }
 }

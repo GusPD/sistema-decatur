@@ -65,7 +65,7 @@ public class ProyectoServiceImp implements ProyectoService{
         String username = authentication.getName();
         Usuario usuarioActual = usuarioDao.findByUsername(username);
         Specification<Proyecto> specification = (root, query, builder) -> {
-            Join<Proyecto, Usuario> proyectoUsuarioJoin = root.join("users"); // Usar el nombre del atributo en la entidad Proyecto
+            Join<Proyecto, Usuario> proyectoUsuarioJoin = root.join("usuariosProyecto");
             return builder.equal(proyectoUsuarioJoin.get("idUsuario"), usuarioActual.getIdUsuario());
         };
         return (DataTablesOutput<Proyecto>) proyectoDao.findAll(input,specification);

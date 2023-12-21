@@ -97,7 +97,7 @@ public class PropietarioController {
     }
     
     //Función que obtiene los propietarios de la base de datos
-    @GetMapping("/propietarios/data")
+    @GetMapping(value="/propietarios/data", produces = "application/json; charset=UTF-8")
     @ResponseBody
     public DataTablesOutput<Propietario> GetPropietarios(@Valid DataTablesInput input) {
         return propietarioService.listarPropietarios(input);
@@ -105,15 +105,21 @@ public class PropietarioController {
     
     //Función que redirigir a la vista de los propietarios del proyecto
     @GetMapping("/Propietarios/{idProyecto}")
-    public String mostrarPropietariosProyecto(Model model, Proyecto proyecto) {
+    public String mostrarPropietariosProyecto(Model model, Proyecto proyecto, Authentication authentication) {
         model.addAttribute("pageTitle", "Propietarios Proyecto");
         Proyecto proyectoEncontrado = proyectoService.encontrar(proyecto.getIdProyecto());
+        String username = authentication.getName();
+        Usuario usuario = usuarioService.encontrarUsername(username);
+        Set<Proyecto> listaProyectosAsignados = usuario.getProyectos();
+        if(!listaProyectosAsignados.contains(proyectoEncontrado)){
+            return "accesodenegado";
+        }
         model.addAttribute("proyecto", proyectoEncontrado);
         return "/Proyecto/PropietariosProyecto";
     }
     
     //Función que obtiene los propietarios del proyecto
-    @GetMapping("/propietariosProyecto/data/{idProyecto}")
+    @GetMapping(value="/propietariosProyecto/data/{idProyecto}", produces = "application/json; charset=UTF-8")
     @ResponseBody
     public DataTablesOutput<VistaPropietariosProyecto> GetPropietariosProyecto(@Valid DataTablesInput input, @PathVariable Long idProyecto) {
         return vistaPropietariosService.listarPropietarios(input, idProyecto);
@@ -128,9 +134,8 @@ public class PropietarioController {
         Proyecto newProyecto = proyectoService.encontrar(proyecto.getIdProyecto());
         String username = authentication.getName();
         Usuario usuario = usuarioService.encontrarUsername(username);
-        System.out.println("Nuevo proyecto: " + newProyecto);
         Set<Proyecto> proyectosPropietario =  usuario.getProyectos();
-        if (!proyectosPropietario.contains(newProyecto) && newProyecto!=null) {
+        if (!proyectosPropietario.contains(newProyecto) && proyecto.getIdProyecto()>0) {
             return "accesodenegado";
         }
         List<TipoDocumento> listaTipoDocumentos = tipoDocumentoService.listaTipoDocumentos();
@@ -142,7 +147,7 @@ public class PropietarioController {
     }
     
     //Función que obtiene los correos del propietario
-    @GetMapping("/correoPropietario/data/{idPropietario}")
+    @GetMapping(value="/correoPropietario/data/{idPropietario}", produces = "application/json; charset=UTF-8")
     @ResponseBody
     public DataTablesOutput<Correo> GetCorreos(@Valid DataTablesInput input, @PathVariable Long idPropietario) {
         return correoService.listarCorreos(input, idPropietario);
@@ -158,9 +163,8 @@ public class PropietarioController {
         Proyecto newProyecto = proyectoService.encontrar(proyecto.getIdProyecto());
         String username = authentication.getName();
         Usuario usuario = usuarioService.encontrarUsername(username);
-        System.out.println("Nuevo proyecto: " + newProyecto);
         Set<Proyecto> proyectosPropietario =  usuario.getProyectos();
-        if (!proyectosPropietario.contains(newProyecto) && newProyecto!=null) {
+        if (!proyectosPropietario.contains(newProyecto) && proyecto.getIdProyecto()>0) {
             return "accesodenegado";
         }
         model.addAttribute("proyecto", newProyecto);
@@ -212,7 +216,7 @@ public class PropietarioController {
     }
     
     //Función que obtiene los telefonos del propietario
-    @GetMapping("/telefonoPropietario/data/{idPropietario}")
+    @GetMapping(value="/telefonoPropietario/data/{idPropietario}", produces = "application/json; charset=UTF-8")
     @ResponseBody
     public DataTablesOutput<Telefono> GetTelefonos(@Valid DataTablesInput input, @PathVariable Long idPropietario) {
         return telefonoService.listarTelefonos(input, idPropietario);
@@ -228,9 +232,8 @@ public class PropietarioController {
         Proyecto newProyecto = proyectoService.encontrar(proyecto.getIdProyecto());
         String username = authentication.getName();
         Usuario usuario = usuarioService.encontrarUsername(username);
-        System.out.println("Nuevo proyecto: " + newProyecto);
         Set<Proyecto> proyectosPropietario =  usuario.getProyectos();
-        if (!proyectosPropietario.contains(newProyecto) && newProyecto!=null) {
+        if (!proyectosPropietario.contains(newProyecto) && proyecto.getIdProyecto()>0) {
             return "accesodenegado";
         }
         model.addAttribute("proyecto", newProyecto);
@@ -281,7 +284,7 @@ public class PropietarioController {
     }
     
     //Función que obtiene las referencias del propietario
-    @GetMapping("/referenciaPropietario/data/{idPropietario}")
+    @GetMapping(value="/referenciaPropietario/data/{idPropietario}", produces = "application/json; charset=UTF-8")
     @ResponseBody
     public DataTablesOutput<Referencia> GetReferencias(@Valid DataTablesInput input, @PathVariable Long idPropietario) {
         return referenciaService.listarReferencias(input, idPropietario);
@@ -296,9 +299,8 @@ public class PropietarioController {
         Proyecto newProyecto = proyectoService.encontrar(proyecto.getIdProyecto());
         String username = authentication.getName();
         Usuario usuario = usuarioService.encontrarUsername(username);
-        System.out.println("Nuevo proyecto: " + newProyecto);
         Set<Proyecto> proyectosPropietario =  usuario.getProyectos();
-        if (!proyectosPropietario.contains(newProyecto) && newProyecto!=null) {
+        if (!proyectosPropietario.contains(newProyecto) && proyecto.getIdProyecto()>0) {
             return "accesodenegado";
         }
         model.addAttribute("proyecto", newProyecto);
@@ -347,7 +349,7 @@ public class PropietarioController {
     }
     
     //Función que obtiene los documentos del propietario
-    @GetMapping("/documentoPropietario/data/{idDocumento}")
+    @GetMapping(value="/documentoPropietario/data/{idDocumento}", produces = "application/json; charset=UTF-8")
     @ResponseBody
     public DataTablesOutput<Documento> GetDocumentos(@Valid DataTablesInput input, @PathVariable Integer idDocumento) {
         return documentoService.listarDocumentos(input, idDocumento);
@@ -362,9 +364,8 @@ public class PropietarioController {
         Proyecto newProyecto = proyectoService.encontrar(proyecto.getIdProyecto());
         String username = authentication.getName();
         Usuario usuario = usuarioService.encontrarUsername(username);
-        System.out.println("Nuevo proyecto: " + newProyecto);
         Set<Proyecto> proyectosPropietario =  usuario.getProyectos();
-        if (!proyectosPropietario.contains(newProyecto) && newProyecto!=null) {
+        if (!proyectosPropietario.contains(newProyecto) && proyecto.getIdProyecto()>0) {
             return "accesodenegado";
         }
         model.addAttribute("proyecto", newProyecto);
@@ -429,9 +430,9 @@ public class PropietarioController {
         bitacoraService.registrarAccion("Ver documento propietario");
         return new ResponseEntity <>(pdfBytes, headers, HttpStatus.OK);
     }
-    
+
     //Función que obtiene los terrenos del propietario
-    @GetMapping("/terrenosPropietario/data/{idPropietario}")
+    @GetMapping(value="/terrenosPropietario/data/{idPropietario}", produces = "application/json; charset=UTF-8")
     @ResponseBody
     public DataTablesOutput<AsignacionPropietario> GetTerrenos(@Valid DataTablesInput input, @PathVariable Long idPropietario) {
         return asigPropietarioService.listarTerrenosPropietario(input, idPropietario);
@@ -446,9 +447,8 @@ public class PropietarioController {
         Proyecto newProyecto = proyectoService.encontrar(proyecto.getIdProyecto());
         String username = authentication.getName();
         Usuario usuario = usuarioService.encontrarUsername(username);
-        System.out.println("Nuevo proyecto: " + newProyecto);
         Set<Proyecto> proyectosPropietario =  usuario.getProyectos();
-        if (!proyectosPropietario.contains(newProyecto) && newProyecto!=null) {
+        if (!proyectosPropietario.contains(newProyecto) && proyecto.getIdProyecto()>0) {
             return "accesodenegado";
         }
         model.addAttribute("proyecto", newProyecto);
@@ -496,7 +496,7 @@ public class PropietarioController {
     }
 
     //Función que obtiene un propietario de la base de datos
-    @GetMapping("/ObtenerPropietario/{id}")
+    @GetMapping(value="/ObtenerPropietario/{id}", produces = "application/json; charset=UTF-8")
     public ResponseEntity<Object> ObtenerPropietario(@PathVariable Long id) {
         Persona persona = personaService.encontrar(id);
         Propietario propietario = propietarioService.encontrarPersona(persona);
@@ -511,7 +511,7 @@ public class PropietarioController {
     }
     
     //Función que obtiene un propietario del proyecto
-    @GetMapping("/ObtenerPropietarioProyecto/{id}")
+    @GetMapping(value="/ObtenerPropietarioProyecto/{id}", produces = "application/json; charset=UTF-8")
     public ResponseEntity<Object> ObtenerPropietarioProyecto(@PathVariable Long id) {
         AsignacionPropietario asignacion = asigPropietarioService.encontrar(id);
         if (asignacion != null) {

@@ -46,7 +46,7 @@ public class Proyecto implements Serializable {
     
     @ManyToMany(mappedBy = "proyectos")
     @JsonIgnore
-    private Collection<Usuario> users;
+    private Collection<Usuario> usuariosProyecto;
 
     @Override
     public int hashCode() {

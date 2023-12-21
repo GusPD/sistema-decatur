@@ -69,9 +69,7 @@ $(document).ready(function() {
                 "sSortDescending": ": Activar para ordenar la columna de manera descendente"
             }
         },
-        search: {
-            return: true
-        }
+        search: true
     });
     //Formulario de agregar
     $.validator.addMethod(
@@ -88,7 +86,7 @@ $(document).ready(function() {
         "Ingrese un número válido para el tipo de documento"
     );
     var formGuardar = $('#formGuardarTrabajador');
-    var validator = $('#formGuardarTrabajador').validate({
+    var validatorAgregar = $('#formGuardarTrabajador').validate({
         rules: {
             tipoDocumento: {
                 required: true,
@@ -182,8 +180,8 @@ $(document).ready(function() {
             });
         }
     });
-    var formSeleccionarGuardar = $('#formSeleccionarTrabajador');
-    var validator = $('#formSeleccionarTrabajador').validate({
+    var formSeleccionar = $('#formSeleccionarTrabajador');
+    var validatorSeleccionar = $('#formSeleccionarTrabajador').validate({
         rules: {
            trabajadores:{
                required: true
@@ -220,7 +218,7 @@ $(document).ready(function() {
         errorClass: 'invalid-feedback',
         submitHandler: function(form) {
             event.preventDefault();
-            var formDataArray = formSeleccionarGuardar.serializeArray();
+            var formDataArray = formSeleccionar.serializeArray();
             var idVenta = $('#idVenta').val();
             var url = '/SeleccionarTrabajadoresVenta';
             formDataArray.push({name: 'idVenta', value: idVenta});
@@ -258,13 +256,19 @@ $(document).ready(function() {
             });
         }
     });
-    // Método para mostrar el modal de eliminación
-    $(document).on('click', '.eliminarModalTrabajador-btn', function () {
-        var idPersona = $(this).data('id');
-        var modal = $('#confirmarEliminarModalTrabajador');
-        var eliminarBtn = modal.find('#eliminarTrabajadorBtn');
-        eliminarBtn.data('id', idPersona);
-        modal.modal('show');
+    // Método para mostrar el modal agregar trabajador
+    $(document).on('click', '#AgregarTrabajador', function () {
+        validatorAgregar.resetForm();
+        formGuardar.find('.is-invalid').removeClass('is-invalid');
+        form.attr('action', '/AgregarTrabajadorVenta');
+        $('.form-control').val('');
+    });
+    // Método para mostrar el modal seleccionar trabajador
+    $(document).on('click', '#SeleccionarTrabajador', function () {
+        validatorSeleccionar.resetForm();
+        formSeleccionar.find('.is-invalid').removeClass('is-invalid');
+        $('.form-control').val('');
+        $("#span-trabajadores-error").addClass('d-none');
     });
     //Método para enviar la solicitud de eliminar
     $(document).on('click', '#eliminarTrabajadorBtn', function () {

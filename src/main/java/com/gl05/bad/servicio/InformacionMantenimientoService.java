@@ -3,6 +3,8 @@ package com.gl05.bad.servicio;
 import com.gl05.bad.domain.InformacionMantenimiento;
 import com.gl05.bad.domain.Proyecto;
 import com.gl05.bad.domain.Venta;
+
+import java.util.Date;
 import java.util.List;
 
 public interface InformacionMantenimientoService {
@@ -18,6 +20,8 @@ public interface InformacionMantenimientoService {
     public InformacionMantenimiento encontrar(Long idInformacionMantenimiento);
     
     public List<InformacionMantenimiento> encontrarVenta(Venta venta);
+
+    public List<InformacionMantenimiento> encontrarFechaAplicacion(Date fechaAplicacion);
     
     public void actualizar(InformacionMantenimiento informacionMantenimiento);
 }

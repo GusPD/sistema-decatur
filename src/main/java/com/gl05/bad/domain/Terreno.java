@@ -65,7 +65,6 @@ public class Terreno implements Serializable {
     @JsonBackReference
     private Collection<Venta> ventas;
 
-
     @Override
     public int hashCode() {
         int hash = 0;

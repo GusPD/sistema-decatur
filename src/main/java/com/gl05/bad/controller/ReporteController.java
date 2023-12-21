@@ -1,13 +1,15 @@
 package com.gl05.bad.controller;
 
-import java.text.DateFormatSymbols;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,23 +17,34 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import com.gl05.bad.domain.AsignacionPropietario;
 import com.gl05.bad.domain.CuotaMantenimiento;
+import com.gl05.bad.domain.Facturacion;
 import com.gl05.bad.domain.InformacionMantenimiento;
 import com.gl05.bad.domain.Pago;
+import com.gl05.bad.domain.Proyecto;
+import com.gl05.bad.domain.Usuario;
 import com.gl05.bad.domain.Venta;
 import com.gl05.bad.servicio.AsignacionPropietarioService;
 import com.gl05.bad.servicio.CuotaMantenimientoService;
+import com.gl05.bad.servicio.FacturacionService;
 import com.gl05.bad.servicio.InformacionMantenimientoService;
 import com.gl05.bad.servicio.PagoService;
+import com.gl05.bad.servicio.UserService;
 import com.gl05.bad.servicio.VentaService;
 
 @Controller
 public class ReporteController {
 
     @Autowired
+    private UserService usuarioService;
+
+    @Autowired
     private CuotaMantenimientoService cuotaMantenimientoService;
 
     @Autowired
     private InformacionMantenimientoService informacionMantenimientoService;
+
+    @Autowired
+    private FacturacionService facturacionService;
 
     @Autowired
     private VentaService ventaService;
@@ -43,10 +56,16 @@ public class ReporteController {
     private PagoService pagoService;
 
     @GetMapping("/EstadoCuentaMantenimiento/{idVenta}")
-    public  String EstadoCuentaMantenimiento(@PathVariable Long idVenta, Model model) {
+    public  String EstadoCuentaMantenimiento(@PathVariable Long idVenta, Model model, Authentication authentication) {
         Venta venta = ventaService.encontrar(idVenta);
         List<CuotaMantenimiento> cuotas = cuotaMantenimientoService.listaCuotaMantenimientos(venta);
         List<AsignacionPropietario> listaPropietarios = asignacionPropietarioService.listaAsignacion(venta);
+        String username = authentication.getName();
+        Usuario usuario = usuarioService.encontrarUsername(username);
+        Set<Proyecto> listaProyectosAsignados = usuario.getProyectos();
+        if(!listaProyectosAsignados.contains(venta.getTerreno().getProyecto())){
+            return "accesodenegado";
+        }
         model.addAttribute("cuotas", cuotas);
         model.addAttribute("venta", venta);
         model.addAttribute("propietarios", listaPropietarios);
@@ -54,7 +73,10 @@ public class ReporteController {
     }
 
     @GetMapping("/ComprobantePago/{idPago}")
-    public  String ReciboMantenimiento(@PathVariable Long idPago, Model model) {
+    public  String ReciboMantenimiento(@PathVariable Long idPago, Model model, Authentication authentication) {
+        String username = authentication.getName();
+        Usuario usuario = usuarioService.encontrarUsername(username);
+        Set<Proyecto> listaProyectosAsignados = usuario.getProyectos();
         String propietario = "";
         String cuota = "";
         String recargo = "";
@@ -64,11 +86,26 @@ public class ReporteController {
         double montoRecargo=0.0;
         double montoPendiente=0.0;
         Pago pago = pagoService.encontrar(idPago);
-        List<CuotaMantenimiento> listaCuotaMantenimientos = cuotaMantenimientoService.encontrarPago(pago);
+        if(!listaProyectosAsignados.contains(pago.getVenta().getTerreno().getProyecto())){
+            return "accesodenegado";
+        }
+        List<CuotaMantenimiento> listaCuotas = cuotaMantenimientoService.encontrarPago(pago);
+        List<CuotaMantenimiento> listaCuotaMantenimientos = new ArrayList<>();
+        List<CuotaMantenimiento> listaCuotaRecargos = new ArrayList<>();
         Venta venta = ventaService.encontrar(pago.getVenta().getIdVenta());
         List<AsignacionPropietario> listaPropietarios = asignacionPropietarioService.listaAsignacionPropietarioSeleccionado(venta);
+        Facturacion facturacion = facturacionService.encontrarVenta(venta);
         SimpleDateFormat sdf = new SimpleDateFormat("MMM/yy");
         DecimalFormat formato = new DecimalFormat("#,##0.00");
+        //Obtener la lista de cuotas de mantenimiento y recargo
+        for (CuotaMantenimiento cuotaEvaluada : listaCuotas) {
+            if(cuotaEvaluada.getCuota()>0){
+                listaCuotaMantenimientos.add(cuotaEvaluada);
+            }
+            if(cuotaEvaluada.getRecargo()>0){
+                listaCuotaRecargos.add(cuotaEvaluada);
+            }
+        }
         //Obtener el nombre del propietario
         if(!listaPropietarios.isEmpty()){
             AsignacionPropietario asignacionPropietario = listaPropietarios.get(0);
@@ -164,8 +201,8 @@ public class ReporteController {
             primeraPosicion = false;
             segundaPosicion = false;
             cuotaMantenimientoAnterior = new CuotaMantenimiento();
-            if(!listaCuotaMantenimientos.isEmpty()){
-                for (CuotaMantenimiento cuotaMantenimiento : listaCuotaMantenimientos) {
+            if(!listaCuotaRecargos.isEmpty()){
+                for (CuotaMantenimiento cuotaMantenimiento : listaCuotaRecargos) {
                     if(cuotaMantenimiento.getRecargo()>0){
                         InformacionMantenimiento informacionCuota = InformacionCuotaMantenimiento(venta, cuotaMantenimiento.getFechaCuota());
                         //Solo existe una cuota registrada
@@ -182,7 +219,7 @@ public class ReporteController {
                             }
                         }
                         //Solo existe dos cuotas registradas
-                        if(listaCuotaMantenimientos.size()==2 && variableControl==1){
+                        if(listaCuotaRecargos.size()==2 && variableControl==1){
                             if(cuotaMantenimiento.getRecargo()<informacionCuota.getMulta() && cuotaMantenimiento.getSaldoRecargo()>0){
                                 recargo += ", Ab. " + capitalize(sdf.format(cuotaMantenimiento.getFechaCuota()));
                             }else{
@@ -194,8 +231,8 @@ public class ReporteController {
                             }
                         }
                         //Solo existe 3 cuotas registradas
-                        if(listaCuotaMantenimientos.size()>=3 && variableControl==1){
-                            if(listaCuotaMantenimientos.size()==3){
+                        if(listaCuotaRecargos.size()>=3 && variableControl==1){
+                            if(listaCuotaRecargos.size()==3){
                                 if(primeraPosicion){
                                     recargo += " a " + capitalize(sdf.format(cuotaMantenimiento.getFechaCuota()));
                                 }else if(segundaPosicion){
@@ -207,7 +244,7 @@ public class ReporteController {
                                 }                        
                             }
                         }
-                        if(listaCuotaMantenimientos.size()==3 && variableControl==2){
+                        if(listaCuotaRecargos.size()==3 && variableControl==2){
                             if(cuotaMantenimiento.getRecargo()<informacionCuota.getMulta() && cuotaMantenimiento.getSaldoRecargo()>0){
                                 recargo += ", Ab. " + capitalize(sdf.format(cuotaMantenimiento.getFechaCuota()));
                             }else{
@@ -215,7 +252,7 @@ public class ReporteController {
                             }
                         }
                         //Solo existen mas de 4 cuotas registradas
-                        if(listaCuotaMantenimientos.size()>=4 && variableControl==(listaCuotaMantenimientos.size()-1)){
+                        if(listaCuotaRecargos.size()>=4 && variableControl==(listaCuotaRecargos.size()-1)){
                             if(cuotaMantenimiento.getRecargo()<informacionCuota.getMulta() && cuotaMantenimiento.getSaldoRecargo()>0){
                                 recargo += " a " + capitalize(sdf.format(cuotaMantenimiento.getFechaCuota()));
                                 recargo += ", Ab. " + capitalize(sdf.format(cuotaMantenimiento.getFechaCuota()));
@@ -229,6 +266,7 @@ public class ReporteController {
                 }
             }
         }
+        model.addAttribute("usuario", usuario);
         model.addAttribute("montoMantenimiento", montoMantenimiento);
         model.addAttribute("montoRecargo", montoRecargo);
         model.addAttribute("pendiente", pendiente);
@@ -239,11 +277,14 @@ public class ReporteController {
         model.addAttribute("recargo", recargo);
         model.addAttribute("cuotas", listaCuotaMantenimientos);
         model.addAttribute("venta", venta);
+        model.addAttribute("facturacion", facturacion);
         model.addAttribute("estado", estado);
         model.addAttribute("propietario", propietario);
         model.addAttribute("propietarios", listaPropietarios);
-        if(pago.getComprobante().equals("Factura")){
+        if(pago.getComprobante().equals("Recibo") && pago.getTipo().equals("Mantenimiento")){
             return "Reportes/ReciboMantenimiento";
+        }else  if(pago.getComprobante().equals("Factura") && pago.getTipo().equals("Mantenimiento")){
+            return "Reportes/FacturaMantenimiento";
         }else{
             return "Reportes/CreditoFiscalMantenimiento";
         }
@@ -269,6 +310,7 @@ public class ReporteController {
         return informacionCuota;
     }
 
+    //Función que convierte el texto con la primera letra en mayuscula
     private static String capitalize(String input) {
         if (input == null || input.isEmpty()) {
             return input;

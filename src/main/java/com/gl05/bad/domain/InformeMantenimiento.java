@@ -32,7 +32,8 @@ import org.springframework.format.annotation.DateTimeFormat;
     @NamedQuery(name = "InformeMantenimiento.findByLote", query = "SELECT i FROM InformeMantenimiento i WHERE i.lote = :lote"),
     @NamedQuery(name = "InformeMantenimiento.findByEstado", query = "SELECT i FROM InformeMantenimiento i WHERE i.estado = :estado"),
     @NamedQuery(name = "InformeMantenimiento.findByCuota", query = "SELECT i FROM InformeMantenimiento i WHERE i.cuota = :cuota"),
-    @NamedQuery(name = "InformeMantenimiento.findByMulta", query = "SELECT i FROM InformeMantenimiento i WHERE i.multa = :multa")})
+    @NamedQuery(name = "InformeMantenimiento.findByMulta", query = "SELECT i FROM InformeMantenimiento i WHERE i.multa = :multa"),
+    @NamedQuery(name = "InformeMantenimiento.findByAjuste", query = "SELECT i FROM InformeMantenimiento i WHERE i.ajuste = :ajuste")})
 public class InformeMantenimiento implements Serializable {
 
     @Id
@@ -57,6 +58,8 @@ public class InformeMantenimiento implements Serializable {
     private double cuota;
     @Column(name = "MONTO_MULTA")
     private double multa;
+    @Column(name = "MONTO_AJUSTE")
+    private double ajuste;
     @ManyToOne
     @JoinColumn(name = "ID_VENTA", referencedColumnName = "ID_VENTA")
     private Venta venta;

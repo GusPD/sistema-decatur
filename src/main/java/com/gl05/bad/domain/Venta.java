@@ -34,10 +34,12 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
     @NamedQuery(name = "Venta.findByIdVenta", query = "SELECT v FROM Venta v WHERE v.idVenta = :idVenta"),
     @NamedQuery(name = "Venta.findByNombre", query = "SELECT v FROM Venta v WHERE v.nombre = :nombre"),
     @NamedQuery(name = "Venta.findByFecha", query = "SELECT v FROM Venta v WHERE v.fecha = :fecha"),
-    @NamedQuery(name = "Venta.findByFechaCorte", query = "SELECT v FROM Venta v WHERE v.fechaCorte = :fechaCorte"),
+    @NamedQuery(name = "Venta.findByFechaCorteMantenimiento", query = "SELECT v FROM Venta v WHERE v.fechaCorteMantenimiento = :fechaCorteMantenimiento"),
+    @NamedQuery(name = "Venta.findByFechaCorteFinanciamiento", query = "SELECT v FROM Venta v WHERE v.fechaCorteFinanciamiento = :fechaCorteFinanciamiento"),
     @NamedQuery(name = "Venta.findByPrecio", query = "SELECT v FROM Venta v WHERE v.precio = :precio"),
     @NamedQuery(name = "Venta.findByDescuento", query = "SELECT v FROM Venta v WHERE v.descuento = :descuento"),
     @NamedQuery(name = "Venta.findByMonto", query = "SELECT v FROM Venta v WHERE v.monto = :monto"),
+    @NamedQuery(name = "Venta.findByIdListDocumento", query = "SELECT v FROM Venta v WHERE v.idListDocumento = :idListDocumento"),
     @NamedQuery(name = "Venta.findByEstado", query = "SELECT v FROM Venta v WHERE v.estado = :estado"),
     @NamedQuery(name = "Venta.findByTerceros", query = "SELECT v FROM Venta v WHERE v.terceros = :terceros")})
 public class Venta implements Serializable {
@@ -54,10 +56,14 @@ public class Venta implements Serializable {
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date fecha;
-    @Column(name = "FECHA_CORTE")
+    @Column(name = "FECHA_CORTE_MANTENIMIENTO")
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private Date fechaCorte;
+    private Date fechaCorteMantenimiento;
+    @Column(name = "FECHA_CORTE_FINANCIAMIENTO")
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
+    private Date fechaCorteFinanciamiento;
     @Column(name = "PRECIO")
     private double precio;
     @Column(name = "DESCUENTO")
@@ -77,7 +83,7 @@ public class Venta implements Serializable {
     @ManyToMany(mappedBy = "ventas")
     @JsonBackReference
     private Collection<Propietario> propietarios;
-    
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -101,5 +107,4 @@ public class Venta implements Serializable {
     public String toString() {
         return "com.gl05.bad.domain.Venta[ idVenta=" + idVenta + " ]";
     }
-    
 }

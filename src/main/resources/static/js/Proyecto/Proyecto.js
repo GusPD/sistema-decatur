@@ -4,7 +4,7 @@ $(document).ready(function() {
         ajax: '/proyectos/data',
         processing: true,
         serverSide: true,
-        order: [[0, 'asc']],
+        order: [[1, 'asc']],
         dom: "<'row w-100'<'col-sm-12 mb-4'B>>" +
              "<'row w-100'<'col-sm-6'l><'col-sm-6'f>>" +
              "<'row w-100'<'col-sm-12 my-4'tr>>" +
@@ -63,7 +63,7 @@ $(document).ready(function() {
                 render: function (data, type, row) {
                     var actionsHtml = '';
                     if(hasPrivilegeVerProyecto === true){
-                        actionsHtml = '<a title="Ver" type="button" class="btn font-size-small btn-outline-secondary btn-sm" href="/VentasActivas/' + row.idProyecto + '">';
+                        actionsHtml = '<a title="Ver" type="button" class="btn font-size-small btn-outline-secondary btn-sm" href="/Proyecto/' + row.idProyecto + '">';
                         actionsHtml += '<i class="far fa-eye"></i></a>';
                     }
                     if(hasPrivilegeEditarProyecto === true){
@@ -112,9 +112,7 @@ $(document).ready(function() {
                 }
             }
         },
-        search: {
-            return: true
-        }
+        search: true
     });
     table.columns.adjust();
     $('#export-pdf').on('click', function() {

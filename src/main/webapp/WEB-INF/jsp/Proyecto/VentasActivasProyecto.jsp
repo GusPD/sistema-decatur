@@ -52,6 +52,33 @@
 <sec:authorize access="hasAuthority('VER_VENTA_PRIVILAGE')" var="hasPrivilegeVerVenta"></sec:authorize>
 <script>var hasPrivilegeVerVenta = <c:out value='${hasPrivilegeVerVenta}' />;</script>    
 
+<c:set var="url" value="" />
+<sec:authorize access="hasAuthority('GESTIONAR_MANTENIMIENTO_VENTA_PRIVILAGE')">
+    <c:set var="url" value="/MantenimientoVenta/" />
+</sec:authorize>
+<sec:authorize access="hasAuthority('GESTIONAR_PRIMA_VENTA_PRIVILAGE')">
+    <c:set var="url" value="/PrimaVenta/" />
+</sec:authorize>    
+<sec:authorize access="hasAuthority('GESTIONAR_PAGOS_VENTA_PRIVILAGE')">
+    <c:set var="url" value="/PagosVenta/" />
+</sec:authorize>
+<sec:authorize access="hasAuthority('GESTIONAR_FACTURACION_VENTA_PRIVILAGE')">
+    <c:set var="url" value="/FacturacionVenta/" />
+</sec:authorize> 
+<sec:authorize access="hasAuthority('GESTIONAR_DOCUMENTO_VENTA_PRIVILAGE')">
+    <c:set var="url" value="/DocumentosVenta/" />
+</sec:authorize> 
+<sec:authorize access="hasAuthority('GESTIONAR_TRABAJADORES_VENTA_PRIVILAGE')">
+    <c:set var="url" value="/TrabajadoresVenta/" />
+</sec:authorize> 
+<sec:authorize access="hasAuthority('GESTIONAR_PROPIETARIOS_VENTA_PRIVILAGE')">
+    <c:set var="url" value="/PropietariosVenta/" />
+</sec:authorize>
+<sec:authorize access="hasAuthority('GESTIONAR_INFORMACION_VENTA_PRIVILAGE')">
+    <c:set var="url" value="/InformacionVenta/" />
+</sec:authorize>
+<script>var urlVerVenta = <c:out value='${url}' />;</script>
+
 <%@ include file="../common/footer.jspf"%>
 
 <script src="${pageContext.request.contextPath}/js/Proyecto/VentasActiva.js"></script>

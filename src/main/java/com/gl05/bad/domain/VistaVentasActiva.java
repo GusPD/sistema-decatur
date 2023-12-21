@@ -14,7 +14,7 @@ public class VistaVentasActiva implements Serializable{
     
     @Id
     @Column(name = "ID_VENTA")
-    private Long idTerreno;
+    private Long idVenta;
     
     @Column(name = "ID_PROYECTO")
     private Long idProyecto;

@@ -87,10 +87,13 @@ $(document).ready(function() {
                 width: '10%',
                 render: function (data, type, row) {
                     var claseCSS = '';
+                    var claseCSS = '';
                     if(row.estado === false){
                         claseCSS = 'badge bg-danger';
-                    }else if(row.comprobante=="Factura"){
+                    }else if(row.comprobante=="Recibo"){
                         claseCSS = 'badge bg-azul';
+                    }else if(row.comprobante=="Factura"){
+                        claseCSS = 'badge bg-amarillo';
                     }else{
                         claseCSS = 'badge bg-verde';
                     }
@@ -147,7 +150,7 @@ $(document).ready(function() {
             "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
             "sInfoFiltered": "",
             "sInfoPostFix": "",
-            "sSearch": "Buscar:",
+            "sSearch": "Buscar recibo:",
             "sUrl": "",
             "sInfoThousands": ",",
             "sLoadingRecords": "Cargando...",
@@ -170,12 +173,8 @@ $(document).ready(function() {
                 }
             }
         },
-        search: {
-            return: true
-        },
-        ordering: {
-            return: true
-        }
+        search: true,
+        ordering: true
     });
     table.columns.adjust();
     $('#export-pdf').on('click', function() {

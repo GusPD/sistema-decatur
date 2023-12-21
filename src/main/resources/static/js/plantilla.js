@@ -14,18 +14,23 @@
   });
 })(jQuery);
 //Funcion para el logout  
-function logout() {
-    var form = document.createElement('form');
-    form.method = 'POST';
-    form.action = '/logout';  
-    var csrfTokenInput = document.createElement('input');
-    csrfTokenInput.type = 'hidden';
-    csrfTokenInput.name = '_csrf';
-    csrfTokenInput.value = csrfToken;
-    form.appendChild(csrfTokenInput);
-    document.body.appendChild(form);
-    form.submit();
-}
+$("#btn-logout").click(function() {
+    var formData = new FormData();
+    formData.append('_csrf', csrfToken);
+    $.ajax({
+        url: '/logout',
+        type: 'POST',
+        data: formData,
+        processData: false,
+        contentType: false, 
+        success: function (response) {
+            location.reload(true);
+        },
+        error: function (xhr, status, error) {
+            location.reload(true);
+        }
+    });
+});
 //Función para mostrar el nombre de usuario en el header
 //Index Controler
 $(document).ready(function() {   
@@ -94,3 +99,14 @@ toastr.options = {
     progressBar: true,
     positionClass: "toast-top-right"
 };
+
+var socket = new SockJS('ws:/localhost:8080/notificacion');
+var stompClient = Stomp.over(socket);
+
+stompClient.connect({}, function (frame) {
+    stompClient.subscribe('/topic/notificaciones', function (notification) {
+        var message = JSON.parse(notification.body);
+        console.log('Notificación: ' + message);
+    });
+});
+

@@ -6,7 +6,7 @@ $(document).ready(function() {
             url: '/ventasActiva/data/' + idProyecto,
             dataSrc: 'data'
         },
-        order: [[0, 'asc'],[1, 'asc'],[2, 'asc']],
+        order: [[1, 'asc'],[2, 'asc']],
         processing: true,
         serverSide: true,
         dom: "<'row w-100'<'col-sm-12 mb-4'B>>" +
@@ -94,7 +94,7 @@ $(document).ready(function() {
                 render: function (data, type, row) {
                     var actionsHtml = '';
                     if(hasPrivilegeVerVenta === true){
-                        actionsHtml = '<a  title="Ver" type="button" class="btn font-size-small btn-outline-secondary btn-sm" href="/InformacionVenta/' + row.idTerreno + '">';
+                        actionsHtml = '<a  title="Ver" type="button" class="btn font-size-small btn-outline-secondary btn-sm" href="' + urlVerVenta + row.idVenta + '">';
                         actionsHtml += '<i class="far fa-eye"></i></a>';
                     }
                     return actionsHtml || '';
@@ -110,7 +110,7 @@ $(document).ready(function() {
             "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
             "sInfoFiltered": "",
             "sInfoPostFix": "",
-            "sSearch": "Buscar:",
+            "sSearch": "Buscar por polígono o lote:",
             "sUrl": "",
             "sInfoThousands": ",",
             "sLoadingRecords": "Cargando...",
@@ -133,12 +133,8 @@ $(document).ready(function() {
                 }
             }
         },
-        search: {
-            return: true
-        },
-        ordering: {
-            return: true
-        }
+        search: true,
+        ordering: true
     });
     table.columns.adjust();
     $('#export-pdf').on('click', function() {

@@ -5,18 +5,26 @@
             <input type="hidden" id="idVenta" value="${venta.getIdVenta()}">
             <!-- Menú de los estados de cuenta -->
             <ul class="nav nav-tabs">
-                <li class="nav-item">
-                    <a class="nav-link text-dark" aria-current="page" href="/PagosVenta/${venta.idVenta}">Pagos</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-dark" aria-current="page" href="/PrimaVenta/${venta.idVenta}">Prima</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-dark active" aria-current="page" href="/MantenimientoVenta/${venta.idVenta}">Matenimiento</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-dark" aria-current="page" href="/FinanciamientoVenta/${venta.idVenta}">Financiamiento</a>
-                </li>
+                <sec:authorize access="hasAuthority('GESTIONAR_PAGOS_VENTA_PRIVILAGE')">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" aria-current="page" href="/PagosVenta/${venta.idVenta}">Pagos</a>
+                    </li>
+                </sec:authorize>
+                <sec:authorize access="hasAuthority('GESTIONAR_PRIMA_VENTA_PRIVILAGE')">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" aria-current="page" href="/PrimaVenta/${venta.idVenta}">Prima</a>
+                    </li>
+                </sec:authorize>
+                <sec:authorize access="hasAuthority('GESTIONAR_MANTENIMIENTO_VENTA_PRIVILAGE')">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark active" aria-current="page" href="/MantenimientoVenta/${venta.idVenta}">Matenimiento</a>
+                    </li>
+                </sec:authorize>
+                <sec:authorize access="hasAuthority('GESTIONAR_FINANCIAMIENTO_VENTA_PRIVILAGE')">
+                    <li class="nav-item">
+                        <a class="nav-link text-dark" aria-current="page" href="/FinanciamientoVenta/${venta.idVenta}">Financiamiento</a>
+                    </li>
+                </sec:authorize>
             </ul>
             <div class="card-header">
                 <!-- Subtitulo de la página y funciones de los datos -->
@@ -153,7 +161,7 @@
         <div class="spinner-border" role="status">
             <span class="sr-only">Cargando...</span>
         </div>
-        <p>Generando reporte...</p>
+        <p id="contenido-pagina-carga">Generando reporte...</p>
     </div>
 </div>
 

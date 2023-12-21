@@ -64,24 +64,46 @@
                                         <c:if test="${requestScope['javax.servlet.forward.request_uri'] == urlActual}">
                                             <c:set var="urlEstados" value="/FinanciamientoVenta/${venta.idVenta}" />
                                         </c:if>
+                                        <sec:authorize access="hasAuthority('GESTIONAR_INFORMACION_VENTA_PRIVILAGE')"> 
                                         <a class="tab-perfil list-group-item list-group-item-info btn-info text-center ${requestScope['javax.servlet.forward.request_uri'] == urlInformacion ? 'active' : ''}" href="/InformacionVenta/${venta.idVenta}" type="button">
                                             Información
                                         </a>
+                                        </sec:authorize>
+                                        <sec:authorize access="hasAuthority('GESTIONAR_PROPIETARIOS_VENTA_PRIVILAGE')"> 
                                         <a class="tab-perfil list-group-item list-group-item-info text-center btn-info ${requestScope['javax.servlet.forward.request_uri'] == urlPropietarios ? 'active' : ''}" href="/PropietariosVenta/${venta.idVenta}" type="button">
                                             Propietarios
                                         </a>
+                                        </sec:authorize>
+                                        <sec:authorize access="hasAuthority('GESTIONAR_TRABAJADORES_VENTA_PRIVILAGE')">
                                         <a class="tab-perfil list-group-item list-group-item-info text-center btn-info ${requestScope['javax.servlet.forward.request_uri'] == urlTrabajadores ? 'active' : ''}" href="/TrabajadoresVenta/${venta.idVenta}" type="button">
                                             Trabajadores
                                         </a>
+                                        </sec:authorize>
+                                        <sec:authorize access="hasAuthority('GESTIONAR_DOCUMENTO_VENTA_PRIVILAGE')">
                                         <a class="tab-perfil list-group-item list-group-item-info text-center btn-info ${requestScope['javax.servlet.forward.request_uri'] == urlDocumentos ? 'active' : ''}" href="/DocumentosVenta/${venta.idVenta}" type="button">
                                             Documentos
                                         </a>
+                                        </sec:authorize>
+                                        <sec:authorize access="hasAuthority('GESTIONAR_FACTURACION_VENTA_PRIVILAGE')">
                                         <a class="tab-perfil list-group-item list-group-item-info text-center btn-info ${requestScope['javax.servlet.forward.request_uri'] == urlFacturacion ? 'active' : ''}" href="/FacturacionVenta/${venta.idVenta}" type="button">
                                             Facturación
                                         </a>
-                                        <a class="tab-perfil list-group-item list-group-item-info text-center btn-info ${requestScope['javax.servlet.forward.request_uri'] == urlEstados ? 'active' : ''}" href="/PagosVenta/${venta.idVenta}" type="button">
+                                        </sec:authorize>
+                                        <c:set var="url" value="" />
+                                        <sec:authorize access="hasAuthority('GESTIONAR_MANTENIMIENTO_VENTA_PRIVILAGE')">
+                                            <c:set var="url" value="/MantenimientoVenta/${venta.idVenta}" />
+                                        </sec:authorize>
+                                        <sec:authorize access="hasAuthority('GESTIONAR_PRIMA_VENTA_PRIVILAGE')">
+                                            <c:set var="url" value="/PrimaVenta/${venta.idVenta}" />
+                                        </sec:authorize>
+                                        <sec:authorize access="hasAuthority('GESTIONAR_PAGOS_VENTA_PRIVILAGE')">
+                                            <c:set var="url" value="/PagosVenta/${venta.idVenta}" />
+                                        </sec:authorize>
+                                        <sec:authorize access="hasAuthority('GESTIONAR_PAGOS_VENTA_PRIVILAGE') || hasAuthority('GESTIONAR_PRIMA_VENTA_PRIVILAGE') || hasAuthority('GESTIONAR_MANTENIMIENTO_VENTA_PRIVILAGE')">
+                                        <a class="tab-perfil list-group-item list-group-item-info text-center btn-info ${requestScope['javax.servlet.forward.request_uri'] == urlEstados ? 'active' : ''}" href="${url}" type="button">
                                             Informes
                                         </a>
+                                        </sec:authorize>
                                     </div>
                                 </div>
                             </div>

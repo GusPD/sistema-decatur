@@ -42,6 +42,14 @@
                                                 </select>
                                             </div>
                                             <div class="form-group form-group-left">
+                                                <label for="tipoEnvio">Tipo de envío:<strong class="text-danger"> *</strong></label>
+                                                <select type="text" class="form-select form-select-sm" id="tipoEnvio" name="tipoEnvio" required>
+                                                    <option value="">Seleccione una opción</option>
+                                                    <option value="Unico">Envío único</option>
+                                                    <option value="Masivo">Envío masivo</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group form-group-left">
                                                 <label for="destino">Destinatarios:<strong class="text-danger"> *</strong></label>
                                                 <select type="text" class="form-select form-select-sm" id="destino" name="destino" required>
                                                     <option value="">Seleccione una opción</option>
@@ -95,12 +103,10 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="modal-footer d-flex justify-content-between">
+                            <div class="card-footer d-flex justify-content-between mb-2">
                                 <label for="monto" class="form-label text-danger mensaje-obligatorios">(*) Campos Obligatorios</label>
                                 <sec:authorize access="hasAuthority('ENVIAR_CORREO_ELECTRONICO_PRIVILAGE')">
-                                    <div>
-                                        <button type="submit" title="Enviar correo" class="btn btn-outline-success btn-sm">Enviar</button>
-                                    </div>
+                                    <button type="submit" title="Enviar correo" class="btn btn-outline-success btn-sm">Enviar</button>
                                 </sec:authorize>
                             </div>
                         </form>
@@ -121,6 +127,9 @@
 </div>
 <!-- Script de la página -->
 <%@ include file="../common/footer.jspf"%>
-
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/RecursosOnline/filepond/dist/filepond.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/RecursosOnline/filepond/locale/es-es.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/RecursosOnline/filepond/plugins/filepond-plugin-file-validate-size.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/RecursosOnline/tinymce/tinymce.min.js"></script>
 <script src="${pageContext.request.contextPath}/js/Notificaciones/Notificacion.js"></script>
 

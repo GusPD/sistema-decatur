@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
@@ -35,7 +36,7 @@
 </head>
 <body class="bg-white">
     <div class="text-center mb-3 w-100">
-        <h6 class="fw-normal p-0 m-0 w-100" style="text-transform: uppercase;">PROYECTO ${venta.terreno.proyecto.nombre}</h6>
+        <h6 class="fw-normal p-0 m-0 w-100" style="text-transform: uppercase;">${venta.terreno.proyecto.nombre}</h6>
         <h6 class="fw-normal p-0 m-0 w-100">ESTADO DE CUENTA DE MANTENIMIENTO</h6>
         <div class="border-bottom border-2" style="margin-left:20%; width: 60%;"></div>
         <h7 class="fw-normal pt-0 m-0 w-100" style="text-transform: uppercase;">LOTE ${venta.terreno.numero}${venta.terreno.seccion} POLIGONO ${venta.terreno.poligono}</h7>

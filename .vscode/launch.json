@@ -1,0 +1,49 @@
+{
+    // Use IntelliSense para saber los atributos posibles.
+    // Mantenga el puntero para ver las descripciones de los existentes atributos.
+    // Para más información, visite: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
+        {
+            "type": "java",
+            "name": "SistemaDecatur",
+            "request": "launch",
+            "mainClass": "com.gl05.bad.SistemaDecatur",
+            "projectName": "SistemaDecatur"
+        },
+        {
+            "type": "java",
+            "name": "EncriptarPassword",
+            "request": "launch",
+            "mainClass": "com.gl05.bad.util.EncriptarPassword",
+            "projectName": "SistemaDecatur"
+        },
+        {
+            "name": "Tomcat",
+            "type": "java",
+            "request": "launch",
+            "mainClass": "com.gl05.bad.SistemaDecatur",
+            "stopOnEntry": false,
+            "projectName": "SistemaDecatur",
+            "args": "",
+            "jvmArgs": "-Dcatalina.home=C:\\Program Files\\Apache Software Foundation\\Tomcat 9.0",
+            "classpath": [
+                "C:\\Program Files\\Apache Software Foundation\\Tomcat 9.0/lib/*",
+                "${workspaceFolder}/bin/*"
+            ],
+            "sourcePaths": [
+                "${workspaceFolder}/src"
+            ],
+            "env": {
+                "CATALINA_BASE": "${workspaceFolder}",
+                "CATALINA_HOME": "C:\\Program Files\\Apache Software Foundation\\Tomcat 9.0"
+            }
+        }
+    ]
+}

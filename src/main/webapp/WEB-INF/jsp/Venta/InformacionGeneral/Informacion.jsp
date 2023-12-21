@@ -1,7 +1,7 @@
 <%@ include file="../venta-header.jspf"%>
 <div id="page-informacion" class="row pb-3">
-    <input type="hidden" id="fechaAplicacionFinanciamiento" value="<c:choose><c:when test="${empty financiamiento}">${venta.fechaCorte}</c:when><c:otherwise>${financiamiento.fechaAplicacion}</c:otherwise></c:choose>">
-    <input type="hidden" id="fechaAplicacionMantenimiento" value="<c:choose><c:when test="${empty mantenimiento}">${venta.fechaCorte}</c:when><c:otherwise>${mantenimiento.fechaAplicacion}</c:otherwise></c:choose>">
+    <input type="hidden" id="fechaAplicacionFinanciamiento" value="<c:choose><c:when test="${empty financiamiento}">${venta.fechaCorteFinanciamiento}</c:when><c:otherwise>${financiamiento.fechaAplicacion}</c:otherwise></c:choose>">
+    <input type="hidden" id="fechaAplicacionMantenimiento" value="<c:choose><c:when test="${empty mantenimiento}">${venta.fechaCorteMantenimiento}</c:when><c:otherwise>${mantenimiento.fechaAplicacion}</c:otherwise></c:choose>">
     <!-- Subtitulo de la página y funciones de los datos -->
     <div class="subtitulo-page">
         <h3 class="mt-0">
@@ -40,8 +40,12 @@
                     <td><c:if test="${not empty venta.fecha}"><fmt:formatDate value="${venta.fecha}" pattern="dd/MM/yyyy" /></c:if></td>
                 </tr>
                 <tr>
-                    <td class="encabezado-tabla font-weight-bold">Fecha Corte</td>
-                    <td><c:if test="${not empty venta.fechaCorte}"><fmt:formatDate value="${venta.fechaCorte}" pattern="dd/MM/yyyy" /></c:if></td>
+                    <td class="encabezado-tabla font-weight-bold">Fecha Corte Financiamiento</td>
+                    <td><c:if test="${not empty venta.fechaCorteFinanciamiento}"><fmt:formatDate value="${venta.fechaCorteFinanciamiento}" pattern="dd/MM/yyyy" /></c:if></td>
+                </tr>
+                <tr>
+                    <td class="encabezado-tabla font-weight-bold">Fecha Corte Mantenimiento</td>
+                    <td><c:if test="${not empty venta.fechaCorteMantenimiento}"><fmt:formatDate value="${venta.fechaCorteMantenimiento}" pattern="dd/MM/yyyy" /></c:if></td>
                 </tr>
                 <tr>
                     <td class="encabezado-tabla font-weight-bold">Precio</td>
@@ -258,8 +262,12 @@
                             <input type="date" class="form-control form-control-sm" id="fecha" name="fecha" maxlength="10" placeholder="Ingrese la fecha de la venta">
                         </div>
                         <div class="form-group">
-                            <label for="fechaCorte" class="form-label">Fecha Corte:<strong class="text-danger"> *</strong></label>
-                            <input type="date" class="form-control form-control-sm" id="fechaCorte" name="fechaCorte" maxlength="10" placeholder="Ingrese la fecha de corte">
+                            <label for="fechaCorteFinanciamiento" class="form-label">Fecha Corte Financiamiento:<strong class="text-danger"> *</strong></label>
+                            <input type="date" class="form-control form-control-sm" id="fechaCorteFinanciamiento" name="fechaCorteFinanciamiento" maxlength="10" placeholder="Ingrese la fecha de corte" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="fechaCorteMantenimiento" class="form-label">Fecha Corte Mantenimiento:<strong class="text-danger"> *</strong></label>
+                            <input type="date" class="form-control form-control-sm" id="fechaCorteMantenimiento" name="fechaCorteMantenimiento" maxlength="10" placeholder="Ingrese la fecha de corte" required>
                         </div>
                         <div class="form-group">
                             <label for="" class="form-label">Precio:<strong class="text-danger"> *</strong></label>
@@ -387,7 +395,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="confirmarEliminarLabel">Confirmar eliminaciï¿½n</h5>
+                <h5 class="modal-title" id="confirmarEliminarLabel">Confirmar eliminación</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -409,7 +417,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="confirmarEliminarLabel">Confirmar eliminaciï¿½n</h5>
+                <h5 class="modal-title" id="confirmarEliminarLabel">Confirmar eliminación</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">

@@ -68,7 +68,7 @@ $(document).ready(function() {
                 render: function (data, type, row) {
                     var actionsHtml = '';
                     if(hasPrivilegeVerTrabajadorProyecto === true){
-                        actionsHtml = '<a  title="Ver" type="button" class="btn font-size-small btn-outline-secondary btn-sm" href="/InformacionTrabajador/'+ row.idProyecto + '/' + row.idPersona + '">';
+                        actionsHtml = '<a  title="Ver" type="button" class="btn font-size-small btn-outline-secondary btn-sm" href="' + urlVerTrabajador + row.idProyecto + "/" + row.idPersona + '">';
                         actionsHtml += '<i class="far fa-eye"></i></a>';
                     }
                     return actionsHtml || '';
@@ -107,12 +107,8 @@ $(document).ready(function() {
                 }
             }
         },
-        search: {
-            return: true
-        },
-        ordering: {
-            return: true
-        }
+        search: true,
+        ordering: true
     });
     table.columns.adjust();
     $('#export-pdf').on('click', function() {

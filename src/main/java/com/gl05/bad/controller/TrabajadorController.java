@@ -81,7 +81,7 @@ public class TrabajadorController {
     }
     
     //Función que obtiene los trabajadores del sistema
-    @GetMapping("/trabajadores/data")
+    @GetMapping(value="/trabajadores/data", produces = "application/json; charset=UTF-8")
     @ResponseBody
     public DataTablesOutput<Visitante> GetTrabajadores(@Valid DataTablesInput input) {
         return visitanteService.listarTrabajadores(input);
@@ -89,15 +89,21 @@ public class TrabajadorController {
     
     //Función para redirigir a la vista de los trabajadores del proyecto
     @GetMapping("/Trabajadores/{idProyecto}")
-    public String mostrarTrabajadoresProyecto(Model model, Proyecto proyecto) {
+    public String mostrarTrabajadoresProyecto(Model model, Proyecto proyecto, Authentication authentication) {
         model.addAttribute("pageTitle", "Trabajadores Proyecto");
         Proyecto proyectoEncontrado = proyectoService.encontrar(proyecto.getIdProyecto());
+        String username = authentication.getName();
+        Usuario usuario = usuarioService.encontrarUsername(username);
+        Set<Proyecto> listaProyectosAsignados = usuario.getProyectos();
+        if(!listaProyectosAsignados.contains(proyectoEncontrado)){
+            return "accesodenegado";
+        }
         model.addAttribute("proyecto", proyectoEncontrado);
         return "/Proyecto/TrabajadoresProyecto";
     }
     
     //Función que obtiene los trabajadores del proyecto
-    @GetMapping("/trabajadoresProyecto/data/{idProyecto}")
+    @GetMapping(value="/trabajadoresProyecto/data/{idProyecto}", produces = "application/json; charset=UTF-8")
     @ResponseBody
     public DataTablesOutput<VistaTrabajadoresProyecto> GetTrabajadoreProyecto(@Valid DataTablesInput input, @PathVariable Long idProyecto) {
         return vistaTrabajadoresProyectoService.listarTrabajadores(input, idProyecto);
@@ -112,9 +118,8 @@ public class TrabajadorController {
         Proyecto newProyecto = proyectoService.encontrar(proyecto.getIdProyecto());
         String username = authentication.getName();
         Usuario usuario = usuarioService.encontrarUsername(username);
-        System.out.println("Nuevo proyecto: " + newProyecto);
         Set<Proyecto> proyectosPropietario =  usuario.getProyectos();
-        if (!proyectosPropietario.contains(newProyecto) && newProyecto!=null) {
+        if (!proyectosPropietario.contains(newProyecto) && proyecto.getIdProyecto()>0) {
             return "accesodenegado";
         }
         List<TipoDocumento> listaTipoDocumentos = tipoDocumentoService.listaTipoDocumentos();
@@ -126,7 +131,7 @@ public class TrabajadorController {
     }
     
     //Función que obtiene los documentos del trabajador
-    @GetMapping("/documentosTrabajador/data/{idDocumento}")
+    @GetMapping(value="/documentosTrabajador/data/{idDocumento}", produces = "application/json; charset=UTF-8")
     @ResponseBody
     public DataTablesOutput<Documento> GetDocumentos(@Valid DataTablesInput input, @PathVariable Integer idDocumento) {
         return documentoService.listarDocumentos(input, idDocumento);
@@ -141,9 +146,8 @@ public class TrabajadorController {
         Proyecto newProyecto = proyectoService.encontrar(proyecto.getIdProyecto());
         String username = authentication.getName();
         Usuario usuario = usuarioService.encontrarUsername(username);
-        System.out.println("Nuevo proyecto: " + newProyecto);
         Set<Proyecto> proyectosPropietario =  usuario.getProyectos();
-        if (!proyectosPropietario.contains(newProyecto) && newProyecto!=null) {
+        if (!proyectosPropietario.contains(newProyecto) && proyecto.getIdProyecto()>0) {
             return "accesodenegado";
         }
         model.addAttribute("proyecto", newProyecto);
@@ -209,7 +213,7 @@ public class TrabajadorController {
     }
     
     //Función que obtiene los terrenos del trabajador
-    @GetMapping("/terrenosTrabajador/data/{idVisitante}")
+    @GetMapping(value="/terrenosTrabajador/data/{idVisitante}", produces = "application/json; charset=UTF-8")
     @ResponseBody
     public DataTablesOutput<AsignacionVisitante> GetTerrenos(@Valid DataTablesInput input, @PathVariable Long idVisitante) {
         return asigVisitanteService.listarTerrenosTrabajador(input, idVisitante);
@@ -224,9 +228,8 @@ public class TrabajadorController {
         Proyecto newProyecto = proyectoService.encontrar(proyecto.getIdProyecto());
         String username = authentication.getName();
         Usuario usuario = usuarioService.encontrarUsername(username);
-        System.out.println("Nuevo proyecto: " + newProyecto);
         Set<Proyecto> proyectosPropietario =  usuario.getProyectos();
-        if (!proyectosPropietario.contains(newProyecto) && newProyecto!=null) {
+        if (!proyectosPropietario.contains(newProyecto) && proyecto.getIdProyecto()>0) {
             return "accesodenegado";
         }
         model.addAttribute("proyecto", newProyecto);
@@ -274,7 +277,7 @@ public class TrabajadorController {
     }
 
     //Función que obtiene un trabajador de la base de datos
-    @GetMapping("/ObtenerTrabajador/{id}")
+    @GetMapping(value="/ObtenerTrabajador/{id}", produces = "application/json; charset=UTF-8")
     public ResponseEntity<Object> ObtenerTrabajador(@PathVariable Long id) {
         Persona persona = personaService.encontrar(id);
         Visitante trabajador = visitanteService.encontrarPersona(persona);

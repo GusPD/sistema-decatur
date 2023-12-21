@@ -67,7 +67,7 @@ $(document).ready(function() {
                 render: function (data, type, row) {
                     var actionsHtml = '';
                     if(hasPrivilegeVerPropietario === true){
-                        actionsHtml = '<a title="Ver" type="button" class="btn font-size-small btn-outline-secondary btn-sm" href="/InformacionPropietario/0/' + row.persona.idPersona + '">';
+                        actionsHtml = '<a title="Ver" type="button" class="btn font-size-small btn-outline-secondary btn-sm" href="' + urlVerPropietario + row.persona.idPersona + '">';
                         actionsHtml += '<i class="far fa-eye"></i></a>';
                     }
                     if(hasPrivilegeEditarPropietario === true){
@@ -116,12 +116,8 @@ $(document).ready(function() {
                 }
             }
         },
-        search: {
-            return: true
-        },
-        ordering: {
-            return: true
-        }
+        search: true,
+        ordering: true
     });
     table.columns.adjust();
     $('#export-pdf').on('click', function() {

@@ -10,15 +10,13 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <link rel="icon" href="${pageContext.request.contextPath}/images/img/favicon-logo.ico" type="image/x-icon">
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/RecursosOnline/bootstrap.min.css">
-        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/RecursosOnline/fonts.googleapis.com.css">
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/js/RecursosOnline/fontawesome-free-6.4.2-web/css/all.min.css">
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/RecursosOnline/toastr.min.css"/>
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/RecursosOnline/dataTables.bootstrap5.min.css"/>
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/RecursosOnline/buttons.bootstrap5.min.css">
-        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/RecursosOnline/fixedHeader.dataTables.min.css">
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/RecursosOnline/select2.min.css" />
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/RecursosOnline/select2-bootstrap-5-theme.min.css" />  
-        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/images/iconos/fontawesome-free-6.4.2-web/css/all.css">
-        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/RecursosOnline/toastr.min.css"/>
-        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/js/RecursosOnline/filepond/dist/filepond.css" rel="stylesheet" />
+        <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/js/RecursosOnline/filepond/dist/filepond.min.css" rel="stylesheet" />
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/RecursosOnline/styleFilepond.css" rel="stylesheet" />
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/RecursosOnline/adminlte.css">
         <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/css/style.css">

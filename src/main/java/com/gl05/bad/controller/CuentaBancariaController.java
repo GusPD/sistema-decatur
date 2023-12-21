@@ -8,6 +8,8 @@ import com.gl05.bad.servicio.CuentaBancariaService;
 import com.gl05.bad.servicio.EmpresaService;
 import com.gl05.bad.servicio.UserServiceImp;
 
+import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,15 +47,19 @@ public class CuentaBancariaController {
     public String mostrarCuentas(Model model, @PathVariable("idEmpresa") Long idEmpresa, Authentication authentication) {
         model.addAttribute("pageTitle", "Cuentas");
         Empresa newEmpresa = empresaService.encontrar(idEmpresa);
-         String username = authentication.getName();
+        String username = authentication.getName();
         Usuario usuario = usuarioService.encontrarUsername(username);
+        Set<Empresa> listaEmpresasAsignadas = usuario.getEmpresas();
+        if(!listaEmpresasAsignadas.contains(newEmpresa)){
+            return "accesodenegado";
+        }
         model.addAttribute("usuario", usuario);
         model.addAttribute("empresa", newEmpresa);
         return "/Cuenta Bancaria/GestionarCuentaBancaria";
     }
     
     //Función para obtener las cuentas de la base de datos
-    @GetMapping("/cuentas/data/{idEmpresa}")
+    @GetMapping(value="/cuentas/data/{idEmpresa}", produces = "application/json; charset=UTF-8")
     @ResponseBody
     public DataTablesOutput<CuentaBancaria> GetCuentas(@Valid DataTablesInput input, @PathVariable Long idEmpresa) {
         return cuentaService.listarCuentas(input, idEmpresa );
@@ -90,7 +96,7 @@ public class CuentaBancariaController {
     }
 
     //Función para obtener una cuenta de la base de datos
-    @GetMapping("/ObtenerCuenta/{id}")
+    @GetMapping(value="/ObtenerCuenta/{id}", produces = "application/json; charset=UTF-8")
     public ResponseEntity<CuentaBancaria> ObtenerCuenta(@PathVariable Long id) {
         CuentaBancaria cuenta = cuentaService.encontrar(id);
         if (cuenta != null) {

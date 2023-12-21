@@ -16,7 +16,7 @@
                             <!-- Columna izquierda -->
                             <div class="col-md-6 border p-3 rounded">
                                 <h6 class="text-center font-weight-bold">
-                                    Consumidor Final
+                                    Comprobante de Recibo
                                     <sec:authorize access="hasAuthority('EDITAR_FACTURACION_PRIVILAGE')">
                                         <span title="Editar Información" id="EditarConsumidorFinal" class="btn abrirModalConsumidorFinal-btn text-info puntero float-end text-blue btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalConsumidorFinal" data-tipo="editar" data-id="${venta.idVenta}" data-modo="actualizar" style="cursor: pointer;">
                                             <i class="far fa-edit"></i>
@@ -49,12 +49,14 @@
                             </div>
                             <!-- Columna derecha -->
                             <div class="col-md-6 border p-3 ml-1 rounded columna-derecha">
-                                <h6 class="text-center font-weight-bold">
-                                    Crédito Fiscal
+                                <h6 id="botones-credito-fiscal" class="text-center font-weight-bold">
+                                    Factura o Crédito Fiscal
                                     <sec:authorize access="hasAuthority('EDITAR_FACTURACION_PRIVILAGE')">
                                         <span title="Editar Información" id="EditarCreditoFiscal" class="btn abrirModalCreditoFiscal-btn text-info puntero float-end text-blue btn-sm" data-bs-toggle="modal" data-bs-target="#crearModalCreditoFiscal" data-tipo="editar" data-id="${facturacion.idFacturacion}" data-modo="actualizar" style="cursor: pointer;">
                                             <i class="far fa-edit"></i>
                                         </span>
+                                    </sec:authorize>
+                                    <sec:authorize access="hasAuthority('ELIMINAR_FACTURACION_PRIVILAGE')">
                                         <c:if test="${not empty facturacion}">
                                             <span title="Eliminar Información" id="EliminarCreditoFiscal" class="btn eliominarModalCreditoFiscal-btn text-info puntero float-end text-blue btn-sm" data-bs-toggle="modal" data-bs-target="#eliminarModalCreditoFiscal" data-tipo="eliminar" data-id="${facturacion.idFacturacion}" data-modo="eliminar" style="cursor: pointer;">
                                                 <i class="far fa-trash-alt"></i>
@@ -85,6 +87,14 @@
                                             <td><c:if test="${not empty facturacion.nombre}">${facturacion.nombre}</c:if></td>
                                         </tr>
                                         <tr>
+                                            <td class="font-weight-bold" scope="col">Departamento:</td>
+                                            <td><c:if test="${not empty facturacion.municipio.departamento.nombre}">${facturacion.municipio.departamento.nombre}</c:if></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="font-weight-bold" scope="col">Municipio:</td>
+                                            <td><c:if test="${not empty facturacion.municipio.nombre}">${facturacion.municipio.nombre}</c:if></td>
+                                        </tr>
+                                        <tr>
                                             <td class="font-weight-bold" scope="col">Dirección:</td>
                                             <td><c:if test="${not empty facturacion.direccion}">${facturacion.direccion}</c:if></td>
                                         </tr>
@@ -107,7 +117,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="crearModalLabel">Consumidor Final</h5>
+                <h5 class="modal-title" id="crearModalLabel">Comprobante de Recibo</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id='formSeleccionarPropietario' accept-charset="UTF-8">
@@ -151,7 +161,7 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header justify-content-left">
-                <h5 class="modal-title" id="crearModalLabel">Crédito Fiscal</h5>
+                <h5 class="modal-title" id="crearModalLabel">Factura o Crédito Fiscal</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <form id="formGuardar" accept-charset="UTF-8" method="post" action="/AgregarFacturacionVenta">
@@ -184,6 +194,26 @@
                         <div class="form-group">
                             <label for="nombre" class="form-label">Nombre:<strong class="text-danger"> *</strong></label>
                             <input type="text" class="form-control form-control-sm" id="nombre" name="nombre" maxlength="200" placeholder="Ingrese el nombre" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="departamentos">Departamento:<strong class="text-danger"> *</strong></label>
+                            <select class="form-select form-select-sm" id="departamento" name="departamento" placeholder="Seleccione el departamento" required>
+                                <c:if test="${not empty departamentos}">
+                                    <c:forEach items="${departamentos}" var="eDepartamento">
+                                        <option value="${eDepartamento.idDepartamento}">${eDepartamento.nombre}</option>
+                                    </c:forEach>
+                                </c:if>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="municipio">Municipio:<strong class="text-danger"> *</strong></label>
+                            <select class="form-select form-select-sm" id="municipio" name="municipio" placeholder="Seleccione el municipio" required>
+                                <c:if test="${not empty municipios}">
+                                    <c:forEach items="${municipios}" var="eMunicipio">
+                                        <option value="${eMunicipio.idMunicipio}" data-departamento="${eMunicipio.departamento.idDepartamento}">${eMunicipio.nombre}</option>
+                                    </c:forEach>
+                                </c:if>
+                            </select>
                         </div>
                         <div class="form-group">
                             <label for="direccion" class="form-label">Dirección:<strong class="text-danger"> *</strong></label>

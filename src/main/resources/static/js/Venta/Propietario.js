@@ -71,9 +71,7 @@ $(document).ready(function() {
                 "sSortDescending": ": Activar para ordenar la columna de manera descendente"
             }
         },
-        search: {
-            return: true
-        }
+        search: true
     });
     $.validator.addMethod(
         "validarDocumento",
@@ -90,7 +88,7 @@ $(document).ready(function() {
     );
     //Formulario de agregar
     var formGuardar = $('#formGuardarPropietario');
-    var validator = $('#formGuardarPropietario').validate({
+    var validatorAgregar = $('#formGuardarPropietario').validate({
         rules: {
             tipoDocumento: {
                 required: true,
@@ -211,47 +209,8 @@ $(document).ready(function() {
             });
         }
     });
-    // Método para mostrar el modal segun sea si editar o nuevo registro
-    $(document).on('click', '.abrirModalPropietario-btn', function () {
-        var idAsignacion = $(this).data('id');
-        var modal = $('#crearModalPropietario');
-        var tituloModal = modal.find('.modal-title');
-        var form = modal.find('form');
-        validator.resetForm();
-        formGuardar.find('.is-invalid').removeClass('is-invalid');
-        if (idAsignacion) {
-            tituloModal.text('Editar Propietario');
-            $.ajax({
-                url: '/ObtenerPropietarioProyecto/' + idAsignacion,
-                type: 'GET',
-                success: function (response) {
-                    $('#idPersona').val(response.asignacion.propietario.persona.idPersona);
-                    $('#tipoDocumento').val(response.persona.tipoDocumento.idTipoDocumento);
-                    $('#numero').val(response.persona.numero);
-                    $('#nombreP').val(response.asignacion.propietario.persona.nombre);
-                    $('#apellido').val(response.asignacion.propietario.persona.apellido);
-                    $('#idPropietario').val(response.asignacion.propietario.idPropietario);
-                    $('#profesion').val(response.asignacion.propietario.profesion);
-                    $('#direccionCasa').val(response.asignacion.propietario.direccionCasa);
-                    $('#lugarTrabajo').val(response.asignacion.propietario.lugarTrabajo);
-                    $('#direccionTrabajo').val(response.asignacion.propietario.direccionTrabajo);
-                    $('#idDocumento').val(response.asignacion.propietario.idDocumento);
-                    $('#estadoP').val(response.asignacion.estado);
-                    $('#idAsignacion').val(response.asignacion.idAsignacion);
-                },
-                error: function () {
-                    alert('Error al obtener los datos del propietario.');
-                }
-            });
-        } else {
-            tituloModal.text('Agregar Propietario');
-            form.attr('action', '/AgregarPropietarioVenta');
-            $('.form-control').val('');
-        }
-        modal.modal('show');
-    });
-    var formSeleccionarGuardar = $('#formSeleccionarPropietario');
-    var validator = $('#formSeleccionarPropietario').validate({
+    var formSeleccionar = $('#formSeleccionarPropietario');
+    var validatorSeleccionar = $('#formSeleccionarPropietario').validate({
         rules: {
             propietarios:{
                 required: true
@@ -285,7 +244,7 @@ $(document).ready(function() {
         errorClass: 'invalid-feedback',
         submitHandler: function(form) {
             event.preventDefault();
-            var formDataArray = formSeleccionarGuardar.serializeArray();
+            var formDataArray = formSeleccionar.serializeArray();
             var idVenta = $('#idVenta').val();
             var url = '/SeleccionarPropietariosVenta';
             formDataArray.push({name: 'idVenta', value: idVenta});
@@ -322,6 +281,20 @@ $(document).ready(function() {
                 }
             });
         }
+    });
+    // Método para mostrar el modal agregar propietario
+    $(document).on('click', '#AgregarPropietario', function () {
+        validatorAgregar.resetForm();
+        formGuardar.find('.is-invalid').removeClass('is-invalid');
+        form.attr('action', '/AgregarPropietarioVenta');
+        $('.form-control').val('');
+    });
+    // Método para mostrar el modal seleccionar propietario
+    $(document).on('click', '#SeleccionarPropietario', function () {
+        validatorSeleccionar.resetForm();
+        formSeleccionar.find('.is-invalid').removeClass('is-invalid');
+        $('.form-control').val('');
+        $("#span-propietarios-error").addClass('d-none');
     });
     //Método para mostrar el modal de eliminación
     $(document).on('click', '.eliminarModalPropietario-btn', function () {

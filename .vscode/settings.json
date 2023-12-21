@@ -3,5 +3,5 @@
     "java.configuration.updateBuildConfiguration": "automatic",
     "files.encoding": "utf8",
     "files.autoGuessEncoding": true,
-    "java.debug.settings.onBuildFailureProceed": true
+    "java.debug.settings.onBuildFailureProceed": true,
 }

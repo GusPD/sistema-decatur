@@ -3,6 +3,7 @@ package com.gl05.bad.domain;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
+
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -34,6 +35,7 @@ import org.springframework.format.annotation.DateTimeFormat;
     @NamedQuery(name = "Pago.findByEstado", query = "SELECT p FROM Pago p WHERE p.estado = :estado"),
     @NamedQuery(name = "Pago.findByComprobante", query = "SELECT p FROM Pago p WHERE p.comprobante = :comprobante"),
     @NamedQuery(name = "Pago.findByRecibo", query = "SELECT p FROM Pago p WHERE p.recibo = :recibo"),
+    @NamedQuery(name = "Pago.findByReferencia", query = "SELECT p FROM Pago p WHERE p.referencia = :referencia"),
     @NamedQuery(name = "Pago.findByTipo", query = "SELECT p FROM Pago p WHERE p.tipo = :tipo"),
     @NamedQuery(name = "Pago.findByMonto", query = "SELECT p FROM Pago p WHERE p.monto = :monto"),
     @NamedQuery(name = "Pago.findByOtros", query = "SELECT p FROM Pago p WHERE p.otros = :otros"),
@@ -55,6 +57,8 @@ public class Pago implements Serializable {
     private Date fecha;
     @Column(name = "RECIBO")
     private Integer recibo;
+    @Column(name = "REFERENCIA")
+    private String referencia;
     @Column(name = "ESTADO")
     private Boolean estado;
     @Size(max = 20)

@@ -143,9 +143,30 @@
 </div>
 
 <!-- Script de la página -->
-<sec:authorize access="hasAuthority('VER_PROPIETARIO_PRIVILAGE')" var="hasPrivilegeVerPropietario"></sec:authorize>
+<sec:authorize access="hasAuthority('GESTIONAR_INFORMACION_PROPIETARIO_PRIVILAGE') || hasAuthority('GESTIONAR_TELEFONO_PROPIETARIO_PRIVILAGE') || hasAuthority('GESTIONAR_CORREO_PROPIETARIO_PRIVILAGE') || hasAuthority('GESTIONAR_REFERENCIA_PROPIETARIO_PRIVILAGE') || hasAuthority('GESTIONAR_DOCUMENTO_PROPIETARIO_PRIVILAGE') || hasAuthority('GESTIONAR_TERRENOS_PROPIETARIO_PRIVILAGE')" var="hasPrivilegeVerPropietario"></sec:authorize>
 <script>var hasPrivilegeVerPropietario = <c:out value='${hasPrivilegeVerPropietario}' />;</script>    
-        
+
+<c:set var="url" value="" /> 
+<sec:authorize access="hasAuthority('GESTIONAR_TERRENOS_PROPIETARIO_PRIVILAGE')">
+    <c:set var="url" value="'/TerrenosPropietario/0/'" />
+</sec:authorize>
+<sec:authorize access="hasAuthority('GESTIONAR_DOCUMENTO_PROPIETARIO_PRIVILAGE')">
+    <c:set var="url" value="'/DocumentosPropietario/0/'" />
+</sec:authorize> 
+<sec:authorize access="hasAuthority('GESTIONAR_REFERENCIA_PROPIETARIO_PRIVILAGE')">
+    <c:set var="url" value="'/ReferenciasPropietario/0/'" />
+</sec:authorize> 
+<sec:authorize access="hasAuthority('GESTIONAR_CORREO_PROPIETARIO_PRIVILAGE')">
+    <c:set var="url" value="'/CorreosPropietario/0/'" />
+</sec:authorize> 
+<sec:authorize access="hasAuthority('GESTIONAR_TELEFONO_PROPIETARIO_PRIVILAGE')">
+    <c:set var="url" value="'/TelefonosPropietario/0/'" />
+</sec:authorize>
+<sec:authorize access="hasAuthority('GESTIONAR_INFORMACION_PROPIETARIO_PRIVILAGE')">
+    <c:set var="url" value="'/InformacionPropietario/0/'" />
+</sec:authorize>
+<script>var urlVerPropietario = <c:out value='${url}' escapeXml="false"/>;</script>
+
 <sec:authorize access="hasAuthority('EDITAR_PROPIETARIO_PRIVILAGE')" var="hasPrivilegeEditarPropietario"></sec:authorize>
 <script>var hasPrivilegeEditarPropietario = <c:out value='${hasPrivilegeEditarPropietario}' />;</script>
 

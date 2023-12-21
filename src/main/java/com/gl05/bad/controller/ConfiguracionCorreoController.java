@@ -48,7 +48,7 @@ public class ConfiguracionCorreoController {
     }
     
     //Función que obtiene las configuraciones de correos
-    @GetMapping("/configuracionCorreo/data")
+    @GetMapping(value="/configuracionCorreo/data", produces = "application/json; charset=UTF-8")
     @ResponseBody
     public DataTablesOutput<ConfiguracionCorreo> GetConfiguracionCorreos(@Valid DataTablesInput input) {
         return configuracionCorreoService.listarConfiguracionesCorreo(input);
@@ -90,7 +90,7 @@ public class ConfiguracionCorreoController {
     }
 
     //Función que obtiene una configuración de correo de la base de datos
-    @GetMapping("/ObtenerConfiguracionCorreo/{id}")
+    @GetMapping(value = "/ObtenerConfiguracionCorreo/{id}", produces = "application/json; charset=UTF-8")
     public ResponseEntity<ConfiguracionCorreo> ObtenerConfiguracionCorreo(@PathVariable Long id) {
         ConfiguracionCorreo configuracionCorreo = configuracionCorreoService.encontrar(id);
         if (configuracionCorreo != null) {

@@ -132,9 +132,21 @@
 </div>
 
 <!-- Script de la página -->
-<sec:authorize access="hasAuthority('VER_TRABAJADOR_PRIVILAGE')" var="hasPrivilegeVerTrabajador"></sec:authorize>
+<sec:authorize access="hasAuthority('GESTIONAR_INFORMACION_TRABAJADOR_PRIVILAGE') || hasAuthority('GESTIONAR_DOCUMENTO_TRABAJADOR_PRIVILAGE') || hasAuthority('GESTIONAR_TERRENOS_TRABAJADOR_PRIVILAGE')" var="hasPrivilegeVerTrabajador"></sec:authorize>
 <script>var hasPrivilegeVerTrabajador = <c:out value='${hasPrivilegeVerTrabajador}' />;</script>    
-        
+
+<c:set var="url" value="" /> 
+<sec:authorize access="hasAuthority('GESTIONAR_TERRENOS_TRABAJADOR_PRIVILAGE')">
+    <c:set var="url" value="'/TerrenosTrabajador/0/'" />
+</sec:authorize>
+<sec:authorize access="hasAuthority('GESTIONAR_DOCUMENTO_TRABAJADOR_PRIVILAGE')">
+    <c:set var="url" value="'/DocumentosTrabajador/0/'" />
+</sec:authorize> 
+<sec:authorize access="hasAuthority('GESTIONAR_INFORMACION_TRABAJADOR_PRIVILAGE')">
+    <c:set var="url" value="'/InformacionTrabajador/0/'" />
+</sec:authorize>
+<script>var urlVerTrabajador = <c:out value='${url}' escapeXml="false"/>;</script>
+
 <sec:authorize access="hasAuthority('EDITAR_TRABAJADOR_PRIVILAGE')" var="hasPrivilegeEditarTrabajador"></sec:authorize>
 <script>var hasPrivilegeEditarTrabajador = <c:out value='${hasPrivilegeEditarTrabajador}' />;</script>
 

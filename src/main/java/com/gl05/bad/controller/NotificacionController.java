@@ -4,16 +4,19 @@ import com.gl05.bad.domain.ConfiguracionCorreo;
 import com.gl05.bad.domain.Correo;
 import com.gl05.bad.domain.Propietario;
 import com.gl05.bad.domain.Proyecto;
+import com.gl05.bad.domain.Usuario;
 import com.gl05.bad.servicio.BitacoraServiceImp;
 import com.gl05.bad.servicio.ConfiguracionCorreoService;
 import com.gl05.bad.servicio.CorreoService;
 import com.gl05.bad.servicio.PropietarioService;
 import com.gl05.bad.servicio.ProyectoService;
+import com.gl05.bad.servicio.UserService;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
@@ -58,6 +61,9 @@ public class NotificacionController {
     
     @Autowired
     private JavaMailSender javaMailSender;
+
+    @Autowired
+    private UserService usuarioService;
     
     //Función para redigir a la vista de notificacion
     @GetMapping("/EnviarNotificacion/{idProyecto}")
@@ -67,6 +73,12 @@ public class NotificacionController {
         Proyecto newProyecto = proyectoService.encontrar(proyecto.getIdProyecto());
         List<Correo> listaCorreosActivos = correoService.listarCorreosVentaActiva(newProyecto);
         List<Correo> listaCorreosProyecto = correoService.listarCorreosProyecto(newProyecto);
+        String username = authentication.getName();
+        Usuario usuario = usuarioService.encontrarUsername(username);
+        Set<Proyecto> listaProyectosAsignados = usuario.getProyectos();
+        if(!listaProyectosAsignados.contains(newProyecto)){
+            return "accesodenegado";
+        }
         model.addAttribute("listaCorreosActivos", listaCorreosActivos);
         model.addAttribute("listaCorreosProyecto", listaCorreosProyecto);
         model.addAttribute("remitentes", listaRemitentes);
@@ -81,6 +93,12 @@ public class NotificacionController {
         Proyecto newProyecto = proyectoService.encontrar(proyecto.getIdProyecto());
         List<Propietario> listaPropietarios = propietarioService.listaPropietariosProyecto(newProyecto);
         List<String> tiposCorreo = listarTiposCorreos();
+        String username = authentication.getName();
+        Usuario usuario = usuarioService.encontrarUsername(username);
+        Set<Proyecto> listaProyectosAsignados = usuario.getProyectos();
+        if(!listaProyectosAsignados.contains(newProyecto)){
+            return "accesodenegado";
+        }
         model.addAttribute("tiposCorreo", tiposCorreo);
         model.addAttribute("propietarios", listaPropietarios);
         model.addAttribute("proyecto", newProyecto);
@@ -88,7 +106,7 @@ public class NotificacionController {
     }
 
     //Función que obtiene los correos del proyecto
-    @GetMapping("/correosProyecto/data/{idProyecto}")
+    @GetMapping(value="/correosProyecto/data/{idProyecto}", produces = "application/json; charset=UTF-8")
     @ResponseBody
     public DataTablesOutput<Correo> GetCorreosProyecto(@Valid DataTablesInput input, @PathVariable Long idProyecto) {
         return correoService.listarCorreosProyecto(input, idProyecto);
@@ -102,6 +120,7 @@ public class NotificacionController {
     @RequestParam("idProyecto") Long idProyecto,
     @RequestParam(value ="propietarioIndividual", required = false) List<String> propietarioIndividual,
     @RequestParam(value ="destinatario", required = false) String destinatario,
+    @RequestParam("tipoEnvio") String tipoEnvio,
     @RequestParam("destino") String destino,
     @RequestParam("asunto") String asunto,
     @RequestParam(value ="cc", required = false) String cc,
@@ -156,7 +175,57 @@ public class NotificacionController {
                     }
                 }
                 //Envío del correo a los destinatarios
-                for (String correo : listaEnvios) {
+                if(tipoEnvio.equals("Masivo")){
+                    for (String correo : listaEnvios) {
+                        JavaMailSenderImpl mailSender = (JavaMailSenderImpl) javaMailSender;
+                        // Obtener la configuración de correo desde la base de datos
+                        ConfiguracionCorreo configuracionCorreo = configuracionCorreoService.encontrar(idRemitente);
+                        String usernameString = configuracionCorreo.getUsername();
+                        // Verificar si se pudo obtener la configuración de correo
+                        if (configuracionCorreo != null) {
+                            mailSender.setHost(configuracionCorreo.getHost());
+                            mailSender.setPort(Integer.parseInt(configuracionCorreo.getPort()));
+                            mailSender.setUsername(configuracionCorreo.getUsername());
+                            mailSender.setPassword(configuracionCorreo.getPassword());
+                            Properties javaMailProperties = mailSender.getJavaMailProperties();
+                            javaMailProperties.put("mail.transport.protocol", configuracionCorreo.getProtocol());
+                            javaMailProperties.put("mail.smtp.auth", String.valueOf(configuracionCorreo.getSmtp_auth()));
+                            javaMailProperties.put("mail.smtp.starttls.enable", String.valueOf(configuracionCorreo.getStart_tls()));
+                        }
+                        // Crear un mensaje de correo con soporte para archivos adjuntos
+                        MimeMessage mensajeCorreo = mailSender.createMimeMessage();
+                        MimeMessageHelper helper = new MimeMessageHelper(mensajeCorreo, true);
+                        // Configurar el remitente, destinatario, asunto y cuerpo del mensaje
+                        helper.setFrom(usernameString, configuracionCorreo.getName());
+                        helper.setTo(correo);
+                        helper.setSubject(asunto);
+                        helper.setText(msj, true);
+                        // Agregar destinatarios en copia (CC) si se proporcionan
+                        List<String> listaCorreosCC =  null;
+                        if (cc != null && !cc.isEmpty()) {
+                            listaCorreosCC =  Arrays.asList(cc.split(","));
+                            for (String correoCC : listaCorreosCC) {
+                                helper.addCc(correoCC);
+                            }
+                        }
+                        // Agregar destinatarios en copia oculta (BCC) si se proporcionan
+                        List<String> listaCorreosBCC =  null;
+                        if (bcc != null && !bcc.isEmpty()) {
+                            listaCorreosBCC =  Arrays.asList(bcc.split(","));
+                            for (String correoBCC : listaCorreosBCC) {
+                                helper.addBcc(correoBCC);
+                            }
+                        }
+                        // Adjuntar archivos al correo
+                        if (adjuntos != null && adjuntos.length > 0) {
+                            for (MultipartFile adjunto : adjuntos) {
+                                helper.addAttachment(adjunto.getOriginalFilename(), adjunto);
+                            }
+                        }
+                        // Enviar el correo
+                        javaMailSender.send(mensajeCorreo);
+                    }
+                }else{
                     JavaMailSenderImpl mailSender = (JavaMailSenderImpl) javaMailSender;
                     // Obtener la configuración de correo desde la base de datos
                     ConfiguracionCorreo configuracionCorreo = configuracionCorreoService.encontrar(idRemitente);
@@ -177,7 +246,7 @@ public class NotificacionController {
                     MimeMessageHelper helper = new MimeMessageHelper(mensajeCorreo, true);
                     // Configurar el remitente, destinatario, asunto y cuerpo del mensaje
                     helper.setFrom(usernameString, configuracionCorreo.getName());
-                    helper.setTo(correo);
+                    //helper.setTo(correo);  Se envian con copia oculta
                     helper.setSubject(asunto);
                     helper.setText(msj, true);
                     // Agregar destinatarios en copia (CC) si se proporcionan
@@ -196,6 +265,11 @@ public class NotificacionController {
                             helper.addBcc(correoBCC);
                         }
                     }
+                    if(!listaEnvios.isEmpty()){
+                        for (String correo : listaEnvios) {
+                            helper.addBcc(correo);
+                        }
+                    }
                     // Adjuntar archivos al correo
                     if (adjuntos != null && adjuntos.length > 0) {
                         for (MultipartFile adjunto : adjuntos) {
@@ -205,7 +279,7 @@ public class NotificacionController {
                     // Enviar el correo
                     javaMailSender.send(mensajeCorreo);
                 }
-
+                
                 String mensaje = "Se ha enviado el correo correctamente.";
                 bitacoraService.registrarAccion("Enviar correo");
                 return ResponseEntity.ok(mensaje);

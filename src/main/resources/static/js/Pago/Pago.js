@@ -1,15 +1,16 @@
+//**********-----------Actualizar en la carpeta de ventas el modulo de pagos-------------**********
 $(document).ready(function() {
     //Tabla
     var fechaInicio = $("#b_fecha_inicio").length > 0 ? $("#b_fecha_inicio").val() : '';
     var fechaFin = $("#b_fecha_fin").length > 0 ? $("#b_fecha_fin").val() : '';
-    var comprobante = $("#b_comprobante").length > 0 ? $("#b_comprobante").val() : '';
+    var tipo = $("#b_tipo").length > 0 ? $("#b_tipo").val() : '';
     var estado = $("#b_estado").length > 0 ? $("#b_estado").val() : '';
-    var tipoPago = $("#b_tipo_pago").length > 0 ? $("#b_tipo_pago").val() : '0';
-    var lote = $("#b_lote").length > 0 ? $("#b_lote").val() : '0';
+    var cuenta = $("#b_cuenta").length > 0 ? $("#b_cuenta").val() : '0';
+    var comprobante = $("#b_comprobante").length > 0 ? $("#b_comprobante").val() : '';
     var idProyecto = $('#proyectoId').data('id');
     var table = $('#pagoTable').DataTable({
         ajax: {
-            url: '/pagos/data/' + idProyecto + '?fecha_inicio=' + fechaInicio + '&fecha_fin=' + fechaFin + '&comprobante=' + comprobante + '&estado=' + estado + '&tipo_pago=' + tipoPago + '&lote=' + lote,
+            url: '/pagos/data/' + idProyecto + '?fecha_inicio=' + fechaInicio + '&fecha_fin=' + fechaFin + '&tipo=' + tipo + '&estado=' + estado + '&cuenta=' + cuenta + '&comprobante=' + comprobante,
             dataSrc: 'data'
         },
         order: [[2, 'desc'],[1, 'desc']],
@@ -64,7 +65,7 @@ $(document).ready(function() {
             },
             {
                 data: 'fechaRegistro',
-                width: '10%',
+                width: '7%',
                 title: 'Fecha Registro',
                 class: 'd-none',
                 searchable: false
@@ -89,22 +90,34 @@ $(document).ready(function() {
             },
             {
                 data: 'recibo',
-                title: 'Recibo',
+                title: 'N° Comp.',
                 width: '10%',
                 render: function (data, type, row) {
                     var claseCSS = '';
                     if(row.estado === false){
                         claseCSS = 'badge bg-danger';
-                    }else if(row.comprobante=="Factura"){
+                    }else if(row.comprobante=="Recibo"){
                         claseCSS = 'badge bg-azul';
+                    }else if(row.comprobante=="Factura"){
+                        claseCSS = 'badge bg-amarillo';
                     }else{
                         claseCSS = 'badge bg-verde';
                     }
-                    return '<span class="badge-recibo ' + claseCSS + '">' + data + '</span>';
+                    var valor = '';
+                    if(row.comprobante === 'Ticket'){
+                        valor += 'T '+data;
+                    }else if(row.comprobante === 'Recibo'){
+                        valor += 'R '+data;
+                    }else if(row.comprobante === 'Factura'){
+                        valor += 'F '+data;
+                    }else if(row.comprobante === 'Crédito Fiscal'){
+                        valor += 'CF '+data;
+                    }
+                    return '<span class="badge-recibo ' + claseCSS + '">' + valor + '</span>';
                 }
             },
-            {data: 'tipo', title: 'Tipo', width: '15%', searchable: false},
-            { data: 'cuentaBancaria.nombre', title:'Tipo Pago', width: '15%', searchable: false},
+            {data: 'tipo', title: 'Tipo', width: '14%', searchable: false},
+            {data: 'cuentaBancaria.nombre', title:'Cuenta', width: '15%', searchable: false},
             {
                 data: 'monto',
                 title: 'Monto',
@@ -123,7 +136,7 @@ $(document).ready(function() {
                 title: 'Lote',
                 sortable: false,
                 searchable: false,
-                width: '10%',
+                width: '8%',
                 render: function (data, type, row) {            
                     return row.venta.terreno.poligono + '-' + row.venta.terreno.numero + row.venta.terreno.seccion;
                 }
@@ -133,7 +146,7 @@ $(document).ready(function() {
                 title: 'Acciones',
                 sortable: false,
                 searchable: false,
-                width: '28%',
+                width: '34%',
                 render: function (data, type, row) {
                     var actionsHtml = '';
                     if(hasPrivilegeVerPago === true){
@@ -160,6 +173,9 @@ $(document).ready(function() {
                             actionsHtml += '<a  title="Desanular" type="button" class="btn font-size-small btn-outline-success btn-sm btn-anular" data-id="' + row.idPago + '" data-estado="true">';
                             actionsHtml += '<i class="fa-solid fa-check"></i></a>';
                         }
+                    }
+                    if(hasPrivilegeImprimirPago == true){
+                        actionsHtml += '<button title="Imprimir Recibo" type="button" class="btn btn-sm font-size-small btn-outline-dark btn-imprimir" data-bs-toggle="modal" data-id="' + row.idPago + '"><i class="fa-solid fa-print"></i></button>'
                     }   
                     return actionsHtml || '';
                 }
@@ -197,12 +213,8 @@ $(document).ready(function() {
                 }
             }
         },
-        search: {
-            return: true
-        },
-        ordering: {
-            return: true
-        }
+        search: true,
+        ordering: true
     });
     table.columns.adjust();
     $('#export-pdf').on('click', function() {
@@ -214,6 +226,46 @@ $(document).ready(function() {
     $('#export-copy').on('click', function() {
         table.button('.buttons-copy').trigger();
     });
+    //Método para filtrar la tabla de pagos
+    $(document).on('click', '#b_buscar', function () {
+        var fechaInicio = $("#b_fecha_inicio").val();
+        var fechaFin = $("#b_fecha_fin").val();
+        var tipo = $("#b_tipo").val();
+        var estado = $("#b_estado").val();
+        var cuenta = $("#b_cuenta").val();
+        var comprobante = $("#b_comprobante").val();
+        var url = '/pagos/data/' + idProyecto + '?fecha_inicio=' + fechaInicio + '&fecha_fin=' + fechaFin + '&tipo=' + tipo + '&estado=' + estado + '&cuenta=' + cuenta + '&comprobante=' + comprobante;
+        console.log(url);
+        table.ajax.url(url).load();
+    });
+    //Método para eliminar los filtros la tabla de pagos
+    $(document).on('click', '#b_clear', function () {
+        $("#b_fecha_inicio").val("");
+        $("#b_fecha_fin").val("");
+        $("#b_tipo").val("");
+        $("#b_estado").val("");
+        $("#b_cuenta").val("0");
+        $("#b_comprobante").val("");
+        var fechaInicio = "";
+        var fechaFin = "";
+        var tipo = "";
+        var estado = "";
+        var cuenta = "0";
+        var comprobante = "";
+        var url = '/pagos/data/' + idProyecto + '?fecha_inicio=' + fechaInicio + '&fecha_fin=' + fechaFin + '&tipo=' + tipo + '&estado=' + estado + '&cuenta=' + cuenta + '&comprobante=' + comprobante;
+        table.ajax.url(url).load();
+    });
+    // Función para obtener la fecha y hora actual en formato deseado
+    function getCurrentDateTime() {
+        var date = new Date();
+        var year = date.getFullYear();
+        var month = String(date.getMonth() + 1).padStart(2, '0');
+        var day = String(date.getDate()).padStart(2, '0');
+        var hours = String(date.getHours()).padStart(2, '0');
+        var minutes = String(date.getMinutes()).padStart(2, '0');
+        var seconds = String(date.getSeconds()).padStart(2, '0');
+        return year + month + day + '_' + hours + minutes + seconds;
+    }
     //Método para anular recibos
     $(document).on('click', '.btn-anular', function () {
         var idPago = $(this).data('id');
@@ -235,47 +287,6 @@ $(document).ready(function() {
             }
         });
     });
-    //Método para filtrar la tabla de pagos
-    $(document).on('click', '#b_buscar', function () {
-        var fechaInicio = $("#b_fecha_inicio").val();
-        var fechaFin = $("#b_fecha_fin").val();
-        var comprobante = $("#b_comprobante").val();
-        var estado = $("#b_estado").val();
-        var tipoPago = $("#b_tipo_pago").val();
-        var lote = $("#b_lote").val();
-        var url = '/pagos/data/' + idProyecto + '?fecha_inicio=' + fechaInicio + '&fecha_fin=' + fechaFin + '&comprobante=' + comprobante + '&estado=' + estado + '&tipo_pago=' + tipoPago + '&lote=' + lote;
-        console.log(url);
-        table.ajax.url(url).load();
-    });
-    //Método para eliminar los filtros la tabla de pagos
-    $(document).on('click', '#b_clear', function () {
-        $("#b_fecha_inicio").val("");
-        $("#b_fecha_fin").val("");
-        $("#b_comprobante").val("");
-        $("#b_estado").val("");
-        $("#b_tipo_pago").val("0");
-        $("#b_lote").val("0");
-        var fechaInicio = "";
-        var fechaFin = "";
-        var comprobante = "";
-        var estado = "";
-        var tipoPago = "0";
-        var lote = "0";
-        var url = '/pagos/data/' + idProyecto + '?fecha_inicio=' + fechaInicio + '&fecha_fin=' + fechaFin + '&comprobante=' + comprobante + '&estado=' + estado + '&tipo_pago=' + tipoPago + '&lote=' + lote;
-        console.log(url);
-        table.ajax.url(url).load();
-    });
-    // Función para obtener la fecha y hora actual en formato deseado
-    function getCurrentDateTime() {
-        var date = new Date();
-        var year = date.getFullYear();
-        var month = String(date.getMonth() + 1).padStart(2, '0');
-        var day = String(date.getDate()).padStart(2, '0');
-        var hours = String(date.getHours()).padStart(2, '0');
-        var minutes = String(date.getMinutes()).padStart(2, '0');
-        var seconds = String(date.getSeconds()).padStart(2, '0');
-        return year + month + day + '_' + hours + minutes + seconds;
-    }
     $.validator.addMethod(
         "validarNumero",
         function(value, element) {
@@ -300,6 +311,35 @@ $(document).ready(function() {
             return otros >= 0 && otros <= valorPago;
         },
         "El valor en 'Otros' debe ser menor o igual que el valor en 'Monto'"
+    );
+    $.validator.addMethod(
+        "encontrarRecibo",
+        function(value, element, params) {
+            var existe = false;
+            if ($("#recibo").val() != "" && $("#comprobante").val() != "" && $("#tipo").val() != "" && $("#venta").val() != "") {
+                $.ajax({
+                    url: '/VerificarPago?recibo=' + $("#recibo").val() + '&comprobante=' + $("#comprobante").val() + '&tipo=' + $("#tipo").val() + '&idVenta=' + $("#venta").val() + '&idPago=' + $("#idPago").val(),
+                    method: 'GET',
+                    dataType: 'json',
+                    async: false,
+                    success: function(response) {
+                        if(response.existe){
+                            existe = false;
+                        }else{
+                            existe = true;
+                        }
+                    },
+                    error: function() {
+                        existe = false;
+                    }
+                });
+            } else {
+                existe = true;
+            }
+            $.validator.messages.encontrarRecibo = "El número de comprobante ya se encuentra registrado.";
+            return existe;
+        },
+        ""
     );
     $.validator.addMethod(
         "descuentoMenorCalculado",
@@ -341,6 +381,10 @@ $(document).ready(function() {
             cuenta: {
                 required: true
             },
+            referencia: {
+                validarNumero: true,
+                maxlength: 20
+            },
             fecha: {
                 required: true,
                 maxlength: 10
@@ -348,6 +392,7 @@ $(document).ready(function() {
             recibo: {
                 required: true,
                 validarNumero: true,
+                encontrarRecibo: true,
                 maxlength: 5
             },
             monto: {
@@ -364,7 +409,10 @@ $(document).ready(function() {
                 validarMonto: true,
                 otrosMenorQueMonto: true,
                 maxlength: 10
-            }  
+            },
+            observaciones: {
+                maxlength: 500
+            }    
         },
         messages:{
             venta:{
@@ -374,6 +422,9 @@ $(document).ready(function() {
                 required: 'Este campo es requerido'
             },
             cuenta:{
+                required: 'Este campo es requerido'
+            },
+            referencia:{
                 required: 'Este campo es requerido'
             },
             fecha:{
@@ -390,7 +441,11 @@ $(document).ready(function() {
             },
             otros:{
                 required: 'Este campo es requerido'
-            }        
+            },
+            observaciones:{
+                maxlength: 'Supera el límite de caracteres'
+            }
+                    
         },
         highlight: function(element) {
             $(element).addClass('is-invalid');
@@ -410,7 +465,7 @@ $(document).ready(function() {
             }
         },
         errorPlacement: function(error, element) {
-            if (element.attr("name") === "comprobante" || element.attr("name") === "cuenta" || element.attr("name") === "fecha" || element.attr("name") === "recibo" || element.attr("name") === "monto" || element.attr("name") === "descuento" || element.attr("name") === "otros") {
+            if (element.attr("name") === "comprobante" || element.attr("name") === "cuenta" || element.attr("name") === "referencia" || element.attr("name") === "fecha" || element.attr("name") === "recibo" || element.attr("name") === "monto" || element.attr("name") === "descuento" || element.attr("name") === "otros" || element.attr("name") === "observaciones") {
                 error.insertAfter(element);
             }        
         },
@@ -497,7 +552,6 @@ $(document).ready(function() {
                             success: function (data) {
                                 var selectElement = $("#venta");
                                 selectElement.empty();
-                                selectElement.append($("<option>", {value: '', text: 'Seleccione una opción'}));
                                 for (var i = 0; i < data.length; i++) {
                                     selectElement.append($("<option>", {
                                         value: data[i].idVenta,
@@ -508,8 +562,16 @@ $(document).ready(function() {
                             }
                         });
                         var selectElement = document.getElementById("comprobante");
-                        var indexToRemove = 1;
-                        selectElement.remove(indexToRemove);
+                        selectElement.innerHTML = '';
+                        //Opciones del select prima
+                        var newOption = document.createElement("option");
+                        newOption.text = "Seleccione una opción";
+                        newOption.value = "";
+                        selectElement.appendChild(newOption);
+                        newOption = document.createElement("option");
+                        newOption.text = "Recibo";
+                        newOption.value = "Recibo";
+                        selectElement.appendChild(newOption);
                         $('#comprobante').val(response.comprobante);
                     }else if(response.tipo==='Mantenimiento'){
                         $.ajax({
@@ -518,7 +580,6 @@ $(document).ready(function() {
                             success: function (data) {
                                 var selectElement = $("#venta");
                                 selectElement.empty();
-                                selectElement.append($("<option>", {value: '', text: 'Seleccione una opción'}));
                                 for (var i = 0; i < data.length; i++) {
                                     selectElement.append($("<option>", {
                                         value: data[i].idVenta,
@@ -529,13 +590,28 @@ $(document).ready(function() {
                             }
                         });
                         var selectElement = document.getElementById("comprobante");
-                        var cantidadDeOpciones = selectElement.options.length;
-                        if (cantidadDeOpciones < 2) {
-                            var newOption = document.createElement("option");
-                            newOption.text = "Crédito Fiscal";
-                            newOption.value = "Crédito Fiscal";
-                            selectElement.appendChild(newOption);
-                        }
+                        selectElement.innerHTML = '';
+                        //Opciones del select de mantenimiento
+                        var newOption = document.createElement("option");
+                        newOption.text = "Seleccione una opción";
+                        newOption.value = "";
+                        selectElement.appendChild(newOption);
+                        newOption = document.createElement("option");
+                        newOption.text = "Ticket";
+                        newOption.value = "Ticket";
+                        selectElement.appendChild(newOption);
+                        newOption = document.createElement("option");
+                        newOption.text = "Recibo";
+                        newOption.value = "Recibo";
+                        selectElement.appendChild(newOption);
+                        newOption = document.createElement("option");
+                        newOption.text = "Factura";
+                        newOption.value = "Factura";
+                        selectElement.appendChild(newOption);
+                        newOption = document.createElement("option");
+                        newOption.text = "Crédito Fiscal";
+                        newOption.value = "Crédito Fiscal";
+                        selectElement.appendChild(newOption);
                         $('#comprobante').val(response.comprobante);
                     }else if(response.tipo==='Financiamiento'){
                         $.ajax({
@@ -544,7 +620,6 @@ $(document).ready(function() {
                             success: function (data) {
                                 var selectElement = $("#venta");
                                 selectElement.empty();
-                                selectElement.append($("<option>", {value: '', text: 'Seleccione una opción'}));
                                 for (var i = 0; i < data.length; i++) {
                                     selectElement.append($("<option>", {
                                         value: data[i].idVenta,
@@ -555,17 +630,21 @@ $(document).ready(function() {
                             }
                         });
                         var selectElement = document.getElementById("comprobante");
-                        var cantidadDeOpciones = selectElement.options.length;
-                        if (cantidadDeOpciones < 2) {
-                            var newOption = document.createElement("option");
-                            newOption.text = "Crédito Fiscal";
-                            newOption.value = "Crédito Fiscal";
-                            selectElement.appendChild(newOption);
-                        }
+                        selectElement.innerHTML = '';
+                        //Opciones del select financiamiento
+                        var newOption = document.createElement("option");
+                        newOption.text = "Seleccione una opción";
+                        newOption.value = "";
+                        selectElement.appendChild(newOption);
+                        newOption = document.createElement("option");
+                        newOption.text = "Recibo";
+                        newOption.value = "Recibo";
+                        selectElement.appendChild(newOption);
                         $('#comprobante').val(response.comprobante);
                     }
                     $('#fecha').val(response.fecha);
                     $('#recibo').val(response.recibo);
+                    $('#referencia').val(response.referencia);
                     $('#estado').val(response.estado);
                     $('#monto').val(parseFloat(response.monto).toFixed(2));
                     $('#otros').val(parseFloat(response.otros).toFixed(2));
@@ -615,6 +694,7 @@ $(document).ready(function() {
             $('#tipo').val('');
             $('#fecha').val('');
             $('#recibo').val('');
+            $('#referencia').val('');
             $('#monto').val('');
             $('#comprobante').val('');
             $('#otros').val('0.00');
@@ -668,6 +748,7 @@ $(document).ready(function() {
     //Método para abrir modal de prima
     $(document).on('click', '#btn-prima', function () {
         validator.resetForm();
+        formGuardar.find('.is-invalid').removeClass('is-invalid');
         var modal = $('#crearModal');
         var modalGuardar = $('#crearModalGuardar');
         $("#crearModalLabelPago").text("Agregar Prima");
@@ -678,7 +759,6 @@ $(document).ready(function() {
             success: function (data) {
                 var selectElement = $("#venta");
                 selectElement.empty();
-                selectElement.append($("<option>", {value: '', text: 'Seleccione una opción'}));
                 for (var i = 0; i < data.length; i++) {
                     selectElement.append($("<option>", {
                         value: data[i].idVenta,
@@ -688,8 +768,16 @@ $(document).ready(function() {
             }
         });
         var selectElement = document.getElementById("comprobante");
-        var indexToRemove = 1;
-        selectElement.remove(indexToRemove);
+        selectElement.innerHTML = '';
+        //Opciones del select prima
+        var newOption = document.createElement("option");
+        newOption.text = "Seleccione una opción";
+        newOption.value = "";
+        selectElement.appendChild(newOption);
+        newOption = document.createElement("option");
+        newOption.text = "Recibo";
+        newOption.value = "Recibo";
+        selectElement.appendChild(newOption);
         document.getElementById("group-otros").style.display = "none";
         document.getElementById("group-descuento").style.display = "none";
         document.getElementById("otros").removeAttribute("required");
@@ -700,6 +788,7 @@ $(document).ready(function() {
     //Método para abrir modal de mantenimiento
     $(document).on('click', '#btn-mantenimiento', function () {
         validator.resetForm();
+        formGuardar.find('.is-invalid').removeClass('is-invalid');
         var modal = $('#crearModal');
         var modalGuardar = $('#crearModalGuardar');
         $("#crearModalLabelPago").text("Agregar Mantenimiento");
@@ -710,7 +799,6 @@ $(document).ready(function() {
             success: function (data) {
                 var selectElement = $("#venta");
                 selectElement.empty();
-                selectElement.append($("<option>", {value: '', text: 'Seleccione una opción'}));
                 for (var i = 0; i < data.length; i++) {
                     selectElement.append($("<option>", {
                         value: data[i].idVenta,
@@ -720,19 +808,45 @@ $(document).ready(function() {
             }
         });
         var selectElement = document.getElementById("comprobante");
-        var cantidadDeOpciones = selectElement.options.length;
-        if (cantidadDeOpciones < 2) {
-            var newOption = document.createElement("option");
-            newOption.text = "Crédito Fiscal";
-            newOption.value = "Crédito Fiscal";
-            selectElement.appendChild(newOption);
-        }
+        selectElement.innerHTML = '';
+        //Opciones del select de mantenimiento
+        var newOption = document.createElement("option");
+        newOption.text = "Seleccione una opción";
+        newOption.value = "";
+        selectElement.appendChild(newOption);
+        newOption = document.createElement("option");
+        newOption.text = "Ticket";
+        newOption.value = "Ticket";
+        selectElement.appendChild(newOption);
+        newOption = document.createElement("option");
+        newOption.text = "Recibo";
+        newOption.value = "Recibo";
+        selectElement.appendChild(newOption);
+        newOption = document.createElement("option");
+        newOption.text = "Factura";
+        newOption.value = "Factura";
+        selectElement.appendChild(newOption);
+        newOption = document.createElement("option");
+        newOption.text = "Crédito Fiscal";
+        newOption.value = "Crédito Fiscal";
+        selectElement.appendChild(newOption);
         document.getElementById("group-otros").style.display = "block";
         document.getElementById("group-descuento").style.display = "block";
         document.getElementById("otros").removeAttribute("required");
         document.getElementById("descuento").removeAttribute("required");
         modal.modal('hide');
         modalGuardar.modal('show');
+    });
+    //Función para mostrar la vista de impresión del comprobante
+    $(document).on('change', '#comprobante', function () {
+        var valor = $(this).val();
+        if(valor === "Ticket"){
+            document.getElementById("group-otros").style.display = "none";
+            document.getElementById("group-descuento").style.display = "none";
+        }else{
+            document.getElementById("group-otros").style.display = "block";
+            document.getElementById("group-descuento").style.display = "block";
+        }
     });
     //Función para inicializar la libreria de select2
     var $select = $('#venta').select2({
@@ -747,15 +861,40 @@ $(document).ready(function() {
             });
         }
     });
-    //Función para definir el uso de la libreria selec2
-    var $select = $( '#b_lote' ).select2( {
-        theme: "bootstrap-5",
-        width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
-        placeholder: $( this ).data( 'placeholder' ),
-        closeOnSelect: false
-    } );
     $select.on('change', function() {
         $(this).trigger('blur');
+        $(this).select2('close');
+    });
+    //Función para admitir los saltos de linea en las observaciones
+    const textarea = document.getElementById('observaciones');
+    textarea.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter') {
+        e.preventDefault();
+        const currentText = textarea.value;
+        textarea.value = currentText + '\n';
+        }
+    });
+    //Función para mostrar la vista de impresión del comprobante
+    $(document).on('click', '.btn-imprimir', function () {
+        var idPago = $(this).data('id');
+        $("#loadingOverlay").show();
+        $.ajax({
+            url: '/ComprobantePago/' + idPago,
+            method: 'GET',
+            success: function (data) {
+                document.getElementById('contenedorDePagina').innerHTML=data;
+                $("#loadingOverlay").hide();
+                $("#reporteModal").modal('show');
+            },
+            error: function () {
+                console.error('Error al cargar la página.');
+            }
+        });
+    });
+    //Función para imprimir el estado de cuenta
+    document.getElementById('btnImprimir').addEventListener('click', function () {
+        var divParaImprimir = $("#contenedorDePagina");
+        divParaImprimir.printThis();
     });
 }); 
 

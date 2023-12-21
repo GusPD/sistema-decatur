@@ -59,6 +59,9 @@ public class Facturacion implements Serializable {
     @ManyToOne
     @JoinColumn(name = "ID_VENTA", referencedColumnName = "ID_VENTA")
     private Venta venta;
+    @ManyToOne
+    @JoinColumn(name = "ID_MUNICIPIO", referencedColumnName = "ID_MUNICIPIO")
+    private Municipio municipio;
 
     @Override
     public int hashCode() {

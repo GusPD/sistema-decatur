@@ -6,7 +6,7 @@ $(document).ready(function() {
             url: '/ventas/data/' + idTerreno,
             dataSrc: 'data'
         },
-        order: [[1, 'asc'],[0, 'asc']],
+        order: [[1, 'asc'],[3, 'asc']],
         processing: true,
         serverSide: true,
         dom: "<'row w-100'<'col-sm-12 mb-4'B>>" +
@@ -61,6 +61,7 @@ $(document).ready(function() {
                 data: 'terceros', 
                 width: '15%', 
                 title: 'Tipo Venta',
+                sortable: false,
                 searchable: false,
                 render: function(data, type, row) {
                     if (type === 'display' || type === 'filter') {
@@ -103,7 +104,7 @@ $(document).ready(function() {
                 render: function (data, type, row) {
                     var actionsHtml = '';
                     if(hasPrivilegeVerVenta === true){
-                        actionsHtml = '<a title="Ver" type="button" class="btn font-size-small btn-outline-secondary btn-sm" href="/InformacionVenta/' + row.idVenta + '">';
+                        actionsHtml = '<a title="Ver" type="button" class="btn font-size-small btn-outline-secondary btn-sm" href="' + urlVerVenta + row.idVenta + '">';
                         actionsHtml += '<i class="far fa-eye"></i></a>';
                     }
                     if(hasPrivilegeEditarVenta === true){
@@ -129,7 +130,7 @@ $(document).ready(function() {
             "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
             "sInfoFiltered": "",
             "sInfoPostFix": "",
-            "sSearch": "Buscar:",
+            "sSearch": "Buscar por nombre o estado:",
             "sUrl": "",
             "sInfoThousands": ",",
             "sLoadingRecords": "Cargando...",
@@ -152,12 +153,8 @@ $(document).ready(function() {
                 }
             }
         },
-        search: {
-            return: true
-        },
-        ordering: {
-            return: true
-        }
+        search: true,
+        ordering: true
     });
     table.columns.adjust();
     $('#export-pdf').on('click', function() {
@@ -253,7 +250,12 @@ $(document).ready(function() {
                 required: true,
                 maxlength: 10
             },
-            fechaCorte: {
+            fechaCorteFinanciamiento: {
+                required: true,
+                fechaMayorIgual: true,
+                maxlength: 10
+            },
+            fechaCorteMantenimiento: {
                 required: true,
                 fechaMayorIgual: true,
                 maxlength: 10
@@ -283,7 +285,10 @@ $(document).ready(function() {
             fecha: {
                 required: 'Este campo es requerido'
             },
-            fechaCorte: {
+            fechaCorteMantenimiento: {
+                required: 'Este campo es requerido'
+            },
+            fechaCorteFinanciamiento: {
                 required: 'Este campo es requerido'
             },
             precio: {
@@ -300,7 +305,7 @@ $(document).ready(function() {
             $(element).removeClass('is-invalid');
         },
         errorPlacement: function(error, element) {
-            if (element.attr("name") === "nombre" || element.attr("name") === "terceros" || element.attr("name") === "fecha" || element.attr("name") === "fechaCorte" || element.attr("name") === "precio" || element.attr("name") === "descuento" || element.attr("name") === "monto") {
+            if (element.attr("name") === "nombre" || element.attr("name") === "terceros" || element.attr("name") === "fecha" || element.attr("name") === "fechaCorteMantenimiento" || element.attr("name") === "fechaCorteFinanciamiento" || element.attr("name") === "precio" || element.attr("name") === "descuento" || element.attr("name") === "monto") {
                 error.insertAfter(element);
             }        
         },
@@ -318,16 +323,28 @@ $(document).ready(function() {
             const month = addLeadingZero(fechaLocal.getMonth() + 1);
             const year = fechaLocal.getFullYear();
             const formattedDate = `${day}/${month}/${year}`;
-            const fechaCorteInputValue = $('#fechaCorte').val();
-            const fechaCorteInput = new Date(fechaCorteInputValue);
-            const fechaCorteLocal = new Date(fechaCorteInput.getTime() + fechaCorteInput.getTimezoneOffset() * 60000);
+            //Fecha corte financiamiento
+            const fechaCorteFInputValue = $('#fechaCorteFinanciamiento').val();
+            const fechaCorteFInput = new Date(fechaCorteFInputValue);
+            const fechaCorteFLocal = new Date(fechaCorteFInput.getTime() + fechaCorteFInput.getTimezoneOffset() * 60000);
             function addLeadingZero(number) {
                 return number < 10 ? `0${number}` : number;
             }
-            const dayCorte = addLeadingZero(fechaCorteLocal.getDate());
-            const monthCorte = addLeadingZero(fechaCorteLocal.getMonth() + 1);
-            const yearCorte = fechaCorteLocal.getFullYear();
-            const formattedDateCorte = `${dayCorte}/${monthCorte}/${yearCorte}`;
+            const dayCorteF = addLeadingZero(fechaCorteFLocal.getDate());
+            const monthCorteF = addLeadingZero(fechaCorteFLocal.getMonth() + 1);
+            const yearCorteF = fechaCorteFLocal.getFullYear();
+            const formattedDateCorteF = `${dayCorteF}/${monthCorteF}/${yearCorteF}`;
+            //Fecha corte mantenimiento
+            const fechaCorteMInputValue = $('#fechaCorteMantenimiento').val();
+            const fechaCorteMInput = new Date(fechaCorteMInputValue);
+            const fechaCorteMLocal = new Date(fechaCorteMInput.getTime() + fechaCorteMInput.getTimezoneOffset() * 60000);
+            function addLeadingZero(number) {
+                return number < 10 ? `0${number}` : number;
+            }
+            const dayCorteM = addLeadingZero(fechaCorteMLocal.getDate());
+            const monthCorteM = addLeadingZero(fechaCorteMLocal.getMonth() + 1);
+            const yearCorteM = fechaCorteMLocal.getFullYear();
+            const formattedDateCorteM = `${dayCorteM}/${monthCorteM}/${yearCorteM}`;
             var idVenta = $('#idVenta').val();
             var estado = $('#estado').val();
             var idTerreno = $('#idTerreno').val();
@@ -336,7 +353,8 @@ $(document).ready(function() {
             var idListDocumento = $('#idListDocumento').val();
             var formDataArray = formGuardar.serializeArray();
             formDataArray = formDataArray.filter(item => item.name !== 'fecha');
-            formDataArray = formDataArray.filter(item => item.name !== 'fechaCorte');
+            formDataArray = formDataArray.filter(item => item.name !== 'fechaCorteMantenimiento');
+            formDataArray = formDataArray.filter(item => item.name !== 'fechaCorteFinanciamiento');
             formDataArray = formDataArray.filter(item => item.name !== 'descuento');
             var url;
             if(descuento===''){
@@ -344,10 +362,10 @@ $(document).ready(function() {
             }
             if (idVenta) {
                 url = '/ActualizarVenta/'+idTerreno;
-                formDataArray.push({name: 'idVenta', value: idVenta},{name: 'estado', value: estado},{name: 'fecha', value: formattedDate},{name: 'fechaCorte', value: formattedDateCorte},{name: 'descuento', value: descuento}, {name: 'idListDocumento', value: idListDocumento}, {name: 'monto', value: monto});
+                formDataArray.push({name: 'idVenta', value: idVenta},{name: 'estado', value: estado},{name: 'fecha', value: formattedDate},{name: 'fechaCorteMantenimiento', value: formattedDateCorteM},{name: 'fechaCorteFinanciamiento', value: formattedDateCorteF},{name: 'descuento', value: descuento}, {name: 'idListDocumento', value: idListDocumento}, {name: 'monto', value: monto});
             } else {
                 url = '/AgregarVenta/'+idTerreno;
-                formDataArray.push({name: 'estado', value: estado},{name: 'fecha', value: formattedDate},{name: 'fechaCorte', value: formattedDateCorte},{name: 'descuento', value: descuento}, {name: 'monto', value: monto});
+                formDataArray.push({name: 'estado', value: estado},{name: 'fecha', value: formattedDate},{name: 'fechaCorteMantenimiento', value: formattedDateCorteM},{name: 'fechaCorteFinanciamiento', value: formattedDateCorteF},{name: 'descuento', value: descuento}, {name: 'monto', value: monto});
             }
             $.ajax({
                 url: url,
@@ -385,7 +403,8 @@ $(document).ready(function() {
                 success: function (response) {
                     $('#nombre').val(response.nombre);
                     $('#fecha').val(response.fecha);
-                    $('#fechaCorte').val(response.fechaCorte);
+                    $('#fechaCorteMantenimiento').val(response.fechaCorteMantenimiento);
+                    $('#fechaCorteFinanciamiento').val(response.fechaCorteFinanciamiento);
                     $('#precio').val(parseFloat(response.precio).toFixed(2));
                     $('#terceros').val(response.terceros.toString());
                     $('#monto').val(parseFloat(response.monto).toFixed(2));
@@ -407,7 +426,8 @@ $(document).ready(function() {
             $('#descuento').val('0.00');
             $('#nombre').prop('disabled', false);
             $('#fecha').prop('disabled', false);
-            $('#fechaCorte').prop('disabled', false);
+            $('#fechaCorteFinanciamiento').prop('disabled', false);
+            $('#fechaCorteMantenimiento').prop('disabled', false);
             $('#precio').prop('disabled', false);
             $('#terceros').prop('disabled', false);
             $('#monto').prop('disabled', true);
@@ -427,7 +447,8 @@ $(document).ready(function() {
                     if(habilitarEdicion){
                         $('#nombre').prop('disabled', false);
                         $('#fecha').prop('disabled', false);
-                        $('#fechaCorte').prop('disabled', false);
+                        $('#fechaCorteMantenimiento').prop('disabled', false);
+                        $('#fechaCorteFinanciamiento').prop('disabled', false);
                         $('#precio').prop('disabled', false);
                         $('#terceros').prop('disabled', false);
                         $('#monto').prop('disabled', true);
@@ -439,7 +460,8 @@ $(document).ready(function() {
                     }else{
                         $('#nombre').prop('disabled', false);
                         $('#fecha').prop('disabled', true);
-                        $('#fechaCorte').prop('disabled', true);
+                        $('#fechaCorteMantenimiento').prop('disabled', true);
+                        $('#fechaCorteFinanciamiento').prop('disabled', true);
                         $('#precio').prop('disabled', true);
                         $('#terceros').prop('disabled', false);
                         $('#monto').prop('disabled', true);

@@ -51,15 +51,21 @@
                                         <c:set var="urlInformacion" value="/InformacionTrabajador/${proyectoId}/${persona.idPersona}" />
                                         <c:set var="urlDocumentos" value="/DocumentosTrabajador/${proyectoId}/${persona.idPersona}" />
                                         <c:set var="urlTerrenos" value="/TerrenosTrabajador/${proyectoId}/${persona.idPersona}" />
+                                        <sec:authorize access="hasAuthority('GESTIONAR_INFORMACION_TRABAJADOR_PRIVILAGE')">
                                         <a class="tab-perfil list-group-item list-group-item-info btn-info text-center ${requestScope['javax.servlet.forward.request_uri'] == urlInformacion ? 'active' : ''}" href="/InformacionTrabajador/${proyectoId}/${persona.idPersona}" type="button">
                                             Información
                                         </a>
+                                        </sec:authorize>
+                                        <sec:authorize access="hasAuthority('GESTIONAR_DOCUMENTO_TRABAJADOR_PRIVILAGE')">
                                         <a class="tab-perfil list-group-item list-group-item-info text-center btn-info ${requestScope['javax.servlet.forward.request_uri'] == urlDocumentos ? 'active' : ''}" href="/DocumentosTrabajador/${proyectoId}/${persona.idPersona}" type="button">
                                             Documentos
                                         </a>
+                                        </sec:authorize>
+                                        <sec:authorize access="hasAuthority('GESTIONAR_TERRENOS_TRABAJADOR_PRIVILAGE')">
                                         <a class="tab-perfil list-group-item list-group-item-info text-center btn-info ${requestScope['javax.servlet.forward.request_uri'] == urlTerrenos ? 'active' : ''}" href="/TerrenosTrabajador/${proyectoId}/${persona.idPersona}" type="button">
                                             Terrenos
                                         </a>
+                                        </sec:authorize>
                                     </div>
                                 </div>
                             </div>

@@ -1,3 +1,4 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
@@ -14,6 +15,14 @@
         }
         .contenedor-fecha-pago{
             display: flex;
+        }
+        .texto-observaciones{
+            text-align: justify;
+            overflow: hidden;
+            line-height: 1.4;
+            padding: 0;
+            max-height: 7cm;
+            max-width: 6.4cm;
         }
         @page {
             size: letter;
@@ -53,9 +62,26 @@
                 margin: 0;
                 padding: 0;
             }
-            .monto-recibo{
+            .contenedor-monto{
+                display: flex;
                 margin-top: 3.5cm;
+                margin-left: 0;
+                margin-right: 0;
+                margin-bottom: 0;
+                padding: 0;
+                height: 13px;
+            }
+            .monto-recibo{
+                margin-top: 0;
                 margin-left: 3.5cm;
+                margin-right: 0;
+                margin-bottom: 0;
+                width: 2.5cm;
+                height: 13px;
+            }
+            .numero-recibo{
+                margin-top: 0;
+                margin-left: 12cm;
                 margin-right: 0;
                 margin-bottom: 0;
                 height: 13px;
@@ -97,11 +123,13 @@
                 height: 13px;
             }
             .valor-mantenimiento{
+                text-align: right;
                 margin-top: 1.5cm;
                 margin-left: 11.7cm;
                 margin-right: 0;
                 margin-bottom: 0;
                 padding: 0;
+                width: 1.5cm;
                 height: 13px;
             }
             .concepto-mantenimiento{
@@ -133,27 +161,33 @@
                 width: 7.2cm;
             }
             .valor-recargo{
+                text-align: right;
                 margin-left: 0.8cm;
                 margin-top: 0;
                 margin-right: 0;
                 margin-bottom: 0;
                 padding: 0;
+                width: 1.5cm;
                 height: 13px;
             }
             .valor-otros{
+                text-align: right;
                 margin-top: 0.2cm;
                 margin-left: 11.7cm;
                 margin-right: 0;
                 margin-bottom: 0;
                 padding: 0;
+                width: 1.5cm;
                 height: 13px;
             }
             .valor-total{
+                text-align: right;
                 margin-top: 1.3cm;
                 margin-left: 11.7cm;
                 margin-right: 0;
                 margin-bottom: 0;
                 padding: 0;
+                width: 1.5cm;
                 height: 13px;
             }
             .contenedor-fecha-pago{
@@ -216,20 +250,18 @@
                 margin-right: 0;
                 margin-bottom: 0;
                 padding: 0;
-                max-height: 5cm;
+                max-height: 7cm;
                 width: 6.4cm;
             }
-            .medio-pago{
-                text-align: justify;
-                overflow: hidden;
-                line-height: 1;
-                margin-left: 9cm;
-                margin-top: 0.4cm;
+            .usuario{
+                text-align: center;
+                margin-left: 2cm;
+                margin-top: 2cm;
                 margin-right: 0;
                 margin-bottom: 0;
                 padding: 0;
-                height: 1.5cm;
-                width: 11.3cm;
+                height: 13px;
+                width: 5.5cm;
             }
         }
     </style>
@@ -238,7 +270,10 @@
     <div class="recibo p-0">
         <div class="parte-superior-recibo">
             <div class="datos-recibo">
-                <p class="monto-recibo"><strong class="vista-impresion">Por: </strong>${pago.monto}</p>
+                <div class="contenedor-monto p-0">
+                    <p class="monto-recibo"><strong class="vista-impresion">Por: </strong>${pago.monto}</p>
+                    <p class="numero-recibo"><strong class="vista-impresion">Recibo: </strong>${pago.recibo}</p>
+                </div>
                 <p class="propietario"><strong class="vista-impresion">Recibimos de: </strong>${propietario}</p>
                 <div class="lote p-0 m-0">
                     <p class="seccion"><strong class="vista-impresion">Lote: </strong>${pago.venta.terreno.numero}${pago.venta.terreno.seccion}</p><p class="poligono p-0">${pago.venta.terreno.poligono}</p>
@@ -246,7 +281,7 @@
                 <p class="valor-mantenimiento"><c:if test="${montoMantenimiento>0}"><strong class="vista-impresion">Monto mantenimiento: </strong><c:out value="${String.format('%.2f', montoMantenimiento)}"/></c:if></p>
                 <p class="concepto-mantenimiento"><c:if test="${montoMantenimiento>0}"><strong class="vista-impresion">Concepto mantenimiento: </strong>${cuota}</c:if></p>
                 <div class="contenedor-recargo p-0">
-                    <p class="concepto-recargo"><c:if test="${montoRecargo>0}"><strong class="vista-impresion">Concepto recargo: </strong>${recargo}</c:if></p><p class="valor-recargo p-0"><c:if test="${montoRecargo>0}"><strong class="vista-impresion">Monto Recargo: </strong><c:out value="${String.format('%.2f', montoRecargo)}"/></c:if></p>
+                    <p class="concepto-recargo"><c:if test="${montoRecargo>0}"><strong class="vista-impresion">Concepto recargo: </strong>${recargo} <c:if test="${pago.descuento>0}">(<c:out value="${String.format('%.2f', pago.descuento)}"/>)</c:if></c:if></p><p class="valor-recargo p-0"><c:if test="${montoRecargo>0}"><strong class="vista-impresion">Monto Recargo: </strong><c:out value="${String.format('%.2f', montoRecargo - pago.descuento)}"/></c:if></p>
                 </div>
                 <p class="valor-otros"><c:if test="${pago.otros>0}"><strong class="vista-impresion">Monto otros: </strong><c:out value="${String.format('%.2f', pago.otros)}"/></c:if></p>
                 <p class="valor-total"><strong class="vista-impresion">Total: </strong><c:out value="${String.format('%.2f', pago.monto)}"/></p>
@@ -256,13 +291,11 @@
             </div>
             <div class="observaciones-recibo">
                 <strong class="vista-impresion">Observaciones: </strong>
-                <p class="fecha-corte"><c:if test="${(montoMantenimiento+montoRecargo)>0}">Fecha de corte <fmt:formatDate value="${pago.venta.fechaCorte}" pattern="dd" /> de cada mes</c:if></p>
+                <p class="fecha-corte"><c:if test="${(montoMantenimiento+montoRecargo)>0}">Fecha de corte <fmt:formatDate value="${pago.venta.fechaCorteMantenimiento}" pattern="dd" /> de cada mes</c:if></p>
                 <p class="texto-observaciones"><c:if test="${not empty estado}">${estado}<br></c:if><c:if test="${montoPendiente>0 && (montoMantenimiento+montoRecargo)>0}">${pendiente}<br></c:if>${pago.observaciones}</p>
             </div>
         </div>
-        <div class="parte-inferior-recibo">
-            <p class="medio-pago"></p>
-        </div>
+        <p class="usuario"><strong class="vista-impresion">Impreso por: </strong>${usuario.nombre}</p>
     </div>
 </body>
 </html>

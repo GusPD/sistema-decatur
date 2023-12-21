@@ -2,7 +2,7 @@ $(document).ready(function() {
     //Plugin editor de texto
     tinymce.init({
         selector: '#mensaje',
-        content_css: '/recursosOnline/css/styleTinymce.css',
+        content_css: '/css/RecursosOnline/styleTinymce.css',
         plugins: 'advlist autolink lists link image charmap preview anchor searchreplace visualblocks fullscreen insertdatetime media table wordcount',
         toolbar: 'undo redo save | fontfamily fontsize | bold italic underline strikethrough | removeformat | forecolor backcolor | align indent outdent lineheight | bullist numlist| subscript superscript',
         menubar: true,
@@ -57,6 +57,9 @@ $(document).ready(function() {
             remitente: {
                 required: true
             },
+            tipoEnvio: {
+                required: true
+            },
             destinatario: {
                 validarCorreos: true
             },
@@ -78,6 +81,9 @@ $(document).ready(function() {
                 required: 'Este campo es requerido'
             },
             propietarioIndividual:{
+                required: 'Este campo es requerido'
+            },
+            tipoEnvio:{
                 required: 'Este campo es requerido'
             },
             destinatario:{
@@ -114,7 +120,7 @@ $(document).ready(function() {
             }
         },
         errorPlacement: function(error, element) {
-            if (element.attr("name") === "remitente" || element.attr("name") === "destinatario" || element.attr("name") === "cc" || element.attr("name") === "cco" || element.attr("name") === "asunto" || element.attr("name") === "mensaje") {
+            if (element.attr("name") === "remitente" || element.attr("name") === "tipoEnvio" || element.attr("name") === "destinatario" || element.attr("name") === "cc" || element.attr("name") === "cco" || element.attr("name") === "asunto" || element.attr("name") === "mensaje") {
                 error.insertAfter(element);
             }        
         },

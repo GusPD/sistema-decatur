@@ -15,6 +15,22 @@
     z-index: 5!important;
 }
 
+body:not(.layout-fixed) .main-sidebar .sidebar {
+    overflow-y: hidden;
+}
+
+.overflow-opciones-menu{
+    overflow-y: auto !important;
+    overflow-x: hidden;
+    max-height: 80vh;
+}
+
+.overflow-opciones-menu-principal{
+    overflow-y: auto !important;
+    overflow-x: hidden;
+    max-height: 90vh;
+}
+
 #sidebar-overlay  {
     z-index: 4!important;
 }
@@ -314,9 +330,11 @@ th {
 .bg-verde{
     background: #89C48F; 
 }
-
 .bg-azul{
     background: #6CB4E3;
+}
+.bg-amarillo{
+    background: #ADB20A;
 }
 .font-size-small{
     font-size: 12px;
@@ -397,6 +415,12 @@ th {
 }
 .select2-selection__rendered li:not(.select2-search):not(:empty):first-child {
     margin-top: 10px;
+}
+.select2-container--bootstrap-5 .select2-dropdown .select2-results__options:not(.select2-results__options--nested) {
+    max-height: 10rem;
+}
+.select2-results__option[aria-disabled="true"] {
+    display: none;
 }
 
 /*Pantalla de carga de correos*/

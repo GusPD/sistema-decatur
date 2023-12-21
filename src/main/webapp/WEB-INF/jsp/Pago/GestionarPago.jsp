@@ -56,8 +56,8 @@
                                         <input type="date" class="form-control form-control-sm" id="b_fecha_fin" name="b_fecha_fin" maxlength="10">
                                     </div>
                                     <div class="col-sm-2 form-group" style="padding-left: 0%!Important; padding-right: 1%!Important;">
-                                        <label for="b_comprobante" class="form-label">Comprobante:</label>
-                                        <select class="form-select form-select-sm" id="b_comprobante" name="b_comprobante" placeholder="Seleccione una opción">
+                                        <label for="b_tipo" class="form-label">Tipo:</label>
+                                        <select class="form-select form-select-sm" id="b_tipo" name="b_tipo" placeholder="Seleccione una opción">
                                             <option value="">Seleccione una opción</option>
                                             <option value="Prima">Prima</option>
                                             <option value="Mantenimiento">Mantenimiento</option>
@@ -73,8 +73,8 @@
                                         </select>
                                     </div>
                                     <div class="col-sm-2 form-group" style="padding-left: 0%!Important; padding-right: 1%!Important;">
-                                        <label for="b_tipo_pago" class="form-label">Tipo Pago:</label>
-                                        <select class="form-select form-select-sm" id="b_tipo_pago" name="b_tipo_pago" placeholder="Seleccione una opción">
+                                        <label for="b_cuenta" class="form-label">Cuenta:</label>
+                                        <select class="form-select form-select-sm" id="b_cuenta" name="b_cuenta" placeholder="Seleccione una opción">
                                             <option value="0">Seleccione una opción</option>
                                             <c:if test="${not empty cuentas}">
                                                 <c:forEach items="${cuentas}" var="eCuenta">
@@ -84,14 +84,13 @@
                                         </select>
                                     </div>
                                     <div class="col-sm-2 form-group" style="padding-left: 0%!Important; padding-right: 1%!Important;">
-                                        <label for="b_lote" class="form-label">Lote:</label>
-                                        <select class="form-select form-select-sm" id="b_lote" name="b_lote" placeholder="Seleccione una opción">
-                                            <option value="0">Seleccione una opción</option>
-                                            <c:if test="${not empty ventas}">
-                                                <c:forEach items="${ventas}" var="eVenta">
-                                                    <option value="${eVenta.idVenta}">${eVenta.terreno.poligono}-${eVenta.terreno.numero}${eVenta.terreno.seccion}</option>
-                                                </c:forEach>
-                                            </c:if>
+                                        <label for="b_lote" class="form-label">Comprobante:</label>
+                                        <select class="form-select form-select-sm" id="b_comprobante" name="b_comprobante" placeholder="Seleccione una opción">
+                                            <option value="">Seleccione una opción</option>
+                                            <option value="Ticket">Ticket</option>
+                                            <option value="Recibo">Recibo</option>
+                                            <option value="Factura">Factura</option>
+                                            <option value="Crédito Fiscal">Crédito Fiscal</option>
                                         </select>
                                     </div>
                                 </div>
@@ -142,7 +141,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form id='formGuardar' accept-charset="UTF-8">
-                    <div class="modal-body ">
+                    <div class="modal-body">
                         <div  class="overflow-auto">
                             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
                             <input type="hidden" id="idPago">
@@ -158,12 +157,10 @@
                                 <label for="comprobante" class="form-label">Comprobante:<strong class="text-danger"> *</strong></label>
                                 <select class="form-select form-select-sm" id="comprobante" name="comprobante" placeholder="Seleccione una opción" required>
                                     <option value="">Seleccione una opción</option>
-                                    <option value="Factura">Factura</option>
-                                    <option value="Crédito Fiscal">Crédito Fiscal</option>
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label for="cuenta" class="form-label">Tipo pago:<strong class="text-danger"> *</strong></label>
+                                <label for="cuenta" class="form-label">Cuenta:<strong class="text-danger"> *</strong></label>
                                 <select class="form-select form-select-sm" id="cuenta" name="cuenta" placeholder="Seleccione una opción" required>
                                     <option value="">Seleccione una opción</option>
                                     <c:if test="${not empty cuentas}">
@@ -174,11 +171,15 @@
                                 </select>
                             </div>
                             <div class="form-group">
+                                <label for="referencia" class="form-label">Referencia:</label>
+                                <input type="text" class="form-control form-control-sm" id="referencia" name="referencia" maxlength="20" placeholder="Ingrese la referencia del abono">
+                            </div>
+                            <div class="form-group">
                                 <label for="fecha" class="form-label">Fecha Pago:<strong class="text-danger"> *</strong></label>
                                 <input type="date" class="form-control form-control-sm" id="fecha" name="fecha" maxlength="10" required>
                             </div>
                             <div class="form-group">
-                                <label for="recibo" class="form-label">Recibo:<strong class="text-danger"> *</strong></label>
+                                <label for="recibo" class="form-label">N° Comprobante:<strong class="text-danger"> *</strong></label>
                                 <input type="text" class="form-control form-control-sm" id="recibo" name="recibo" maxlength="5" placeholder="Ingrese el número de recibo" required>
                             </div>
                             <div class="form-group">
@@ -195,7 +196,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="observaciones" class="form-label">Observaciones:</label>
-                                <textarea class="form-control form-control-sm" id="observaciones" name="observaciones" placeholder="Ingrese las observaciones"></textarea>
+                                <textarea class="form-control form-control-sm" id="observaciones" name="observaciones" maxlength="500" placeholder="Ingrese las observaciones"></textarea>
                             </div>
                         </div>
                     </div>
@@ -234,6 +235,36 @@
     </form>                    
 </div>
 
+<!-- Modal Reporte Impresión -->
+<div class="modal fade" id="reporteModal" tabindex="-1" aria-labelledby="reporteModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="reporteModalLabel">Vista Previa de Impresión</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="overflow-auto">
+                    <div id="contenedorDePagina" class="bg-white m-0 p-0"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="btnImprimir" type="button" class="btn btn-sm btn-outline-dark" data-bs-dismiss="modal">Imprimir</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Pantalla de carga --> 
+<div id="loadingOverlay">
+    <div class="loading-spinner">
+        <div class="spinner-border" role="status">
+            <span class="sr-only">Cargando...</span>
+        </div>
+        <p>Generando reporte...</p>
+    </div>
+</div>
+
 <!-- Script de la página -->
 <sec:authorize access="hasAuthority('VER_PAGO_PRIVILAGE')" var="hasPrivilegeVerPago"></sec:authorize>
 <script>var hasPrivilegeVerPago = <c:out value='${hasPrivilegeVerPago}'/>;</script>
@@ -243,6 +274,9 @@
 
 <sec:authorize access="hasAuthority('ELIMINAR_PAGO_PRIVILAGE')" var="hasPrivilegeEliminarPago"></sec:authorize>
 <script>var hasPrivilegeEliminarPago = <c:out value='${hasPrivilegeEliminarPago}'/>;</script>
+
+<sec:authorize access="hasAuthority('EXPORTAR_PAGO_PRIVILAGE')" var="hasPrivilegeImprimirPago"></sec:authorize>
+<script>var hasPrivilegeImprimirPago = <c:out value='${hasPrivilegeImprimirPago}'/>;</script>
 
 <%@ include file="../common/footer.jspf"%>
 

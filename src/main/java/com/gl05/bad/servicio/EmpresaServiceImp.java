@@ -65,7 +65,7 @@ public class EmpresaServiceImp implements EmpresaService{
         String username = authentication.getName();
         Usuario usuarioActual = usuarioDao.findByUsername(username);
         Specification<Empresa> specification = (root, query, builder) -> {
-            Join<Empresa, Usuario> empresaUsuarioJoin = root.join("users"); // Usar el nombre del atributo en la entidad Proyecto
+            Join<Empresa, Usuario> empresaUsuarioJoin = root.join("usuariosEmpresa");
             return builder.equal(empresaUsuarioJoin.get("idUsuario"), usuarioActual.getIdUsuario());
         };
         return (DataTablesOutput<Empresa>) empresaDao.findAll(input,specification);

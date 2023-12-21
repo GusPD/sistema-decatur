@@ -1,7 +1,10 @@
 $(document).ready(function() { 
     //Tabla
+    var fechaInicio = $("#b_fecha_inicio").length > 0 ? $("#b_fecha_inicio").val() : '';
+    var fechaFin = $("#b_fecha_fin").length > 0 ? $("#b_fecha_fin").val() : '';
+    var usuario = $("#b_usuario").length > 0 ? $("#b_usuario").val() : '';
     var table = $('#bitacoraTable').DataTable({
-        ajax: '/bitacora/data',
+        ajax: '/bitacora/data?fecha_inicio=' + fechaInicio + '&fecha_fin=' + fechaFin + '&usuario=' + usuario,
         processing: true,
         serverSide: true,
         order: [[3, 'desc']],
@@ -52,19 +55,17 @@ $(document).ready(function() {
                 },
                 width: '10%'
             },
-            { data: 'username', title: 'Usuario', width: '20%', class: 'text-center' },
-            { 
-                data: 'evento', title: 'Evento', width: '30%', class: 'text-center'
-            },
+            {data: 'username', title: 'Usuario', width: '20%'},
+            {data: 'evento', title: 'Evento', width: '30%'},
             {
                 data: 'hora',
                 width: '10%',
                 title: 'Fecha',
-                class: 'text-center',
+                searchable: false,
                 render: function(data, type, row) {
                     if (type === 'display' || type === 'filter') {
                         var date = new Date(data);
-                        var formattedDate = new Date(date.toLocaleString('en-US', { timeZone: 'UTC' }));
+                        var formattedDate = new Date(date.toLocaleString('en-US', { timeZone: 'America/El_Salvador' }));
                         var day = formattedDate.getDate();
                         var month = formattedDate.getMonth() + 1;
                         var year = formattedDate.getFullYear();
@@ -78,7 +79,7 @@ $(document).ready(function() {
                 data: 'hora',
                 title: 'Hora',
                 width: '10%',
-                class: 'text-center',
+                searchable: false,
                 render: function(data, type, row) {
                   if (type === 'display' || type === 'filter') {
                     var date = new Date(data);
@@ -93,9 +94,7 @@ $(document).ready(function() {
                   return data;
                 }
             },
-            { 
-                data: 'ipEquipo', title: 'IP Equipo', width: '15%', class: 'text-center'
-            }
+            {data: 'ipEquipo', title: 'IP Equipo', width: '15%', sortable: false, searchable: false}
         ],
         language: {
             "sProcessing": "Procesando...",
@@ -106,7 +105,7 @@ $(document).ready(function() {
             "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
             "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
             "sInfoPostFix": "",
-            "sSearch": "Buscar:",
+            "sSearch": "Buscar por usuario o envento:",
             "sUrl": "",
             "sInfoThousands": ",",
             "sLoadingRecords": "Cargando...",
@@ -129,9 +128,7 @@ $(document).ready(function() {
                 }
             }
         },
-        search: {
-            return: true
-        }
+        search: true
     });
     table.columns.adjust();    
     $('#export-pdf').on('click', function() {
@@ -154,6 +151,25 @@ $(document).ready(function() {
         var seconds = String(date.getSeconds()).padStart(2, '0');
         return year + month + day + '_' + hours + minutes + seconds;
     }
+    //Método para filtrar la tabla de la bitacora
+    $(document).on('click', '#b_buscar', function () {
+        var fechaInicio = $("#b_fecha_inicio").val();
+        var fechaFin = $("#b_fecha_fin").val();
+        var usuario = $("#b_usuario").val();
+        var url = '/bitacora/data?fecha_inicio=' + fechaInicio + '&fecha_fin=' + fechaFin + '&usuario=' + usuario;
+        table.ajax.url(url).load();
+    });
+    //Método para eliminar los filtros la tabla de pagos
+    $(document).on('click', '#b_clear', function () {
+        $("#b_fecha_inicio").val("");
+        $("#b_fecha_fin").val("");
+        $("#b_usuario").val("");
+        var fechaInicio = "";
+        var fechaFin = "";
+        var usuario = "";
+        var url = '/bitacora/data?fecha_inicio=' + fechaInicio + '&fecha_fin=' + fechaFin + '&usuario=' + usuario;
+        table.ajax.url(url).load();
+    });
 });
     
 

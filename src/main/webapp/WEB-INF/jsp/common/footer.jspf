@@ -1,34 +1,33 @@
     </div>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/js/RecursosOnline/jquery-3.7.0.js"></script>    
-    <script type="text/javascript" src="${pageContext.request.contextPath}/js/RecursosOnline/jquery.validate.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/js/RecursosOnline/popper.min.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/js/RecursosOnline/bootstrap.bundle.min.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/images/iconos/fontawesome-free-6.4.2-web/js/all.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/RecursosOnline/jquery.min.js"></script>    
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/RecursosOnline/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/RecursosOnline/jquery.inputmask.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/RecursosOnline/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/RecursosOnline/jquery.spring-friendly.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/RecursosOnline/dataTables.bootstrap5.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/RecursosOnline/dataTables.buttons.min.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/js/RecursosOnline/buttons.bootstrap5.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/RecursosOnline/jszip.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/RecursosOnline/pdfmake.min.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/js/RecursosOnline/vfs_fonts.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/RecursosOnline/vfs_fonts.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/RecursosOnline/buttons.html5.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/RecursosOnline/buttons.print.min.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/js/RecursosOnline/dataTables.fixedHeader.min.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/js/RecursosOnline/jquery.inputmask.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/js/RecursosOnline/jquery.spring-friendly.min.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/RecursosOnline/popper.min.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/RecursosOnline/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/RecursosOnline/fontawesome-free-6.4.2-web/js/all.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/RecursosOnline/select2.full.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/RecursosOnline/es.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/RecursosOnline/toastr.min.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/js/RecursosOnline/moment.min.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/js/RecursosOnline/tinymce/tinymce.min.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/js/RecursosOnline/filepond/dist/filepond.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/js/RecursosOnline/filepond/locale/es-es.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/js/RecursosOnline/filepond/plugins/filepond-plugin-file-validate-size.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/js/RecursosOnline/printThis.js"></script>
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/RecursosOnline/printThis.min.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/js/RecursosOnline/adminlte.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/js/Plantilla.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.6.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
+    <script type="text/javascript" src="${pageContext.request.contextPath}/js/plantilla.js"></script>
     
     <script>var csrfToken = '${_csrf.token}';</script>
     <script>$.fn.select2.defaults.set('language', 'es');</script>
+    
+
+   
     </body>
 </html>

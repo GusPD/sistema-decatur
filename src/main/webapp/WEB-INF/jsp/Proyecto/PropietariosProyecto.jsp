@@ -50,8 +50,29 @@
 </div>
 
 <!-- Script de la página -->
-<sec:authorize access="hasAuthority('VER_PROPIETARIO_PRIVILAGE')" var="hasPrivilegeVerPropietarioProyecto"></sec:authorize>
+<sec:authorize access="hasAuthority('GESTIONAR_INFORMACION_PROPIETARIO_PRIVILAGE') || hasAuthority('GESTIONAR_TELEFONO_PROPIETARIO_PRIVILAGE') || hasAuthority('GESTIONAR_CORREO_PROPIETARIO_PRIVILAGE') || hasAuthority('GESTIONAR_REFERENCIA_PROPIETARIO_PRIVILAGE') || hasAuthority('GESTIONAR_DOCUMENTO_PROPIETARIO_PRIVILAGE') || hasAuthority('GESTIONAR_TERRENOS_PROPIETARIO_PRIVILAGE')" var="hasPrivilegeVerPropietarioProyecto"></sec:authorize>
 <script>var hasPrivilegeVerPropietarioProyecto = <c:out value='${hasPrivilegeVerPropietarioProyecto}' />;</script>    
+
+<c:set var="url" value="" /> 
+<sec:authorize access="hasAuthority('GESTIONAR_TERRENOS_PROPIETARIO_PRIVILAGE')">
+    <c:set var="url" value="'/TerrenosPropietario/'" />
+</sec:authorize>
+<sec:authorize access="hasAuthority('GESTIONAR_DOCUMENTO_PROPIETARIO_PRIVILAGE')">
+    <c:set var="url" value="'/DocumentosPropietario/'" />
+</sec:authorize> 
+<sec:authorize access="hasAuthority('GESTIONAR_REFERENCIA_PROPIETARIO_PRIVILAGE')">
+    <c:set var="url" value="'/ReferenciasPropietario/'" />
+</sec:authorize> 
+<sec:authorize access="hasAuthority('GESTIONAR_CORREO_PROPIETARIO_PRIVILAGE')">
+    <c:set var="url" value="'/CorreosPropietario/'" />
+</sec:authorize> 
+<sec:authorize access="hasAuthority('GESTIONAR_TELEFONO_PROPIETARIO_PRIVILAGE')">
+    <c:set var="url" value="'/TelefonosPropietario/'" />
+</sec:authorize>
+<sec:authorize access="hasAuthority('GESTIONAR_INFORMACION_PROPIETARIO_PRIVILAGE')">
+    <c:set var="url" value="'/InformacionPropietario/'" />
+</sec:authorize>
+<script>var urlVerPropietario = <c:out value='${url}' escapeXml="false"/>;</script>
 
 <%@ include file="../common/footer.jspf"%>
 

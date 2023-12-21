@@ -4,6 +4,7 @@ import com.gl05.bad.dao.VentaDao;
 import com.gl05.bad.domain.InformacionFinanciamiento;
 import com.gl05.bad.domain.InformacionMantenimiento;
 import com.gl05.bad.domain.Proyecto;
+import com.gl05.bad.domain.Terreno;
 import com.gl05.bad.domain.Venta;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,9 +27,6 @@ public class VentaServiceImp implements VentaService{
     @Autowired
     private InformacionMantenimientoServiceImp mantenimientoService;
 
-    @Autowired
-    private ProyectoServiceImp proyectoService;
-
     @Override
     @Transactional(readOnly = true)
     public List<Venta> listaVentas() {
@@ -37,8 +35,14 @@ public class VentaServiceImp implements VentaService{
 
     @Override
     @Transactional(readOnly = true)
-    public List<Venta> listarVentas(String estado, Long idProyecto){
-        return (List<Venta>) ventaDao.findByEstadoAndTerrenoProyecto("Activo", proyectoService.encontrar(idProyecto));
+    public List<Venta> listarVentas(String estado, Proyecto proyecto){
+        return (List<Venta>) ventaDao.findByEstadoAndTerrenoProyecto(estado, proyecto);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Venta> listarVentas(Terreno terreno){
+        return (List<Venta>) ventaDao.findByTerreno(terreno);
     }
 
     @Override
@@ -61,8 +65,8 @@ public class VentaServiceImp implements VentaService{
     
     @Override
     @Transactional(readOnly = true)
-    public Venta encontrarDocumento(Integer idDocumento) {
-        return ventaDao.findByIdListDocumento(idDocumento);
+    public Venta encontrarDocumento(Integer idListDocumento) {
+        return ventaDao.findByIdListDocumento(idListDocumento);
     }
 
     @Override

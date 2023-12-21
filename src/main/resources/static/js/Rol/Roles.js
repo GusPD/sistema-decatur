@@ -107,9 +107,7 @@ $(document).ready(function () {
                 }
             }
         },
-        search: {
-            return: true
-        }
+        search: true
     });
     table.columns.adjust();
     $('#export-pdf').on('click', function() {

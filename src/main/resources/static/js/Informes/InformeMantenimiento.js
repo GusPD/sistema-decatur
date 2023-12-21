@@ -53,7 +53,7 @@ $(document).ready(function() {
                 },
                 width: '6%'
             },
-            { data: 'lote', title: 'Lote', width: '10%'},
+            { data: 'lote', title: 'Lote', width: '9%'},
             {
                 data: 'fechaPago', 
                 width: '10.5%', 
@@ -94,12 +94,12 @@ $(document).ready(function() {
             {
                 data: 'cuota',
                 title: 'Cuota',
-                width: '10.5%',
+                width: '10%',
                 sortable: false,
                 searchable: false,
                 render: function (data, type, row) {
                   if (type === 'display' || type === 'filter') {
-                    return '$' + parseFloat(data).toFixed(2);
+                    return '$ ' + parseFloat(data).toFixed(2);
                   }
                   return data;
                 }
@@ -107,12 +107,12 @@ $(document).ready(function() {
             {
                 data: 'multa',
                 title: 'Recargo',
-                width: '10.5%',
+                width: '10%',
                 sortable: false,
                 searchable: false,
                 render: function (data, type, row) {
                   if (type === 'display' || type === 'filter') {
-                    return '$' + parseFloat(data).toFixed(2);
+                    return '$ ' + parseFloat(data).toFixed(2);
                   }
                   return data;
                 }
@@ -120,12 +120,25 @@ $(document).ready(function() {
             {
                 data: null,
                 title: 'Total',
-                width: '10.5%',
+                width: '10%',
                 sortable: false,
                 searchable: false,
                 render: function (data, type, row) {
                   if (type === 'display' || type === 'filter') {
-                    return '$' + parseFloat(row.cuota + row.multa).toFixed(2);
+                    return '$ ' + parseFloat(row.cuota + row.multa).toFixed(2);
+                  }
+                  return data;
+                }
+            },
+            {
+                data: null,
+                title: 'Ajuste',
+                width: '10%',
+                sortable: false,
+                searchable: false,
+                render: function (data, type, row) {
+                  if (type === 'display' || type === 'filter') {
+                    return '$ ' + parseFloat(row.ajuste).toFixed(2);
                   }
                   return data;
                 }
@@ -135,7 +148,7 @@ $(document).ready(function() {
                 title: 'Acciones',
                 sortable: false,
                 searchable: false,
-                width: '10.5%',
+                width: '9%',
                 render: function (data, type, row) {
                     var actionsHtml = '';
                     if(hasPrivilegeVerVenta === true){
@@ -170,9 +183,7 @@ $(document).ready(function() {
                 "sSortDescending": ": Activar para ordenar la columna de manera descendente"
             }
         },
-        search: {
-            return: true
-        }
+        search: true
     });
     table.columns.adjust();
     $('#export-pdf').on('click', function() {

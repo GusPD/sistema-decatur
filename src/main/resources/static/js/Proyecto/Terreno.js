@@ -6,7 +6,7 @@ $(document).ready(function() {
             url: '/terrenos/data/' + idProyecto,
             dataSrc: 'data'
         },
-        order: [[0, 'asc'],[1, 'asc'],[2, 'asc']],
+        order: [[1, 'asc'],[2, 'asc']],
         processing: true,
         serverSide: true,
         dom: "<'row w-100'<'col-sm-12 mb-4'B>>" +
@@ -56,8 +56,8 @@ $(document).ready(function() {
                 },
                 width: '10%'
             },
-            { data: 'poligono', title:'Polígono', width: '10%' },
-            { data: 'lote', title:'Lote', width: '10%' },
+            { data: 'poligono', title:'Polígono', width: '10%'},
+            { data: 'lote', title:'Lote', width: '10%'},
             { data: 'matricula', title:'Matrícula', width: '20%', sortable: false, searchable: false,},
             {
                 data: 'areaMetros',
@@ -120,7 +120,7 @@ $(document).ready(function() {
             "sInfoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
             "sInfoFiltered": "",
             "sInfoPostFix": "",
-            "sSearch": "Buscar:",
+            "sSearch": "Buscar por polígono o lote:",
             "sUrl": "",
             "sInfoThousands": ",",
             "sLoadingRecords": "Cargando...",
@@ -143,14 +143,9 @@ $(document).ready(function() {
                 }
             }
         },
-        search: {
-            return: true
-        },
-        ordering: {
-            return: true
-        }
+        search: true,
+        ordering: true
     });
-    table.columns.adjust();
     $('#export-pdf').on('click', function() {
         table.button('.buttons-pdf').trigger();
     });
@@ -370,6 +365,84 @@ $(document).ready(function() {
                 toastr.error(errorMessage);
             }
         });
+    });
+    //Formulario de agregar terrenos por medio de un archivo
+    $.validator.addMethod(
+        "validarDocumento",
+        function(value, element) {
+            return this.optional(element) || /\.csv$/i.test(value);
+        },
+        "Ingrese un documento en formato .csv"
+    );
+    var formGuardarArchivo = $('#formGuardarArchivo');
+    var validator = $('#formGuardarArchivo').validate({
+        rules: {
+           documento: {
+               required: true,
+               validarDocumento: true
+           }      
+        },
+        messages:{
+            documento:{
+                required: 'Este campo es requerido'
+            }    
+        },
+        highlight: function(element) {
+            $(element).addClass('is-invalid');
+        },
+        unhighlight: function(element) {
+            $(element).removeClass('is-invalid');
+        },
+        errorPlacement: function(error, element) {
+            if (element.attr("name") === "documento") {
+                error.insertAfter(element);
+            }        
+        },
+        errorElement: 'div',
+        errorClass: 'invalid-feedback',
+        submitHandler: function(form) {
+            event.preventDefault();
+            var idProyecto = $('#idProyecto').val();
+            var formDataArray = new FormData(formGuardarArchivo[0]);
+            var url = '/AgregarTerrenos';
+            formDataArray.append('idProyecto', idProyecto);
+            $('#crearModalArchivo').modal('hide');
+            $("#loadingOverlay").show();
+            $.ajax({
+                url: url,
+                type: 'POST',
+                data: formDataArray,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    $("#loadingOverlay").hide();
+                    $(".form-control").val("");
+                    toastr.success(response);
+                    table.ajax.reload();
+                },
+                error: function (xhr, status, error) {
+                    $("#loadingOverlay").hide();
+                    var errorMessage = xhr.responseText || 'Error al agregar los terrenos.';
+                    if (errorMessage.includes('Errores en los registros:')) {
+                        errorMessage = errorMessage.replace("Errores en los registros:", "");
+                        var lineas = errorMessage.trim().split('\n');
+                        var lista = document.createElement("ul");
+                        for (var i = 0; i < lineas.length; i++) {
+                            var li = document.createElement("li");
+                            li.textContent = lineas[i].trim();
+                            lista.appendChild(li);
+                        }
+                        var listaMensajesErrorElement = document.getElementById("listaMensajesError");
+                        listaMensajesErrorElement.innerHTML = "";
+                        listaMensajesErrorElement.appendChild(lista);
+                        $("#mensajeErrores").modal('show');
+                    }else{
+                        toastr.error(errorMessage);
+                    }
+                    $(".form-control").val("");
+                }
+            });
+        }
     });
 }); 
 

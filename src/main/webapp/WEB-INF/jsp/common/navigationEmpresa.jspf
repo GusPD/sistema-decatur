@@ -28,8 +28,10 @@
                     </div>
                 </div>
                 <ul id="user-dropdownMenu" class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                    <sec:authorize access="hasAuthority('VER_USUARIO_PRIVILAGE')">
                     <li><a class="dropdown-item small" href="/PerfilUsuario"><i class="fa-solid fa-user-pen text-blue"></i></i>&nbsp;Perfil</a></li>
-                    <li><a class="dropdown-item small" href="#" onclick="logout()"><i class="fa-solid fa-power-off text-danger"></i>&nbsp;Salir</a></li>
+                    </sec:authorize>
+                    <li><a id="btn-logout" class="dropdown-item small" href="#"><i class="fa-solid fa-power-off text-danger"></i>&nbsp;Salir</a></li>
                 </ul>
             </div>
         </li>
@@ -54,43 +56,40 @@
     </div>
     <!-- Opciones de menú -->
     <div class="sidebar">
-        <nav class="mt-2">
-            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                <li class="nav-item">  
-                    <a href="#" class="nav-link" style="background-color: #E3E7EA;">
-                        <i class="fa-solid fa-building nav-icon text-blue"></i>
-                        <p>&nbsp;Empresa<br>&nbsp;${empresa.nombre}</p>
-                    </a>
-                </li>
-                <sec:authorize access="hasAuthority('ENVIO_CORREO_PRIVILAGE')">
-                    <li class="nav-item">  
-                        <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#notificacionModal">
-                            <i class="nav-icon fas fa-envelope"></i>
-                            <p>&nbsp;Notificaciones</p>
-                        </a>
-                    </li>
-                </sec:authorize>
-                <sec:authorize access="hasAuthority('GESTIONAR_CUENTA_BANCARIA_PRIVILAGE')">
-                    <c:set var="urlCuentas" value="/CuentasBancarias/${empresa.idEmpresa}" />
-                    <li class="nav-item ${requestScope['javax.servlet.forward.request_uri'] == urlCuentas ? 'menu-open' : ''}">
-                        <a href="#" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlCuentas ? 'active' : ''}">
-                            <i class="nav-icon fas fa-coins"></i>
-                            <p>Facturación<i class="right fas fa-angle-left"></i></p>
-                        </a>
-                        <ul class="nav nav-treeview">
-                            <sec:authorize access="hasAuthority('GESTIONAR_CUENTA_BANCARIA_PRIVILAGE')">
-                                <li class="nav-item">
-                                    <a href="/CuentasBancarias/${empresa.idEmpresa}" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlCuentas ? 'active' : ''}">
-                                        <i class="fa-solid fa-building-columns nav-icon text-blue"></i>
-                                        <p>Cuentas Bancarias</p>
-                                    </a>
-                                </li>
-                            </sec:authorize>
-                        </ul>
-                    </li>
-                </sec:authorize>
-            </ul>
-        </nav>
+        <div class="nav nav-pills nav-sidebar flex-column mt-2 mb-2">
+            <div class="nav-item">
+                <c:set var="urlEmpresa" value="/Empresa/${empresa.idEmpresa}"/>
+                <a href="/Empresa/${empresa.idEmpresa}" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlEmpresa ? 'active' : ''}" style="${requestScope['javax.servlet.forward.request_uri'] != urlEmpresa ? 'background-color: #E3E7EA;' : ''}">
+                    <i class="fa-solid fa-building nav-icon ${requestScope['javax.servlet.forward.request_uri'] != urlEmpresa ? 'text-blue' : ''}"></i>
+                    <p>Empresa<br>${empresa.nombre}</p>
+                </a>
+            </div>  
+        </div>
+        <div class="overflow-opciones-menu">
+            <nav>
+                <ul class="nav nav-pills nav-sidebar" data-widget="treeview" role="menu" data-accordion="false">
+                    <sec:authorize access="hasAuthority('GESTIONAR_CUENTA_BANCARIA_PRIVILAGE')">
+                        <c:set var="urlCuentas" value="/CuentasBancarias/${empresa.idEmpresa}" />
+                        <li class="nav-item ${requestScope['javax.servlet.forward.request_uri'] == urlCuentas ? 'menu-open' : ''}">
+                            <a href="#" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlCuentas ? 'active' : ''}">
+                                <i class="nav-icon fas fa-coins"></i>
+                                <p>Facturación<i class="right fas fa-angle-left"></i></p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <sec:authorize access="hasAuthority('GESTIONAR_CUENTA_BANCARIA_PRIVILAGE')">
+                                    <li class="nav-item">
+                                        <a href="/CuentasBancarias/${empresa.idEmpresa}" class="nav-link ${requestScope['javax.servlet.forward.request_uri'] == urlCuentas ? 'active' : ''}">
+                                            <i class="fa-solid fa-building-columns nav-icon text-blue"></i>
+                                            <p>Cuentas Bancarias</p>
+                                        </a>
+                                    </li>
+                                </sec:authorize>
+                            </ul>
+                        </li>
+                    </sec:authorize>
+                </ul>
+            </nav>
+        </div>
     </div>
 </aside>
 <!-- Modal de enviar notificaciones -->

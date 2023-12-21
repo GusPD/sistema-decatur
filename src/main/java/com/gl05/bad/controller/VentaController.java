@@ -6,7 +6,9 @@ import com.gl05.bad.domain.AsignacionPropietario;
 import com.gl05.bad.domain.AsignacionVisitante;
 import com.gl05.bad.domain.CuentaBancaria;
 import com.gl05.bad.domain.CuotaMantenimiento;
+import com.gl05.bad.domain.Departamento;
 import com.gl05.bad.domain.Documento;
+import com.gl05.bad.domain.Empresa;
 import com.gl05.bad.domain.Facturacion;
 import com.gl05.bad.domain.Persona;
 import com.gl05.bad.domain.Propietario;
@@ -21,16 +23,20 @@ import com.gl05.bad.domain.VistaVentasActiva;
 import com.gl05.bad.domain.InformacionFinanciamiento;
 import com.gl05.bad.domain.InformacionMantenimiento;
 import com.gl05.bad.domain.InformeMantenimiento;
+import com.gl05.bad.domain.Municipio;
 import com.gl05.bad.servicio.AsignacionPropietarioService;
 import com.gl05.bad.servicio.AsignacionVisitanteService;
 import com.gl05.bad.servicio.BitacoraServiceImp;
 import com.gl05.bad.servicio.CuentaBancariaService;
 import com.gl05.bad.servicio.CuotaMantenimientoService;
+import com.gl05.bad.servicio.DepartamentoService;
 import com.gl05.bad.servicio.DocumentoService;
+import com.gl05.bad.servicio.EmpresaService;
 import com.gl05.bad.servicio.FacturacionService;
 import com.gl05.bad.servicio.InformacionFinanciamientoService;
 import com.gl05.bad.servicio.InformacionMantenimientoService;
 import com.gl05.bad.servicio.InformeMantenimientoService;
+import com.gl05.bad.servicio.MunicipioService;
 import com.gl05.bad.servicio.PagoService;
 import com.gl05.bad.servicio.PersonaService;
 import com.gl05.bad.servicio.PropietarioService;
@@ -56,6 +62,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -113,10 +121,22 @@ public class VentaController {
     private ProyectoService proyectoService;
 
     @Autowired
+    private EmpresaService empresaService;
+
+    @Autowired
+    private CuentaBancariaService cuentaService;
+
+    @Autowired
     private PagoService pagoService;
     
     @Autowired
     private FacturacionService facturacionService;
+
+    @Autowired
+    private DepartamentoService departamentoService;
+
+    @Autowired
+    private MunicipioService municipioService;
 
     @Autowired
     private CuentaBancariaService cuentaBancariaService;
@@ -141,19 +161,25 @@ public class VentaController {
     
     //Función que redirige a la vista de las ventas del terreno
     @GetMapping("/Ventas/{idTerreno}")
-    public String mostrarVentas(Model model, Terreno terreno) {
+    public String mostrarVentas(Model model, Terreno terreno, Authentication authentication) {
         model.addAttribute("pageTitle", "Ventas");
         Terreno terrenoEncontrado = terrenoService.encontrar(terreno.getIdTerreno());
         model.addAttribute("terreno", terrenoEncontrado);
         double prima = 0;
         Proyecto proyecto = terrenoEncontrado.getProyecto();
+        String username = authentication.getName();
+        Usuario usuario = usuarioService.encontrarUsername(username);
+        Set<Proyecto> listaProyectosAsignados = usuario.getProyectos();
+        if(!listaProyectosAsignados.contains(proyecto)){
+            return "accesodenegado";
+        }
         model.addAttribute("proyecto", proyecto);
         model.addAttribute("valorPrima", prima);
         return "/Proyecto/VentasTerrenoProyecto";
     }
     
     //Función que obtiene las ventas del terreno
-    @GetMapping("/ventas/data/{idTerreno}")
+    @GetMapping(value="/ventas/data/{idTerreno}", produces = "application/json; charset=UTF-8")
     @ResponseBody
     public DataTablesOutput<Venta> GetVentas(@Valid DataTablesInput input, @PathVariable Long idTerreno) {
         return ventaService.listarVentas(input, idTerreno);
@@ -161,15 +187,21 @@ public class VentaController {
     
     //Función que redirige a la vista de las ventas activas del proyecto
     @GetMapping("/VentasActivas/{idProyecto}")
-    public String mostrarVentasActivas(Model model, Proyecto proyecto) {
+    public String mostrarVentasActivas(Model model, Proyecto proyecto, Authentication authentication) {
         model.addAttribute("pageTitle", "Ventas Activas");
         Proyecto newProyecto = proyectoService.encontrar(proyecto.getIdProyecto());
+        String username = authentication.getName();
+        Usuario usuario = usuarioService.encontrarUsername(username);
+        Set<Proyecto> listaProyectosAsignados = usuario.getProyectos();
+        if(!listaProyectosAsignados.contains(proyecto)){
+            return "accesodenegado";
+        }
         model.addAttribute("proyecto", newProyecto);
         return "/Proyecto/VentasActivasProyecto";
     }
     
     //Función que obtiene las ventas activas del proyecto
-    @GetMapping("/ventasActiva/data/{idProyecto}")
+    @GetMapping(value="/ventasActiva/data/{idProyecto}", produces = "application/json; charset=UTF-8")
     @ResponseBody
     public DataTablesOutput<VistaVentasActiva> GetVentasActivas(@Valid DataTablesInput input, @PathVariable Long idProyecto) {
         return vistaVentasActivaService.listarTerrenos(input, idProyecto);
@@ -182,6 +214,12 @@ public class VentaController {
         Venta ventaEncontrada = ventaService.encontrar(venta.getIdVenta());
         Terreno terrenoEncontrado = ventaEncontrada.getTerreno();
         Proyecto proyecto = terrenoEncontrado.getProyecto();
+        String username = authentication.getName();
+        Usuario usuario = usuarioService.encontrarUsername(username);
+        Set<Proyecto> listaProyectosAsignados = usuario.getProyectos();
+        if(!listaProyectosAsignados.contains(proyecto)){
+            return "accesodenegado";
+        }
         List<InformacionFinanciamiento> financiamientos = financiamientoService.encontrarVenta(venta);
         InformacionFinanciamiento financiamiento = null;
         if(!financiamientos.isEmpty()){
@@ -197,8 +235,6 @@ public class VentaController {
         for (Pago prima : primas) {
             valorPrima += prima.getMonto();
         }
-        String username = authentication.getName();
-        Usuario usuario = usuarioService.encontrarUsername(username);
         model.addAttribute("usuario", usuario);
         model.addAttribute("financiamiento", financiamiento);
         model.addAttribute("financiamientos", financiamientos);
@@ -228,7 +264,7 @@ public class VentaController {
     }
     
     //Función que obtiene la información del financiamiento de la venta en la base de datos
-    @GetMapping("/ObtenerFinanciamientoVenta/{id}")
+    @GetMapping(value="/ObtenerFinanciamientoVenta/{id}", produces = "application/json; charset=UTF-8")
     public ResponseEntity<Object> ObtenerFinanciamiento(@PathVariable Long id) {
         InformacionFinanciamiento financiamiento = financiamientoService.encontrar(id);
         if (financiamiento != null) {
@@ -271,7 +307,7 @@ public class VentaController {
     }
     
     //Función que obtiene la información del mantenimiento de la venta en la base de datos
-    @GetMapping("/ObtenerMantenimientoVenta/{id}")
+    @GetMapping(value="/ObtenerMantenimientoVenta/{id}", produces = "application/json; charset=UTF-8")
     public ResponseEntity<Object> ObtenerMantenimiento(@PathVariable Long id) {
         InformacionMantenimiento mantenimiento = mantenimientoService.encontrar(id);
         if (mantenimiento != null) {
@@ -298,7 +334,7 @@ public class VentaController {
     }
     
     //Función que obtiene los propietarios de la venta
-    @GetMapping("/propietarioVenta/data/{idVenta}")
+    @GetMapping(value="/propietarioVenta/data/{idVenta}", produces = "application/json; charset=UTF-8")
     @ResponseBody
     public DataTablesOutput<Propietario> GetPropietarios(@Valid DataTablesInput input, @PathVariable Long idVenta) {
         return propietarioService.listarPropietariosVenta(input, idVenta);
@@ -306,13 +342,18 @@ public class VentaController {
     
     //Función que redirige a la vista de los propietarios de la venta
     @GetMapping("/PropietariosVenta/{idVenta}")
-    public String mostrarPropietariosVenta(Model model, Venta venta) {
+    public String mostrarPropietariosVenta(Model model, Venta venta, Authentication authentication) {
         model.addAttribute("pageTitle", "Venta");
         Venta ventaEncontrada = ventaService.encontrar(venta.getIdVenta());
         Terreno terrenoEncontrado = ventaEncontrada.getTerreno();
         Proyecto proyecto = terrenoEncontrado.getProyecto();
+        String username = authentication.getName();
+        Usuario usuario = usuarioService.encontrarUsername(username);
+        Set<Proyecto> listaProyectosAsignados = usuario.getProyectos();
+        if(!listaProyectosAsignados.contains(proyecto)){
+            return "accesodenegado";
+        }
         List<TipoDocumento> listaTipoDocumentos = tipoDocumentoService.listaTipoDocumentos();
-        
         List<Propietario> listaPropietarios = propietarioService.listaPropietarios();
         List<AsignacionPropietario> listaAsignaciones = asigPropietarioService.listaAsignacion();
         List<Propietario> propietariosNoVenta = new ArrayList<Propietario>();
@@ -428,7 +469,7 @@ public class VentaController {
     }
     
     //Función que obtiene los trabajadores de la venta
-    @GetMapping("/trabajadorVenta/data/{idVenta}")
+    @GetMapping(value="/trabajadorVenta/data/{idVenta}", produces = "application/json; charset=UTF-8")
     @ResponseBody
     public DataTablesOutput<AsignacionVisitante> GetTrabjadoress(@Valid DataTablesInput input, @PathVariable Long idVenta) {
         return asigVisitanteService.listarTrabajadoresVenta(input, idVenta);
@@ -436,13 +477,18 @@ public class VentaController {
     
     //Función que redirige a la vista de los trabajadores de la venta
     @GetMapping("/TrabajadoresVenta/{idVenta}")
-    public String mostrarTrabajadoresVenta(Model model, Venta venta) {
+    public String mostrarTrabajadoresVenta(Model model, Venta venta, Authentication authentication) {
         model.addAttribute("pageTitle", "Venta");
         Venta ventaEncontrada = ventaService.encontrar(venta.getIdVenta());
         Terreno terrenoEncontrado = ventaEncontrada.getTerreno();
         Proyecto proyecto = terrenoEncontrado.getProyecto();
+        String username = authentication.getName();
+        Usuario usuario = usuarioService.encontrarUsername(username);
+        Set<Proyecto> listaProyectosAsignados = usuario.getProyectos();
+        if(!listaProyectosAsignados.contains(proyecto)){
+            return "accesodenegado";
+        }
         List<TipoDocumento> listaTipoDocumentos = tipoDocumentoService.listaTipoDocumentos();
-        
         List<Visitante> listaVisitantes = visitanteService.listaVisitantes();
         List<AsignacionVisitante> listaAsignacionesVisitante = asigVisitanteService.listaAsignacionVisitantes();
         List<Visitante> visitantesNoVenta = new ArrayList<Visitante>();
@@ -544,7 +590,7 @@ public class VentaController {
     }
     
     //Función que obtiene los documentos de la venta
-    @GetMapping("/documentoVenta/data/{idListDocumento}")
+    @GetMapping(value="/documentoVenta/data/{idListDocumento}", produces = "application/json; charset=UTF-8")
     @ResponseBody
     public DataTablesOutput<Documento> GetDocumentos(@Valid DataTablesInput input, @PathVariable Integer idListDocumento) {
         return documentoService.listarDocumentos(input, idListDocumento);
@@ -552,11 +598,17 @@ public class VentaController {
     
     //Función que redirige a la vista de los documentos de la venta
     @GetMapping("/DocumentosVenta/{idVenta}")
-    public String mostrarDocumentoVenta(Model model, Venta venta) {
+    public String mostrarDocumentoVenta(Model model, Venta venta, Authentication authentication) {
         model.addAttribute("pageTitle", "Venta");
         Venta ventaEncontrada = ventaService.encontrar(venta.getIdVenta());
         Terreno terrenoEncontrado = ventaEncontrada.getTerreno();
         Proyecto proyecto = terrenoEncontrado.getProyecto();
+        String username = authentication.getName();
+        Usuario usuario = usuarioService.encontrarUsername(username);
+        Set<Proyecto> listaProyectosAsignados = usuario.getProyectos();
+        if(!listaProyectosAsignados.contains(proyecto)){
+            return "accesodenegado";
+        }
         List<Documento> listaDocumentos = documentoService.listarDocumentos();
         List<Documento> documentosVenta = new ArrayList<Documento>();
         for (var documento : listaDocumentos) {
@@ -617,10 +669,18 @@ public class VentaController {
     
     //Función para visualizar un documento de la venta
     @GetMapping("/DocumentoVenta/{IdDocumento}")
-    public ResponseEntity <byte[]> mostrarDocumentoPDF(@PathVariable("IdDocumento") Long id) {
+    public ResponseEntity <byte[]> mostrarDocumentoPDF(@PathVariable("IdDocumento") Long id, Authentication authentication) {
         Documento archivo = new Documento();
         archivo.setIdDocumento(id);
         Documento archivoExistente = documentoService.encontrar(archivo);
+        String username = authentication.getName();
+        Usuario usuario = usuarioService.encontrarUsername(username);
+        Set<Proyecto> listaProyectosAsignados = usuario.getProyectos();
+        Venta venta = ventaService.encontrarDocumento(archivoExistente.getIdListDocumento());
+        if(!listaProyectosAsignados.contains(venta.getTerreno().getProyecto())){
+            String mensajeAccesoDenegado = "Acceso denegado: No tiene acceso a este documento.";
+            return new ResponseEntity<>(mensajeAccesoDenegado.getBytes(), HttpStatus.FORBIDDEN);
+        }
         byte[] pdfBytes = archivoExistente.getDocumento();
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
@@ -631,15 +691,25 @@ public class VentaController {
     
     //Función que redirige a la vista de la facturación de la venta
     @GetMapping("/FacturacionVenta/{idVenta}")
-    public String mostrarFacturacionVenta(Model model, Venta venta) {
+    public String mostrarFacturacionVenta(Model model, Venta venta, Authentication authentication) {
         model.addAttribute("pageTitle", "Venta");
         Venta ventaEncontrada = ventaService.encontrar(venta.getIdVenta());
         Terreno terrenoEncontrado = ventaEncontrada.getTerreno();
         Proyecto proyecto = terrenoEncontrado.getProyecto();
+        String username = authentication.getName();
+        Usuario usuario = usuarioService.encontrarUsername(username);
+        Set<Proyecto> listaProyectosAsignados = usuario.getProyectos();
+        if(!listaProyectosAsignados.contains(ventaEncontrada.getTerreno().getProyecto())){
+            return "accesodenegado";
+        }
         Facturacion newFacturacion = facturacionService.encontrarVenta(ventaEncontrada);     
         List<AsignacionPropietario> propietarios = asigPropietarioService.listaAsignacion(ventaEncontrada);
         List<AsignacionPropietario> propietariosSeleccionados = asigPropietarioService.listaAsignacionPropietarioSeleccionado(ventaEncontrada);
+        List<Departamento> departamentos = departamentoService.listarDepartamentos();
+        List<Municipio> municipios = municipioService.listarMunicipios();
         model.addAttribute("facturacion", newFacturacion);
+        model.addAttribute("departamentos", departamentos);
+        model.addAttribute("municipios", municipios);
         model.addAttribute("propietariosAsignados", propietarios);
         model.addAttribute("consumidorFinal", propietariosSeleccionados);
         model.addAttribute("proyecto", proyecto);
@@ -666,20 +736,20 @@ public class VentaController {
                 }
             }
             if("Seleccionado".equals(estado)){
-                mensaje = "Se ha selecionado un propietario para la factura de consumidor final de la venta.";
+                mensaje = "Se ha selecionado un propietario para el comprobante de recibo de la venta.";
                 if(contador>1){
-                    mensaje = "Se ha selecionado los propietarios para la factura de consumidor final de la venta.";
+                    mensaje = "Se ha selecionado los propietarios para el comprobante de recibo de la venta.";
                 }
             }else{
-                 mensaje = "Se ha deselecionado un propietario para la factura de consumidor final de la venta.";
+                 mensaje = "Se ha deselecionado un propietario para el comprobante de recibo de la venta.";
                 if(contador>1){
-                    mensaje = "Se han deselecionado los propietarios para la factura de consumidor final de la venta.";
+                    mensaje = "Se han deselecionado los propietarios para el comprobante de recibo de la venta.";
                 }
             }
-            bitacoraService.registrarAccion("Agregar facturación consumidor final de la venta.");
+            bitacoraService.registrarAccion("Agregar información del comprobante de recibo de la venta.");
             return ResponseEntity.ok(mensaje);
         } catch (Exception e) {
-            String error = "Ocurrió un error al seleccionar el propietario para la factura de consumidor final de la venta.";
+            String error = "Ocurrió un error al seleccionar el propietario para el comprobante de recibo de la venta.";
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
     }
@@ -691,11 +761,11 @@ public class VentaController {
             Venta newVenta = ventaService.encontrar(idVenta);
             facturacion.setVenta(newVenta);
             facturacionService.agregar(facturacion);
-            String mensaje = "Se ha agregado la información para la facturación de crédito fiscal en la venta.";
-            bitacoraService.registrarAccion("Agregar facturación crédito fiscal de la venta.");
+            String mensaje = "Se ha agregado la información para la factura o crédito fiscal en la venta.";
+            bitacoraService.registrarAccion("Agregar información de la factura o crédito fiscal de la venta.");
             return ResponseEntity.ok(mensaje);
         } catch (Exception e) {
-            String error = "Ocurrió un error al agregar la información para la facturación de crédito fiscal en la venta.";
+            String error = "Ocurrió un error al agregar la información para la factura o crédito fiscal en la venta.";
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
     }
@@ -707,17 +777,17 @@ public class VentaController {
             Venta newVenta = ventaService.encontrar(idVenta);
             facturacion.setVenta(newVenta);
             facturacionService.actualizar(facturacion);
-            String mensaje = "Se ha actualizado la información para la facturación de crédito fiscal en la venta.";
-            bitacoraService.registrarAccion("Actualizar facturación crédito fiscal de la venta.");
+            String mensaje = "Se ha actualizado la información para la factura o crédito fiscal en la venta.";
+            bitacoraService.registrarAccion("Actualizar la información factura o crédito fiscal de la venta.");
             return ResponseEntity.ok(mensaje);
         } catch (Exception e) {
-            String error = "Ocurrió un error al agregar la información para la facturación de crédito fiscal en la venta.";
+            String error = "Ocurrió un error al agregar la información para la factura o crédito fiscal en la venta.";
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
     }
     
     //Función que obtiene la facturación de crédito fiscal en la base de datos
-    @GetMapping("/ObtenerFacturacion/{id}")
+    @GetMapping(value="/ObtenerFacturacion/{id}", produces = "application/json; charset=UTF-8")
     public ResponseEntity<Object> ObtenerFacturacion(@PathVariable Long id) {
         Facturacion facturacion = facturacionService.encontrar(id);
         if (facturacion != null) {
@@ -735,23 +805,32 @@ public class VentaController {
         try {
             Facturacion facturacion = facturacionService.encontrar(idFacturacion);
             facturacionService.eliminar(facturacion);
-            String mensaje = "Se ha eliminado la facturación de crédito fiscal correctamente.";
-            bitacoraService.registrarAccion("Eliminar facturación de crédito fiscal de la venta");
+            String mensaje = "Se ha eliminado la información de factura o crédito fiscal correctamente.";
+            bitacoraService.registrarAccion("Eliminar la información factura o crédito fiscal de la venta");
             return ResponseEntity.ok(mensaje);
         } catch (Exception e) {
-            String error = "Ha ocurrido un error al eliminar la facturación de crédito fiscal.";
+            String error = "Ha ocurrido un error al eliminar la información para la factura o crédito fiscal.";
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(error);
         }
     }
 
     //Función que redirige a la vista de los pagos de la venta
     @GetMapping("/PagosVenta/{idVenta}")
-    public String mostrarPagosVenta(Model model, Venta venta) {
+    public String mostrarPagosVenta(Model model, Venta venta, Authentication authentication) {
         model.addAttribute("pageTitle", "Venta");
         Venta ventaEncontrada = ventaService.encontrar(venta.getIdVenta());
         Terreno terrenoEncontrado = ventaEncontrada.getTerreno();
         Proyecto proyecto = terrenoEncontrado.getProyecto();
-        
+        String username = authentication.getName();
+        Usuario usuario = usuarioService.encontrarUsername(username);
+        Set<Proyecto> listaProyectosAsignados = usuario.getProyectos();
+        if(!listaProyectosAsignados.contains(proyecto)){
+            return "accesodenegado";
+        }
+        Empresa empresa = empresaService.encontrar(proyecto.getEmpresa().getIdEmpresa());
+        List<CuentaBancaria> cuentas = cuentaService.encontrarEmpresa(empresa);
+        model.addAttribute("cuentas", cuentas);
+        model.addAttribute("empresa", empresa);
         model.addAttribute("proyecto", proyecto);
         model.addAttribute("terreno", terrenoEncontrado);
         model.addAttribute("venta", ventaEncontrada);
@@ -759,7 +838,7 @@ public class VentaController {
     }
 
     //Función para obtener las pagos de la venta de la base de datos
-    @GetMapping("/pagosVenta/data/{idVenta}")
+    @GetMapping(value="/pagosVenta/data/{idVenta}", produces = "application/json; charset=UTF-8")
     @ResponseBody
     public DataTablesOutput<Pago> GetPagosVenta(@Valid DataTablesInput input,  @PathVariable Long idVenta){
         return pagoService.listarPagosVenta(input, idVenta);
@@ -767,12 +846,17 @@ public class VentaController {
 
     //Función que redirige a la vista de la prima de la venta
     @GetMapping("/PrimaVenta/{idVenta}")
-    public String mostrarPrimasVenta(Model model, Venta venta) {
+    public String mostrarPrimasVenta(Model model, Venta venta, Authentication authentication) {
         model.addAttribute("pageTitle", "Venta");
         Venta ventaEncontrada = ventaService.encontrar(venta.getIdVenta());
         Terreno terrenoEncontrado = ventaEncontrada.getTerreno();
         Proyecto proyecto = terrenoEncontrado.getProyecto();
-        
+        String username = authentication.getName();
+        Usuario usuario = usuarioService.encontrarUsername(username);
+        Set<Proyecto> listaProyectosAsignados = usuario.getProyectos();
+        if(!listaProyectosAsignados.contains(proyecto)){
+            return "accesodenegado";
+        }
         model.addAttribute("proyecto", proyecto);
         model.addAttribute("terreno", terrenoEncontrado);
         model.addAttribute("venta", ventaEncontrada);
@@ -780,7 +864,7 @@ public class VentaController {
     }
 
     //Función para obtener la prima de la venta de la base de datos
-    @GetMapping("/primaVenta/data/{idVenta}")
+    @GetMapping(value="/primaVenta/data/{idVenta}", produces = "application/json; charset=UTF-8")
     @ResponseBody
     public DataTablesOutput<Pago> GetPrimaVenta(@Valid DataTablesInput input,  @PathVariable Long idVenta){
         return pagoService.listarPrimaVenta(input, idVenta);
@@ -788,12 +872,17 @@ public class VentaController {
 
     //Función que redirige a la vista del mantenimiento de la venta
     @GetMapping("/MantenimientoVenta/{idVenta}")
-    public String mostrarMantenimientoVenta(Model model, Venta venta) {
+    public String mostrarMantenimientoVenta(Model model, Venta venta, Authentication authentication) {
         model.addAttribute("pageTitle", "Venta");
         Venta ventaEncontrada = ventaService.encontrar(venta.getIdVenta());
         Terreno terrenoEncontrado = ventaEncontrada.getTerreno();
         Proyecto proyecto = terrenoEncontrado.getProyecto();
-        
+        String username = authentication.getName();
+        Usuario usuario = usuarioService.encontrarUsername(username);
+        Set<Proyecto> listaProyectosAsignados = usuario.getProyectos();
+        if(!listaProyectosAsignados.contains(proyecto)){
+            return "accesodenegado";
+        }
         model.addAttribute("proyecto", proyecto);
         model.addAttribute("terreno", terrenoEncontrado);
         model.addAttribute("venta", ventaEncontrada);
@@ -801,7 +890,7 @@ public class VentaController {
     }
 
     //Función para obtener el mantenimiento de la venta de la base de datos
-    @GetMapping("/mantenimientoVenta/data/{idVenta}")
+    @GetMapping(value="/mantenimientoVenta/data/{idVenta}", produces = "application/json; charset=UTF-8")
     @ResponseBody
     public DataTablesOutput<CuotaMantenimiento> GetMantenimientoVenta(@Valid DataTablesInput input,  @PathVariable Long idVenta){
         return cuotaMantenimientoService.listarVenta(input, idVenta);
@@ -821,36 +910,38 @@ public class VentaController {
                     CSVReader csvReader = new CSVReader(new InputStreamReader(new ByteArrayInputStream(fileBytes)))) {
                     //Variables a utilizar en el manejo del archivo
                     List<CuotaMantenimiento> listaCuotasPago = new ArrayList<>();
+                    List<String> listadoRecibos = new ArrayList<>();
                     String[] nextRecord;
                     double montoPago = 0;
                     double montoDescuento = 0;
                     Date fechaPagoAnterior = null;
                     Integer reciboAnterior = 0;
+                    String referenciaAnterior = "";
                     String comprobanteAnterior = "";
                     String cuentaAnterior = "";
                     double otrosAterior = 0;
-                    int contadorRegistros = 0;
+                    int contadorRegistros = 1;
 
                     //Validar que el archivo tenga el formato correcto
                     String mensajeErrores = "";
                     boolean existeError = false;
                     while ((nextRecord = csvReader.readNext()) != null) {
                         // Validar que el registro tenga el número correcto de campos
-                        if(contadorRegistros==0){
-                            if(!nextRecord[0].trim().equals("Fecha Pago") || !nextRecord[1].trim().equals("Recibo") || !nextRecord[2].trim().equals("Cuenta") || !nextRecord[3].trim().equals("Comprobante") || !nextRecord[4].trim().equals("Fecha Cuota") || !nextRecord[5].trim().equals("Cuota") || !nextRecord[6].trim().equals("Saldo Cuota") || !nextRecord[7].trim().equals("Recargo") || !nextRecord[8].trim().equals("Saldo Recargo") || !nextRecord[9].trim().equals("Descuento") || !nextRecord[10].trim().equals("Otros")){
-                                mensajeErrores += "El encabezado debe estar identificado en el formato y orden siguiente: Fecha Pago, Recibo, Cuenta, Comprobante, Fecha Cuota, Cuota, Saldo Cuota, Recargo, Saldo Recargo, Descuento, Otros";
+                        if(contadorRegistros==1){
+                            if(!nextRecord[0].trim().equals("Fecha Pago") || !nextRecord[1].trim().equals("Recibo") || !nextRecord[2].trim().equals("Cuenta") || !nextRecord[3].trim().equals("Referencia") || !nextRecord[4].trim().equals("Comprobante") || !nextRecord[5].trim().equals("Fecha Cuota") || !nextRecord[6].trim().equals("Cuota") || !nextRecord[7].trim().equals("Saldo Cuota") || !nextRecord[8].trim().equals("Recargo") || !nextRecord[9].trim().equals("Saldo Recargo") || !nextRecord[10].trim().equals("Descuento") || !nextRecord[11].trim().equals("Otros")){
+                                mensajeErrores += "El encabezado debe estar identificado en el formato y orden siguiente: Fecha Pago, Recibo, Cuenta, Referencia, Comprobante, Fecha Cuota, Cuota, Saldo Cuota, Recargo, Saldo Recargo, Descuento, Otros";
                                 existeError = true;
                             }
                         }else{
-                            if (nextRecord.length != 11) {
-                                mensajeErrores += "\nEl registro N° "+contadorRegistros+", no contiene las 11 columnas del formato, deben estar separadas por una coma.";
+                            if (nextRecord.length != 12) {
+                                mensajeErrores += "\nEl registro N° "+contadorRegistros+", no contiene las 12 columnas del formato, deben estar separadas por una coma.";
                                 existeError = true;
                                 contadorRegistros++;
                                 continue;
                             }
                             try {
                                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                                Date fecha = dateFormat.parse(nextRecord[0]);
+                                Date fecha = dateFormat.parse(nextRecord[0].trim());
                                 System.out.println(fecha);
                             } catch (ParseException | NumberFormatException e) {
                                 mensajeErrores += "\nEl registro N° "+contadorRegistros+", el valor de la fecha pago no se encuentra en el formato: dd/MM/yyyy.";
@@ -868,63 +959,95 @@ public class VentaController {
                                 mensajeErrores += "\nEl registro N° "+contadorRegistros+", la cuenta no se encuentra registrada en el sistema.";
                                 existeError = true;
                             }
-
-                            if(!nextRecord[3].trim().equals("Factura") && !nextRecord[3].trim().equals("Crédito Fiscal")){
-                                mensajeErrores += "\nEl registro N° "+contadorRegistros+", el comprobante no se encuentra en el formato: Factura ó Crédito Fiscal.";
+                            try {
+                                if(!nextRecord[3].equals("")){
+                                    double numero = Double.parseDouble(nextRecord[3]);
+                                    System.out.println(numero);
+                                }
+                            } catch (NumberFormatException e) {
+                                mensajeErrores += "\nEl registro N° "+contadorRegistros+", el valor de la referencia no es un número.";
+                                existeError = true;
+                            }
+                            if(!nextRecord[4].trim().equals("Recibo") && !nextRecord[4].trim().equals("Factura") && !nextRecord[4].trim().equals("Crédito Fiscal")){
+                                mensajeErrores += "\nEl registro N° "+contadorRegistros+", el comprobante no se encuentra en el formato: Recibo, Factura ó Crédito Fiscal.";
                                 existeError = true;
                             }
                             try {
                                 SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                                Date fecha = dateFormat.parse(nextRecord[4]);
+                                Date fecha = dateFormat.parse(nextRecord[5].trim());
                                 System.out.println(fecha);
                             } catch (ParseException | NumberFormatException e) {
                                 mensajeErrores += "\nEl registro N° "+contadorRegistros+", el valor de la fecha de la cuota no se encuentra en el formato: dd/MM/yyyy.";
                                 existeError = true;
                             }
                             try {
-                                double numero = Double.parseDouble(nextRecord[5]);
+                                double numero = Double.parseDouble(nextRecord[6]);
                                 System.out.println(numero);
                             } catch (NumberFormatException e) {
                                 mensajeErrores += "\nEl registro N° "+contadorRegistros+", el valor de la cuota no es un número.";
                                 existeError = true;
                             }
                             try {
-                                double numero = Double.parseDouble(nextRecord[6]);
+                                double numero = Double.parseDouble(nextRecord[7]);
                                 System.out.println(numero);
                             } catch (NumberFormatException e) {
                                 mensajeErrores += "\nEl registro N° "+contadorRegistros+", el valor de saldo de la cuota no es un número.";
                                 existeError = true;
                             }
                             try {
-                                double numero = Double.parseDouble(nextRecord[7]);
+                                double numero = Double.parseDouble(nextRecord[8]);
                                 System.out.println(numero);
                             } catch (NumberFormatException e) {
                                 mensajeErrores += "\nEl registro N° "+contadorRegistros+", el valor de recargo no es un número.";
                                 existeError = true;
                             }
                             try {
-                                double numero = Double.parseDouble(nextRecord[8]);
+                                double numero = Double.parseDouble(nextRecord[9]);
                                 System.out.println(numero);
                             } catch (NumberFormatException e) {
                                 mensajeErrores += "\nEl registro N° "+contadorRegistros+", el valor de saldo de recargo no es un número.";
                                 existeError = true;
                             }
                             try {
-                                double numero = Double.parseDouble(nextRecord[9]);
+                                double numero = Double.parseDouble(nextRecord[10]);
                                 System.out.println(numero);
                             } catch (NumberFormatException e) {
                                 mensajeErrores += "\nEl registro N° "+contadorRegistros+", el valor de descuento no es un número.";
                                 existeError = true;
                             }
                             try {
-                                double numero = Double.parseDouble(nextRecord[10]);
+                                double numero = Double.parseDouble(nextRecord[11]);
                                 System.out.println(numero);
                             } catch (NumberFormatException e) {
                                 mensajeErrores += "\nEl registro N° "+contadorRegistros+", el valor de otros no es un número.";
                                 existeError = true;
                             }
+                            try {
+                                Pago pagoEncontrado = pagoService.encontrarRecibo("Mantenimiento", reciboAnterior, newVenta.getTerreno().getProyecto(), comprobanteAnterior);
+                                if (reciboAnterior != Integer.parseInt(nextRecord[1]) && contadorRegistros > 1) {
+                                    if(listadoRecibos.contains(reciboAnterior+comprobanteAnterior) || pagoEncontrado != null){
+                                        mensajeErrores += "\nEl registro N° "+(contadorRegistros-1)+", el recibo se encuentra duplicado.";
+                                        existeError = true;
+                                    }else{
+                                        listadoRecibos.add(reciboAnterior+comprobanteAnterior);
+                                    }
+                                }
+                            } catch (NumberFormatException e) {}
                         }
+                        try {
+                            reciboAnterior = Integer.parseInt(nextRecord[1]);
+                        } catch (NumberFormatException e) {}
+                        comprobanteAnterior = nextRecord[3].trim();
                         contadorRegistros++;
+                    }
+                    if (contadorRegistros > 0) {
+                        Pago pagoEncontrado = pagoService.encontrarRecibo("Mantenimiento", reciboAnterior, newVenta.getTerreno().getProyecto(), comprobanteAnterior);
+                        if(listadoRecibos.contains(reciboAnterior+comprobanteAnterior) || pagoEncontrado != null){
+                            mensajeErrores += "\nEl registro N° "+(contadorRegistros-1)+", el recibo se encuentra duplicado.";
+                            existeError = true;
+                        }else{
+                            listadoRecibos.add(reciboAnterior+comprobanteAnterior);
+                        }
                     }
                     csvReader.close();
                     //Se envía el mensaje de errores
@@ -932,6 +1055,8 @@ public class VentaController {
                         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Errores en los registros:"+mensajeErrores);
                     }
                     //Registro de los pagos y las cuotas
+                    reciboAnterior = 0;
+                    comprobanteAnterior = "";
                     CSVReader csvReader2 = new CSVReader(new InputStreamReader(new ByteArrayInputStream(fileBytes)));
                     csvReader2.readNext();
                     contadorRegistros=0;
@@ -940,17 +1065,18 @@ public class VentaController {
                         Date fechaPago = dateFormat.parse(nextRecord[0]);
                         Integer recibo = Integer.parseInt(nextRecord[1]);
                         String cuenta = nextRecord[2];
-                        String comprobante = nextRecord[3];
-                        Date fechaCuota = dateFormat.parse(nextRecord[4]);
-                        double cuota = Double.parseDouble(nextRecord[5]);
-                        double saldoCuota = Double.parseDouble(nextRecord[6]);
-                        double recargo = Double.parseDouble(nextRecord[7]);
-                        double saldoRecargo = Double.parseDouble(nextRecord[8]);
-                        double descuento = Double.parseDouble(nextRecord[9]);
-                        double otros = Double.parseDouble(nextRecord[10]);
+                        String referencia = nextRecord[3];
+                        String comprobante = nextRecord[4];
+                        Date fechaCuota = dateFormat.parse(nextRecord[5]);
+                        double cuota = Double.parseDouble(nextRecord[6]);
+                        double saldoCuota = Double.parseDouble(nextRecord[7]);
+                        double recargo = Double.parseDouble(nextRecord[8]);
+                        double saldoRecargo = Double.parseDouble(nextRecord[9]);
+                        double descuento = Double.parseDouble(nextRecord[10]);
+                        double otros = Double.parseDouble(nextRecord[11]);
                         // Registro del pago
                         if (reciboAnterior != recibo && contadorRegistros > 0) {
-                            Pago pago = crearNuevoPago(newVenta, comprobante, cuentaAnterior, fechaPagoAnterior, reciboAnterior, montoPago, otrosAterior, montoDescuento);
+                            Pago pago = crearNuevoPago(newVenta, comprobante, cuentaAnterior, referenciaAnterior, fechaPagoAnterior, reciboAnterior, montoPago, otrosAterior, montoDescuento);
                             pagoService.agregar(pago);
                             for (CuotaMantenimiento cuotaMantenimiento : listaCuotasPago) {
                                 cuotaMantenimiento.setPago(pago);
@@ -966,8 +1092,9 @@ public class VentaController {
                         listaCuotasPago.add(cuotaMantenimiento);
                         // Actualizar variables de control
                         cuentaAnterior = cuenta;
+                        referenciaAnterior = referencia;
                         fechaPagoAnterior = fechaPago;
-                        montoPago += cuota + recargo;
+                        montoPago += cuota + recargo + otros - descuento;
                         montoDescuento += descuento;
                         reciboAnterior = recibo;
                         comprobanteAnterior = comprobante;
@@ -977,15 +1104,13 @@ public class VentaController {
                     
                     // Registro del último pago
                     if (contadorRegistros > 0) {
-                        Pago pago = crearNuevoPago(newVenta, comprobanteAnterior, cuentaAnterior, fechaPagoAnterior, reciboAnterior, montoPago, otrosAterior, montoDescuento);
+                        Pago pago = crearNuevoPago(newVenta, comprobanteAnterior, cuentaAnterior, referenciaAnterior, fechaPagoAnterior, reciboAnterior, montoPago, otrosAterior, montoDescuento);
                         pagoService.agregar(pago);
-                    
                         for (CuotaMantenimiento cuotaMantenimiento : listaCuotasPago) {
                             cuotaMantenimiento.setPago(pago);
                             cuotaMantenimiento.setFechaRegistro(LocalDateTime.now());
                             cuotaMantenimientoService.agregar(cuotaMantenimiento);
                         }
-                    
                         listaCuotasPago.clear();
                     }
                     csvReader2.close();
@@ -1006,13 +1131,14 @@ public class VentaController {
         }
     }
     //Método para crear instancias de Pago
-    private Pago crearNuevoPago(Venta newVenta, String comprobante, String cuenta, Date fechaPago, int recibo, double montoPago, double otros, double montoDescuento) {
+    private Pago crearNuevoPago(Venta newVenta, String comprobante, String cuenta, String referencia, Date fechaPago, int recibo, double montoPago, double otros, double montoDescuento) {
         Pago pago = new Pago();
         pago.setTipo("Mantenimiento");
         pago.setVenta(newVenta);
         pago.setComprobante(comprobante);
         pago.setEstado(true);
         pago.setCuentaBancaria(cuentaBancariaService.encontrarNombreEmpresa(cuenta, newVenta.getTerreno().getProyecto().getEmpresa()));
+        pago.setReferencia(referencia);
         pago.setFecha(fechaPago);
         pago.setFechaRegistro(LocalDateTime.now());
         pago.setRecibo(recibo);
@@ -1094,17 +1220,11 @@ public class VentaController {
         try {
             Venta newVenta = ventaService.encontrar(venta.getIdVenta());
             InformeMantenimiento informeMantenimiento = informeMantenimientoService.encontrarVenta(newVenta);
-            informeMantenimientoService.eliminar(informeMantenimiento);
-            ventaService.eliminar(newVenta);
-            List<Venta> listadoVentas = ventaService.listaVentas();
-            List<Venta> listadoVentasTerreno = new ArrayList<Venta>();
-            if(!listadoVentas.isEmpty()){
-                for (Venta valorVenta : listadoVentas){
-                    if(valorVenta.getTerreno().getIdTerreno().equals(newVenta.getTerreno().getIdTerreno())){
-                        listadoVentasTerreno.add(valorVenta);
-                    }
-                }
+            if(informeMantenimiento!=null){
+                informeMantenimientoService.eliminar(informeMantenimiento);
             }
+            ventaService.eliminar(newVenta);
+            List<Venta> listadoVentasTerreno = ventaService.listarVentas(newVenta.getTerreno());
             if(!listadoVentasTerreno.isEmpty()){
                 Venta ultimaVenta= listadoVentasTerreno.get(listadoVentasTerreno.size() - 1);
                 if (ultimaVenta != null) {

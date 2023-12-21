@@ -22,7 +22,7 @@ $(document).ready(function() {
     );
     //Formulario de agregar credito fiscal
     var formGuardar = $('#formGuardar');
-    var validator = $('#formGuardar').validate({
+    var validatorGuardar = $('#formGuardar').validate({
         rules: {
             registro: {
                 required: true,
@@ -40,6 +40,12 @@ $(document).ready(function() {
             nombre: {
                 required: true,
                 maxlength: 200
+            },
+            departamento: {
+                required: true
+            },
+            municipio: {
+                required: true
             },
             dirección: {
                 required: true,
@@ -66,6 +72,12 @@ $(document).ready(function() {
             nombre:{
                 required: 'Este campo es requerido'
             },
+            departamento:{
+                required: 'Este campo es requerido'
+            },
+            municipio:{
+                required: 'Este campo es requerido'
+            },
             direccion:{
                 required: 'Este campo es requerido'
             },
@@ -83,7 +95,7 @@ $(document).ready(function() {
             $(element).removeClass('is-invalid');
         },
         errorPlacement: function(error, element) {
-            if (element.attr("name") === "registro" || element.attr("name") === "nit" || element.attr("name") === "dui" || element.attr("name") === "nombre" || element.attr("name") === "direccion" || element.attr("name") === "giro" || element.attr("name") === "fiscal") {
+            if (element.attr("name") === "registro" || element.attr("name") === "nit" || element.attr("name") === "dui" || element.attr("name") === "nombre" || element.attr("name") === "departamento" || element.attr("name") === "municipio" || element.attr("name") === "direccion" || element.attr("name") === "giro" || element.attr("name") === "fiscal") {
                 error.insertAfter(element);
             }        
         },
@@ -99,10 +111,12 @@ $(document).ready(function() {
                 url = '/ActualizarFacturacionVenta';
                 formDataArray.push({name: 'idFacturacion', value: idFacturacion}, {name: 'idVenta', value: idVenta});
                 formDataArray = formDataArray.filter(item => item.name !== 'fiscal');
+                formDataArray = formDataArray.filter(item => item.name !== 'departamento');
             } else {
                 url = '/AgregarFacturacionVenta';
                 formDataArray.push({name: 'idFacturacion', value: idFacturacion}, {name: 'idVenta', value: idVenta});
                 formDataArray = formDataArray.filter(item => item.name !== 'fiscal');
+                formDataArray = formDataArray.filter(item => item.name !== 'departamento');
             }
             $.ajax({
                 url: url,
@@ -117,6 +131,9 @@ $(document).ready(function() {
                         success: function (nuevosDatos) {
                             var elementoActualizable1 = $(nuevosDatos).find('#tabla-creditoFiscal');
                             $('#tabla-creditoFiscal').html(elementoActualizable1.html());
+                            var elementoActualizable2 = $(nuevosDatos).find('#botones-credito-fiscal');
+                            $('#botones-credito-fiscal').html(elementoActualizable2.html());
+                            validarPersona();
                             $('.form-control').val("");
                             var nitField = document.getElementById("input-nit");
                             var duiField = document.getElementById("input-dui");
@@ -139,30 +156,33 @@ $(document).ready(function() {
         }
     });
     //Función que valida el tipo de persona jurída
-    document.getElementById("fiscal").addEventListener("change", function () {
-        var selectedValue = this.value;
-        var nitField = document.getElementById("input-nit");
-        var duiField = document.getElementById("input-dui");
-        nitField.style.display = "none";
-        duiField.style.display = "none";
-        if (selectedValue === "1") {
-            nitField.style.display = "block";
-            document.getElementById("nit").setAttribute("required", "required");
-            document.getElementById("dui").removeAttribute("required");
-            document.getElementById("dui").value="";
-        } else if (selectedValue === "0") {
-            duiField.style.display = "block";
-            document.getElementById("dui").setAttribute("required", "required");
-            document.getElementById("nit").removeAttribute("required");
-            document.getElementById("nit").value="";
-        }
-    });
+    validarPersona();
+    function validarPersona(){
+        document.getElementById("fiscal").addEventListener("change", function () {
+            var selectedValue = this.value;
+            var nitField = document.getElementById("input-nit");
+            var duiField = document.getElementById("input-dui");
+            nitField.style.display = "none";
+            duiField.style.display = "none";
+            if (selectedValue === "1") {
+                nitField.style.display = "block";
+                document.getElementById("nit").setAttribute("required", "required");
+                document.getElementById("dui").removeAttribute("required");
+                document.getElementById("dui").value="";
+            } else if (selectedValue === "0") {
+                duiField.style.display = "block";
+                document.getElementById("dui").setAttribute("required", "required");
+                document.getElementById("nit").removeAttribute("required");
+                document.getElementById("nit").value="";
+            }
+        });
+    }
     // Método para mostrar el modal segun sea si editar o nuevo registro
     $(document).on('click', '#EditarCreditoFiscal', function () {
         var idFacturacion = $(this).data('id');
         var modal = $('#crearModalCreditoFiscal');
         var form = modal.find('form');
-        validator.resetForm();
+        validatorGuardar.resetForm();
         formGuardar.find('.is-invalid').removeClass('is-invalid');
         if (idFacturacion) {
             $.ajax({
@@ -189,6 +209,11 @@ $(document).ready(function() {
                     $('#nombre').val(response.facturacion.nombre);
                     $('#direccion').val(response.facturacion.direccion);
                     $('#giro').val(response.facturacion.giro);
+                    $('#departamento').val(response.facturacion.municipio.departamento.idDepartamento);
+                    filtrarMunicipios();
+                    $('#municipio').val(response.facturacion.municipio.idMunicipio);
+                    $('#departamento').trigger('change');
+                    $('#municipio').trigger('change');
                 },
                 error: function () {
                     alert('Error al obtener los datos de la facturacion.');
@@ -196,12 +221,17 @@ $(document).ready(function() {
             });
         } else {
             form.attr('action', '/AgregarFacturacionVenta');
+            $("#idFacturacion").val("");
             $('.form-control').val('');
+            $('.form-select').val('');
+            $('#departamento').val(1);
+            $('#departamento').trigger('change');
+            filtrarMunicipios();
         }
         modal.modal('show');
     });
     var formSeleccionarGuardar = $('#formSeleccionarPropietario');
-    var validator = $('#formSeleccionarPropietario').validate({
+    var validatorSeleccionar = $('#formSeleccionarPropietario').validate({
         rules: {
             propietarios:{
                 required: true
@@ -283,6 +313,13 @@ $(document).ready(function() {
             });
         }
     });
+    // Método para mostrar el modar de editar comprobante de consumidor final
+    $(document).on('click', '#EditarConsumidorFinal', function () {
+        $(".form-control").val("");
+        validatorSeleccionar.resetForm();
+        $(".form-select").removeClass("is-invalid");
+        $("#span-propietarios-error").addClass('d-none');
+    });
     // Método para mostrar el modal de eliminación
     $(document).on('click', '#EliminarCreditoFiscal', function () {
         var idFacturacion = $(this).data('id');
@@ -307,8 +344,12 @@ $(document).ready(function() {
                     url: "/FacturacionVenta/"+idVenta,
                     type: 'GET',
                     success: function (nuevosDatos) {
+                        $("#idFacturacion").val("");
                         var elementoActualizable1 = $(nuevosDatos).find('#tabla-creditoFiscal');
                         $('#tabla-creditoFiscal').html(elementoActualizable1.html());
+                        var elementoActualizable2 = $(nuevosDatos).find('#botones-credito-fiscal');
+                        $('#botones-credito-fiscal').html(elementoActualizable2.html());
+                        validarPersona();
                         $('.form-control').val("");
                         var nitField = document.getElementById("input-nit");
                         var duiField = document.getElementById("input-dui");
@@ -337,7 +378,53 @@ $(document).ready(function() {
         dropdownParent: $('#crearModalConsumidorFinal .modal-body'),
         closeOnSelect: false
     } );
-    $select.on('change', function() {
+    var $select1 = $( '#departamento' ).select2( {
+        theme: "bootstrap-5",
+        width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+        placeholder: $( this ).data( 'placeholder' ),
+        dropdownParent: $('#crearModalCreditoFiscal .modal-body'),
+        closeOnSelect: true,
+        sorter: function (data) {
+            return data.sort(function (a, b) {
+                return a.text.localeCompare(b.text);
+            });
+        }
+    } );
+    var $select2 = $( '#municipio' ).select2( {
+        theme: "bootstrap-5",
+        width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+        placeholder: $( this ).data( 'placeholder' ),
+        dropdownParent: $('#crearModalCreditoFiscal .modal-body'),
+        closeOnSelect: true
+    } );
+    $select2.on('change', function() {
         $(this).trigger('blur');
+        $(this).select2('close');
     });
+    $select1.on('change', function() {
+        filtrarMunicipios();
+        $(this).trigger('blur');
+        $(this).select2('close');
+    });
+    //Función para filtrar los municipios
+    filtrarMunicipios();
+    function filtrarMunicipios() {
+        const departamentoSeleccionado = $('#departamento').val();
+        $('#municipio option').each(function () {
+            const municipioDepartamento = $(this).data('departamento');
+            if (municipioDepartamento == departamentoSeleccionado) {
+                $(this).prop('disabled', false);
+            } else {
+                $(this).prop('disabled', true);
+            }
+        });
+        $('#municipio').select2( {
+            theme: "bootstrap-5",
+            width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+            placeholder: $( this ).data( 'placeholder' ),
+            dropdownParent: $('#crearModalCreditoFiscal .modal-body'),
+            closeOnSelect: false
+        } );
+        $('#municipio').val($('#municipio option:not(:disabled):first').val()).trigger('change');
+    }
 }); 

@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 return cuota;
             }
             //Función para seleccionar la fecha de aplicación para los mantenimientos
-            $('#fechaAplicacionM').change(function () {
+            $('#fechaAplicacionM').blur(function () {
                 var valorFecha = $(this).val();
                 if (valorFecha) {
                     var fecha = new Date(valorFecha);
@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
             //Función para seleccionar la fecha de aplicación para los financiamientos
-            $('#fechaAplicacionF').change(function () {
+            $('#fechaAplicacionF').blur(function () {
                 var valorFecha = $(this).val();
                 if (valorFecha) {
                     var fecha = new Date(valorFecha);
@@ -89,21 +89,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         //Formulario de editar
         $.validator.addMethod(
-            "validarPrecio",
-            function(value, element) {
-                return this.optional(element) || /^\d+(\.\d+)?$/.test(value);
-            },
-            "Ingrese un número válido"
-        );
-        $.validator.addMethod(
-            "validarDescuento",
-            function(value, element) {
-                return this.optional(element) || /^\d+(\.\d+)?$/.test(value);
-            },
-            "Ingrese un número válido"
-        );
-        $.validator.addMethod(
-            "validarMonto",
+            "validarNumero",
             function(value, element) {
                 return this.optional(element) || /^\d+(\.\d+)?$/.test(value);
             },
@@ -120,34 +106,6 @@ document.addEventListener('DOMContentLoaded', function() {
             "validarTasa",
             function(value, element) {
                 return this.optional(element) || /^(100(\.0+)?|[0-9]?[0-9](\.\d+)?)$/.test(value);
-            },
-            "Ingrese un número válido"
-        );
-        $.validator.addMethod(
-            "validarCuotaKi",
-            function(value, element) {
-                return this.optional(element) || /^\d+(\.\d+)?$/.test(value);
-            },
-            "Ingrese un número válido"
-        );
-        $.validator.addMethod(
-            "validarCuotaMantenimiento",
-            function(value, element) {
-                return this.optional(element) || /^\d+(\.\d+)?$/.test(value);
-            },
-            "Ingrese un número válido"
-        );
-        $.validator.addMethod(
-            "validarMultaMantenimiento",
-            function(value, element) {
-                return this.optional(element) || /^\d+(\.\d+)?$/.test(value);
-            },
-            "Ingrese un número válido"
-        );
-        $.validator.addMethod(
-            "validarMultaFinanciamiento",
-            function(value, element) {
-                return this.optional(element) || /^\d+(\.\d+)?$/.test(value);
             },
             "Ingrese un número válido"
         );
@@ -175,24 +133,29 @@ document.addEventListener('DOMContentLoaded', function() {
                     required: true,
                     maxlength: 10
                 },
-                fechaCorte: {
+                fechaCorteFinanciamiento: {
+                    required: true,
+                    fechaMayorIgual: true,
+                    maxlength: 10
+                },
+                fechaCorteMantenimiento: {
                     required: true,
                     fechaMayorIgual: true,
                     maxlength: 10
                 },
                 precio: {
                     required: true,
-                    validarPrecio: true,
+                    validarNumero: true,
                     maxlength: 9
                 },
                 descuento:{
                     required: true,
-                    validarDescuento: true,
+                    validarNumero: true,
                     validarDescuentoMenorIgualPrecio: true,
                     maxlength: 9
                 },
                 monto:{
-                    validarMonto: true
+                    validarNumero: true
                 },
                 plazo:{
                     required: true,
@@ -205,21 +168,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     maxlength: 6
                 },
                 cuotaKi:{
-                    validarMonto: true
-                },
-                cuotaMantenimiento: {
-                    required: true,
-                    validarCuotaMantenimiento: true,
-                    maxlength: 9
-                },
-                multaMantenimiento: {
-                    required: true,
-                    validarMultaMantenimiento: true,
-                    maxlength: 9
+                    validarNumero: true
                 },
                 multaFinanciamiento: {
                     required: true,
-                    validarMultaFinanciamiento: true,
+                    validarNumero: true,
                     maxlength: 9
                 }
             },
@@ -233,7 +186,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 fecha: {
                     required: 'Este campo es requerido'
                 },
-                fechaCorte: {
+                fechaCorteMantenimiento: {
+                    required: 'Este campo es requerido'
+                },
+                fechaCorteFinanciamiento: {
                     required: 'Este campo es requerido'
                 },
                 precio: {
@@ -248,12 +204,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 tasa: {
                     required: 'Este campo es requerido'
                 },
-                cuotaMantenimiento: {
-                    required: 'Este campo es requerido'
-                },
-                multaMantenimiento: {
-                    required: 'Este campo es requerido'
-                },
                 multaFinanciamiento: {
                     required: 'Este campo es requerido'
                 }        
@@ -265,7 +215,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 $(element).removeClass('is-invalid');
             },
             errorPlacement: function(error, element) {
-                if (element.attr("name") === "nombre" || element.attr("name") === "terceros" || element.attr("name") === "fecha" || element.attr("name") === "fechaCorte" || element.attr("name") === "precio" || element.attr("name") === "descuento" || element.attr("name") === "monto" || element.attr("name") === "plazo" || element.attr("name") === "tasa" || element.attr("name") === "cuotaKi" || element.attr("name") === "cuotaMantenimiento" || element.attr("name") === "multaFinanciamiento" || element.attr("name") === "multaMantenimiento") {
+                if (element.attr("name") === "nombre" || element.attr("name") === "terceros" || element.attr("name") === "fecha" || element.attr("name") === "fechaCorteMantenimiento" || element.attr("name") === "fechaCorteFinanciamiento" || element.attr("name") === "precio" || element.attr("name") === "descuento" || element.attr("name") === "monto" || element.attr("name") === "plazo" || element.attr("name") === "tasa" || element.attr("name") === "cuotaKi" || element.attr("name") === "cuotaMantenimiento" || element.attr("name") === "multaFinanciamiento" || element.attr("name") === "multaMantenimiento") {
                     error.insertAfter(element);
                 }        
             },
@@ -284,31 +234,48 @@ document.addEventListener('DOMContentLoaded', function() {
                 const month = addLeadingZero(fechaLocal.getMonth() + 1);
                 const year = fechaLocal.getFullYear();
                 const formattedDate = `${day}/${month}/${year}`;
-                const fechaCorteInputValue = $('#fechaCorte').val();
-                const fechaCorteInput = new Date(fechaCorteInputValue);
-                const fechaCorteLocal = new Date(fechaCorteInput.getTime() + fechaCorteInput.getTimezoneOffset() * 60000);
-
+                //Fecha corte financiamiento
+                const fechaCorteFInputValue = $('#fechaCorteFinanciamiento').val();
+                const fechaCorteFInput = new Date(fechaCorteFInputValue);
+                const fechaCorteFLocal = new Date(fechaCorteFInput.getTime() + fechaCorteFInput.getTimezoneOffset() * 60000);
                 function addLeadingZero(number) {
                     return number < 10 ? `0${number}` : number;
                 }
-                const dayCorte = addLeadingZero(fechaCorteLocal.getDate());
-                const monthCorte = addLeadingZero(fechaCorteLocal.getMonth() + 1);
-                const yearCorte = fechaCorteLocal.getFullYear();
-                const formattedDateCorte = `${dayCorte}/${monthCorte}/${yearCorte}`;
+                const dayCorteF = addLeadingZero(fechaCorteFLocal.getDate());
+                const monthCorteF = addLeadingZero(fechaCorteFLocal.getMonth() + 1);
+                const yearCorteF = fechaCorteFLocal.getFullYear();
+                const formattedDateCorteF = `${dayCorteF}/${monthCorteF}/${yearCorteF}`;
+                //Fecha corte mantenimiento
+                const fechaCorteMInputValue = $('#fechaCorteMantenimiento').val();
+                const fechaCorteMInput = new Date(fechaCorteMInputValue);
+                const fechaCorteMLocal = new Date(fechaCorteMInput.getTime() + fechaCorteMInput.getTimezoneOffset() * 60000);
+                function addLeadingZero(number) {
+                    return number < 10 ? `0${number}` : number;
+                }
+                const dayCorteM = addLeadingZero(fechaCorteMLocal.getDate());
+                const monthCorteM = addLeadingZero(fechaCorteMLocal.getMonth() + 1);
+                const yearCorteM = fechaCorteMLocal.getFullYear();
+                const formattedDateCorteM = `${dayCorteM}/${monthCorteM}/${yearCorteM}`;
                 var idVenta = $('#idVenta').val();
                 var idListDocumento = $('#idListDocumento').val();
                 var estado = $('#estado').val();
                 var idTerreno = $('#idTerreno').val();
+                var descuento = $('#descuento').val();
                 var formDataArray = formGuardar.serializeArray();
                 formDataArray = formDataArray.filter(item => item.name !== 'fecha');
-                formDataArray = formDataArray.filter(item => item.name !== 'fechaCorte');
+                formDataArray = formDataArray.filter(item => item.name !== 'fechaCorteMantenimiento');
+                formDataArray = formDataArray.filter(item => item.name !== 'fechaCorteFinanciamiento');
+                formDataArray = formDataArray.filter(item => item.name !== 'descuento');
                 var url;
+                if(descuento===''){
+                    descuento='0.00';
+                }
                 if (idVenta) {
                     url = '/ActualizarVenta/'+idTerreno;
-                    formDataArray.push({name: 'idVenta', value: idVenta},{name: 'estado', value: estado},{name: 'idListDocumento', value: idListDocumento},{name: 'fecha', value: formattedDate},{name: 'fechaCorte', value: formattedDateCorte});
+                    formDataArray.push({name: 'idVenta', value: idVenta},{name: 'estado', value: estado},{name: 'idListDocumento', value: idListDocumento},{name: 'fecha', value: formattedDate},{name: 'fechaCorteMantenimiento', value: formattedDateCorteM},{name: 'fechaCorteFinanciamiento', value: formattedDateCorteF},{name: 'descuento', value: descuento});
                 } else {
                     url = '/AgregarVenta/'+idTerreno;
-                    formDataArray.push({name: 'estado', value: estado},{name: 'idListDocumento', value: idListDocumento},{name: 'fecha', value: formattedDate},{name: 'fechaCorte', value: formattedDateCorte});
+                    formDataArray.push({name: 'estado', value: estado},{name: 'idListDocumento', value: idListDocumento},{name: 'fecha', value: formattedDate},{name: 'fechaCorteMantenimiento', value: formattedDateCorteM},{name: 'fechaCorteFinanciamiento', value: formattedDateCorteF},{name: 'descuento', value: descuento});
                 }
                 $.ajax({
                     url: url,
@@ -359,13 +326,16 @@ document.addEventListener('DOMContentLoaded', function() {
         var validatorFinanciamiento = $('#formGuardarFinanciamiento').validate({
             rules: {
                 montoF: {
-                    required: true
+                    required: true,
+                    validarNumero: true
                 },
                 prima: {
-                    required: true
+                    required: true,
+                    validarNumero: true
                 },
                 financiamiento: {
-                    required: true
+                    required: true,
+                    validarNumero: true
                 },
                 fechaAplicacionF: {
                    required: true,
@@ -383,11 +353,11 @@ document.addEventListener('DOMContentLoaded', function() {
                     maxlength: 6
                 },
                 cuotaKi:{
-                    validarMonto: true
+                    validarNumero: true
                 },
                 multaFinanciamiento: {
                     required: true,
-                    validarMultaFinanciamiento: true,
+                    validarNumero: true,
                     maxlength: 9
                 }
             },
@@ -479,7 +449,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         });
                     },
                     error: function (xhr, status, error) {
-                        $('#crearModal').modal('hide');
+                        $('#crearModalFinanciamiento').modal('hide');
                         var errorMessage = xhr.responseText || 'Error al actualizar la información del financiamiento.';
                         toastr.error(errorMessage);
                     }
@@ -507,11 +477,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 cuotaMantenimiento:{
                     required: true,
+                    validarNumero: true,
                     maxlength: 9
                 },
                 multaMantenimiento: {
                     required: true,
-                    validarMultaMantenimiento: true,
+                    validarNumero: true,
                     maxlength: 9
                 }
             },
@@ -588,7 +559,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         });
                     },
                     error: function (xhr, status, error) {
-                        $('#crearModal').modal('hide');
+                        $('#crearModalMantenimiento').modal('hide');
                         var errorMessage = xhr.responseText || 'Error al actualizar la información del mantenimiento.';
                         toastr.error(errorMessage);
                     }
@@ -612,7 +583,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     success: function (response) {
                         $('#nombre').val(response.nombre);
                         $('#fecha').val(response.fecha);
-                        $('#fechaCorte').val(response.fechaCorte);
+                        $('#fechaCorteMantenimiento').val(response.fechaCorteMantenimiento);
+                        $('#fechaCorteFinanciamiento').val(response.fechaCorteFinanciamiento);
                         $('#precio').val(parseFloat(response.precio).toFixed(2));
                         $('#terceros').val(response.terceros.toString());
                         $('#descuento').val(parseFloat(response.descuento).toFixed(2));
@@ -632,8 +604,25 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             modal.modal('show');
         });
-        // Método para mostrar el financiamiento
-        $(document).on('click', '.mostrarFinanciamiento-btn', function () {
+        // Método para mostrar el modal de la informacion financiamiento
+        $(document).on('click', '#EditarInformacionFinanciamiento', function () {
+            $("#fechaAplicacionF").val("");
+            $("#plazo").val("");
+            $("#tasa").val("");
+            $("#multaFinanciamiento").val("");
+            validatorFinanciamiento.resetForm();
+            $(".form-control").removeClass("is-invalid");
+        });
+        // Método para mostrar el modal de la informacion mantenimiento
+        $(document).on('click', '#EditarInformacionMantenimiento', function () {
+            $("#fechaAplicacionM").val("");
+            $("#cuotaMantenimiento").val("");
+            $("#multaMantenimiento").val("");
+            validatorMantenimiento.resetForm();
+            $(".form-control").removeClass("is-invalid");
+        });
+         // Método para mostrar la informacion del financiamiento
+         $(document).on('click', '.mostrarFinanciamiento-btn', function () {
             var idFinanciamiento = $(this).data('id');
             $.ajax({
                 url: '/ObtenerFinanciamientoVenta/' + idFinanciamiento,
@@ -649,18 +638,18 @@ document.addEventListener('DOMContentLoaded', function() {
                     };
                     var fechaFormateada = fechaAplicacion.toLocaleDateString(undefined, opcionesFormato);
                     $('#fecha-aplicacion-financiamiento').html(fechaFormateada);
-                    $('#monto-financiamiento').html('$ '+parseFloat(response.financiamiento.monto).toFixed(2));
+                    $('#monto-financiamiento').html('$ '+response.financiamiento.monto.toFixed(2));
                     $('#plazo-financiamiento').html(response.financiamiento.plazo);
                     $('#tasa-financiamiento').html(response.financiamiento.tasa.toFixed(2)+' %');
-                    $('#cuota-financiamiento').html('$ '+parseFloat(response.financiamiento.cuota).toFixed(2));
-                    $('#multa-financiamiento').html('$ '+parseFloat(response.financiamiento.multa).toFixed(2));
+                    $('#cuota-financiamiento').html('$ '+response.financiamiento.cuota.toFixed(2));
+                    $('#multa-financiamiento').html('$ '+response.financiamiento.multa.toFixed(2));
                 },
                 error: function () {
                     alert('Error al obtener los datos del financimaiento de la venta.');
                 }
             });
         });
-        // Método para mostrar el mantenimiento
+        // Método para mostrar la informacion del mantenimiento
         $(document).on('click', '.mostrarMantenimiento-btn', function () {
             var idMantenimiento = $(this).data('id');
             $.ajax({

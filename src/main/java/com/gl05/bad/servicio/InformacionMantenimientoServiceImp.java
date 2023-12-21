@@ -4,6 +4,8 @@ import com.gl05.bad.dao.InformacionMantenimientoDao;
 import com.gl05.bad.domain.InformacionMantenimiento;
 import com.gl05.bad.domain.Proyecto;
 import com.gl05.bad.domain.Venta;
+
+import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,6 +51,12 @@ public class InformacionMantenimientoServiceImp implements InformacionMantenimie
     @Transactional(readOnly = true)
     public List<InformacionMantenimiento> encontrarVenta(Venta venta) {
         return informacionMantenimientoDao.findByVenta(venta);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<InformacionMantenimiento> encontrarFechaAplicacion(Date fechaAplicacion) {
+        return informacionMantenimientoDao.findByFechaAplicacion(fechaAplicacion);
     }
 
     @Override
