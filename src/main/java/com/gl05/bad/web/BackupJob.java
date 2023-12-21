@@ -19,7 +19,7 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
-import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.services.drive.Drive;
 import com.google.api.services.drive.DriveScopes;
 import com.google.api.services.drive.model.FileList;
@@ -123,11 +123,9 @@ public class BackupJob implements Job {
     public Drive initializeDriveService() throws Exception {
         InputStream credentialsStream = getClass().getClassLoader().getResourceAsStream("credentials.json");
         GoogleCredentials credentials = GoogleCredentials.fromStream(credentialsStream).createScoped(Collections.singleton(DriveScopes.DRIVE));
-        @SuppressWarnings("deprecation")
-        JacksonFactory jacksonFactory = new JacksonFactory();
         return new Drive.Builder(
                 GoogleNetHttpTransport.newTrustedTransport(),
-                jacksonFactory,
+                GsonFactory.getDefaultInstance(),
                 new HttpCredentialsAdapter(credentials))
                 .setApplicationName("SistemaDecatur")
                 .build();

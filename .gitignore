@@ -28,3 +28,5 @@ build/
 ### DB ###
 /db
 docker-compose.yml
+
+src/main/resources/credentials.json
